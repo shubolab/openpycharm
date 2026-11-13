@@ -10,13 +10,13 @@
     "sdkVersion": "2026.1.4",
     "sdkBuild": "261.26222.68",
     "pluginClassCount": 66,
-    "pluginSha256": "ae063778b2f260002a12d8f87fc6708632322779c0c3235f679c071bf1232169",
+    "pluginSha256": "be9b9d73ccab469c3e10c187ebd3b9874ea7a65238d41365c51c093d13afba6c",
     "intellijArchiveReader": {
       "status": "pass",
       "reader": "HashMapZipFile",
       "verifiedEntries": 70,
       "closed": true,
-      "sha256": "ae063778b2f260002a12d8f87fc6708632322779c0c3235f679c071bf1232169"
+      "sha256": "be9b9d73ccab469c3e10c187ebd3b9874ea7a65238d41365c51c093d13afba6c"
     },
     "realLoopbackProtocol": {
       "status": "pass",
@@ -48,9 +48,10 @@
       },
       "nativeLexerRestartRestore": {
         "status": "pass",
-        "documents": 6,
-        "restartSuffixTokenChecks": 1133,
-        "restoreChecks": 73
+        "documents": 26,
+        "physicalLineCases": 20,
+        "restartSuffixTokenChecks": 4915,
+        "restoreChecks": 451
       }
     },
     "repositoryUnitTests": {
@@ -92,14 +93,28 @@
       "fix": "Capture expectRequestTarget at the beginning of advance and expose that token-start state.",
       "after": {
         "status": "pass",
-        "documents": 6,
-        "restartSuffixTokenChecks": 1133,
-        "restoreChecks": 73
+        "documents": 26,
+        "physicalLineCases": 20,
+        "restartSuffixTokenChecks": 4915,
+        "restoreChecks": 451
       }
+    },
+    {
+      "finding": "Quoted text and unfinished variables could swallow later physical lines, request separators and gutter methods",
+      "before": "At52d7b2b the new semantic probe failed on a text/plain body containing don't followed by ### Next and GET; the string token consumed the remainder.",
+      "fix": "Stop quoted/variable scanning before CR/LF, do not let escape handling consume a line break, and consume variable-closing braces only when present.",
+      "after": {
+        "status": "pass",
+        "documents": 26,
+        "physicalLineCases": 20,
+        "restartSuffixTokenChecks": 4915,
+        "restoreChecks": 451
+      },
+      "cases": "20 LF/CRLF cases cover plain apostrophes, unfinished single/double quotes, backslashes before line breaks, unfinished body/header variables, and retained valid escaped quotes/complete same-line variables."
     }
   ],
   "regressionTestSources": {
     "tests/http_client/HttpProtocolProbe.kt": "df73a9dc13d73609c6a3a30daa5b60eb076f8539ff490f93b68de644356f7176",
-    "tests/http_client/HttpLexerProbe.java": "51099fc9e2b480af22771ba322eeb0273d42505dfbaf27b7e56628013a2f5d85"
+    "tests/http_client/HttpLexerProbe.java": "678c327f02e3545fafef8970d6714165b8c2437c30aa920d9e2ee39fdfcabe77"
   }
 }

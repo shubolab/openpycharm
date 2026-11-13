@@ -12,11 +12,28 @@ public final class HttpLexerProbe {
   private record Token(int start, int end, int state, IElementType type) { }
 
   public static void main(String[] arguments) {
-    List<String> inputs = List.of(
+    List<String> inputs = new ArrayList<>(List.of(
       "GET http://localhost/a HTTP/1.1\r\nX-Probe: value\r\n\r\n### Next\nPOST {{base}}/b\nContent-Type: application/json\n\n{\"hello\":\"你好😀\",\"n\":1}",
       "@base = http://localhost\n# comment\n// comment\n  PATCH\t{{base}}/path\n\n[true, null, 1.25]\n### End\nHEAD https://example.invalid/",
       "GET", "GET \t", "GET http://localhost/path", "\n\t\r\n"
-    );
+    ));
+    int physicalLineCases = 0;
+    for (String newline : List.of("\n", "\r\n")) {
+      for (String fragment : List.of("don't change this", "\"unterminated", "'unterminated",
+                                    "\"unterminated\\", "'unterminated\\", "{{unfinished", "prefix {{unfinished",
+                                    "{{complete}}", "\"valid \\\"quote\\\" and don't\"")) {
+        String text = "POST http://localhost/a" + newline + "Content-Type: text/plain" + newline + newline + fragment + newline
+          + "### Next" + newline + "GET http://localhost/b" + newline;
+        assertNextRequestVisible(text);
+        inputs.add(text);
+        physicalLineCases++;
+      }
+      String headerVariable = "GET http://localhost/a" + newline + "X-Probe: {{unfinished" + newline
+        + newline + "### Next" + newline + "GET http://localhost/b" + newline;
+      assertNextRequestVisible(headerVariable);
+      inputs.add(headerVariable);
+      physicalLineCases++;
+    }
     int restartChecks = 0;
     int restoreChecks = 0;
     for (String text : inputs) {
@@ -52,7 +69,30 @@ public final class HttpLexerProbe {
     HttpRequestLexer first = new HttpRequestLexer();
     first.start("GET http://localhost/", 0, 21, 0);
     if (first.getTokenType() != HttpRequestTokens.INSTANCE.getMETHOD()) throw new AssertionError("GET is not a method");
-    System.out.println("{\"status\":\"pass\",\"documents\":" + inputs.size() + ",\"restartSuffixTokenChecks\":" + restartChecks + ",\"restoreChecks\":" + restoreChecks + "}");
+    System.out.println("{\"status\":\"pass\",\"documents\":" + inputs.size() + ",\"physicalLineCases\":" + physicalLineCases + ",\"restartSuffixTokenChecks\":" + restartChecks + ",\"restoreChecks\":" + restoreChecks + "}");
+  }
+
+  private static void assertNextRequestVisible(String text) {
+    List<Token> tokens = scan(text);
+    List<String> methods = tokens.stream().filter(token -> token.type() == HttpRequestTokens.INSTANCE.getMETHOD())
+      .map(token -> text.substring(token.start(), token.end())).toList();
+    if (methods.size() != 2 || tokens.stream().filter(token -> token.type() == HttpRequestTokens.INSTANCE.getSEPARATOR()).count() != 1) {
+      throw new AssertionError("A quote or unfinished variable swallowed the next ###/GET request: " + text.replace("\r", "\\r").replace("\n", "\\n"));
+    }
+    if (tokens.stream().noneMatch(token -> token.type() == HttpRequestTokens.INSTANCE.getURL()
+        && text.substring(token.start(), token.end()).equals("http://localhost/b"))) {
+      throw new AssertionError("The next request target is not a URL token");
+    }
+    for (Token token : tokens) {
+      if (token.type() == HttpRequestTokens.INSTANCE.getSTRING() || token.type() == HttpRequestTokens.INSTANCE.getVARIABLE()) {
+        String value = text.substring(token.start(), token.end());
+        if (value.indexOf('\r') >= 0 || value.indexOf('\n') >= 0) throw new AssertionError("String/variable token crossed a physical line");
+      }
+    }
+    if (text.contains("{{complete}}") && tokens.stream().noneMatch(token -> token.type() == HttpRequestTokens.INSTANCE.getVARIABLE()
+        && text.substring(token.start(), token.end()).equals("{{complete}}"))) {
+      throw new AssertionError("A complete same-line variable was damaged");
+    }
   }
 
   private static List<Token> scan(String text) {

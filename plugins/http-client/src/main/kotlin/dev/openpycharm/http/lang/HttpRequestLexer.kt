@@ -92,8 +92,9 @@ class HttpRequestLexer : LexerBase() {
             }
             c == '{' && peek('{') -> {
                 next++
-                while (next < end && !(text[next] == '}' && next + 1 < end && text[next + 1] == '}')) next++
-                if (next + 1 < end) next += 2
+                while (next < end && !text[next].isLineBreak() &&
+                    !(text[next] == '}' && next + 1 < end && text[next + 1] == '}')) next++
+                if (next + 1 < end && text[next] == '}' && text[next + 1] == '}') next += 2
                 HttpRequestTokens.VARIABLE
             }
             c == '"' || c == '\'' -> {
@@ -158,10 +159,10 @@ class HttpRequestLexer : LexerBase() {
     }
 
     private fun scanString(quote: Char) {
-        while (next < end) {
+        while (next < end && !text[next].isLineBreak()) {
             val value = text[next++]
             if (value == quote) return
-            if (value == '\\' && next < end) next++
+            if (value == '\\' && next < end && !text[next].isLineBreak()) next++
         }
     }
 
@@ -175,6 +176,7 @@ class HttpRequestLexer : LexerBase() {
     }
 
     private fun peek(expected: Char) = next < end && text[next] == expected
+    private fun Char.isLineBreak() = this == '\r' || this == '\n'
     private fun Char.isWhitespace() = this == ' ' || this == '\t' || this == '\r' || this == '\n'
     private fun Char.isAsciiDigit() = this in '0'..'9'
     private fun Char.isWordStart() = this == '_' || Character.isLetter(this)

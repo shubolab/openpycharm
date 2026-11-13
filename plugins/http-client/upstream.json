@@ -7,7 +7,8 @@
     "Isolated OpenPyCharm package/language/action/service identities",
     "No Go, LSP4IJ or terminal integration dependency",
     "Reject manual Transfer-Encoding case-insensitively so the transport owns request framing",
-    "Expose token-start lexer state for IntelliJ incremental restart and position restore"
+    "Expose token-start lexer state for IntelliJ incremental restart and position restore",
+    "Bound quoted and unfinished-variable tokens to physical lines so following requests remain visible"
   ],
   "files": [
     {
@@ -74,7 +75,7 @@
       "originalPath": "src/main/kotlin/dev/openidea/goide/lang/HttpRequestLexer.kt",
       "originalSha256": "a48e56b03fb86d629f5e4d56ea02ed2c368d97ed2d15f29bebdda1b102ea5e35",
       "adaptedPath": "plugins/http-client/src/main/kotlin/dev/openpycharm/http/lang/HttpRequestLexer.kt",
-      "adaptedSha256": "c6c1f2cdb6dd6f2d7118f4482d61a94948b7b4406332436cb09996b31bc4f0d8"
+      "adaptedSha256": "8cfefd07a4f69c933b3b84bbb6d75c81d66546b9d60da041d1dd81f3c8b9280c"
     },
     {
       "originalPath": "src/main/kotlin/dev/openidea/goide/lang/HttpRequestParserDefinition.kt",
