@@ -1,0 +1,64 @@
+{
+  "schema": 1,
+  "referenceImplementation": {
+    "repository": "https://github.com/shubolab/opengoland",
+    "commit": "3b32dc53df49388528203fa9b600b93ea69b8368",
+    "sourceRecord": "plugins/http-client/upstream.json"
+  },
+  "observed": {
+    "sdkProduct": "PC",
+    "sdkVersion": "2026.1.4",
+    "sdkBuild": "261.26222.68",
+    "pluginClassCount": 66,
+    "pluginSha256": "85d1f572bc15cc61bf1ba64f3235de663f54eefd3609873b34f29d6cf6bab4dc",
+    "intellijArchiveReader": {
+      "status": "pass",
+      "reader": "HashMapZipFile",
+      "verifiedEntries": 70,
+      "closed": true,
+      "sha256": "85d1f572bc15cc61bf1ba64f3235de663f54eefd3609873b34f29d6cf6bab4dc"
+    },
+    "realLoopbackProtocol": {
+      "status": "pass",
+      "serverOwnedClosed": true,
+      "checkCount": 8,
+      "checks": [
+        "real UTF-8 POST preserves body whitespace, request/response headers and HTTP error status",
+        "raw response bytes are preserved and binary data is not rendered as text",
+        "redirect responses are visible and requests do not acquire a shared cookie jar",
+        "streaming response limit applies without Content-Length",
+        "cancel completes the pending call and disconnects the active streaming socket",
+        "deadline includes a response body stalled after headers",
+        "file variables, named requests, caret selection and ordered plan requests reach the server",
+        "unsupported credentials, managed headers, variable cycles, missing variables, file bodies and oversized request bodies fail explicitly"
+      ],
+      "responsePresentationAndRawSave": {
+        "status": "pass",
+        "nativeEditorPresentationPrepared": true,
+        "binaryPreserved": true,
+        "atomicRawSaveBytesMatch": true,
+        "temporarySaveFilesCleaned": true
+      }
+    },
+    "repositoryUnitTests": {
+      "count": 50,
+      "status": "pass"
+    },
+    "nativeAcceptancePreparation": {
+      "GUIStarted": false,
+      "explicitDisposableProjectArgument": true,
+      "isolatedConfigCachePluginsLog": true,
+      "normalTrustFlow": true
+    }
+  },
+  "inferred": [
+    "The same native editor/Services APIs reused from opengoland should expose the configured HTTP actions in OpenPyCharm; compilation alone does not establish this."
+  ],
+  "unknown": [
+    "OpenPyCharm native editor toolbar/gutter and Services selection have not yet been exercised for this plugin.",
+    "Actual desktop Run current/Run All/Stop/Save dialog acceptance remains pending.",
+    "Windows plugin compilation, runtime and installer integration remain pending.",
+    "The first builder uses already cached hash-pinned Kotlin compiler artifacts; clean CI compiler provisioning is separate integration work."
+  ],
+  "scope": "Protocol/data preparation and native artifact readability only; no full HTTP feature parity or native UI acceptance claim."
+}

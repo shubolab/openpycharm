@@ -1,0 +1,31 @@
+<idea-plugin>
+  <id>dev.openpycharm.http</id>
+  <name>OpenPyCharm HTTP Client</name>
+  <version>@VERSION@</version>
+  <vendor>OpenPyCharm contributors</vendor>
+  <description>Native HTTP request files, bounded local request execution and Services responses.</description>
+  <idea-version since-build="261" until-build="261.*"/>
+  <depends>com.intellij.modules.platform</depends>
+  <depends>com.intellij.modules.execution</depends>
+  <extensions defaultExtensionNs="com.intellij">
+    <fileType name="OpenPyCharm HTTP Request" language="OpenPyCharmHttpRequest" implementationClass="dev.openpycharm.http.lang.HttpRequestFileType" fieldName="INSTANCE" extensions="http"/>
+    <lang.parserDefinition language="OpenPyCharmHttpRequest" implementationClass="dev.openpycharm.http.lang.HttpRequestParserDefinition"/>
+    <lang.syntaxHighlighterFactory language="OpenPyCharmHttpRequest" implementationClass="dev.openpycharm.http.lang.HttpRequestSyntaxHighlighterFactory"/>
+    <lang.commenter language="OpenPyCharmHttpRequest" implementationClass="dev.openpycharm.http.lang.HttpRequestCommenter"/>
+    <runLineMarkerContributor language="OpenPyCharmHttpRequest" implementationClass="dev.openpycharm.http.HttpRequestRunLineMarkerContributor"/>
+    <serviceViewContributor implementation="dev.openpycharm.http.HttpServicesContributor"/>
+    <notificationGroup id="OpenPyCharm HTTP" displayType="BALLOON"/>
+  </extensions>
+  <projectListeners>
+    <listener class="dev.openpycharm.http.HttpRequestEditorToolbar" topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
+  </projectListeners>
+  <actions>
+    <action id="OpenPyCharm.Http.RunRequest" class="dev.openpycharm.http.RunHttpRequestAction" text="Run HTTP Request" description="Send the HTTP request at the caret">
+      <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+    </action>
+    <action id="OpenPyCharm.Http.RunAllRequests" class="dev.openpycharm.http.RunAllHttpRequestsAction" text="Run All Requests" description="Run every request in this HTTP file in order">
+      <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+    </action>
+    <action id="OpenPyCharm.Http.SaveResponse" class="dev.openpycharm.http.SaveHttpResponseAction" text="Save Response…" description="Save the original HTTP response bytes"/>
+  </actions>
+</idea-plugin>

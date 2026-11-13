@@ -1,0 +1,11 @@
+OpenPyCharm HTTP Client
+
+The native HTTP client sources are adapted, at the repository owner's request,
+from the same owner's shubolab/opengoland repository, commit
+3b32dc53df49388528203fa9b600b93ea69b8368. Original source paths and SHA-256 hashes,
+plus the namespace adaptations, are recorded in upstream.json. Original source
+comments remain, including references to the earlier GoLand observations.
+
+The plugin uses public open-source IntelliJ Platform APIs and the JDK HTTP
+client. It has no Go engine, LSP, proprietary PyCharm plugin or WebView dependency.
+The platform and third-party notices supplied with OpenPyCharm remain applicable.
