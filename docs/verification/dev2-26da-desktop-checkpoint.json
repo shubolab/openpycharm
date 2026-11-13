@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "version": "0.1.0-dev.2",
+  "sourceCommit": "26da4932742e1f260b80dfdaa2e39353e6bd466c",
+  "ciRun": 43501519051,
+  "installedFromDmg": true,
+  "installerSha256": "7b9a5bb7f1c0f6e8c7e2991adc17c1b8a0cbe3b96aac33b8c036017e5bec6b50",
+  "postDesktopTreeSha256": "246498705a403637db488b6cc29ae3d84b193e7ca2ec6757e81393886bce4504",
+  "appTreeUnchanged": true,
+  "strictAdHocSignaturePassed": true,
+  "releaseEligible": false,
+  "startupBlocker": {
+    "feature": "Restored Markdown JCEF preview",
+    "timestamp": "2026-11-14 05:07:52 +08:00",
+    "message": "JBCefApp$Holder <clinit> requests ProxyMigrationService; class initialization must not depend on services",
+    "serviceOrProxyDisabled": false
+  },
+  "nativePython": {
+    "runExitCode": 0,
+    "unittestMethods": 9,
+    "unittestItems": 20,
+    "allPassed": true
+  },
+  "nativeFastApi": {
+    "project": ".state/dev2-release/FastAPI 演示",
+    "python": "3.14.0",
+    "nativeVenvCreated": true,
+    "dependencyInstallExplicitlySelected": true,
+    "sourceTemplateClean": true,
+    "bind": "127.0.0.1:8000",
+    "debugChildPid": 47766,
+    "breakpoint": "app.py:8",
+    "expression": "app.title",
+    "evaluation": "FastAPI",
+    "afterResume": {
+      "status": 200,
+      "body": {
+        "framework": "fastapi",
+        "message": "Hello from FastAPI!"
+      }
+    },
+    "nativeStopExitCode": 0,
+    "ownedIdeAndDebugChildExited": true
+  },
+  "logs": {
+    "sessionSha256": "1544a27ab909b799d2234d8f09a0be009f370da509cb8d85d5c74d276678cb0d",
+    "severeRecords": 6,
+    "errorRecords": 0
+  },
+  "captures": "docs/demo/checkpoint-26da/capture.json",
+  "limitations": [
+    "Rejected candidate evidence only; no dev.2 release published",
+    "Final installed HTTP UI and fresh post-fix release GIF remain pending",
+    "Windows installer/native startup passed CI; Windows Python desktop workflows remain unverified"
+  ]
+}

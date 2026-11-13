@@ -1,0 +1,25 @@
+{
+  "productVersion": "0.1.0-dev.2",
+  "upstreamVersion": "2026.1.4",
+  "upstreamBuild": "PC-261.26222.68",
+  "system": "macOS 27.2 arm64",
+  "python": "3.14.0",
+  "captureDate": "2026-11-14",
+  "states": [
+    "Python example Run: exit0 and expected Decimal totals",
+    "Native unittest: 9 methods / 20 items passed",
+    "FastAPI native Debug: app.py:8 breakpoint; app.title evaluated to 'FastAPI'; resume returned HTTP200; native Stop exit0"
+  ],
+  "releaseStatus": "Rejected release candidate: Markdown restore logged a service-in-static-initializer SEVERE; these captures are historical checkpoints, not final release GIF inputs.",
+  "sourceCommit": "26da4932742e1f260b80dfdaa2e39353e6bd466c",
+  "ciRun": 43501519051,
+  "installer": "OpenPyCharm-0.1.0-dev.2-macos-arm64.dmg",
+  "installerSha256": "7b9a5bb7f1c0f6e8c7e2991adc17c1b8a0cbe3b96aac33b8c036017e5bec6b50",
+  "installedApplication": "/Users/wangshubo/Applications/OpenPyCharm.app",
+  "frames": {
+    "debug.png": "5554cc110f48f0e389e69ad35028be3e4552c5104f9b3722406279836766ec32",
+    "tests.png": "113e1269c76e2e0df69f5a430cbc690b5b1c6ecb09a354f7fa62b4782f899d70",
+    "run.png": "dfe85787fa338941c87992f5dce9e1eaa9967605b7256fffd862e8aa7fd65b39",
+    "framework-create.jpg": "2a2062d49355e7f0ed166d93566d05e5fa05a1de0b0d7d3dd83a38891c2d09ec"
+  }
+}
