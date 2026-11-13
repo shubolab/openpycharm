@@ -3,6 +3,8 @@ package dev.openpycharm.notebooks;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonElement;
+import java.math.BigInteger;
 import java.util.List;
 
 /** Pure JVM tests cover large foreign metadata without a filesystem or IDE. */
@@ -112,12 +114,69 @@ public final class NotebookMergeTest {
     require(result.conflicts().equals(List.of("/a~1b~0c")), "Conflict JSON Pointer escaping failed");
   }
 
+  private static void numericChange(String before, String after) {
+    JsonObject base = notebook();
+    cell(base, 0).getAsJsonObject("metadata").add("timestamp", JsonParser.parseString(before));
+    JsonObject local = base.deepCopy(), incoming = base.deepCopy();
+    cell(local, 0).addProperty("source", "notebook-edit");
+    cell(incoming, 0).getAsJsonObject("metadata").add("timestamp", JsonParser.parseString(after));
+    NotebookMerge.Result result = NotebookMerge.merge(base, local, incoming);
+    require(!result.hasConflicts(), "Independent source/numeric metadata change conflicted: " + before + " / " + after);
+    require(cell(result.merged(), 0).get("source").getAsString().equals("notebook-edit"), "Numeric comparison lost local source");
+    require(cell(result.merged(), 0).getAsJsonObject("metadata").get("timestamp").getAsString().equals(after),
+        "Incoming numeric metadata was rounded away: " + before + " / " + after);
+    require(!NotebookMerge.exactEquals(JsonParser.parseString(before), JsonParser.parseString(after)), "Distinct numeric primitives compared equal");
+    require(!NotebookMerge.exactEquals(json("{\"nested\":[{\"value\":" + before + "}]}"), json("{\"nested\":[{\"value\":" + after + "}]}")),
+        "Containing object/array bypassed exact numeric comparison");
+  }
+
+  private static void exactNumbers() {
+    numericChange("9007199254740992", "9007199254740993");
+    numericChange("-9007199254740992", "-9007199254740993");
+    numericChange("9223372036854775807", "9223372036854775808");
+    numericChange("1.00000000000000000000000000000001", "1.00000000000000000000000000000002");
+    numericChange("1e400", "2e400");
+    numericChange("0", "1e-4000");
+    numericChange("1e2147483648", "2e2147483648");
+    numericChange("1e-2147483649", "2e-2147483649");
+
+    for (List<String> pair : List.of(List.of("1", "1.0"), List.of("1000e-3", "1.00"),
+        List.of("0.00100", "1e-3"), List.of("-0", "0.000e999999999999999999999999"),
+        List.of("1e2147483648", "10e2147483647"), List.of("1e-2147483649", "10e-2147483650"))) {
+      JsonElement first = JsonParser.parseString(pair.get(0)), second = JsonParser.parseString(pair.get(1));
+      require(NotebookMerge.exactEquals(first, second), "Equivalent finite decimals compared different: " + pair);
+      NotebookMerge.Result sameValue = NotebookMerge.merge(json("{\"v\":0}"), json("{\"v\":" + pair.get(0) + "}"), json("{\"v\":" + pair.get(1) + "}"));
+      require(!sameValue.hasConflicts(), "Equivalent decimal edits produced a false conflict: " + pair);
+    }
+    String huge = "9".repeat(300), next = new BigInteger(huge).add(BigInteger.ONE).toString();
+    JsonElement expandedScale = JsonParser.parseString("10e" + huge), normalizedScale = JsonParser.parseString("1e" + next);
+    require(expandedScale.getAsJsonPrimitive().isNumber() && normalizedScale.getAsJsonPrimitive().isNumber(),
+        "Extreme-exponent fixture must use actual parsed numeric primitives");
+    require(NotebookMerge.exactEquals(expandedScale, normalizedScale),
+        "Extreme exponent normalization expanded/rounded the exponent");
+    require(NotebookMerge.exactEquals(JsonParser.parseString("10e-" + next), JsonParser.parseString("1e-" + huge)),
+        "Extreme negative exponent normalization lost exact borrow arithmetic");
+    require(!NotebookMerge.exactEquals(JsonParser.parseString("1e" + huge), JsonParser.parseString("2e" + huge)),
+        "Extreme exponent differences compared equal");
+
+    JsonObject base = json("{\"v\":9007199254740991}"), local = json("{\"v\":9007199254740992}"), incoming = json("{\"v\":9007199254740993}");
+    NotebookMerge.Result overlap = NotebookMerge.merge(base, local, incoming);
+    require(overlap.conflicts().equals(List.of("/v")) && overlap.merged().get("v").getAsString().equals("9007199254740992"),
+        "Concurrent adjacent large integer changes did not retain an exact local conflict");
+    require(!NotebookMerge.exactEquals(JsonParser.parseString("1"), JsonParser.parseString("\"1\"")), "String and number compared equal");
+    require(!NotebookMerge.exactEquals(JsonParser.parseString("true"), JsonParser.parseString("1")), "Boolean and number compared equal");
+    require(!NotebookMerge.exactEquals(null, JsonParser.parseString("null")), "Missing and explicit null compared equal");
+    require(NotebookMerge.exactEquals(json("{\"b\":[1.00],\"a\":null}"), json("{\"a\":null,\"b\":[10e-1]}")),
+        "Object key order or nested equivalent decimals changed equality");
+  }
+
   public static void main(String[] args) {
     largeIndependentChanges();
     overlappingChanges();
     structuralAndAtomicArrays();
     unchangedAndIdenticalChanges();
     additionsRemovalsAndNulls();
-    System.out.println("{\"status\":\"pass\",\"foreignMetadataChars\":2600000,\"independentSourceAndMetadata\":true,\"localRetainedOnConflict\":true,\"stableCellIdentities\":true,\"structuralAndAtomicArrays\":true,\"identicalChanges\":true,\"missingKeysAndNull\":true,\"immutableInputs\":true,\"structuralSharing\":true}");
+    exactNumbers();
+    System.out.println("{\"status\":\"pass\",\"foreignMetadataChars\":2600000,\"independentSourceAndMetadata\":true,\"localRetainedOnConflict\":true,\"stableCellIdentities\":true,\"structuralAndAtomicArrays\":true,\"identicalChanges\":true,\"missingKeysAndNull\":true,\"immutableInputs\":true,\"structuralSharing\":true,\"exactLargeIntegersAndDecimals\":true,\"extremeExponents\":true,\"recursiveNumericEquality\":true}");
   }
 }
