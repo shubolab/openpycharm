@@ -1,0 +1,13 @@
+<idea-plugin>
+  <id>dev.openpycharm.frontend.m0</id>
+  <name>OpenPyCharm Frontend M0</name>
+  <version>@VERSION@</version>
+  <vendor>OpenPyCharm</vendor>
+  <description>Independent, default-off native TypeScript/JavaScript LSP M0 for explicitly prepared owned fixtures. Not a released frontend feature.</description>
+  <idea-version since-build="261" until-build="261.*"/>
+  <depends>com.intellij.modules.platform</depends>
+  <depends>com.intellij.modules.lsp</depends>
+  <extensions defaultExtensionNs="com.intellij.platform.lsp">
+    <integrationProvider implementation="dev.openpycharm.frontend.FrontendLspProvider"/>
+  </extensions>
+</idea-plugin>

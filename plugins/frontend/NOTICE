@@ -1,0 +1,18 @@
+OpenPyCharm Frontend M0
+Independent OpenPyCharm source under the repository LICENSE.
+
+This default-off, fixture-only native API plugin is not included in the product
+packaging pipeline and does not contain JetBrains proprietary JavaScript code.
+It uses the authenticated open-source IntelliJ Platform SDK supplied separately.
+
+Node 24.22.3, TypeScript Language Server 6.1.0 and TypeScript 6.0.3 are separately
+authenticated in an owned development cache, never installed by opening a file.
+The runtime retains original Node LICENSE/third-party text, TLS LICENSE,
+TypeScript LICENSE/ThirdPartyNoticeText and full original legal files for the
+21 exact npm packages embedded in the published TLS CLI bundle. Their original
+archives, SRI/SHA/size, legal file hashes and payload closure are pinned in
+tools.lock.json. No npm lifecycle/build/install scripts are executed.
+
+Native compilation and standalone stdio protocol checks do not establish
+native PC module/service activation, editor/UI behavior, Windows execution,
+installed-product acceptance, or full PyCharm frontend parity.
