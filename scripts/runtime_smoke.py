@@ -21,6 +21,7 @@ import tempfile
 import time
 
 from bootstrap import ROOT, sha256
+from provenance import verify_product_plugins
 
 # Win32 CreateProcess flags. CREATE_SUSPENDED is deliberately not accessed
 # through subprocess: Python 3.12's module does not export that constant.
@@ -150,7 +151,7 @@ def stop_owned(process: subprocess.Popen, job: WindowsJob | None) -> dict:
     return {"mode": "owned-posix-session", "pid": process.pid, "exitCode": process.returncode}
 
 
-def log_observation(text: str, profile: Path, project: Path, build: str) -> dict:
+def log_observation(text: str, profile: Path, project: Path, build: str, packaged_plugins: list[dict] | None = None) -> dict:
     def normalized(value: str) -> str:
         value = value.replace("\\", "/")
         return value.casefold() if platform.system() == "Windows" else value
@@ -159,6 +160,9 @@ def log_observation(text: str, profile: Path, project: Path, build: str) -> dict
     plugins = {name: any(re.search(r"(?:plugins: |, )" + re.escape(name) + r" \(", line)
                          for line in plugin_lines)
                for name in ("Python Community Edition", "Git", "Terminal")}
+    packaged = {item["id"]: any(re.search(r"(?:plugins: |, )" + re.escape(item["name"]) +
+                    r" \(" + re.escape(item["version"]) + r"\)(?:,|$)", line) for line in plugin_lines)
+                for item in packaged_plugins or []}
     paths = {}
     for name in ("config", "system", "plugins", "log"):
         matches = re.findall(r"^\s*idea\." + name + r"\.path=(.+)$", text, re.MULTILINE)
@@ -175,6 +179,7 @@ def log_observation(text: str, profile: Path, project: Path, build: str) -> dict
     project_opened = bool(re.search(r"Project " + re.escape(project.name) + r" was added to the list of open projects", text))
     return {"ideStarted": "IDE STARTED" in text, "productIdentity": identity,
             "vendorIdentity": vendor, "isolatedPaths": paths, "loadedPlugins": plugins,
+            "packagedPlugins": packaged,
             "projectOpenRequested": project_requested, "projectOpenedInLog": project_opened,
             "errorCount": len(errors), "errors": errors[:50],
             "warningCount": len(warnings), "warnings": warnings[:20]}
@@ -187,6 +192,7 @@ def startup_ready(observation: dict) -> bool:
                     for name in ("config", "system", "plugins", "log"))
             and all(observation.get("loadedPlugins", {}).get(name, False)
                     for name in ("Python Community Edition", "Git", "Terminal"))
+            and all(observation.get("packagedPlugins", {}).values())
             and observation.get("errorCount", 1) == 0)
 
 
@@ -200,6 +206,7 @@ def run_smoke(app: Path, profile: Path | None = None, *, timeout: int = 120, obs
     manifest = json.loads((contents / "openpycharm-build.json").read_text(encoding="utf-8"))
     if manifest.get("name") != "OpenPyCharm" or manifest.get("upstreamProduct") != "PC":
         raise ValueError("Only the assembled OpenPyCharm product may be smoke tested")
+    verified_plugins = verify_product_plugins(manifest, contents)
     executable = contents / ("MacOS/pycharm" if platform.system() == "Darwin" else "bin/pycharm64.exe")
     if not executable.is_file():
         raise ValueError("Native product launcher is missing")
@@ -234,6 +241,7 @@ def run_smoke(app: Path, profile: Path | None = None, *, timeout: int = 120, obs
     receipt = {"schema": 1, "status": "failed", "application": str(app), "profile": str(profile),
                "target": manifest.get("target"), "version": manifest.get("version"),
                "productManifestSha256": sha256(contents / "openpycharm-build.json"),
+               "verifiedPluginJars": verified_plugins,
                "command": command, "projectTrustBypassed": False,
                "limitations": ["Project trust and first-run dialogs remain normal and may await user input",
                                "Startup logs do not establish Run/Test/Debug or other native UI acceptance"]}
@@ -254,7 +262,7 @@ def run_smoke(app: Path, profile: Path | None = None, *, timeout: int = 120, obs
                 if process.poll() is not None:
                     raise ValueError(f"Owned native launcher exited before startup verification: {process.returncode}")
                 text = log_path.read_text(encoding="utf-8", errors="replace") if log_path.is_file() else ""
-                observation = log_observation(text, profile, project, manifest["upstreamBuild"])
+                observation = log_observation(text, profile, project, manifest["upstreamBuild"], manifest.get("plugins", []))
                 receipt["observation"] = observation
                 if observation["errorCount"]:
                     raise ValueError("Native startup log contains ERROR or SEVERE entries")
@@ -285,7 +293,7 @@ def run_smoke(app: Path, profile: Path | None = None, *, timeout: int = 120, obs
         if log_path.is_file():
             receipt["logSha256"] = sha256(log_path)
             final_observation = log_observation(log_path.read_text(encoding="utf-8", errors="replace"),
-                                                profile, project, manifest["upstreamBuild"])
+                                                profile, project, manifest["upstreamBuild"], manifest.get("plugins", []))
             receipt["finalObservation"] = final_observation
             if final_observation["errorCount"]:
                 receipt["status"] = "failed"

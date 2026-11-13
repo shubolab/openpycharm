@@ -1,0 +1,18 @@
+<idea-plugin>
+  <id>dev.openpycharm.frameworks</id>
+  <name>OpenPyCharm Python Frameworks</name>
+  <version>@VERSION@</version>
+  <vendor url="https://github.com/shubolab/openpycharm">OpenPyCharm</vendor>
+  <description>Native Django, Flask and FastAPI project generators and development-server Run/Debug configurations. Dependency installation is opt-in and uses the selected Python interpreter.</description>
+  <idea-version since-build="261" until-build="261.*"/>
+  <depends>com.intellij.modules.platform</depends>
+  <depends>PythonCore</depends>
+  <extensions defaultExtensionNs="com.intellij">
+    <configurationType implementation="dev.openpycharm.frameworks.DjangoConfigurationType"/>
+    <configurationType implementation="dev.openpycharm.frameworks.FlaskConfigurationType"/>
+    <configurationType implementation="dev.openpycharm.frameworks.FastApiConfigurationType"/>
+    <directoryProjectGenerator implementation="dev.openpycharm.frameworks.DjangoProjectGenerator"/>
+    <directoryProjectGenerator implementation="dev.openpycharm.frameworks.FlaskProjectGenerator"/>
+    <directoryProjectGenerator implementation="dev.openpycharm.frameworks.FastApiProjectGenerator"/>
+  </extensions>
+</idea-plugin>

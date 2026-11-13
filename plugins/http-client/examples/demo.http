@@ -1,0 +1,16 @@
+@base = http://127.0.0.1:18081
+
+### Service status
+GET {{base}}/health
+Accept: application/json
+
+### Echo a JSON request
+# @name echo_quote
+POST {{base}}/echo
+Content-Type: application/json; charset=UTF-8
+X-Example: OpenPyCharm
+
+{"message":"你好 OpenPyCharm 🚀","quantity":2}
+
+### Raw binary response
+GET {{base}}/binary

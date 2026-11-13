@@ -1,0 +1,459 @@
+{
+  "schema": 1,
+  "capturedAt": "2026-11-13T18:33:28.260594+00:00",
+  "candidateVersion": "0.1.0-dev.2",
+  "status": "Local macOS candidate verified; not published and not full 1:1 acceptance",
+  "baseCommit": "c406f163e243ac4d9cffa4acb65f04aed2e26d6c",
+  "productionSourceCommit": "6f9ae45dad50f2ddb288e8c5b0274d5a26467e13",
+  "productManifestSha256": "3dbf085a9f3cd9493a4517307a359e13c69f9a969b290bf9ef751c681b50a0ec",
+  "productionSourceInventoryCount": 57,
+  "productionSourceInventorySha256": "0a79238126675c9c0bfac45be7ee9256a2538389eb23863e7a200fac50dfc9f6",
+  "compilerProvision": {
+    "schema": 1,
+    "cache": ".tools/kotlin",
+    "source": "https://repo.maven.apache.org/maven2/",
+    "artifacts": [
+      {
+        "name": "kotlin-compiler-embeddable-2.3.21.jar",
+        "sha256": "d3e70fb011675e77ef00f1a68918d3cd91eed26058977d1e3ea2a37a293233af",
+        "size": 59720376
+      },
+      {
+        "name": "kotlin-stdlib-2.3.21.jar",
+        "sha256": "6f64eac736db9434dd6925b4a518b9d1d17177652320c37916cf9ba3ce7d7d7a",
+        "size": 1804721
+      },
+      {
+        "name": "kotlin-script-runtime-2.3.21.jar",
+        "sha256": "ec61bf1229c837fa9f4255f34ca69816138b73158e7ae9b8d964cf92ca6dfd2e",
+        "size": 44972
+      },
+      {
+        "name": "kotlin-reflect-1.6.10.jar",
+        "sha256": "3277ac102ae17aad10a55abec75ff5696c8d109790396434b496e75087854203",
+        "size": 3038560
+      },
+      {
+        "name": "kotlin-daemon-embeddable-2.3.21.jar",
+        "sha256": "222fc10a3c22e74d30369bf8a0ca6c4f9372eac7d4a0081e290c256fa4d30fb2",
+        "size": 368344
+      },
+      {
+        "name": "kotlinx-coroutines-core-jvm-1.8.0.jar",
+        "sha256": "9860906a1937490bf5f3b06d2f0e10ef451e65b95b269f22daf68a3d1f5065c5",
+        "size": 1548360
+      },
+      {
+        "name": "annotations-13.0.jar",
+        "sha256": "ace2a10dc8e2d5fd34925ecac03e4988b2c0f851650c94b8cef49ba1bd111478",
+        "size": 17536
+      }
+    ]
+  },
+  "thirdPartyLoading": {
+    "propertyOverrideRequired": false,
+    "relativeDirectory": "third-party-plugins/openpycharm-http",
+    "primarySource": "https://github.com/JetBrains/intellij-community/blob/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/core-impl/src/com/intellij/ide/plugins/PluginDescriptorLoader.kt#L433-L449"
+  },
+  "repositoryControls": {
+    "pythonVersion": "3.10.18",
+    "host": "macOS arm64",
+    "testsRun": 64,
+    "testsPassed": 64,
+    "testsSkipped": 0,
+    "fixtureTestsPassed": 9
+  },
+  "httpBuilds": {
+    "macos-arm64": {
+      "buildReport": "build/http-client-macos-arm64/build.json",
+      "buildReportSha256": "f987987d9c4699365251afdd49917652209fcc1b61ce825ae2d7eb639d81bd51",
+      "jarSha256": "968be1b17338800eab6d7d796137916e01b9a502db9b183ba2cadc13db8e52d5",
+      "classCount": 66,
+      "targetPlatform": "macos",
+      "executionPlatform": "macos",
+      "nativeTargetRuntime": true,
+      "sdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+      "executionSdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+      "archiveVerification": {
+        "status": "pass",
+        "reader": "HashMapZipFile",
+        "verifiedEntries": 70,
+        "closed": true,
+        "sha256": "968be1b17338800eab6d7d796137916e01b9a502db9b183ba2cadc13db8e52d5"
+      },
+      "protocolTests": {
+        "status": "pass",
+        "serverOwnedClosed": true,
+        "requestFraming": {
+          "rejectedHeaderVariants": 6,
+          "wireContentLength": 5,
+          "wireTransferEncodingAbsent": true,
+          "rejectedRequestsOpenedSockets": false
+        },
+        "checkCount": 9,
+        "checks": [
+          "real UTF-8 POST preserves body whitespace, request/response headers and HTTP error status",
+          "raw response bytes are preserved and binary data is not rendered as text",
+          "redirect responses are visible and requests do not acquire a shared cookie jar",
+          "streaming response limit applies without Content-Length",
+          "cancel completes the pending call and disconnects the active streaming socket",
+          "deadline includes a response body stalled after headers",
+          "file variables, named requests, caret selection and ordered plan requests reach the server",
+          "unsupported credentials, managed headers, variable cycles, missing variables, file bodies and oversized request bodies fail explicitly",
+          "raw HTTP/1.1 wire has one matching Content-Length and no Transfer-Encoding; six manual framing variants fail before connecting"
+        ],
+        "responsePresentationAndRawSave": {
+          "status": "pass",
+          "nativeEditorPresentationPrepared": true,
+          "binaryPreserved": true,
+          "atomicRawSaveBytesMatch": true,
+          "temporarySaveFilesCleaned": true
+        },
+        "nativeLexerRestartRestore": {
+          "status": "pass",
+          "documents": 26,
+          "physicalLineCases": 20,
+          "restartSuffixTokenChecks": 4915,
+          "restoreChecks": 451
+        },
+        "targetPlatform": "macos",
+        "executionPlatform": "macos",
+        "nativeTargetRuntime": true,
+        "jarSha256": "968be1b17338800eab6d7d796137916e01b9a502db9b183ba2cadc13db8e52d5"
+      }
+    },
+    "windows-x64": {
+      "buildReport": "build/http-client-windows-x64/build.json",
+      "buildReportSha256": "7ceb9053e72b66fbe989c10ba77cffd15ae044e659f8b84e15dbeac8f0b08637",
+      "jarSha256": "968be1b17338800eab6d7d796137916e01b9a502db9b183ba2cadc13db8e52d5",
+      "classCount": 66,
+      "targetPlatform": "windows",
+      "executionPlatform": "macos",
+      "nativeTargetRuntime": false,
+      "sdkReceiptSha256": "88db2818b7fbc4cb73d02fb19982369fe2e2ef2b4a80bbc50c9fa392858fc198",
+      "executionSdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+      "archiveVerification": {
+        "status": "pass",
+        "reader": "HashMapZipFile",
+        "verifiedEntries": 70,
+        "closed": true,
+        "sha256": "968be1b17338800eab6d7d796137916e01b9a502db9b183ba2cadc13db8e52d5"
+      },
+      "protocolTests": {
+        "status": "pass",
+        "serverOwnedClosed": true,
+        "requestFraming": {
+          "rejectedHeaderVariants": 6,
+          "wireContentLength": 5,
+          "wireTransferEncodingAbsent": true,
+          "rejectedRequestsOpenedSockets": false
+        },
+        "checkCount": 9,
+        "checks": [
+          "real UTF-8 POST preserves body whitespace, request/response headers and HTTP error status",
+          "raw response bytes are preserved and binary data is not rendered as text",
+          "redirect responses are visible and requests do not acquire a shared cookie jar",
+          "streaming response limit applies without Content-Length",
+          "cancel completes the pending call and disconnects the active streaming socket",
+          "deadline includes a response body stalled after headers",
+          "file variables, named requests, caret selection and ordered plan requests reach the server",
+          "unsupported credentials, managed headers, variable cycles, missing variables, file bodies and oversized request bodies fail explicitly",
+          "raw HTTP/1.1 wire has one matching Content-Length and no Transfer-Encoding; six manual framing variants fail before connecting"
+        ],
+        "responsePresentationAndRawSave": {
+          "status": "pass",
+          "nativeEditorPresentationPrepared": true,
+          "binaryPreserved": true,
+          "atomicRawSaveBytesMatch": true,
+          "temporarySaveFilesCleaned": true
+        },
+        "nativeLexerRestartRestore": {
+          "status": "pass",
+          "documents": 26,
+          "physicalLineCases": 20,
+          "restartSuffixTokenChecks": 4915,
+          "restoreChecks": 451
+        },
+        "targetPlatform": "windows",
+        "executionPlatform": "macos",
+        "nativeTargetRuntime": false,
+        "jarSha256": "968be1b17338800eab6d7d796137916e01b9a502db9b183ba2cadc13db8e52d5"
+      }
+    }
+  },
+  "startup": {
+    "status": "passed-startup",
+    "productManifestSha256": "3dbf085a9f3cd9493a4517307a359e13c69f9a969b290bf9ef751c681b50a0ec",
+    "verifiedPluginJars": [
+      {
+        "id": "dev.openpycharm.http",
+        "version": "0.1.0-dev.2",
+        "jar": "third-party-plugins/openpycharm-http/lib/openpycharm-http.jar",
+        "jarSha256": "968be1b17338800eab6d7d796137916e01b9a502db9b183ba2cadc13db8e52d5"
+      }
+    ],
+    "projectTrustBypassed": false,
+    "cleanup": {
+      "mode": "owned-posix-session",
+      "pid": 3113,
+      "exitCode": 143
+    },
+    "logSha256": "464f246ce2079cd8bd37aaf3b6365bf6aa236b4c0b13038bedf26b450e04f9c2"
+  },
+  "startupObserved": {
+    "loadedPlugins": {
+      "Python Community Edition": true,
+      "Git": true,
+      "Terminal": true
+    },
+    "packagedPlugins": {
+      "dev.openpycharm.http": true
+    },
+    "isolatedPaths": {
+      "config": true,
+      "system": true,
+      "plugins": true,
+      "log": true
+    },
+    "errorCount": 0,
+    "warningCount": 2
+  },
+  "nativeRegistration": [
+    {
+      "report": ".state/http-native-api-final/report.json",
+      "reportSha256": "7ce71c3480175a5572f09f65fca844338280458b8dd087db0ac862625de6400c",
+      "productManifestSha256": "3dbf085a9f3cd9493a4517307a359e13c69f9a969b290bf9ef751c681b50a0ec",
+      "assessment": {
+        "status": "pass",
+        "pluginId": "dev.openpycharm.http",
+        "version": "0.1.0-dev.2",
+        "jarSha256": "968be1b17338800eab6d7d796137916e01b9a502db9b183ba2cadc13db8e52d5",
+        "scope": "Actual plugin loading, native file type/in-memory PSI/highlighting/actions/Services registration; actions were not invoked"
+      },
+      "inspectionMode": "application-registration-and-default-project-in-memory-PSI",
+      "application": "build/http-preview-final/OpenPyCharm.app",
+      "profile": ".state/http-native-api-final",
+      "projectTrustBypassed": false,
+      "httpPlugin": {
+        "id": "dev.openpycharm.http",
+        "version": "0.1.0-dev.2",
+        "enabled": true,
+        "bundled": true,
+        "path": "build/http-preview-final/OpenPyCharm.app/Contents/third-party-plugins/openpycharm-http",
+        "jar": "build/http-preview-final/OpenPyCharm.app/Contents/third-party-plugins/openpycharm-http/lib/openpycharm-http.jar",
+        "jarSha256": "968be1b17338800eab6d7d796137916e01b9a502db9b183ba2cadc13db8e52d5",
+        "implementationClass": "dev.openpycharm.http.HttpServicesContributor"
+      },
+      "fileType": "dev.openpycharm.http.lang.HttpRequestFileType",
+      "language": "OpenPyCharmHttpRequest",
+      "psiClass": "dev.openpycharm.http.lang.HttpRequestParserDefinition$createFile$1",
+      "parserDefinition": "dev.openpycharm.http.lang.HttpRequestParserDefinition",
+      "syntaxHighlighter": "dev.openpycharm.http.lang.HttpRequestSyntaxHighlighter",
+      "highlightTokenCounts": {
+        "HTTP_REQUEST_VARIABLE": 1,
+        "WHITE_SPACE": 21,
+        "HTTP_REQUEST_OPERATOR": 11,
+        "HTTP_REQUEST_TEXT": 8,
+        "BAD_CHARACTER": 4,
+        "HTTP_REQUEST_NUMBER": 3,
+        "HTTP_REQUEST_SEPARATOR": 3,
+        "HTTP_REQUEST_METHOD": 3,
+        "HTTP_REQUEST_URL": 3,
+        "HTTP_REQUEST_HEADER_NAME": 3,
+        "HTTP_REQUEST_COMMENT": 1,
+        "HTTP_REQUEST_LBRACE": 1,
+        "HTTP_REQUEST_STRING": 3,
+        "HTTP_REQUEST_RBRACE": 1
+      },
+      "actions": {
+        "OpenPyCharm.Http.RunRequest": "dev.openpycharm.http.RunHttpRequestAction",
+        "OpenPyCharm.Http.RunAllRequests": "dev.openpycharm.http.RunAllHttpRequestsAction",
+        "OpenPyCharm.Http.SaveResponse": "dev.openpycharm.http.SaveHttpResponseAction"
+      },
+      "servicesContributor": [
+        "dev.openpycharm.http.HttpServicesContributor"
+      ],
+      "isDispatchThread": false,
+      "isReadAccessAllowed": true,
+      "archiveVerification": {
+        "status": "pass",
+        "reader": "HashMapZipFile",
+        "entryCount": 3,
+        "closed": true,
+        "sha256": "eddb77e3b7e4343641790a574aeaacff100fe129d92fc0a1422fe33acf69af9a",
+        "helperSha256": "b8250c10eea65869d88b549ae85483ee6a20bea095259744ca8e420ea3c2597b",
+        "actualProductLibraries": [
+          {
+            "name": "platform-loader.jar",
+            "sha256": "33616b5f4b055a87c47c88b0fc73a2ddbe6eca3e470433025fc81f006867a4d4"
+          },
+          {
+            "name": "annotations.jar",
+            "sha256": "5562f3a195200e6c60f0715ff1b578a5aa7f061071cd7955c7c0a9ccf1a9fb69"
+          }
+        ],
+        "classpathStaging": "Owned temporary copies; exact actual-product reader-library digests verified",
+        "scope": "Actual product ZIP reader and all plugin payload bytes; plugin startup is verified separately"
+      },
+      "cleanup": {
+        "mode": "owned-posix-session",
+        "pid": 3155,
+        "exitCode": 143
+      }
+    },
+    {
+      "report": ".state/http-native-api-final/relocated-report.json",
+      "reportSha256": "2de28e4be5a5666c63a823c391af16b7de829ae98c288cb0e22d63ee7001c515",
+      "productManifestSha256": "3dbf085a9f3cd9493a4517307a359e13c69f9a969b290bf9ef751c681b50a0ec",
+      "assessment": {
+        "status": "pass",
+        "pluginId": "dev.openpycharm.http",
+        "version": "0.1.0-dev.2",
+        "jarSha256": "968be1b17338800eab6d7d796137916e01b9a502db9b183ba2cadc13db8e52d5",
+        "scope": "Actual plugin loading, native file type/in-memory PSI/highlighting/actions/Services registration; actions were not invoked"
+      },
+      "inspectionMode": "application-registration-and-default-project-in-memory-PSI",
+      "application": "build/http-final-relocated/迁移 验证/OpenPyCharm.app",
+      "profile": ".state/http-native-api-final",
+      "projectTrustBypassed": false,
+      "httpPlugin": {
+        "id": "dev.openpycharm.http",
+        "version": "0.1.0-dev.2",
+        "enabled": true,
+        "bundled": true,
+        "path": "build/http-final-relocated/迁移 验证/OpenPyCharm.app/Contents/third-party-plugins/openpycharm-http",
+        "jar": "build/http-final-relocated/迁移 验证/OpenPyCharm.app/Contents/third-party-plugins/openpycharm-http/lib/openpycharm-http.jar",
+        "jarSha256": "968be1b17338800eab6d7d796137916e01b9a502db9b183ba2cadc13db8e52d5",
+        "implementationClass": "dev.openpycharm.http.HttpServicesContributor"
+      },
+      "fileType": "dev.openpycharm.http.lang.HttpRequestFileType",
+      "language": "OpenPyCharmHttpRequest",
+      "psiClass": "dev.openpycharm.http.lang.HttpRequestParserDefinition$createFile$1",
+      "parserDefinition": "dev.openpycharm.http.lang.HttpRequestParserDefinition",
+      "syntaxHighlighter": "dev.openpycharm.http.lang.HttpRequestSyntaxHighlighter",
+      "highlightTokenCounts": {
+        "HTTP_REQUEST_VARIABLE": 1,
+        "WHITE_SPACE": 21,
+        "HTTP_REQUEST_OPERATOR": 11,
+        "HTTP_REQUEST_TEXT": 8,
+        "BAD_CHARACTER": 4,
+        "HTTP_REQUEST_NUMBER": 3,
+        "HTTP_REQUEST_SEPARATOR": 3,
+        "HTTP_REQUEST_METHOD": 3,
+        "HTTP_REQUEST_URL": 3,
+        "HTTP_REQUEST_HEADER_NAME": 3,
+        "HTTP_REQUEST_COMMENT": 1,
+        "HTTP_REQUEST_LBRACE": 1,
+        "HTTP_REQUEST_STRING": 3,
+        "HTTP_REQUEST_RBRACE": 1
+      },
+      "actions": {
+        "OpenPyCharm.Http.RunRequest": "dev.openpycharm.http.RunHttpRequestAction",
+        "OpenPyCharm.Http.RunAllRequests": "dev.openpycharm.http.RunAllHttpRequestsAction",
+        "OpenPyCharm.Http.SaveResponse": "dev.openpycharm.http.SaveHttpResponseAction"
+      },
+      "servicesContributor": [
+        "dev.openpycharm.http.HttpServicesContributor"
+      ],
+      "isDispatchThread": false,
+      "isReadAccessAllowed": true,
+      "archiveVerification": {
+        "status": "pass",
+        "reader": "HashMapZipFile",
+        "entryCount": 3,
+        "closed": true,
+        "sha256": "eddb77e3b7e4343641790a574aeaacff100fe129d92fc0a1422fe33acf69af9a",
+        "helperSha256": "b8250c10eea65869d88b549ae85483ee6a20bea095259744ca8e420ea3c2597b",
+        "actualProductLibraries": [
+          {
+            "name": "platform-loader.jar",
+            "sha256": "33616b5f4b055a87c47c88b0fc73a2ddbe6eca3e470433025fc81f006867a4d4"
+          },
+          {
+            "name": "annotations.jar",
+            "sha256": "5562f3a195200e6c60f0715ff1b578a5aa7f061071cd7955c7c0a9ccf1a9fb69"
+          }
+        ],
+        "classpathStaging": "Owned temporary copies; exact actual-product reader-library digests verified",
+        "scope": "Actual product ZIP reader and all plugin payload bytes; plugin startup is verified separately"
+      },
+      "cleanup": {
+        "mode": "owned-posix-session",
+        "pid": 3335,
+        "exitCode": 143
+      }
+    }
+  ],
+  "warmRelocation": {
+    "source": "build/http-preview-final/OpenPyCharm.app",
+    "destination": "build/http-final-relocated/迁移 验证/OpenPyCharm.app",
+    "beforeTreeSha256": "5e6061ce2d83397fe4b6df033a61c7ed23cd6bba1d20bf088a7f074531f4a851",
+    "afterCopyTreeSha256": "5e6061ce2d83397fe4b6df033a61c7ed23cd6bba1d20bf088a7f074531f4a851",
+    "sourceAfterNativeTreeSha256": "5e6061ce2d83397fe4b6df033a61c7ed23cd6bba1d20bf088a7f074531f4a851",
+    "destinationAfterNativeTreeSha256": "5e6061ce2d83397fe4b6df033a61c7ed23cd6bba1d20bf088a7f074531f4a851",
+    "codesignDeepStrictPassed": true
+  },
+  "signingAndHelpers": {
+    "codesignDeepStrictPassed": true,
+    "helperResources": {
+      "resource": "plugins/python-ce/helpers",
+      "directories": 1468,
+      "directoryWriteBitsRemoved": true,
+      "userPythonEnvironmentModified": false
+    },
+    "sourceSDKModified": false,
+    "order": "Compile/copy plugin and metadata; seal helper directories; ad-hoc sign and verify"
+  },
+  "macOSInstaller": {
+    "schema": 1,
+    "target": "macos-arm64",
+    "version": "0.1.0-dev.2",
+    "installer": "OpenPyCharm-0.1.0-dev.2-macos-arm64.dmg",
+    "sha256": "38dbc812fa871d3a5ec404c037b32e013ce9aefe1e4d84f6abf324760662523b",
+    "size": 685794216,
+    "productTreeSha256": "5e6061ce2d83397fe4b6df033a61c7ed23cd6bba1d20bf088a7f074531f4a851",
+    "checks": [
+      "hdiutil-verify",
+      "mounted-product-tree",
+      "Applications-symlink",
+      "copied-product-tree",
+      "ad-hoc-signature"
+    ],
+    "limitations": [
+      "Not notarized",
+      "Installer checks do not establish native Python Run/Test/Debug acceptance"
+    ]
+  },
+  "installerScope": "Built DMG verified/mounted/copied into an owned temporary installation; installed-user native HTTP workflow not performed",
+  "independentReview": {
+    "source": "Parent reviewer reuse_audit",
+    "findingsResolved": [
+      "Manual Transfer-Encoding framing",
+      "Incremental lexer token-start state",
+      "Quote/unfinished variable scan crossing physical lines",
+      "Installer plugin receipt drift"
+    ],
+    "controls": "Own raw framing/lexer probes, owned compiler-cache controls and original installer mutation reproducer passed; raw evidence retained under primary checkout .tools/http-review"
+  },
+  "additionalNegativeObservation": {
+    "appLocation": "build/http-relocated/HTTP 验证 🚀/OpenPyCharm.app (precommit development candidate)",
+    "observed": "Native launcher emitted xplat_launcher JVM abort_hook before IDE startup logging; no API report within 60 seconds; owned process was stopped",
+    "reportSha256": "7aae3a424dc6953c20c5cc7be2e2b38d7a8957ecc3aa153e77ceb03c488aacc9",
+    "cleanup": {
+      "mode": "owned-posix-session",
+      "pid": 2427,
+      "exitCode": 143
+    },
+    "diagnostic": "Standalone product JBR NIO/ZipFile could read platform-loader.jar and its class entry, but the standard classpath loader did not resolve that class at the non-BMP app path",
+    "inferred": "Consistent with an early launcher/JBR classpath path-encoding problem; HTTP implementation had not started",
+    "unknown": "Exact native abort cause and unmodified upstream baseline were not established. No production workaround was applied.",
+    "harnessChange": "Archive verification stages exact actual-product reader-library copies in an owned temporary directory and records their hashes; product JVM remains in use"
+  },
+  "remainingAcceptance": [
+    "Windows native JVM, API probe and EXE installer for dev.2 await execution of the updated CI workflow; local Windows SDK tests used the authenticated macOS host JVM",
+    "HTTP toolbar/gutter and current/Run All clicks, Services selection, Stop/cancel UI, raw save dialog, project disposal and real installed-version capture remain unverified",
+    "This candidate has not been published; English/Chinese README feature GIF must be refreshed from the actual installed version before publication",
+    "Environment files, dynamic/OS variables, HTTP JavaScript, uploads/multipart, cookie jar, OAuth helpers, redirect following, WebSocket/gRPC and HTTP history remain unsupported as stated in plugin README",
+    "Full 1:1 PyCharm acceptance remains open"
+  ]
+}

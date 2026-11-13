@@ -1,0 +1,273 @@
+{
+  "schema": 1,
+  "recordedAt": "2026-11-13T18:02:05.538995+00:00",
+  "scope": "Independent native framework generator UI/API slice; not full desktop or installed-release acceptance",
+  "baseCommit": "67e5d9b3daae23b64967417a83bac18784c602fd",
+  "platform": {
+    "system": "Darwin",
+    "machine": "arm64",
+    "macOS": "27.2"
+  },
+  "applicationHost": {
+    "version": "0.1.0-dev.1",
+    "upstreamBuild": "261.26222.68",
+    "sourceCommit": "9c5343e9b30ce5254fdd28383e4e28776c1507fa",
+    "manifestSha256": "3f25669f5140783a36c9bb9bf71962fbb9d7569d3eefaf32d184f7fbd625b868"
+  },
+  "plugin": {
+    "id": "dev.openpycharm.frameworks",
+    "version": "0.1.0-dev.2",
+    "sha256": "7f191b13f6ac9762e074424cd94fdc982b3620cc7f5f69eb02150ec541e01956",
+    "compiler": "javac 25.0.3",
+    "sdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+    "testProbeSha256": "24e87790803d10f4a1e22ee878348dc159ab0c08f74220bd2f6af92a0033c7e6"
+  },
+  "checks": {
+    "pythonUnittest": {
+      "status": "pass",
+      "tests": 52
+    },
+    "helloPythonFixture": {
+      "status": "pass",
+      "tests": 9
+    },
+    "commandCodec": {
+      "status": "pass",
+      "frameworks": 3
+    },
+    "templateWriter": {
+      "status": "pass",
+      "scope": "template plans and transactional filesystem writer",
+      "checks": 254,
+      "symlinksTested": true
+    },
+    "requestIsolation": {
+      "status": "pass",
+      "scope": "per-module dependency opt-in request isolation",
+      "checks": 16
+    }
+  },
+  "native": {
+    "receipt": ".state/framework-generators-sealed/framework-probe.json",
+    "sha256": "527490b9b42d90a9da9a67076335ae20a1195a9eaee80d8a3e1a6c5bf2a9dfd4",
+    "invocationId": "95b3211c9cba4b74b92472db4bba77a3",
+    "assessment": {
+      "status": "pass",
+      "frameworks": 3,
+      "generatedProjects": 4,
+      "nativeGuiCreateClicked": false,
+      "scope": "Native generator UI/API, real selected venv/module, opt-in/out and helper lifecycle"
+    },
+    "nativeGracefulExit": 0,
+    "cleanup": {
+      "mode": "owned-posix-session",
+      "pid": 99159,
+      "exitCode": 0
+    },
+    "errorCount": 0,
+    "generatorPeers": [
+      {
+        "dependencyCheckboxDefault": false,
+        "dependencyCheckboxBinding": "pass",
+        "nativePeer": "com.jetbrains.python.newProjectWizard.impl.PyV3GeneratorPeer",
+        "framework": "DJANGO",
+        "generator": "dev.openpycharm.frameworks.DjangoProjectGenerator",
+        "nativeComponent": "com.intellij.openapi.ui.DialogPanel"
+      },
+      {
+        "dependencyCheckboxDefault": false,
+        "dependencyCheckboxBinding": "pass",
+        "nativePeer": "com.jetbrains.python.newProjectWizard.impl.PyV3GeneratorPeer",
+        "framework": "FLASK",
+        "generator": "dev.openpycharm.frameworks.FlaskProjectGenerator",
+        "nativeComponent": "com.intellij.openapi.ui.DialogPanel"
+      },
+      {
+        "dependencyCheckboxDefault": false,
+        "dependencyCheckboxBinding": "pass",
+        "nativePeer": "com.jetbrains.python.newProjectWizard.impl.PyV3GeneratorPeer",
+        "framework": "FASTAPI",
+        "generator": "dev.openpycharm.frameworks.FastApiProjectGenerator",
+        "nativeComponent": "com.intellij.openapi.ui.DialogPanel"
+      }
+    ],
+    "projects": [
+      {
+        "framework": "django",
+        "installDependencies": true,
+        "status": "pass",
+        "files": {
+          "requirements.txt": "399419ca0dc48d150fb2f06e8c7acd67e0f3864da366ade3d5604c81a621652e",
+          "manage.py": "f2f599c3197d812fe0fe4ebf212ae73a4960af6aa0434a844fdf10511f762db7",
+          "project_config/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "project_config/settings.py": "bef5f59fa5c52e2d18b81f2ef83b89a1fbd74b7126079017e91f86d471944cd4",
+          "project_config/urls.py": "f35a3cbdff6a5e7a50dc0f781a9c52409bb4136373c4a942178a379f6b06a039",
+          "README.md": "390a8a4b7dc302b0c8503a8f669a919f59b5c57f9b31545b30e469739f52210b"
+        },
+        "runConfigurationType": "OpenPyCharmDjango",
+        "moduleSdk": true,
+        "collisionRejected": true,
+        "sdkCreatorContext": "com.jetbrains.python.sdk.ModuleOrProject$ModuleAndProject"
+      },
+      {
+        "framework": "flask",
+        "installDependencies": true,
+        "status": "pass",
+        "files": {
+          "requirements.txt": "6979faed9b4726634bb0ff2b36f3e5a080e4d89a162dc1f264fce99bae332a8a",
+          "app.py": "4e05788b8e317707dd6ea1cc7ec430407c572575d8eb52d0f7acf59cfb3623e5",
+          "README.md": "2b90473ad97fcb2e0b23e965ddf81b410c9c9cba0bfe48ee6352794aa4f5f4b8"
+        },
+        "runConfigurationType": "OpenPyCharmFlask",
+        "moduleSdk": true,
+        "collisionRejected": true,
+        "sdkCreatorContext": "com.jetbrains.python.sdk.ModuleOrProject$ModuleAndProject"
+      },
+      {
+        "framework": "fastapi",
+        "installDependencies": true,
+        "status": "pass",
+        "files": {
+          "requirements.txt": "a5ee2ca15213db4da4f16c58eef6ff1f332f10ae9bb04b9fbd652df5815b9539",
+          "app.py": "1ef4d59ecb2aba41ad1860fd55dfd14b99611bb5c14b01a0765a8266790ca4f0",
+          "README.md": "a40b2c0797b67a7304a41694b8a7e3e65c3bac38575b8f561b555a0dbe264c5b"
+        },
+        "runConfigurationType": "OpenPyCharmFastAPI",
+        "moduleSdk": true,
+        "collisionRejected": true,
+        "sdkCreatorContext": "com.jetbrains.python.sdk.ModuleOrProject$ModuleAndProject"
+      },
+      {
+        "framework": "flask",
+        "installDependencies": false,
+        "status": "pass",
+        "files": {
+          "requirements.txt": "6979faed9b4726634bb0ff2b36f3e5a080e4d89a162dc1f264fce99bae332a8a",
+          "app.py": "4e05788b8e317707dd6ea1cc7ec430407c572575d8eb52d0f7acf59cfb3623e5",
+          "README.md": "2b90473ad97fcb2e0b23e965ddf81b410c9c9cba0bfe48ee6352794aa4f5f4b8"
+        },
+        "runConfigurationType": "OpenPyCharmFlask",
+        "moduleSdk": true,
+        "collisionRejected": true,
+        "sdkCreatorContext": "com.jetbrains.python.sdk.ModuleOrProject$ModuleAndProject"
+      }
+    ],
+    "selectedVenvPackages": {
+      "Django": "5.2.8",
+      "Flask": "3.1.2",
+      "fastapi": "0.121.0",
+      "uvicorn": "0.38.0"
+    },
+    "optOutFrameworkPackagesPresent": false,
+    "processLifecycle": {
+      "failedExitOwnedPids": {
+        "parent": 99175.0,
+        "child": 99176.0
+      },
+      "timeoutPropagated": true,
+      "ownedPidsAliveAfterCancellation": false,
+      "status": "pass",
+      "failedExitChildrenCleaned": true,
+      "ownedPids": {
+        "parent": 99167.0,
+        "child": 99168.0
+      },
+      "nonzeroExitPropagated": true,
+      "normalExitOwnedPids": {
+        "parent": 99173.0,
+        "child": 99174.0
+      },
+      "cancellationPreserved": true,
+      "normalExitChildrenCleaned": true
+    }
+  },
+  "generatedServers": {
+    "receipt": ".tools/framework-generator-servers-sealed/framework-servers.json",
+    "sha256": "5f673d0a406a8cb2e01372b357bb75ec2b0bc40265e68c002e556d787f0b925c",
+    "status": "pass",
+    "servers": [
+      {
+        "framework": "django",
+        "status": "pass",
+        "httpStatus": 200,
+        "response": {
+          "framework": "django",
+          "marker": "django-c9669e9edf274770bb57aece7f390baa"
+        },
+        "cleanup": {
+          "mode": "owned-posix-session",
+          "pid": 99311,
+          "exitCode": -15
+        }
+      },
+      {
+        "framework": "flask",
+        "status": "pass",
+        "httpStatus": 200,
+        "response": {
+          "framework": "flask",
+          "marker": "flask-fdae40aadd634ef78f3ad90041925b50"
+        },
+        "cleanup": {
+          "mode": "owned-posix-session",
+          "pid": 99312,
+          "exitCode": -15
+        }
+      },
+      {
+        "framework": "fastapi",
+        "status": "pass",
+        "httpStatus": 200,
+        "response": {
+          "framework": "fastapi",
+          "marker": "fastapi-d7609f2d35264a549cd06971dda1fdea"
+        },
+        "cleanup": {
+          "mode": "owned-posix-session",
+          "pid": 99313,
+          "exitCode": -15
+        }
+      }
+    ]
+  },
+  "retainedFailure": {
+    "receipt": ".state/framework-generators-1/framework-probe.json",
+    "sha256": "087d77860da9b000ba256d44256d7724f3d4505d2926ffd4560dab5674fe6c6b",
+    "cause": "Test-only project disposal omitted WriteAction and logged SEVERE; corrected without masking errors"
+  },
+  "sourceSha256": {
+    "plugins/frameworks/resources/META-INF/plugin.xml": "540be1af331af9faa26eb96d1bc62667863429d624d1c7c45a66bf25a10a52b8",
+    "plugins/frameworks/src/dev/openpycharm/frameworks/DjangoConfigurationType.java": "ae1985170b656bedb3e08bc0dcef9472a062b672a9d8fcfacefdea5595c1b970",
+    "plugins/frameworks/src/dev/openpycharm/frameworks/DjangoProjectGenerator.java": "169d91de3c0e3d877ecf36935d25414c778601585d0354cb373e87388ff1d1b3",
+    "plugins/frameworks/src/dev/openpycharm/frameworks/FastApiConfigurationType.java": "9b3226c9f3478bffd23fb057d8b37e64d12b0e48e558a81db1134dfe2bbc93d1",
+    "plugins/frameworks/src/dev/openpycharm/frameworks/FastApiProjectGenerator.java": "c1a0077aff1739d22a00f3880c3678da37ecaa9b50b557a1e2f53e2b5b164493",
+    "plugins/frameworks/src/dev/openpycharm/frameworks/FlaskConfigurationType.java": "fe3344e0aacdd90ed734f6b027d982beda12637d1429c28eb8e31625b29b71f6",
+    "plugins/frameworks/src/dev/openpycharm/frameworks/FlaskProjectGenerator.java": "4e5f86da5dc23d9cdca611762a9f513d17fe0e098537342295bfd8f453bba3b3",
+    "plugins/frameworks/src/dev/openpycharm/frameworks/FrameworkConfigurationType.java": "fa384008cd5dc6150b8c26476498bfd2aa4fc3bb6e3744a79b2ad748c8222781",
+    "plugins/frameworks/src/dev/openpycharm/frameworks/FrameworkDependencyInstaller.java": "53b251bcbba1a5834e903ca3619d4b738e7d97efc9490fd47458a0bf54be2b20",
+    "plugins/frameworks/src/dev/openpycharm/frameworks/FrameworkKind.java": "499ba3ccb1b1ae9f0820aacc1aba9ef4521bb9e6b4d89d47c22760a32f0e6f2c",
+    "plugins/frameworks/src/dev/openpycharm/frameworks/FrameworkProjectFiles.java": "8c22394abea3dd6b82dacfa025f866fcb812eaea2095aec9d38022fac8e9f1be",
+    "plugins/frameworks/src/dev/openpycharm/frameworks/FrameworkProjectGenerator.java": "25391606b827d46ac17148fbe7fafed6a9dff2534894b58e9c85b2ec6e7bce38",
+    "plugins/frameworks/src/dev/openpycharm/frameworks/FrameworkProjectSettings.java": "a9275e0b052ea48eb412ce2f20df17a50035c6e7ab670dcd0587b1baae13022f",
+    "plugins/frameworks/src/dev/openpycharm/frameworks/FrameworkProjectUi.java": "d3f940afe4293f144a7748b7fb1905165557b2dffa8fb3064747731bf36a4997",
+    "plugins/frameworks/src/dev/openpycharm/frameworks/FrameworkRunConfiguration.java": "49294a24b5f473bacf34d2ff1b4b022280bbc2a2afe912fb75208449ffdd1b91",
+    "scripts/build_framework_plugin.py": "33ad700000adf7cd1a3ccad4641ed5d27bfa084b30c0a96b73cfee9b949561fe",
+    "scripts/framework_probe.py": "cc07bea43f303968c798417845ffca96a0fa4cc7891c16c04ad19b4b6ff0ecc0",
+    "scripts/framework_server_smoke.py": "3dc0e968d2a9032b35551c02a940f975c0fe09a9a9c28a6d564c34421b3d3b70",
+    "tests/frameworks/FrameworkCommandTest.java": "9076dc98e2c38ef51ec65b29a343b566dff94d337cec03bb0c69c35b7bd12e92",
+    "tests/frameworks/FrameworkProjectFilesTest.java": "5372e3e5140cf48dae2261db56202023816f86801e733665bcfc4f4f47cdfd96",
+    "tests/frameworks/FrameworkProjectSettingsTest.java": "d287bebccb00a612b8ad1c52a8b43755f0c395f8109248862a1a2d448c183eca",
+    "tests/frameworks/native/FrameworkGeneratorProbe.java": "4d15ca4751bfcec6329fc654a2d3c5840b4007fda6cd1a4ba0aa77c0cca4c03c",
+    "tests/frameworks/native/FrameworkProbe.java": "4eabbb0a5863279ea2df2fda444bee747c9939758c5cf85ebfbd61c78885249f",
+    "tests/test_framework_plugin.py": "296b091153c36d5c937031b9d1a3f3a29009862347f088e260e8f68b7c972786"
+  },
+  "limitations": [
+    "Native generator UI/API with a controlled SDK creator selecting real clean existing venvs",
+    "The actual wizard Create/Cancel clicks and Windows desktop flow remain separate acceptance gates",
+    "Pinned dependency installation is opt-in and targets only the disposable selected venv",
+    "Portable process cleanup tracks observed descendants; an instant-spawn orphan before observation is not covered by a native OS job/session container",
+    "Actual native new-venv creation UI was not exercised; controlled native SDK creator selected real existing clean venvs",
+    "Native framework Run/Debug, breakpoints, installed packaging and Windows/Linux remain separate acceptance gates",
+    "No core-release integration or 1:1 framework-parity claim"
+  ]
+}

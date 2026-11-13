@@ -9,4 +9,7 @@
   <extensions defaultExtensionNs="com.intellij">
     <postStartupActivity implementation="dev.openpycharm.probe.DiagnosticProbe"/>
   </extensions>
+  <applicationListeners>
+    <listener class="dev.openpycharm.probe.HttpPluginProbe" topic="com.intellij.ide.AppLifecycleListener"/>
+  </applicationListeners>
 </idea-plugin>

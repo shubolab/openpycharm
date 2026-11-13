@@ -1,0 +1,13 @@
+<idea-plugin>
+  <id>dev.openpycharm.frameworks.probe</id>
+  <name>OpenPyCharm Framework Native Probe</name>
+  <version>1</version>
+  <vendor>OpenPyCharm</vendor>
+  <idea-version since-build="261" until-build="261.*"/>
+  <depends>com.intellij.modules.platform</depends>
+  <depends>PythonCore</depends>
+  <depends>dev.openpycharm.frameworks</depends>
+  <applicationListeners>
+    <listener class="dev.openpycharm.frameworks.probe.FrameworkProbe" topic="com.intellij.ide.AppLifecycleListener"/>
+  </applicationListeners>
+</idea-plugin>

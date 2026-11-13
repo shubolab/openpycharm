@@ -1,0 +1,7 @@
+OpenPyCharm Python Frameworks
+Copyright OpenPyCharm contributors
+
+This independently implemented plugin uses the public APIs of the Apache-2.0
+IntelliJ Platform and open-source PyCharm (PythonCore). No proprietary framework
+plugin implementation is included. Upstream Python icons are referenced through
+the installed PythonCore API and remain part of that upstream distribution.

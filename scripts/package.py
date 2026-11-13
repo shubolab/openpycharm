@@ -13,7 +13,7 @@ import tempfile
 
 from product import IDENTITY, ROOT, brand_plist, brand_product_info, brand_resources, seal_python_helper_directories, sha, write_paths
 from bootstrap import PIN_PATH, validate_cached
-from provenance import source_inputs
+from provenance import source_inputs, verify_source_inputs
 
 
 def assemble(sdk, target, version, output):
@@ -38,6 +38,11 @@ def assemble(sdk, target, version, output):
         raise ValueError("Choose a new output below this repository's build directory")
     if shutil.disk_usage(ROOT).free < 24 * 1024**3:
         raise ValueError("The build needs 20 GiB reserve plus assembly space")
+    inputs = source_inputs()
+    from build_http_plugin import build as build_http_plugin
+    http = build_http_plugin(sdk, ROOT / f"build/http-client-{target}", version, [ROOT / ".tools/kotlin"])
+    from build_framework_plugin import build_plugin as build_framework_plugin
+    framework_directory, frameworks = build_framework_plugin(sdk, version=version)
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="assemble-", dir=output.parent) as staging_name:
         staging = Path(staging_name) / output.name
@@ -55,6 +60,20 @@ def assemble(sdk, target, version, output):
         branding = brand_resources(contents)
         from local_product import apply
         local_policy = apply(contents, source_contents)
+        plugins = []
+        for plugin_id, name, directory_name, source_directory, jar_name, build in (
+            ("dev.openpycharm.http", "OpenPyCharm HTTP Client", "openpycharm-http", Path(http["pluginDirectory"]), "openpycharm-http.jar", http),
+            ("dev.openpycharm.frameworks", "OpenPyCharm Python Frameworks", "openpycharm-frameworks", framework_directory, "frameworks.jar", frameworks),
+        ):
+            directory = contents / "third-party-plugins" / directory_name
+            jar = directory / "lib" / jar_name
+            jar.parent.mkdir(parents=True)
+            shutil.copyfile(source_directory / "lib" / jar_name, jar)
+            if sha(jar) != build["jarSha256"]:
+                raise ValueError(f"Packaged {name} digest differs from its authenticated build")
+            plugins.append({"id": plugin_id, "name": name, "version": version,
+                            "path": directory.relative_to(contents).as_posix(), "jar": jar.relative_to(contents).as_posix(),
+                            "jarSha256": build["jarSha256"], "build": build})
         if macos:
             from icons import mac_icon
             mac_icon(contents)
@@ -73,10 +92,11 @@ def assemble(sdk, target, version, output):
                   "upstreamBuild": original_info["buildNumber"], "upstreamProduct": "PC",
                   "platformReceipt": receipt, "branding": branding, "paths": paths,
                   "localProduct": local_policy, "platformRepairs": repairs,
+                  "plugins": plugins,
                   "limitations": ["Full 1:1 acceptance remains open"]}
         import PIL
         report["buildDependencies"] = {"Pillow": PIL.__version__}
-        report["sourceInputs"] = source_inputs()
+        report["sourceInputs"] = inputs
         try:
             report["sourceCommit"] = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True, stderr=subprocess.DEVNULL).strip()
         except subprocess.CalledProcessError:
@@ -88,6 +108,7 @@ def assemble(sdk, target, version, output):
             (contents / "openpycharm-build.json").write_text(json.dumps(report, indent=2) + "\n")
             subprocess.run(["codesign", "--force", "--deep", "--sign", "-", str(staging)], check=True)
             subprocess.run(["codesign", "--verify", "--deep", "--strict", str(staging)], check=True)
+        verify_source_inputs(report)
         staging.rename(output)
     print(json.dumps({"output": str(output), "version": version, "target": target}))
     return output

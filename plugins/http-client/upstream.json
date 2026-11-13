@@ -1,0 +1,93 @@
+{
+  "schema": 1,
+  "repository": "https://github.com/shubolab/opengoland",
+  "commit": "3b32dc53df49388528203fa9b600b93ea69b8368",
+  "basis": "User-directed reuse of the same author's existing native HTTP implementation",
+  "adaptations": [
+    "Isolated OpenPyCharm package/language/action/service identities",
+    "No Go, LSP4IJ or terminal integration dependency",
+    "Reject manual Transfer-Encoding case-insensitively so the transport owns request framing",
+    "Expose token-start lexer state for IntelliJ incremental restart and position restore",
+    "Bound quoted and unfinished-variable tokens to physical lines so following requests remain visible"
+  ],
+  "files": [
+    {
+      "originalPath": "src/main/kotlin/dev/openidea/goide/http/HttpBatchProcessHandler.kt",
+      "originalSha256": "a2fbb2a6ae9b421068bb514125a35c683afee7b5cc3a730582adab8f04d45fe2",
+      "adaptedPath": "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpBatchProcessHandler.kt",
+      "adaptedSha256": "607999478eed3e2ae39ef540fcf1650df59055c9fbbf297b4d6d770111e47a53"
+    },
+    {
+      "originalPath": "src/main/kotlin/dev/openidea/goide/http/HttpRequestCall.kt",
+      "originalSha256": "d2641fb15bba570ffe91e02148251f592525ec4e5999f2cce19c961c32ce518f",
+      "adaptedPath": "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpRequestCall.kt",
+      "adaptedSha256": "813c18548904537f47b6cc18a49a944bcaf3855ae224a932b3158f12c8ec8220"
+    },
+    {
+      "originalPath": "src/main/kotlin/dev/openidea/goide/http/HttpRequestDocument.kt",
+      "originalSha256": "104d88efe8ecc8ef85716f6008e762abda92203a417302f222858c152644060b",
+      "adaptedPath": "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpRequestDocument.kt",
+      "adaptedSha256": "3c39cb305517db1b54e14dd885a677c5a0bc2f597355ea6af5bed4c965b70b7e"
+    },
+    {
+      "originalPath": "src/main/kotlin/dev/openidea/goide/http/HttpRequestRun.kt",
+      "originalSha256": "17b77ac7349400877404d45cf075c123771604c446d0e6e840c9ea68fb808afc",
+      "adaptedPath": "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpRequestRun.kt",
+      "adaptedSha256": "14a204a5da357273dd191e3c62119b743156a17e33facf2fbbcd5d786d02517a"
+    },
+    {
+      "originalPath": "src/main/kotlin/dev/openidea/goide/http/HttpRequestSession.kt",
+      "originalSha256": "aaf9c564957dd15e5501729a2b1a274840f58c306143a7be217a9173d9d6279f",
+      "adaptedPath": "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpRequestSession.kt",
+      "adaptedSha256": "b8433a13496ba956dd41e340b8b0f1cd78925452d777cd4cdb1e87eab49527f4"
+    },
+    {
+      "originalPath": "src/main/kotlin/dev/openidea/goide/http/HttpResponseCache.kt",
+      "originalSha256": "c643b80516726b78d2f0087efca449d0d4b3e3e0684c67518ba1a605791f5dca",
+      "adaptedPath": "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpResponseCache.kt",
+      "adaptedSha256": "b7e75143029009124c946b6fbc3f69e68dccd3fc24c9650231ae4724ca8a0a19"
+    },
+    {
+      "originalPath": "src/main/kotlin/dev/openidea/goide/http/HttpResponseView.kt",
+      "originalSha256": "7f6c86fcdfb4581cd36ca5f3eb485810f3aa6cc262ae702c5fecd7f22db1cf64",
+      "adaptedPath": "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpResponseView.kt",
+      "adaptedSha256": "8d7c642c7b6f9c55ac15b82de90b6a103b8b85275f5b4b57ff712088d0d27bd7"
+    },
+    {
+      "originalPath": "src/main/kotlin/dev/openidea/goide/http/HttpServicesContributor.kt",
+      "originalSha256": "9d0cbb688ed285594bac6934cfa3bde4e427c74e1f16cac0e153f4673bdc4a47",
+      "adaptedPath": "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpServicesContributor.kt",
+      "adaptedSha256": "b8f5cb8eb39daaf29084246e1c450c117f9f17daf587ea6b825c87b778cdae13"
+    },
+    {
+      "originalPath": "src/main/kotlin/dev/openidea/goide/http/SaveHttpResponseAction.kt",
+      "originalSha256": "99b47c004564cfeec0dcd8e40f37f83440dec9bfe1d30d6419841bc369fad5fb",
+      "adaptedPath": "plugins/http-client/src/main/kotlin/dev/openpycharm/http/SaveHttpResponseAction.kt",
+      "adaptedSha256": "97d0774a0ee8cd2e8458dbcd2f4a32179ae5e43bbbce5deed3a6fd1a11df3fd6"
+    },
+    {
+      "originalPath": "src/main/kotlin/dev/openidea/goide/lang/HttpRequestLanguage.kt",
+      "originalSha256": "a801f53c8f610449cd5ae732474a18aed4cb89150d1c29a9940508ecb8d5f828",
+      "adaptedPath": "plugins/http-client/src/main/kotlin/dev/openpycharm/http/lang/HttpRequestLanguage.kt",
+      "adaptedSha256": "b354eb8e4f27a3dcabaaa2c98f6715ecdf60a5be624ff4d9576d5d7ce1a9e62f"
+    },
+    {
+      "originalPath": "src/main/kotlin/dev/openidea/goide/lang/HttpRequestLexer.kt",
+      "originalSha256": "a48e56b03fb86d629f5e4d56ea02ed2c368d97ed2d15f29bebdda1b102ea5e35",
+      "adaptedPath": "plugins/http-client/src/main/kotlin/dev/openpycharm/http/lang/HttpRequestLexer.kt",
+      "adaptedSha256": "8cfefd07a4f69c933b3b84bbb6d75c81d66546b9d60da041d1dd81f3c8b9280c"
+    },
+    {
+      "originalPath": "src/main/kotlin/dev/openidea/goide/lang/HttpRequestParserDefinition.kt",
+      "originalSha256": "c80ccefb81e3379d7db8c825fb1f2a7ed1707d01a413f821e41cfdd0334bac09",
+      "adaptedPath": "plugins/http-client/src/main/kotlin/dev/openpycharm/http/lang/HttpRequestParserDefinition.kt",
+      "adaptedSha256": "69a479d7fedf8ade2bdca13f178cc230136205663e591921973de3391f46181a"
+    },
+    {
+      "originalPath": "src/main/kotlin/dev/openidea/goide/lang/HttpRequestSyntaxHighlighter.kt",
+      "originalSha256": "8b6c6b35249246bab96fd2b84eaf5e710204bb2290fa37216b03d6c2b4aaa814",
+      "adaptedPath": "plugins/http-client/src/main/kotlin/dev/openpycharm/http/lang/HttpRequestSyntaxHighlighter.kt",
+      "adaptedSha256": "918e314f919e79787d881e8deebd80b936bc9bde50bbca0d3e7362c832fc9c17"
+    }
+  ]
+}

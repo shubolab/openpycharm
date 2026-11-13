@@ -1,0 +1,348 @@
+{
+  "schema": 1,
+  "date": "2026-11-14",
+  "platform": "macOS-27.2-arm64-arm-64bit",
+  "upstream": "PC-261.26222.68",
+  "pluginId": "dev.openpycharm.frameworks",
+  "pluginSha256": "0f5d51279144ce1a2e9d42ad77f4680f22bf79b82ff267c4c69620bd2c903605",
+  "build": {
+    "schema": 1,
+    "identity": {
+      "pluginId": "dev.openpycharm.frameworks",
+      "sources": {
+        "plugins/frameworks/NOTICE": "4894983e756bc62f77959ec2b268e88e08a136ed91f47e5c6e4951235cb832c0",
+        "plugins/frameworks/README.md": "5a5287b17dd46ad5ccd59cf592c5fe520ef457b701258a336ed9bd7689294117",
+        "plugins/frameworks/resources/META-INF/plugin.xml": "0e80e4bf3e61b693ac57f65282fc9c27dcc7be0091815f44a08077fd39556d8d",
+        "plugins/frameworks/src/dev/openpycharm/frameworks/DjangoConfigurationType.java": "ae1985170b656bedb3e08bc0dcef9472a062b672a9d8fcfacefdea5595c1b970",
+        "plugins/frameworks/src/dev/openpycharm/frameworks/FastApiConfigurationType.java": "9b3226c9f3478bffd23fb057d8b37e64d12b0e48e558a81db1134dfe2bbc93d1",
+        "plugins/frameworks/src/dev/openpycharm/frameworks/FlaskConfigurationType.java": "fe3344e0aacdd90ed734f6b027d982beda12637d1429c28eb8e31625b29b71f6",
+        "plugins/frameworks/src/dev/openpycharm/frameworks/FrameworkConfigurationType.java": "fa384008cd5dc6150b8c26476498bfd2aa4fc3bb6e3744a79b2ad748c8222781",
+        "plugins/frameworks/src/dev/openpycharm/frameworks/FrameworkKind.java": "499ba3ccb1b1ae9f0820aacc1aba9ef4521bb9e6b4d89d47c22760a32f0e6f2c",
+        "plugins/frameworks/src/dev/openpycharm/frameworks/FrameworkRunConfiguration.java": "49294a24b5f473bacf34d2ff1b4b022280bbc2a2afe912fb75208449ffdd1b91",
+        "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "scripts/build_framework_plugin.py": "5514141b7155bb23c8b806acc82de52bbe18f6253709d5cee3448bf7df011f9c"
+      },
+      "sdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+      "compiler": "javac 25.0.3"
+    },
+    "pluginSha256": "0f5d51279144ce1a2e9d42ad77f4680f22bf79b82ff267c4c69620bd2c903605",
+    "compilation": {
+      "stdout": "",
+      "stderr": ""
+    },
+    "classes": [
+      "dev/openpycharm/frameworks/DjangoConfigurationType.class",
+      "dev/openpycharm/frameworks/FastApiConfigurationType.class",
+      "dev/openpycharm/frameworks/FlaskConfigurationType.class",
+      "dev/openpycharm/frameworks/FrameworkConfigurationType$1.class",
+      "dev/openpycharm/frameworks/FrameworkConfigurationType.class",
+      "dev/openpycharm/frameworks/FrameworkKind.class",
+      "dev/openpycharm/frameworks/FrameworkRunConfiguration.class"
+    ]
+  },
+  "argumentTests": {
+    "commands": [
+      {
+        "framework": "django",
+        "moduleMode": false,
+        "scriptName": "manage.py",
+        "arguments": [
+          "runserver",
+          "127.0.0.1:8000",
+          "--noreload"
+        ]
+      },
+      {
+        "framework": "flask",
+        "moduleMode": true,
+        "scriptName": "flask",
+        "arguments": [
+          "--app",
+          "app",
+          "run",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "5000",
+          "--no-reload",
+          "--no-debugger"
+        ]
+      },
+      {
+        "framework": "fastapi",
+        "moduleMode": true,
+        "scriptName": "uvicorn",
+        "arguments": [
+          "app:app",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "8000"
+        ]
+      }
+    ],
+    "frameworks": 3,
+    "scope": "default commands and native argument codec",
+    "status": "pass"
+  },
+  "realFrameworkServers": {
+    "status": "pass",
+    "interpreter": {
+      "executable": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frameworks/.tools/framework-venv/bin/python",
+      "prefix": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frameworks/.tools/framework-venv",
+      "basePrefix": "/Users/wangshubo/.local/share/mise/installs/python/3.10.18",
+      "version": "3.10.18 (main, Jun  4 2025, 17:37:48) [Clang 20.1.4 ]"
+    },
+    "servers": [
+      {
+        "framework": "django",
+        "command": [
+          "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frameworks/.tools/framework-venv/bin/python",
+          "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frameworks/fixtures/frameworks/django/manage.py",
+          "runserver",
+          "127.0.0.1:54221",
+          "--noreload"
+        ],
+        "cwd": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frameworks/fixtures/frameworks/django",
+        "marker": "django-880eff8cad3a461187328f9d8c712d8e",
+        "port": 54221,
+        "ownedPid": 84670,
+        "status": "pass",
+        "httpStatus": 200,
+        "response": {
+          "framework": "django",
+          "marker": "django-880eff8cad3a461187328f9d8c712d8e"
+        },
+        "cleanup": {
+          "mode": "owned-posix-session",
+          "pid": 84670,
+          "exitCode": -15
+        }
+      },
+      {
+        "framework": "flask",
+        "command": [
+          "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frameworks/.tools/framework-venv/bin/python",
+          "-m",
+          "flask",
+          "--app",
+          "app",
+          "run",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "54226",
+          "--no-reload",
+          "--no-debugger"
+        ],
+        "cwd": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frameworks/fixtures/frameworks/flask",
+        "marker": "flask-4600ae544eb54ef0ab89ccc8b7e31c3d",
+        "port": 54226,
+        "ownedPid": 84671,
+        "status": "pass",
+        "httpStatus": 200,
+        "response": {
+          "framework": "flask",
+          "marker": "flask-4600ae544eb54ef0ab89ccc8b7e31c3d"
+        },
+        "cleanup": {
+          "mode": "owned-posix-session",
+          "pid": 84671,
+          "exitCode": -15
+        }
+      },
+      {
+        "framework": "fastapi",
+        "command": [
+          "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frameworks/.tools/framework-venv/bin/python",
+          "-m",
+          "uvicorn",
+          "app:app",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "54231"
+        ],
+        "cwd": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frameworks/fixtures/frameworks/fastapi",
+        "marker": "fastapi-8169e827e8cd4e309983535452f92012",
+        "port": 54231,
+        "ownedPid": 84672,
+        "status": "pass",
+        "httpStatus": 200,
+        "response": {
+          "framework": "fastapi",
+          "marker": "fastapi-8169e827e8cd4e309983535452f92012"
+        },
+        "cleanup": {
+          "mode": "owned-posix-session",
+          "pid": 84672,
+          "exitCode": -15
+        }
+      }
+    ],
+    "report": ".tools/framework-server-final/framework-servers.json",
+    "reportSha256": "70add1f4676e76cc1266ffb6d2218c4b1ff8030b6a904f15fe6afe4bc2566511",
+    "installedPythonPackages": [
+      "annotated-doc==0.0.6",
+      "annotated-types==0.8.0",
+      "anyio==4.16.0",
+      "asgiref==3.12.1",
+      "blinker==1.9.0",
+      "click==8.5.1",
+      "Django==5.2.8",
+      "exceptiongroup==1.3.1",
+      "fastapi==0.121.0",
+      "Flask==3.1.2",
+      "h11==0.16.0",
+      "idna==3.20",
+      "itsdangerous==2.2.0",
+      "Jinja2==3.1.6",
+      "MarkupSafe==3.0.4",
+      "pydantic==2.14.3",
+      "pydantic_core==2.50.4",
+      "sqlparse==0.6.1",
+      "starlette==0.49.3",
+      "typing-inspection==0.4.5",
+      "typing_extensions==4.16.0",
+      "uvicorn==0.38.0",
+      "Werkzeug==3.1.9"
+    ]
+  },
+  "nativeConfigurationApi": {
+    "assessment": {
+      "status": "pass",
+      "frameworks": 3,
+      "userCodeExecuted": false,
+      "scope": "Native EP registration, editor/state, runner selection and persistence"
+    },
+    "applicationBuild": {
+      "version": "0.1.0-dev.1",
+      "upstreamBuild": "261.26222.68",
+      "sourceCommit": "a7335490bb9b81a9d0d12b193de78b13be3fc19b",
+      "manifestSha256": "1e56c02f3ed82ec50e5051f82e384348f7d51355bbdd8fd47c923720423928fa"
+    },
+    "configurations": [
+      {
+        "typeId": "OpenPyCharmDjango",
+        "typeClass": "dev.openpycharm.frameworks.DjangoConfigurationType",
+        "factoryApplicable": true,
+        "framework": "DJANGO",
+        "defaultModuleMode": false,
+        "defaultScriptName": "manage.py",
+        "defaultParameters": "runserver 127.0.0.1:8000 --noreload",
+        "nativeEditor": "com.jetbrains.python.run.configuration.PythonConfigurationFragmentedEditor",
+        "nativeRunRunner": "PythonRunner",
+        "nativeDebugRunner": "PyDebugRunner",
+        "nativeState": "com.jetbrains.python.run.PythonScriptCommandLineState",
+        "sdkHomePersisted": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frameworks/.tools/framework-venv/bin/python",
+        "workingDirectoryPersisted": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frameworks/.state/framework-native-sealed/working directory 中文",
+        "environmentPersisted": {
+          "PYTHONUNBUFFERED": "1",
+          "OPENPYCHARM_FRAMEWORK_TEST": "中文 space;$(literal)"
+        },
+        "parentEnvironmentPersisted": false,
+        "argumentPersistence": "pass",
+        "factoryClonePreservesSelection": true,
+        "status": "pass"
+      },
+      {
+        "typeId": "OpenPyCharmFlask",
+        "typeClass": "dev.openpycharm.frameworks.FlaskConfigurationType",
+        "factoryApplicable": true,
+        "framework": "FLASK",
+        "defaultModuleMode": true,
+        "defaultScriptName": "flask",
+        "defaultParameters": "--app app run --host 127.0.0.1 --port 5000 --no-reload --no-debugger",
+        "nativeEditor": "com.jetbrains.python.run.configuration.PythonConfigurationFragmentedEditor",
+        "nativeRunRunner": "PythonRunner",
+        "nativeDebugRunner": "PyDebugRunner",
+        "nativeState": "com.jetbrains.python.run.PythonScriptCommandLineState",
+        "sdkHomePersisted": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frameworks/.tools/framework-venv/bin/python",
+        "workingDirectoryPersisted": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frameworks/.state/framework-native-sealed/working directory 中文",
+        "environmentPersisted": {
+          "PYTHONUNBUFFERED": "1",
+          "OPENPYCHARM_FRAMEWORK_TEST": "中文 space;$(literal)"
+        },
+        "parentEnvironmentPersisted": false,
+        "argumentPersistence": "pass",
+        "factoryClonePreservesSelection": true,
+        "status": "pass"
+      },
+      {
+        "typeId": "OpenPyCharmFastAPI",
+        "typeClass": "dev.openpycharm.frameworks.FastApiConfigurationType",
+        "factoryApplicable": true,
+        "framework": "FASTAPI",
+        "defaultModuleMode": true,
+        "defaultScriptName": "uvicorn",
+        "defaultParameters": "app:app --host 127.0.0.1 --port 8000",
+        "nativeEditor": "com.jetbrains.python.run.configuration.PythonConfigurationFragmentedEditor",
+        "nativeRunRunner": "PythonRunner",
+        "nativeDebugRunner": "PyDebugRunner",
+        "nativeState": "com.jetbrains.python.run.PythonScriptCommandLineState",
+        "sdkHomePersisted": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frameworks/.tools/framework-venv/bin/python",
+        "workingDirectoryPersisted": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frameworks/.state/framework-native-sealed/working directory 中文",
+        "environmentPersisted": {
+          "PYTHONUNBUFFERED": "1",
+          "OPENPYCHARM_FRAMEWORK_TEST": "中文 space;$(literal)"
+        },
+        "parentEnvironmentPersisted": false,
+        "argumentPersistence": "pass",
+        "factoryClonePreservesSelection": true,
+        "status": "pass"
+      }
+    ],
+    "nativeGracefulExit": 0,
+    "cleanup": {
+      "mode": "owned-posix-session",
+      "pid": 84750,
+      "exitCode": 0
+    },
+    "errorCount": 0,
+    "warningCount": 1,
+    "report": ".state/framework-native-sealed/framework-probe.json",
+    "reportSha256": "d24655ea68301e846ac44316a3f759f68e9ba74ea32b2b260251c2268273c37e",
+    "ideaLogSha256": "90069ce039cbded8057fbf66aec1e51a23f95c2a7b3933a240ef86ba3f2e05c9"
+  },
+  "retainedFailures": [
+    {
+      "report": ".state/framework-native-1/framework-probe.json",
+      "sha256": "b74c4429148b6e3c7b5bf84a65c01e78a1cfe60cbd08da59ebc456b13cd425ab",
+      "assessment": {
+        "status": "fail",
+        "error": "Native IDEA log contains ERROR or SEVERE entries"
+      },
+      "errorCount": 29,
+      "nativeApiStatus": "pass",
+      "nativeGracefulExit": null
+    },
+    {
+      "report": ".state/framework-native-2/framework-probe.json",
+      "sha256": "8c5b75bcb4eb89fcb277eb57b6673b6b64716c0f7bc100ef76c19c71b83bb0fc",
+      "assessment": {
+        "status": "fail",
+        "error": "Native IDEA log contains ERROR or SEVERE entries"
+      },
+      "errorCount": 6,
+      "nativeApiStatus": "pass",
+      "nativeGracefulExit": "timed-out; owned-session cleanup required"
+    },
+    {
+      "report": ".state/framework-native-3/framework-probe.json",
+      "sha256": "972b748f6448cb80cefec76081b218765a2be4dda93fc5526995ce40d373f5e6",
+      "assessment": {
+        "status": "fail",
+        "error": "Native IDEA log contains ERROR or SEVERE entries"
+      },
+      "errorCount": 6,
+      "nativeApiStatus": "pass",
+      "nativeGracefulExit": 0
+    }
+  ],
+  "limitations": [
+    "This plugin was attached to a native macOS app through plugin.path; final installer integration is unverified",
+    "Native GUI Run/Debug server execution, breakpoints, stepping, watches and Stop are not established by runner selection",
+    "Windows feature/runtime/installer acceptance remains open",
+    "New-project generators, framework intelligence, reloaders, remote interpreters and production deployment remain open"
+  ]
+}

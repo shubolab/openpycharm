@@ -19,7 +19,7 @@ import subprocess
 import tempfile
 
 from bootstrap import ROOT, check_space, sha256, tree_digest
-from provenance import verify_source_inputs
+from provenance import verify_source_inputs, verify_product_plugins
 
 # Official release and its published digest, also used by opengoland.
 INNO = {
@@ -49,6 +49,7 @@ def validate_product(product: Path, target: str, version: str) -> tuple[Path, di
     manifest_path = contents / "openpycharm-build.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     verify_source_inputs(manifest)
+    verify_product_plugins(manifest, contents)
     if any(manifest.get(key) != value for key, value in {
         "schema": 1, "name": "OpenPyCharm", "version": version, "target": target,
         "upstreamProduct": "PC",
