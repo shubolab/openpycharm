@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "sourceCommit": "456919a9624bae72ac12efafc35d2b916cb0c5c5",
+  "dropPluginIds": ["tanvd.grazi"],
+  "excludeModuleIds": [
+    "intellij.settingsSync.core",
+    "intellij.vcs.github.ultimatePromo",
+    "intellij.pycharm.community.ide.impl.promotion",
+    "intellij.searchEverywhereMl.typos",
+    "intellij.grazie",
+    "intellij.python.grazie",
+    "intellij.toml.grazie"
+  ],
+  "excludeModulePrefixes": ["intellij.grazie."],
+  "optionalDependencyOwners": ["intellij.pycharm.community.customization"],
+  "description": "Exclude IDE account/sync, Pro advertisements and Grazie registration from the independently assembled OSS product. Preserve Git/GitHub/GitLab authentication, native Python features and ordinary plugin management. No authentication or licensing implementation is changed."
+}

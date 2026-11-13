@@ -1,0 +1,59 @@
+{
+  "evidence_id": "ev_5befad62e65a3ebc6337bf98961ca1b8e60ffe1ef3a6547cbc00053dc2242bf7",
+  "parent_evidence_id": "ev_bcdc227a2872db37959ab613368930584f6bbf220f8079db158d7f3f3b79fae2",
+  "operation": "inspect_analysis_view",
+  "authority": "shipped-artifact",
+  "confidence": "derived",
+  "artifact": {
+    "path": "/Users/wangshubo/develop/openpycharm/.tools/platform/pycharm-2026.1.4-macos-arm64/PyCharm.app/Contents/plugins/python-ce/lib/python-ce.jar",
+    "sha256": "862d2ea1e52142b64435d3cf1b4328c033a9a8e6be3b8eddd5972696cb3dd9d0"
+  },
+  "summary": {
+    "manifest": {
+      "manifest_id": "agm_a5cf3a7c3174a5d87473239f2f9230ee886c8bfe186cee2704563977e8173859",
+      "root_artifact_id": "art_75872a5b5abc56f49a5d85bc353c7f5524180e60e9090723d2e91bb5e1054879",
+      "root_sha256": "862d2ea1e52142b64435d3cf1b4328c033a9a8e6be3b8eddd5972696cb3dd9d0",
+      "root_format": "zip",
+      "graph_sha256": "29c610e71c71eb2b5d2393daba7f557f08c1493c86c4db26b5c10e013e6cf559",
+      "node_count": 56,
+      "occurrence_count": 56,
+      "edge_count": 55
+    },
+    "available_counts": {
+      "nodes": 56,
+      "occurrences": 56,
+      "edges": 55,
+      "integrity_contradictions": 0
+    },
+    "observed_entry_kind_counts": {
+      "file": 56,
+      "directory": 0,
+      "symlink": 0,
+      "slice": 0
+    },
+    "source_complete": true,
+    "inventory_evidence_ids": [
+      "ev_774e73d0b15c2cdc1d3494b412371f1978a0580d6a2fbe5b0c56ad5ebb90af66"
+    ],
+    "inspection": {
+      "coverage": {
+        "status": "complete-within-substeps",
+        "substeps_completed": 1,
+        "observations_retained": 1,
+        "observations_omitted": 0,
+        "hypotheses_retained": 0,
+        "hypotheses_omitted": 0,
+        "unexplored_branches_retained": 0,
+        "unexplored_branches_omitted": 0,
+        "next_probes_retained": 0,
+        "next_probes_omitted": 0
+      },
+      "unexplored_branches": []
+    },
+    "limitation_count": 2
+  },
+  "limitations": [
+    "Inspection derives bounded static hypotheses and next probes; it does not execute the artifact or claim format-specific semantics.",
+    "ZIP inventory lists central-directory entries only. Non-entry bytes, including an APK Signing Block before the central directory or a ZIP comment after it, are not occurrences."
+  ]
+}

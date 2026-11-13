@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "upstream": {
+    "repository": "https://github.com/JetBrains/intellij-community",
+    "tag": "pycharm/2026.1.4",
+    "commit": "456919a9624bae72ac12efafc35d2b916cb0c5c5",
+    "license": "Apache-2.0; complete original source headers and upstream SDK notices retained"
+  },
+  "platformVersion": "2026.1.4",
+  "upstreamJar": {
+    "path": "Contents/lib/util-8.jar",
+    "sha256": "ee053200e3d18d0a9b544dcc330c73669d56c3475729a58406cc36798ca2a22f"
+  },
+  "sources": [
+    {
+      "path": "platform/util/src/com/intellij/openapi/util/JDOMUtil.java",
+      "sourceUrl": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/util/src/com/intellij/openapi/util/JDOMUtil.java",
+      "upstreamSha256": "b0289509b126f631e964d7bb03c5c1996f9a3536b27ef0134353417d898a438d",
+      "patchedSha256": "3c6dd6ce4e103f9a466e144d1a9ac0a8e43d9089676eb63ce38241af4b8ecaed"
+    }
+  ],
+  "patchFile": "platform-unicode-2026.1.4.patch",
+  "patchSha256": "cdb3a11b5f4f55cc9a63e94d5bc149d0d9c5bcfc378306cf354e6244eb0eaaee",
+  "classPrefixes": [
+    "com/intellij/openapi/util/JDOMUtil"
+  ],
+  "scope": {
+    "zh": "修复OSS平台JDOMUtil.removeControlChars按UTF-16单元过滤导致合法非BMP Unicode字符丢失的问题；按Unicode码点判定XML合法性，仍过滤非法控制符与未配对surrogate。",
+    "preserves": [
+      "Existing XML character validity policy",
+      "Original class and nested-class API/ABI",
+      "Existing trust policy and explicit user decisions"
+    ],
+    "excludes": [
+      "No automatic trust grants",
+      "No migration or inference of previously truncated paths",
+      "No modifications to the upstream SDK or installed reference applications",
+      "No plugin classloader override of platform core classes"
+    ]
+  },
+  "requiredClassNames": [
+    "com/intellij/openapi/util/JDOMUtil$ElementInfo.class",
+    "com/intellij/openapi/util/JDOMUtil$ElementOutputFilter.class",
+    "com/intellij/openapi/util/JDOMUtil$LoggerHolder.class",
+    "com/intellij/openapi/util/JDOMUtil$MergeAttribute.class",
+    "com/intellij/openapi/util/JDOMUtil$MyXMLOutputter.class",
+    "com/intellij/openapi/util/JDOMUtil.class"
+  ],
+  "reusedFrom": {
+    "repository": "https://github.com/shubolab/opengoland",
+    "commit": "3b32dc53df49388528203fa9b600b93ea69b8368",
+    "pin": "product/patches/platform-unicode-2026.1.4.json"
+  },
+  "verification": {
+    "scope": "Authenticated source replay and exact JAR/class verification; native OpenPyCharm controls remain separate.",
+    "sourceSdkModified": false
+  },
+  "targetPlatform": "macos-arm64"
+}

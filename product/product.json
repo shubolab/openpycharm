@@ -1,0 +1,9 @@
+{
+  "name": "OpenPyCharm",
+  "id": "dev.openpycharm.ide",
+  "version": "0.1.0-dev.1",
+  "vendor": "OpenPyCharm",
+  "selector": "OpenPyCharm2026.1",
+  "script": "openpycharm",
+  "repository": "https://github.com/shubolab/openpycharm"
+}

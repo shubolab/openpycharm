@@ -1,0 +1,9 @@
+.tools/
+build/
+.state/
+__pycache__/
+*.pyc
+.idea/
+*.iml
+.DS_Store
+.venv/

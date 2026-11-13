@@ -1,0 +1,110 @@
+#!/usr/bin/env python3
+"""Assemble OpenPyCharm from a verified OSS distribution."""
+import argparse
+import json
+import os
+from pathlib import Path
+import platform
+import plistlib
+import re
+import shutil
+import subprocess
+import tempfile
+
+from product import IDENTITY, ROOT, brand_plist, brand_product_info, brand_resources, sha, write_paths
+from bootstrap import PIN_PATH, validate_cached
+
+
+def assemble(sdk, target, version, output):
+    sdk = sdk.resolve()
+    macos = target == "macos-arm64"
+    receipt_path = sdk.parent / ".openpycharm-platform.json"
+    if not receipt_path.is_file():
+        raise ValueError("Run scripts/bootstrap.py first; the verified OSS SDK receipt is required")
+    receipt = json.loads(receipt_path.read_text())
+    authenticated_sdk = validate_cached(sdk.parent, json.loads(PIN_PATH.read_text()), target)
+    if authenticated_sdk != sdk:
+        raise ValueError("SDK does not match its authenticated receipt")
+    source_contents = sdk / "Contents" if macos else sdk
+    source_info = source_contents / ("Resources/product-info.json" if macos else "product-info.json")
+    original_info = json.loads(source_info.read_text())
+    if original_info.get("productCode") != "PC" or original_info["version"] != "2026.1.4":
+        raise ValueError("Expected the pinned OSS PyCharm 2026.1.4 distribution")
+    if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9.-]+)?", version):
+        raise ValueError("Invalid release version")
+    output = output.resolve()
+    if not output.is_relative_to((ROOT / "build").resolve()) or output.exists():
+        raise ValueError("Choose a new output below this repository's build directory")
+    if shutil.disk_usage(ROOT).free < 24 * 1024**3:
+        raise ValueError("The build needs 20 GiB reserve plus assembly space")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix="assemble-", dir=output.parent) as staging_name:
+        staging = Path(staging_name) / output.name
+        if macos:
+            subprocess.run(["ditto", str(sdk), str(staging)], check=True)
+            subprocess.run(["codesign", "--remove-signature", str(staging)], check=True)
+        else:
+            shutil.copytree(sdk, staging, symlinks=True)
+        contents = staging / "Contents" if macos else staging
+        metadata = contents / ("Resources/product-info.json" if macos else "product-info.json")
+        metadata.write_text(json.dumps(brand_product_info(original_info, version), indent=2) + "\n")
+        paths = write_paths(contents, macos)
+        from repairs import apply as apply_repairs
+        repairs = apply_repairs(contents, sdk)
+        branding = brand_resources(contents)
+        from local_product import apply
+        local_policy = apply(contents, source_contents)
+        if macos:
+            from icons import mac_icon
+            mac_icon(contents)
+            info_path = contents / "Info.plist"
+            plist = brand_plist(plistlib.loads(info_path.read_bytes()), version)
+            plist["CFBundleIconFile"] = "openpycharm.icns"
+            for item in plist.get("CFBundleDocumentTypes", []):
+                item["CFBundleTypeIconFile"] = "openpycharm.icns"
+            info_path.write_bytes(plistlib.dumps(plist))
+            launcher = contents / "bin/openpycharm"
+            launcher.write_text('#!/bin/sh\nset -eu\ncontents="$(cd "$(dirname "$0")/.." && pwd)"\nexec "$contents/MacOS/pycharm" "$@"\n')
+            launcher.chmod(0o755)
+        else:
+            (contents / "bin/openpycharm.bat").write_bytes(b'@echo off\r\n"%~dp0pycharm64.exe" %*\r\n')
+        report = {"schema": 1, "name": IDENTITY["name"], "version": version, "target": target,
+                  "upstreamBuild": original_info["buildNumber"], "upstreamProduct": "PC",
+                  "platformReceipt": receipt, "branding": branding, "paths": paths,
+                  "localProduct": local_policy, "platformRepairs": repairs,
+                  "limitations": ["Full 1:1 acceptance remains open"]}
+        import PIL
+        report["buildDependencies"] = {"Pillow": PIL.__version__}
+        inputs = [path for directory in ("scripts", "product") for path in (ROOT / directory).rglob("*")
+                  if path.is_file() and "__pycache__" not in path.parts]
+        inputs += [ROOT / name for name in ("requirements-build.txt", "LICENSE", "NOTICE")]
+        report["sourceInputs"] = {path.relative_to(ROOT).as_posix(): sha(path) for path in sorted(inputs)}
+        try:
+            report["sourceCommit"] = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True, stderr=subprocess.DEVNULL).strip()
+        except subprocess.CalledProcessError:
+            report["sourceCommit"] = None
+        shutil.copyfile(ROOT / "NOTICE", contents / "license/OPENPYCHARM-NOTICE.txt")
+        (contents / "openpycharm-build.json").write_text(json.dumps(report, indent=2) + "\n")
+        if macos:
+            subprocess.run(["codesign", "--force", "--deep", "--sign", "-", str(staging)], check=True)
+            subprocess.run(["codesign", "--verify", "--deep", "--strict", str(staging)], check=True)
+        staging.rename(output)
+    print(json.dumps({"output": str(output), "version": version, "target": target}))
+    return output
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--target", choices=["macos-arm64", "windows-x64"], default="macos-arm64")
+    parser.add_argument("--sdk", type=Path)
+    parser.add_argument("--version", default=IDENTITY["version"])
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args()
+    macos = args.target == "macos-arm64"
+    sdk = args.sdk or ROOT / f".tools/platform/pycharm-2026.1.4-{args.target}" / ("PyCharm.app" if macos else "pycharm")
+    output = args.output or ROOT / "build/product" / ("OpenPyCharm.app" if macos else "OpenPyCharm")
+    assemble(sdk, args.target, args.version, output)
+
+
+if __name__ == "__main__":
+    main()

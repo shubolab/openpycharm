@@ -1,0 +1,10 @@
+* text=auto
+*.py text eol=lf
+*.json text eol=lf
+*.java text eol=lf
+*.yml text eol=lf
+*.md text eol=lf
+# Source patch context lines intentionally retain upstream whitespace.
+*.patch text eol=lf -whitespace
+*.png binary
+*.gif binary

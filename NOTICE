@@ -1,0 +1,12 @@
+This software includes code from IntelliJ IDEA Community Edition
+Copyright (C) JetBrains s.r.o.
+https://www.jetbrains.com/idea/
+
+OpenPyCharm distribution modifications Copyright (C) 2026 OpenPyCharm contributors.
+Product assembly, branding, isolated paths, and feature-registration selection
+are maintained at https://github.com/shubolab/openpycharm .
+
+Packaging patterns and source-correlated platform repairs are adapted from
+shubolab/opengoland (https://github.com/shubolab/opengoland), developed by the
+same project owner. Upstream JetBrains source headers and bundled third-party
+notices remain in the product's license directory.
