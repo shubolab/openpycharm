@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "scope": "Read-only frontend source/metadata/SDK inventory research plus isolated compile-only draft; no native application or language server launch",
+  "observedDate": "2026-11-14",
+  "sourceCommit": "456919a9624bae72ac12efafc35d2b916cb0c5c5",
+  "sourceGateAudit": {
+    "paths": [
+      "platform/lsp",
+      "platform/lsp-impl"
+    ],
+    "productionTextFiles": 180,
+    "bytes": 659217,
+    "formats": [
+      ".kt",
+      ".java",
+      ".xml",
+      ".properties"
+    ],
+    "testsExcluded": true,
+    "gitBlobShaVerifiedForEachRead": true,
+    "readErrors": 0,
+    "perFileManifestRetained": false,
+    "productLicenseSubscriptionUltimateGateFound": false,
+    "normalGates": [
+      "TrustedProjects",
+      "local in-content files",
+      "registered integration provider",
+      "descriptor/root deduplication",
+      "maximum server count",
+      "descriptor/server feature capabilities"
+    ],
+    "limitations": [
+      "No global IDE gate audit; no runtime availability proof"
+    ]
+  },
+  "compileOnly": {
+    "status": "compile-pass",
+    "applicationStarted": false,
+    "languageServerStarted": false,
+    "sourcePin": "456919a9624bae72ac12efafc35d2b916cb0c5c5",
+    "classpathJars": 337,
+    "compiler": "/Users/wangshubo/develop/openpycharm/.tools/platform/pycharm-2026.1.4-macos-arm64/PyCharm.app/Contents/jbr/Contents/Home/bin/javac",
+    "release": 21,
+    "sourceSha256": "939da0216bfd4e1bac6c355f43a41f6c8d4d5609e21d3e755316c40c9ec4f17f",
+    "pluginXmlSha256": "2103a35588f6e85ceda9126f07d603675c6ca1d13aee775e548370faac38abf9",
+    "jarSha256": "69d39795359d3c6ce6ee9ada4b139b33c7d4d057dace903fe84d873da6027af5",
+    "classes": [
+      "dev/openpycharm/frontend/probe/FrontendLspProbe$Descriptor.class",
+      "dev/openpycharm/frontend/probe/FrontendLspProbe.class"
+    ],
+    "sdkLspJars": {
+      "intellij.platform.lsp.impl.jar": "13db5f9fd6e5568fb026c6a0e292730d325f176bef3d419127343e92142eda3d",
+      "intellij.platform.lsp.jar": "31f9997c16f42c5491d96dc482da9507851844cc906bd79662440df6af2d8705"
+    },
+    "limitations": [
+      "Compilation/EP descriptor only; no IDE/classloader/native LSP/service/gate/process behavior acceptance"
+    ]
+  },
+  "reaArchiveEvidence": {
+    "apiParentEvidenceId": "ev_5f5d82d9bf30b1f3e7f1c2c01059ab77fd16db08ee0b9714a2d431bfbd340313",
+    "implParentEvidenceId": "ev_3b1022beadc4e66fea6ead94c22a9ca91d0d1af821c7e53aa58d37ba80cc4dc8",
+    "apiMembers": 144,
+    "implMembers": 309,
+    "sdkJarSha256": {
+      "intellij.platform.lsp.impl.jar": "13db5f9fd6e5568fb026c6a0e292730d325f176bef3d419127343e92142eda3d",
+      "intellij.platform.lsp.jar": "31f9997c16f42c5491d96dc482da9507851844cc906bd79662440df6af2d8705"
+    },
+    "sourceCompleteArchiveInventories": true,
+    "applicationRuntimeEstablished": false
+  },
+  "candidatePins": {
+    "status": "candidate-metadata-only",
+    "observedDate": "2026-11-14",
+    "downloadedServerBytesAuthenticated": false,
+    "packages": {
+      "typescript-language-server": {
+        "version": "6.1.0",
+        "license": "Apache-2.0",
+        "engines": {
+          "node": ">=22.22.2"
+        },
+        "metadataUrl": "https://registry.npmjs.org/typescript-language-server/6.1.0",
+        "tarball": "https://registry.npmjs.org/typescript-language-server/-/typescript-language-server-6.1.0.tgz",
+        "expectedIntegrity": "sha512-/O/dr2CbvDS1W9jKJcBQxk4WagUQ97oBb8k/eq9cOslsbtAuC2BDPpkcULxE2SEZiPIJvVNLeNjLZe9hQl1zCQ==",
+        "unpackedSize": 2456190
+      },
+      "typescript": {
+        "version": "6.0.3",
+        "license": "Apache-2.0",
+        "engines": {
+          "node": ">=14.17"
+        },
+        "metadataUrl": "https://registry.npmjs.org/typescript/6.0.3",
+        "tarball": "https://registry.npmjs.org/typescript/-/typescript-6.0.3.tgz",
+        "expectedIntegrity": "sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==",
+        "unpackedSize": 24346827
+      },
+      "vscode-html-languageservice": {
+        "version": "5.6.2",
+        "license": "MIT",
+        "engines": null,
+        "metadataUrl": "https://registry.npmjs.org/vscode-html-languageservice/5.6.2",
+        "tarball": "https://registry.npmjs.org/vscode-html-languageservice/-/vscode-html-languageservice-5.6.2.tgz",
+        "expectedIntegrity": "sha512-ulCrSnFnfQ16YzvwnYUgEbUEl/ZG7u2eV27YhvLObSHKkb8fw1Z9cgsnUwjTEeDIdJDoTDTDpxuhQwoenoLNMg==",
+        "unpackedSize": 2003649
+      },
+      "vscode-css-languageservice": {
+        "version": "6.3.10",
+        "license": "MIT",
+        "engines": null,
+        "metadataUrl": "https://registry.npmjs.org/vscode-css-languageservice/6.3.10",
+        "tarball": "https://registry.npmjs.org/vscode-css-languageservice/-/vscode-css-languageservice-6.3.10.tgz",
+        "expectedIntegrity": "sha512-eq5N9Er3fC4vA9zd9EFhyBG90wtCCuXgRSpAndaOgXMh1Wgep5lBgRIeDgjZBW9pa+332yC9+49cZMW8jcL3MA==",
+        "unpackedSize": 4674871
+      }
+    },
+    "node": {
+      "version": "24.22.3",
+      "license": "MIT plus bundled third-party notices",
+      "checksumSource": "https://nodejs.org/dist/v24.22.3/SHASUMS256.txt",
+      "artifacts": {
+        "node-v24.22.3-darwin-arm64.tar.xz": "1d64136c8a43d648d1b3bad10797a4c995b1ca032d2bde8799de43b37f058fe5",
+        "node-v24.22.3-win-x64.zip": "e612af99f626ab415ea225af6bce5c971feb448cb5cae250bb1c3fa50c5f7d9f"
+      }
+    },
+    "officialHtmlCssServerSource": {
+      "repository": "https://github.com/microsoft/vscode",
+      "tag": "1.146.0",
+      "commit": "69047191fc427f2f92828279aae1d90d8eeda7ab",
+      "license": "MIT",
+      "serverPackageVersions": {
+        "vscode-html-languageserver": "10.0.0",
+        "vscode-css-languageserver": "10.0.0"
+      },
+      "entries": [
+        "extensions/html-language-features/server/src/node/htmlServerMain.ts",
+        "extensions/css-language-features/server/src/node/cssServerMain.ts"
+      ],
+      "warning": "Official server package.json uses caret prerelease service dependencies (HTML ^6.0.0-next.2/CSS ^7.0.0-next.2). Do not substitute stable library pins above without a separate wrapper/build. Create an audited closed build/runtime dependency lock before provisioning; these package versions alone do not identify reproducible server bytes."
+    },
+    "browserDebug": {
+      "repository": "https://github.com/microsoft/vscode-js-debug",
+      "version": "1.140.1",
+      "license": "MIT",
+      "artifact": "js-debug-dap-v1.140.1.tar.gz",
+      "size": 1249566,
+      "expectedSha256": "c72fab31bcbfdce6ad1f42adfd28eff8d4681dd3b03b5e2e6f9e72e6f9927faf",
+      "metadataSource": "https://api.github.com/repos/microsoft/vscode-js-debug/releases/tags/v1.140.1",
+      "warning": "Release metadata only; actual bytes, capabilities, dependencies, telemetry/network behavior and browser ownership not runtime-verified here."
+    },
+    "lsp4ijFallback": {
+      "version": "0.21.0",
+      "commit": "b30f69dd1285f201d53ce360b7fad0bba96f0d58",
+      "license": "EPL-2.0",
+      "marketplaceUpdateId": 1157565,
+      "zipSize": 4449291,
+      "sinceBuild": "242.0",
+      "untilBuild": "",
+      "warning": "Declared compatibility includes261; actual PC261 native loading/behavior remains a gate. Reuse sibling source fixes only with matching upstream hashes and corresponding-source/notices."
+    }
+  },
+  "unknown": [
+    "Normal PC261 plugin module/EP/service activation",
+    "Real stdio initialize and native document features",
+    "Both-platform runtime and installer payload closure",
+    "HTML embedded-language and Django/Jinja semantics",
+    "Browser DAP/XDebugger behavior and ownership",
+    "Full PyCharm parity"
+  ]
+}
