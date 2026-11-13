@@ -25,10 +25,16 @@ class NativeProbeBoundaryTests(unittest.TestCase):
 
     def test_existing_profile_cannot_redirect_to_shared_configuration(self):
         with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
+            # Windows tempfile paths can contain 8.3 aliases; prepare_profile
+            # writes canonical paths. Mutate that actual value, not an alias.
+            root = Path(directory).resolve()
             profile = root / "profile"
             properties = probe.prepare_profile(profile, [])
-            data = properties.read_text().replace((profile / "config").as_posix(), (root / "shared-config").as_posix())
+            original = properties.read_text(encoding="utf-8")
+            isolated = (profile / "config").as_posix()
+            self.assertIn(isolated, original)
+            data = original.replace(isolated, (root / "shared-config").as_posix())
+            self.assertNotEqual(data, original)
             properties.write_text(data, encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "isolated"):
                 probe.prepare_profile(profile, [])

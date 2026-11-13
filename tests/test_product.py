@@ -30,8 +30,13 @@ class ProductTests(unittest.TestCase):
             brand_product_info({**source, "productCode": "PY"}, "0.1.0")
 
     def test_application_resources_preserve_python_essential_plugin(self):
-        xml = b'<component xmlns="http://jetbrains.org/intellij/schema/application-info"><names product="PyCharm" fullname="PyCharm" edition="Community"/><build number="PC-261.26222.68"/><essential-plugin>PythonCore</essential-plugin></component>'
-        result = ET.fromstring(brand_application_info(xml))
+        header = b'<!-- Copyright JetBrains; Apache-2.0. -->\n'
+        xml = b'<?xml version="1.0" encoding="UTF-8"?>\n' + header + b'<component xmlns="http://jetbrains.org/intellij/schema/application-info"><names product="PyCharm" fullname="PyCharm" edition="Community"/><build number="PC-261.26222.68"/><essential-plugin>PythonCore</essential-plugin></component>'
+        branded = brand_application_info(xml)
+        self.assertIn(header, branded)
+        self.assertIn(b'Modified by OpenPyCharm contributors', branded)
+        self.assertEqual(branded.count(b'<?xml'), 1)
+        result = ET.fromstring(branded)
         ns = {"i": "http://jetbrains.org/intellij/schema/application-info"}
         self.assertEqual(result.find("i:names", ns).get("product"), "OpenPyCharm")
         self.assertEqual(result.find("i:essential-plugin", ns).text, "PythonCore")

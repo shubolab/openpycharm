@@ -39,6 +39,12 @@ def rewrite_jar(path, replacements):
 
 
 def brand_application_info(raw):
+    root_start = re.search(rb"<component(?:\s|>)", raw)
+    if root_start is None:
+        raise ValueError("Missing application-info component root")
+    # ElementTree does not retain comments preceding the root element. Keep the
+    # upstream copyright/license header explicitly when branding this resource.
+    prefix = re.sub(rb"^\s*<\?xml[^?]*\?>", b"", raw[:root_start.start()], count=1)
     parser = ET.XMLParser(target=ET.TreeBuilder(insert_comments=True))
     xml = ET.fromstring(raw, parser=parser)
     namespace = xml.tag.partition("}")[0].removeprefix("{") if "}" in xml.tag else ""
@@ -62,7 +68,8 @@ def brand_application_info(raw):
                     element.set(key, IDENTITY["repository"])
     if namespace:
         ET.register_namespace("", namespace)
-    return ET.tostring(xml, encoding="utf-8", xml_declaration=True)
+    notice = b"<!-- Modified by OpenPyCharm contributors: independent product identity and resource URLs. -->\n"
+    return b'<?xml version="1.0" encoding="utf-8"?>\n' + prefix + notice + ET.tostring(xml, encoding="utf-8")
 
 
 def brand_resources(contents):
