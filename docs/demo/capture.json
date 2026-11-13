@@ -31,5 +31,9 @@
     }
   ],
   "gifSha256": "3404c697a3713cdc0b415b6098bbc3ee8085e2bb525e7f954c9870d7ff6fbfec",
-  "releaseStatus": "development candidate; refresh captures for the published release"
+  "releaseStatus": "development candidate; refresh captures for the published release",
+  "captureSize": [
+    2800,
+    1750
+  ]
 }

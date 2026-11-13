@@ -15,4 +15,7 @@ the README demo from that version's actual installed app and refresh the version
 system and capture manifest. Source changes that materially alter the demonstrated
 workflow require new captures.
 
-Rebuild the GIF from the reviewed native captures with `python3 scripts/make-demo.py`.
+Update `capture.json` with the actual version, OS, Python and capture date before
+assembling a new recording. The recipe preserves that reviewed metadata rather
+than guessing it from the current development machine. Rebuild the GIF with
+`python3 scripts/make-demo.py`.
