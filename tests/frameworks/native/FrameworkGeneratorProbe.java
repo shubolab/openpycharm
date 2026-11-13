@@ -63,6 +63,7 @@ public final class FrameworkGeneratorProbe {
       List<Project> projects = new ArrayList<>();
       List<Sdk> sdks = new ArrayList<>();
       try {
+        result.put("frameworkPlugin", FrameworkProbe.pluginObservation());
         Path root = Path.of(System.getProperty("openpycharm.framework.generator.probe.root")).toAbsolutePath().normalize();
         require(root.startsWith(report.getParent()), "Generator output escaped the disposable profile");
         Files.createDirectories(root);

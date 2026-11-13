@@ -124,3 +124,11 @@ python3 scripts/framework_server_smoke.py \
 ```
 
 相关源码：[PyV3ProjectBaseGenerator.kt](https://github.com/JetBrains/intellij-community/blob/456919a9624bae72ac12efafc35d2b916cb0c5c5/python/src/com/jetbrains/python/newProjectWizard/PyV3ProjectBaseGenerator.kt)、[PyV3BaseProjectSettings.kt](https://github.com/JetBrains/intellij-community/blob/456919a9624bae72ac12efafc35d2b916cb0c5c5/python/src/com/jetbrains/python/newProjectWizard/PyV3BaseProjectSettings.kt)、[PyV3ProjectTypeSpecificSettings.kt](https://github.com/JetBrains/intellij-community/blob/456919a9624bae72ac12efafc35d2b916cb0c5c5/python/src/com/jetbrains/python/newProjectWizard/PyV3ProjectTypeSpecificSettings.kt)。
+
+## 产品集成检查
+
+框架分支已基于原生 HTTP Client 的构建流水线集成。`package.py` 将两个独立插件放入产品 `third-party-plugins`，框架路径为 `openpycharm-frameworks/lib/frameworks.jar`。生产 JAR 的版本由产品版本参数填写；编译和 IntelliJ 实际 archive reader 校验使用经过完整收据验证的固定 OSS SDK。跨平台检查可以用 `--host-sdk` 选经过验证的本机 JBR，在 Windows SDK 的 classpath 上编译；这不能证明 Windows 运行通过。
+
+产品 `plugins[]` 清单记录 id、名称、版本、相对目录、JAR 与摘要及完整构建收据。来源闭包包含全部 `plugins/`。安装器与启动检查复用 `verify_product_plugins`，框架与 HTTP JAR 任一字节变化均被拒绝。`framework_probe.py --packaged` 在创建配置或启动之前检查来源和两份 JAR；只注入测试监听器，要求原生 descriptor 的 bundled 标记、版本、路径、JAR 摘要及应用 home 都与产品一致。生产插件没有通过 `plugin.path` 注入。探针编译和临时文件始终位于工作树 `.tools` 或隔离 profile，不写入签名产品。
+
+本次集成的真实原生运行验证尚待执行；前述历史记录仍是独立加载的切片证据，不能当作集成产品验收。Windows native CI 和实际桌面操作继续由主线候选检查。

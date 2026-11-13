@@ -4,7 +4,7 @@ import sys
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-from framework_probe import assess, assess_generators, assess_venvs
+from framework_probe import assess, assess_generators, assess_packaged, assess_packaged_startup, assess_venvs
 
 
 class FrameworkEvidenceTests(unittest.TestCase):
@@ -128,6 +128,41 @@ class FrameworkGeneratorEvidenceTests(unittest.TestCase):
             (current_selected if target == "selected" else current_optout).update(mutation)
             with self.subTest(target=target, mutation=mutation), self.assertRaises(ValueError):
                 assess_venvs(current_selected, current_optout, primary, optout)
+
+
+class PackagedFrameworkEvidenceTests(unittest.TestCase):
+    def test_welcome_probe_requires_all_non_project_startup_boundaries(self):
+        manifest = {"plugins": [{"id": "dev.openpycharm.http"}, {"id": "dev.openpycharm.frameworks"}]}
+        observation = {"ideStarted": True, "productIdentity": True, "vendorIdentity": True, "errorCount": 0,
+                       "isolatedPaths": {key: True for key in ("config", "system", "plugins", "log")},
+                       "loadedPlugins": {key: True for key in ("Python Community Edition", "Git", "Terminal")},
+                       "packagedPlugins": {entry["id"]: True for entry in manifest["plugins"]}}
+        assess_packaged_startup(observation, manifest)
+        mutations = [lambda candidate, key=key: candidate.update({key: False}) for key in ("ideStarted", "productIdentity", "vendorIdentity")]
+        for group in ("isolatedPaths", "loadedPlugins", "packagedPlugins"):
+            mutations += [lambda candidate, group=group, key=key: candidate[group].update({key: False}) for key in observation[group]]
+        mutations += [lambda candidate: candidate.update(errorCount=1), lambda candidate: candidate["packagedPlugins"].pop("dev.openpycharm.frameworks")]
+        for mutate in mutations:
+            current = copy.deepcopy(observation)
+            mutate(current)
+            with self.subTest(observation=current), self.assertRaises(ValueError):
+                assess_packaged_startup(current, manifest)
+
+    def test_native_product_location_version_and_exact_jar_are_required(self):
+        contents, probe = Path("/candidate/OpenPyCharm/Contents"), Path("/owned/test-listener")
+        entry = {"id": "dev.openpycharm.frameworks", "version": "0.1.0-dev.2", "jarSha256": "a" * 64,
+                 "path": "third-party-plugins/openpycharm-frameworks", "jar": "third-party-plugins/openpycharm-frameworks/lib/frameworks.jar"}
+        plugin = {"id": entry["id"], "version": entry["version"], "jarSha256": entry["jarSha256"], "enabled": True, "bundled": True,
+                  "path": str(contents / entry["path"]), "jar": str(contents / entry["jar"]),
+                  "applicationHome": str(contents), "pluginPathProperty": probe.as_posix()}
+        self.assertEqual(assess_packaged({"frameworkPlugin": plugin}, {"plugins": [entry]}, contents, probe)["status"], "pass")
+        for mutation in ({"id": "locked.frameworks"}, {"version": "old"}, {"jarSha256": "b" * 64}, {"enabled": False}, {"bundled": False},
+                         {"path": "/external/plugin"}, {"jar": "/external/frameworks.jar"}, {"applicationHome": "/reference/PyCharm"},
+                         {"pluginPathProperty": probe.as_posix() + "," + str(contents / entry["path"])}):
+            with self.subTest(mutation=mutation), self.assertRaisesRegex(ValueError, "authenticated native product"):
+                assess_packaged({"frameworkPlugin": {**plugin, **mutation}}, {"plugins": [entry]}, contents, probe)
+        with self.assertRaisesRegex(ValueError, "does not declare"):
+            assess_packaged({"frameworkPlugin": plugin}, {"plugins": []}, contents, probe)
 
 
 if __name__ == "__main__":

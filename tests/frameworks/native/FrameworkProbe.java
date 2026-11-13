@@ -9,6 +9,9 @@ import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.runners.ExecutionEnvironmentBuilder;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.ide.AppLifecycleListener;
+import com.intellij.ide.plugins.PluginManagerCore;
+import com.intellij.openapi.application.PathManager;
+import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ex.ApplicationEx;
 import com.intellij.openapi.project.Project;
@@ -19,6 +22,7 @@ import com.jetbrains.python.run.PythonScriptCommandLineState;
 import dev.openpycharm.frameworks.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.jdom.Element;
@@ -58,13 +62,14 @@ public final class FrameworkProbe implements AppLifecycleListener {
         result.put("failure", error.toString());
         result.put("stack", Arrays.stream(error.getStackTrace()).limit(15).map(Object::toString).toList());
       }
-      String json = new GsonBuilder().setPrettyPrinting().create().toJson(result);
       // Filesystem output runs on a pooled thread, never the EDT callback.
       AppExecutorUtil.getAppExecutorService().execute(() -> {
+        try { result.put("frameworkPlugin", pluginObservation()); }
+        catch (Exception error) { result.put("status", "fail"); result.put("failure", error.toString()); }
         try {
           Files.createDirectories(report.getParent());
           Path temporary = Files.createTempFile(report.getParent(), ".framework-probe-", ".json");
-          Files.writeString(temporary, json);
+          Files.writeString(temporary, new GsonBuilder().setPrettyPrinting().create().toJson(result));
           Files.move(temporary, report, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
           // Ask the owned IDE to close normally first. Sending SIGTERM to its
           // whole session would interrupt SDK helpers before Java cancels them.
@@ -73,6 +78,26 @@ public final class FrameworkProbe implements AppLifecycleListener {
         } catch (Exception ignored) { }
       });
     });
+  }
+
+  static Map<String, Object> pluginObservation() throws Exception {
+    var descriptor = PluginManagerCore.getPlugin(PluginId.getId("dev.openpycharm.frameworks"));
+    require(descriptor != null, "Framework plugin descriptor was not loaded");
+    Path directory = descriptor.getPluginPath().toAbsolutePath().normalize();
+    Path jar = directory.resolve("lib/frameworks.jar");
+    MessageDigest digest = MessageDigest.getInstance("SHA-256");
+    try (var input = Files.newInputStream(jar)) {
+      byte[] buffer = new byte[65536];
+      for (int count; (count = input.read(buffer)) != -1;) digest.update(buffer, 0, count);
+    }
+    Map<String, Object> result = new LinkedHashMap<>();
+    result.put("id", descriptor.getPluginId().getIdString()); result.put("version", descriptor.getVersion());
+    result.put("enabled", descriptor.isEnabled()); result.put("bundled", descriptor.isBundled());
+    result.put("path", directory.toString()); result.put("jar", jar.toString());
+    result.put("jarSha256", HexFormat.of().formatHex(digest.digest()));
+    result.put("applicationHome", PathManager.getHomePath());
+    result.put("pluginPathProperty", System.getProperty("plugin.path"));
+    return result;
   }
 
   private static Object inspect(Project project, Class<? extends ConfigurationType> typeClass) throws Exception {

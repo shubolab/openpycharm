@@ -16,10 +16,14 @@ class SourceProvenanceTests(unittest.TestCase):
         (self.root / "scripts").mkdir()
         (self.root / "product/resources").mkdir(parents=True)
         (self.root / "plugins/http-client/src").mkdir(parents=True)
+        (self.root / "plugins/frameworks/src").mkdir(parents=True)
+        (self.root / "plugins/frameworks/resources/META-INF").mkdir(parents=True)
         self.files = {"scripts/package.py": b"print('build')\n", "product/resources/icon.svg": b"<svg/>\n",
                       "product/platform.lock.json": b'{"pin":"fixed"}\n',
                       "plugins/http-client/src/Client.kt": b"class Client\n",
                       "plugins/http-client/compiler.lock.json": b'{"sha256":"pinned"}\n',
+                      "plugins/frameworks/src/FrameworkProjectGenerator.java": b"class FrameworkProjectGenerator {}\n",
+                      "plugins/frameworks/resources/META-INF/plugin.xml": b"<idea-plugin/>\n",
                       "requirements-build.txt": b"Pillow==12.1.0\n", "LICENSE": b"license\n", "NOTICE": b"notice\n"}
         for relative, data in self.files.items():
             (self.root / relative).write_bytes(data)

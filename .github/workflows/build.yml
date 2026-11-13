@@ -106,6 +106,9 @@ jobs:
       - name: Compile and check HTTP protocol, lexer and archive against the native SDK
         shell: bash
         run: python scripts/build_http_plugin.py --sdk "$SDK" --version "$RELEASE_VERSION" --output "build/http-client-${TARGET}" --compiler-cache .tools/kotlin --test
+      - name: Compile and check native framework commands, templates and request isolation
+        shell: bash
+        run: python scripts/build_framework_plugin.py --sdk "$SDK" --version "$RELEASE_VERSION" --test > "build/framework-${TARGET}.json"
       - name: Assemble the standalone product
         shell: bash
         run: python scripts/package.py --target "$TARGET" --sdk "$SDK" --version "$RELEASE_VERSION" --output "$PRODUCT"
@@ -121,6 +124,11 @@ jobs:
                           ignore=shutil.ignore_patterns('.idea', '__pycache__', '*.pyc'))
           PY
           python scripts/native_probe.py --mode http --app "$PRODUCT" --sdk "$SDK" --project build/http-api-fixture --test-file build/http-api-fixture/demo.http --profile "build/native-http-${TARGET}" --report "build/native-http-${TARGET}/http-plugin.json" --delay 5 --timeout 90
+      - name: Check packaged framework generation with real isolated venvs and dependency opt-in
+        shell: bash
+        run: |
+          python scripts/framework_probe.py --app "$PRODUCT" --sdk "$SDK" --python "$(python -c 'import sys; print(sys.executable)')" --profile "build/native-framework-${TARGET}" --packaged --generators --timeout 180
+          python scripts/framework_server_smoke.py --sdk "$SDK" --python "build/native-framework-${TARGET}/selected-venv/$([ "$TARGET" = windows-x64 ] && echo Scripts/python.exe || echo bin/python)" --projects "build/native-framework-${TARGET}/generated projects 中文" --output "build/framework-servers-${TARGET}"
       - name: Build and check the macOS DMG
         if: matrix.target == 'macos-arm64'
         shell: bash
@@ -138,6 +146,9 @@ jobs:
             build/installers/
             build/http-client-*/build.json
             build/http-client-*/protocol-tests.json
+            build/framework-*.json
+            build/framework-servers-*/framework-servers.json
+            build/framework-servers-*/*.log
             build/product/**/openpycharm-build.json
             build/runtime-startup-*/startup.json
             build/runtime-startup-*/idea.properties
@@ -147,6 +158,11 @@ jobs:
             build/native-http-*/idea.properties
             build/native-http-*/native-probe-launch.log
             build/native-http-*/log/
+            build/native-framework-*/framework-probe.json
+            build/native-framework-*/framework-native.json
+            build/native-framework-*/idea.properties
+            build/native-framework-*/framework-launch.log
+            build/native-framework-*/log/
           if-no-files-found: warn
           retention-days: 14
       # Native Python Run/Test/Debug UI acceptance and release publication are

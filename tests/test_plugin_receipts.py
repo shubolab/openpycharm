@@ -25,8 +25,14 @@ class PluginReceiptControls(unittest.TestCase):
         self.plugin = {"id": "dev.openpycharm.http", "name": "OpenPyCharm HTTP Client", "version": "0.1.0-dev.2",
                        "path": "third-party-plugins/http", "jar": self.jar.relative_to(self.contents).as_posix(),
                        "jarSha256": hashlib.sha256(self.jar.read_bytes()).hexdigest()}
+        self.framework_jar = self.contents / "third-party-plugins/frameworks/lib/frameworks.jar"
+        self.framework_jar.parent.mkdir(parents=True)
+        self.framework_jar.write_bytes(b"authenticated framework payload")
+        self.framework_plugin = {"id": "dev.openpycharm.frameworks", "name": "OpenPyCharm Python Frameworks", "version": "0.1.0-dev.2",
+                                 "path": "third-party-plugins/frameworks", "jar": self.framework_jar.relative_to(self.contents).as_posix(),
+                                 "jarSha256": hashlib.sha256(self.framework_jar.read_bytes()).hexdigest()}
         self.manifest = {"schema": 1, "name": "OpenPyCharm", "version": "0.1.0-dev.2", "target": "windows-x64",
-                         "upstreamProduct": "PC", "sourceInputs": source_inputs(), "plugins": [self.plugin]}
+                         "upstreamProduct": "PC", "sourceInputs": source_inputs(), "plugins": [self.plugin, self.framework_plugin]}
 
     def test_installer_rejects_mutated_plugin_even_when_source_and_metadata_still_match(self):
         (self.contents / "openpycharm-build.json").write_text(json.dumps(self.manifest))
@@ -36,17 +42,23 @@ class PluginReceiptControls(unittest.TestCase):
             (self.contents / "bin" / name).write_bytes(b"never executed")
         with patch.object(installers, "ROOT", self.root):
             self.assertEqual(installers.validate_product(self.contents, "windows-x64", "0.1.0-dev.2")[0], self.contents)
-            self.jar.write_bytes(b"changed executable plugin payload")
-            with self.assertRaisesRegex(ValueError, "JAR digest"):
-                installers.validate_product(self.contents, "windows-x64", "0.1.0-dev.2")
+            for jar in (self.jar, self.framework_jar):
+                original = jar.read_bytes()
+                jar.write_bytes(b"changed executable plugin payload")
+                with self.subTest(plugin=jar), self.assertRaisesRegex(ValueError, "JAR digest"):
+                    installers.validate_product(self.contents, "windows-x64", "0.1.0-dev.2")
+                jar.write_bytes(original)
 
     def test_startup_rejects_mutated_plugin_before_creating_a_profile_or_process(self):
         (self.contents / "openpycharm-build.json").write_text(json.dumps(self.manifest))
-        self.jar.write_bytes(b"changed executable plugin payload")
         profile = self.root / "profile"
         with patch.object(runtime_smoke.platform, "system", return_value="Windows"), patch.object(runtime_smoke.subprocess, "Popen") as process:
-            with self.assertRaisesRegex(ValueError, "JAR digest"):
-                runtime_smoke.run_smoke(self.contents, profile)
+            for jar in (self.jar, self.framework_jar):
+                original = jar.read_bytes()
+                jar.write_bytes(b"changed executable plugin payload")
+                with self.subTest(plugin=jar), self.assertRaisesRegex(ValueError, "JAR digest"):
+                    runtime_smoke.run_smoke(self.contents, profile)
+                jar.write_bytes(original)
             process.assert_not_called()
         self.assertFalse(profile.exists())
 

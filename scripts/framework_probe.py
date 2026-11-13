@@ -20,6 +20,7 @@ import uuid
 from build_framework_plugin import ROOT, build_native_probe, build_plugin
 from bootstrap import sha256
 from native_probe import app_layout, prepare_profile
+from provenance import verify_product_plugins, verify_source_inputs
 from runtime_smoke import WindowsJob, WINDOWS_CREATE_SUSPENDED, WINDOWS_CREATE_NEW_PROCESS_GROUP, log_observation, stop_owned
 
 
@@ -110,7 +111,35 @@ def assess_venvs(selected: dict, no_install: dict, python: Path, optout_python: 
         raise ValueError("Pinned dependencies or opt-out did not stay within the selected real venvs")
 
 
-def run_probe(app: Path, sdk: Path, python: Path, profile: Path, timeout: int = 90, generators: bool = False) -> dict:
+def assess_packaged(native: dict, manifest: dict, contents: Path, test_plugin: Path) -> dict:
+    expected = next((entry for entry in manifest.get("plugins", []) if entry.get("id") == "dev.openpycharm.frameworks"), None)
+    if expected is None:
+        raise ValueError("Product manifest does not declare the framework plugin")
+    observed = native.get("frameworkPlugin", {})
+    normalize = lambda path: str(path).replace("\\", "/").casefold() if os.name == "nt" else str(path)
+    if (observed.get("id") != expected["id"] or observed.get("version") != expected["version"]
+            or observed.get("enabled") is not True or observed.get("bundled") is not True
+            or observed.get("jarSha256") != expected["jarSha256"]
+            or normalize(observed.get("path")) != normalize(contents / expected["path"])
+            or normalize(observed.get("jar")) != normalize(contents / expected["jar"])
+            or normalize(observed.get("applicationHome")) != normalize(contents)
+            or normalize(observed.get("pluginPathProperty")) != normalize(test_plugin.as_posix())):
+        raise ValueError("Framework implementation was not loaded from the authenticated native product directory")
+    return {"status": "pass", "id": expected["id"], "version": expected["version"], "jarSha256": expected["jarSha256"],
+            "loading": "Native home-relative third-party-plugins; only the test listener is injected"}
+
+
+def assess_packaged_startup(observation: dict, manifest: dict) -> None:
+    if (not all(observation.get(key) is True for key in ("ideStarted", "productIdentity", "vendorIdentity"))
+            or not all(observation.get("isolatedPaths", {}).get(key) is True for key in ("config", "system", "plugins", "log"))
+            or not all(observation.get("loadedPlugins", {}).get(key) is True for key in ("Python Community Edition", "Git", "Terminal"))
+            or set(observation.get("packagedPlugins", {})) != {entry["id"] for entry in manifest.get("plugins", [])}
+            or not observation.get("packagedPlugins") or not all(observation["packagedPlugins"].values())
+            or observation.get("errorCount") != 0):
+        raise ValueError("Native product startup identity, isolated paths or packaged plugin loading was not fully observed")
+
+
+def run_probe(app: Path, sdk: Path, python: Path, profile: Path, timeout: int = 90, generators: bool = False, packaged: bool = False) -> dict:
     if not 10 <= timeout <= 180:
         raise ValueError("Use a 10–180 second native probe timeout")
     profile = profile.resolve()
@@ -119,11 +148,22 @@ def run_probe(app: Path, sdk: Path, python: Path, profile: Path, timeout: int = 
     layout = app_layout(app)
     app_manifest_path = layout.contents / "openpycharm-build.json"
     app_manifest = json.loads(app_manifest_path.read_text(encoding="utf-8"))
+    verified_plugins = verify_product_plugins(app_manifest, layout.contents)
+    if packaged:
+        verify_source_inputs(app_manifest)
+        framework = next((entry for entry in app_manifest.get("plugins", []) if entry.get("id") == "dev.openpycharm.frameworks"), None)
+        if framework is None:
+            raise ValueError("The selected product does not bundle the framework plugin")
+        if not isinstance(framework.get("build"), dict) or framework["build"].get("jarSha256") != framework["jarSha256"]:
+            raise ValueError("The packaged framework build receipt does not match its JAR")
     python = python.absolute()
     if not python.is_file():
         raise ValueError("Select an existing interpreter for the persistence check")
     properties = prepare_profile(profile, [app, sdk])
-    plugin, build = build_plugin(sdk)
+    if packaged:
+        plugin, build = layout.contents / framework["path"], framework["build"]
+    else:
+        plugin, build = build_plugin(sdk)
     probe = build_native_probe(sdk, plugin)
     invocation = uuid.uuid4().hex
     native_path = profile / "framework-native.json"
@@ -144,16 +184,17 @@ def run_probe(app: Path, sdk: Path, python: Path, profile: Path, timeout: int = 
               "applicationBuild": {"version": app_manifest.get("version"), "upstreamBuild": app_manifest.get("upstreamBuild"),
                                    "sourceCommit": app_manifest.get("sourceCommit"), "manifestSha256": sha256(app_manifest_path)},
               "frameworkPluginBuild": build, "invocationId": invocation,
+              "packagedMode": packaged, "verifiedPluginJars": verified_plugins,
               "isolatedJvmHome": str(isolated_home),
               "limitations": ["No user code is executed by the probe",
                               "The normal welcome provider may create a disposable project/venv under the isolated JVM home",
                               "Actual native Run/Debug, breakpoints, stop/reload and Windows UI remain separate acceptance gates"]}
-    with tempfile.TemporaryDirectory(prefix="framework-launch-", dir=plugin.parent) as directory:
+    with tempfile.TemporaryDirectory(prefix="framework-launch-", dir=profile) as directory:
         temporary = Path(directory)
         vmoptions = temporary / "framework-probe.vmoptions"
         base = layout.contents / ("bin/pycharm.vmoptions" if layout.platform == "macos" else "bin/pycharm64.exe.vmoptions")
         properties_map = {"user.home": isolated_home.as_posix(),
-                          "plugin.path": ",".join(path.as_posix() for path in (plugin, probe)),
+                          "plugin.path": probe.as_posix() if packaged else ",".join(path.as_posix() for path in (plugin, probe)),
                           "openpycharm.framework.probe.report": native_path.as_posix(),
                           "openpycharm.framework.probe.output.root": profile.as_posix(),
                           "openpycharm.framework.probe.invocation.id": invocation,
@@ -197,6 +238,8 @@ def run_probe(app: Path, sdk: Path, python: Path, profile: Path, timeout: int = 
                 result["native"] = native
                 result["assessment"] = (assess_generators(native, invocation, python.as_posix(), optout_python.as_posix()) if generators
                                         else assess(native, invocation, python.as_posix(), work.as_posix()))
+                if packaged:
+                    result["packagedAssessment"] = assess_packaged(native, app_manifest, layout.contents, probe)
                 try:
                     process.wait(timeout=20)
                     result["nativeGracefulExit"] = process.returncode
@@ -218,10 +261,15 @@ def run_probe(app: Path, sdk: Path, python: Path, profile: Path, timeout: int = 
                     job.stop()
     idea_log = profile / "log/idea.log"
     if idea_log.is_file():
-        observed = log_observation(idea_log.read_text(encoding="utf-8", errors="replace"), profile, work, app_manifest["upstreamBuild"])
+        observed = log_observation(idea_log.read_text(encoding="utf-8", errors="replace"), profile, work, app_manifest["upstreamBuild"], app_manifest.get("plugins", []))
         result["logObservation"] = observed
         if observed["errorCount"]:
             result["assessment"] = {"status": "fail", "error": "Native IDEA log contains ERROR or SEVERE entries"}
+        if packaged:
+            try:
+                assess_packaged_startup(observed, app_manifest)
+            except ValueError as error:
+                result["assessment"] = {"status": "fail", "error": str(error)}
     else:
         result["assessment"] = {"status": "fail", "error": "Native IDEA log is missing"}
     if generators and result.get("assessment", {}).get("status") == "pass":
@@ -247,8 +295,9 @@ def main():
     parser.add_argument("--profile", type=Path, required=True)
     parser.add_argument("--timeout", type=int, default=90)
     parser.add_argument("--generators", action="store_true", help="Exercise generator UI/API with clean disposable venvs and opt-in dependency installation")
+    parser.add_argument("--packaged", action="store_true", help="Require the production framework JAR to load through the native product plugin directory")
     args = parser.parse_args()
-    result = run_probe(args.app, args.sdk, args.python, args.profile, args.timeout, args.generators)
+    result = run_probe(args.app, args.sdk, args.python, args.profile, args.timeout, args.generators, args.packaged)
     print(json.dumps({"assessment": result["assessment"], "profile": result["profile"]}))
     if result["assessment"]["status"] != "pass":
         raise SystemExit(1)

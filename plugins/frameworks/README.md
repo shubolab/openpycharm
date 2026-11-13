@@ -16,4 +16,6 @@
 
 本插件没有引用商业框架实现，也没有启用付费组件或恢复已移除的锁定推广类。示例见 [`fixtures/frameworks`](../../fixtures/frameworks/README.md)，API 与证据边界见 [`framework-api.md`](../../docs/verification/framework-api.md)。
 
+产品构建将此插件与 HTTP Client 一起放入原生 `third-party-plugins` 目录，并在产品清单中记录具体版本、JAR 摘要、编译器和来源输入。安装包和启动检查复用相同的摘要校验；生产启动不设置 `plugin.path`。打包检查使用 `framework_probe.py --packaged`，仅为测试监听器指定额外插件路径，要求框架实现实际来自产品内的目录。
+
 The plugin adds independent native Django, Flask and FastAPI project generators and Run/Debug configuration types. It preserves PythonCore's editor, interpreter selection, environment, working directory, persistence and execution state. New projects use PythonCore's native interpreter/venv UI. Installing pinned requirements is opt-in and targets the selected interpreter; cleanup acts only on that process and observed descendants. Full framework intelligence, actual wizard Create/Cancel desktop acceptance, reloaders and remote workflows remain separate work.
