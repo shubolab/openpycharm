@@ -34,7 +34,7 @@ startup registration is omitted. This removes the unsolicited upstream release
 tab while preserving the Help action, native onboarding and feature tours.
 Routing the manual What's New action to our own release notes remains open.
 
-Controls: 11 local-product tests pass, covering exact framework omissions,
+Controls: 12 local-product tests pass, covering exact framework omissions,
 embedded XML, untouched Python/test configuration types, retained native tours,
 Git authentication/feature discovery and numeric-promotion inlay hints, plus
 source-SDK/symlink ownership. The original pinned cached/JAR descriptors were
@@ -42,6 +42,46 @@ also transformed in memory; all targeted framework/migration registrations were
 absent afterward. The compact local control is
 `.tools/parity-audit/promo-registration-control.json`. Updated product build and
 native checks must run after these descriptor edits.
+
+### Standalone welcome isolation
+
+A no-argument framework probe using an isolated IDE configuration still created
+`~/PyCharmMiscProject` and its `.venv` at 2026-11-14 00:29. The IDE configuration
+paths do not govern this upstream project-data location. The pinned
+`python/ide/impl/src/com/intellij/pycharm/community/ide/impl/miscProject/impl/lib.kt`
+chooses `GeneralLocalSettings.defaultProjectDirectory`, otherwise `user.home`,
+then appends the fixed `PyCharmMiscProject` name. The Python
+`PyCharmWelcomeScreenProjectProvider` opens that directory and silently creates
+a venv/SDK for a new welcome project when an installed Python is available.
+
+The platform's
+[WelcomeScreenNoProjectStateHandler](https://github.com/JetBrains/intellij-community/blob/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/non-modal-welcome-screen/src/com/intellij/platform/ide/nonModalWelcomeScreen/WelcomeScreenNoProjectStateHandler.kt)
+requires a registered provider before choosing the non-modal project experience.
+The product therefore omits only the exact
+`welcomeScreenProjectProvider` registration for
+`com.intellij.pycharm.community.ide.impl.welcomeScreen.PyCharmWelcomeScreenProjectProvider`,
+including its embedded cached copy. This allows the ordinary native welcome
+fallback and retains New Project, Open and Clone registrations. An existing
+Advanced Settings value cannot re-enable the removed provider.
+
+The upstream `welcome.screen.non.modal.enabled` control is an Advanced Setting,
+not a demonstrated JVM property: `AdvancedSettingsImpl.getSetting` reads saved
+state or its descriptor default. No unsupported `-D` override is added. No
+application code, `user.home`, reference installation or existing project data
+is changed. A replacement non-modal provider and all direct miscellaneous-file
+creation paths need a product-owned location before future parity acceptance.
+No-argument native startup on the rebuilt product remains a required runtime
+check; the regression control currently verifies descriptor exclusion and
+retention of ordinary welcome entries only.
+
+Read-only provenance: the shared directory's birth time is 00:29:47 +0800,
+`.idea` is 00:29:50 and `.venv` is 00:29:52, matching the framework probe log;
+its top level contains only `.idea` and `.venv`. No process/open file handle
+referencing that tree was found in the subsequent bounded check. The directory
+is preserved. If cleanup is authorized, first archive the complete tree with
+symlinks/metadata, retain hashes and the creating log excerpt, recheck handles,
+and verify the archive independently; do not delete or rename it merely from
+the path name or creation-time correlation.
 
 ## What is actually available
 

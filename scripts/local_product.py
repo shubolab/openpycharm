@@ -161,6 +161,7 @@ def xml_filter(data: bytes, excluded: set[str]) -> tuple[bytes, list[dict]]:
             or (tag == "listener" and attrs.get("class") == "com.intellij.pycharm.community.ide.impl.promo.CommunityToUnifiedListener"
                 and attrs.get("topic") == "com.intellij.ide.AppLifecycleListener")
             or (tag == "postStartupActivity" and attrs.get("implementation") == "com.intellij.platform.whatsNew.WhatsNewShowOnStartCheckService")
+            or (tag == "welcomeScreenProjectProvider" and attrs.get("implementation") == "com.intellij.pycharm.community.ide.impl.welcomeScreen.PyCharmWelcomeScreenProjectProvider")
         )
         if selected:
             targets.append((begin, finish, {"tag": tag, "attributes": attrs, "sha256": sha(data[begin:finish])}, b""))
@@ -322,7 +323,7 @@ def apply(contents: Path, sdk_contents: Path | None = None) -> dict:
     jars = []
     tokens = [b"settingsSync", b"ultimatePromo", b"grazie", b".promotion", b"PycharmProSuggestionProvider", b"pluginsAdvertisement", b"TryUltimateActionHandler", b"ConsentConfigurable",
               b"LockedRunConfigurationType", b"DbtRunLockedConfigurationType", b"WelcomeToUnifiedWelcomeScreenBanner", b"CommunityToUnifiedListener",
-              b"WhatsNewShowOnStartCheckService"]
+              b"WhatsNewShowOnStartCheckService", b"PyCharmWelcomeScreenProjectProvider"]
     for path in sorted(contents.rglob("*.jar")):
         if path == module_jar:
             continue

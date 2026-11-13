@@ -81,6 +81,15 @@ class LocalProductDescriptorTests(unittest.TestCase):
         expected = b'<idea-plugin><extensions>' + kept + b'</extensions></idea-plugin>'
         self.assertEqual(expected, xml_filter(before, set())[0])
 
+    def test_shared_home_welcome_provider_removed_but_native_welcome_entries_stay(self):
+        provider = b'<welcomeScreenProjectProvider implementation="com.intellij.pycharm.community.ide.impl.welcomeScreen.PyCharmWelcomeScreenProjectProvider" order="first"/>'
+        retained = b'<noProjectStateHandler implementation="com.intellij.platform.ide.nonModalWelcomeScreen.WelcomeScreenNoProjectStateHandler" order="first"/><action id="NewProject" class="example.NativeNewProject"/><action id="OpenFile" class="example.NativeOpen"/><action id="ProjectFromVersionControl" class="example.NativeClone"/>'
+        before = b'<idea-plugin><extensions>' + provider + retained + b'</extensions></idea-plugin>'
+        expected = b'<idea-plugin><extensions>' + retained + b'</extensions></idea-plugin>'
+        self.assertEqual(expected, xml_filter(before, set())[0])
+        wrap = lambda data: b'<idea-plugin><content><module name="intellij.pycharm.community.ide.impl">' + escape(data.decode(), {'"': '&quot;'}).encode() + b'</module></content></idea-plugin>'
+        self.assertEqual(wrap(expected), xml_filter(wrap(before), set())[0])
+
     def test_cache_preserves_non_xml_record_bytes_and_rejects_truncation(self):
         core = b'<idea-plugin><id>core</id></idea-plugin>'
         descriptor = b'<idea-plugin><id>Git4Idea</id></idea-plugin>'
