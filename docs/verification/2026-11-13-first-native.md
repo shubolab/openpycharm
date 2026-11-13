@@ -4,6 +4,12 @@ Product candidate: OpenPyCharm `0.1.0-dev.1`; upstream PC `261.26222.68`
 (2026.1.4). Host: macOS Apple silicon. This record is a development checkpoint,
 not full parity acceptance or a published release.
 
+The [published preview record](2026-11-14-preview-release.md) supersedes this
+checkpoint. Older generated binaries were retired after publication; their
+manifests, hashes and logs were retained locally. See the exact
+[retention ledger](artifact-retention-20261114.json) before interpreting the
+historical build paths below as existing binaries.
+
 ## Passed observations
 
 - Official OSS archive authenticated; PC identity, PythonCore present, Pythonid

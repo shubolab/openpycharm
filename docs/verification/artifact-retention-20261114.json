@@ -1,0 +1,118 @@
+{
+  "schema": 1,
+  "removedAt": "2026-11-13T19:19:10.783006+00:00",
+  "scope": "Only exact superseded generated app trees and DMGs; source/SDK/worktrees/profiles/reference applications retained",
+  "publishedRelease": "https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.1",
+  "preservedEvidenceArchive": ".tools/generated-cleanup-provenance",
+  "retainedLatest": [
+    "build/signed-preview/OpenPyCharm.app",
+    "build/signed-installers/OpenPyCharm-0.1.0-dev.1-macos-arm64.dmg",
+    "/Users/wangshubo/Applications/OpenPyCharm.app",
+    ".tools/release/v0.1.0-dev.1"
+  ],
+  "held": [
+    "build/final/OpenPyCharm.app"
+  ],
+  "twoPhaseMoveThenPurge": true,
+  "liveReferencesRechecked": true,
+  "freeBeforeBytes": 67019657216,
+  "freeAfterBytes": 72059006976,
+  "removed": [
+    {
+      "originalPath": "build/product/OpenPyCharm.app",
+      "quarantinePath": "build/generated-quarantine/20261114-first-preview/product/OpenPyCharm.app",
+      "kind": "old-app-tree",
+      "sha256": "f23dc4c5677032a4cc183a855d2ecfa722526d17a07d56e2cd01e735470a0f63",
+      "sourceCommit": null,
+      "apparentBytes": 1882247818
+    },
+    {
+      "originalPath": "build/release/OpenPyCharm.app",
+      "quarantinePath": "build/generated-quarantine/20261114-first-preview/release/OpenPyCharm.app",
+      "kind": "old-app-tree",
+      "sha256": "f8b990b262351781eb9e33cb2b5e5e5ec0c923dd91fe832a137a5278c2fb5faf",
+      "sourceCommit": "36082744b2c13bcd6b9af85f991815bed8442f25",
+      "apparentBytes": 1882124556
+    },
+    {
+      "originalPath": "build/release-candidate/OpenPyCharm.app",
+      "quarantinePath": "build/generated-quarantine/20261114-first-preview/release-candidate/OpenPyCharm.app",
+      "kind": "old-app-tree",
+      "sha256": "83a0f5479d180798818b1d5ed9e3bdeb021a4a2c5cc1bf01358ccfbb12adec7c",
+      "sourceCommit": "9f6821f8f26575837ae7e6280ae7ba37681703bf",
+      "apparentBytes": 1882124988
+    },
+    {
+      "originalPath": "build/release-sealed/OpenPyCharm.app",
+      "quarantinePath": "build/generated-quarantine/20261114-first-preview/release-sealed/OpenPyCharm.app",
+      "kind": "old-app-tree",
+      "sha256": "f701454c27c30bd6b529faadcc51bce316f11d591ff071e9e89f170fb7292d6e",
+      "sourceCommit": "7e896e7bbb71ba23030a48d8e97baa41d69f9183",
+      "apparentBytes": 1882124988
+    },
+    {
+      "originalPath": "build/isolated-release/OpenPyCharm.app",
+      "quarantinePath": "build/generated-quarantine/20261114-first-preview/isolated-release/OpenPyCharm.app",
+      "kind": "old-app-tree",
+      "sha256": "264f35f8b062c468adcf13bbd2ae2d9cae11de1313794db6d4c01f9635544212",
+      "sourceCommit": "a7335490bb9b81a9d0d12b193de78b13be3fc19b",
+      "apparentBytes": 1882125724
+    },
+    {
+      "originalPath": "build/preview/OpenPyCharm.app",
+      "quarantinePath": "build/generated-quarantine/20261114-first-preview/preview/OpenPyCharm.app",
+      "kind": "old-app-tree",
+      "sha256": "a4de3071298205babb29714ae97d8b0367aa6c0137d9da70cbc0a4fdec840048",
+      "sourceCommit": "9c5343e9b30ce5254fdd28383e4e28776c1507fa",
+      "apparentBytes": 1882128300
+    },
+    {
+      "originalPath": "build/repair-smoke/OpenPyCharm.app",
+      "quarantinePath": "build/generated-quarantine/20261114-first-preview/repair-smoke/OpenPyCharm.app",
+      "kind": "old-app-tree",
+      "sha256": "5c7d3a07c7e1d7853ca9c13d08e0df4ec681aa67dcefa13ce61d36d5e944ba37",
+      "sourceCommit": null,
+      "apparentBytes": 91264083
+    },
+    {
+      "originalPath": "build/installers/OpenPyCharm-0.1.0-dev.1-macos-arm64.dmg",
+      "quarantinePath": "build/generated-quarantine/20261114-first-preview/installers/OpenPyCharm-0.1.0-dev.1-macos-arm64.dmg",
+      "kind": "old-dmg",
+      "sha256": "13e60240ba409d8b242d0f8c10d7e3c0f7f46489bc3cafc5773f4815082412e8",
+      "sourceCommit": null,
+      "apparentBytes": 689424795
+    },
+    {
+      "originalPath": "build/candidate-installers/OpenPyCharm-0.1.0-dev.1-macos-arm64.dmg",
+      "quarantinePath": "build/generated-quarantine/20261114-first-preview/candidate-installers/OpenPyCharm-0.1.0-dev.1-macos-arm64.dmg",
+      "kind": "old-dmg",
+      "sha256": "6d81b8ed4149af3dace7e295bebcd3afdf9076dfaefe8e77408f7dd6e72c7f0a",
+      "sourceCommit": null,
+      "apparentBytes": 688444647
+    },
+    {
+      "originalPath": "build/final-installers/OpenPyCharm-0.1.0-dev.1-macos-arm64.dmg",
+      "quarantinePath": "build/generated-quarantine/20261114-first-preview/final-installers/OpenPyCharm-0.1.0-dev.1-macos-arm64.dmg",
+      "kind": "old-dmg",
+      "sha256": "89767e8205769ddb91a83d90240f42237ea91e18d7572bc5bf46d839d935b107",
+      "sourceCommit": null,
+      "apparentBytes": 688687219
+    },
+    {
+      "originalPath": "build/release-installers/OpenPyCharm-0.1.0-dev.1-macos-arm64.dmg",
+      "quarantinePath": "build/generated-quarantine/20261114-first-preview/release-installers/OpenPyCharm-0.1.0-dev.1-macos-arm64.dmg",
+      "kind": "old-dmg",
+      "sha256": "72b1c20e132eaeb8c4a501b599bdc0c461bb7159df4dc4bf5a3d23f905291d6e",
+      "sourceCommit": null,
+      "apparentBytes": 688719189
+    },
+    {
+      "originalPath": "build/preview-installers/OpenPyCharm-0.1.0-dev.1-macos-arm64.dmg",
+      "quarantinePath": "build/generated-quarantine/20261114-first-preview/preview-installers/OpenPyCharm-0.1.0-dev.1-macos-arm64.dmg",
+      "kind": "old-dmg",
+      "sha256": "36823fa5b80e0effe6e988c600c4efb068abb677c949afd9bb2d0ae9a0220c74",
+      "sourceCommit": null,
+      "apparentBytes": 690430730
+    }
+  ]
+}

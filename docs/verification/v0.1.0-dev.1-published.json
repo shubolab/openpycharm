@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "releaseId": 444523987,
+  "url": "https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.1",
+  "publishedAt": "2026-11-13T18:51:59Z",
+  "prerelease": true,
+  "tag": "v0.1.0-dev.1",
+  "tagCommit": "c406f163e243ac4d9cffa4acb65f04aed2e26d6c",
+  "productionSourceCommit": "3b45fda2ceb2a4d81c8eaf1169f953dd8b1b8b5e",
+  "allServerDigestsMatchedLocalReleaseManifest": true,
+  "assets": [
+    {
+      "name": "OpenPyCharm-0.1.0-dev.1-macos-arm64.dmg",
+      "bytes": 686045262,
+      "digest": "sha256:4b6954fb3a3116b5b05f6933d9e603840de28cce364e6fce42d0c35fda4b9c27",
+      "downloadUrl": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.1/OpenPyCharm-0.1.0-dev.1-macos-arm64.dmg"
+    },
+    {
+      "name": "OpenPyCharm-0.1.0-dev.1-provenance.zip",
+      "bytes": 1382615,
+      "digest": "sha256:ef7c2eba8174f8480b1308ccbd96f0cfe5ce6c15b18fd467e2e1396c9473890e",
+      "downloadUrl": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.1/OpenPyCharm-0.1.0-dev.1-provenance.zip"
+    },
+    {
+      "name": "OpenPyCharm-0.1.0-dev.1-windows-x64-setup.exe",
+      "bytes": 596721591,
+      "digest": "sha256:97249b3e261bf9d427a39cd1ad6652d780ea5d507e35a168cf8e2c490326d374",
+      "downloadUrl": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.1/OpenPyCharm-0.1.0-dev.1-windows-x64-setup.exe"
+    },
+    {
+      "name": "SHA256SUMS.txt",
+      "bytes": 218,
+      "digest": "sha256:44b7a4694cfed1f837295069d284cdd19eef579877e97a707dfbc8b463d9ceab",
+      "downloadUrl": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.1/SHA256SUMS.txt"
+    }
+  ],
+  "windowsTransferRun": "https://github.com/shubolab/openpycharm/actions/runs/43483493154"
+}
