@@ -7,7 +7,7 @@ import java.util.UUID;
 public final class NotebookModel {
   public static final int MAX_CHARS = 8 * 1024 * 1024;
   public static final int MAX_CELLS = 1000;
-  private static final Gson JSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+  private static final Gson JSON = new GsonBuilder().disableHtmlEscaping().create();
   private final JsonObject root;
   private final JsonArray cells;
 
@@ -73,9 +73,41 @@ public final class NotebookModel {
   }
   public void remove(int i) { cells.remove(i); }
   public String json() {
-    String result = JSON.toJson(root) + "\n";
-    if (result.length() > MAX_CHARS) throw new IllegalArgumentException("Notebook output exceeds the 8 MiB save limit; clear cell outputs");
-    return result;
+    return snapshot().json();
+  }
+
+  /** Copy only mutable notebook/cell/output containers, never large foreign metadata trees.
+   * Metadata/source/data values are immutable to this model: edits replace their values.
+   * This bounded capture is cheap on the EDT; traversal/serialization happens on a worker.
+   */
+  public Snapshot snapshot() {
+    JsonObject copy = shallow(root);
+    JsonArray capturedCells = new JsonArray();
+    for (JsonElement value : cells) {
+      JsonObject cell = shallow(value.getAsJsonObject());
+      if (cell.has("outputs") && cell.get("outputs").isJsonArray()) {
+        JsonArray outputs = new JsonArray();
+        for (JsonElement output : cell.getAsJsonArray("outputs"))
+          outputs.add(output.isJsonObject() ? shallow(output.getAsJsonObject()) : output);
+        cell.add("outputs", outputs);
+      }
+      capturedCells.add(cell);
+    }
+    copy.add("cells", capturedCells);
+    return new Snapshot(copy);
+  }
+  private static JsonObject shallow(JsonObject input) {
+    JsonObject copy = new JsonObject();
+    input.entrySet().forEach(entry -> copy.add(entry.getKey(), entry.getValue()));
+    return copy;
+  }
+  public static final class Snapshot {
+    private final JsonObject root;
+    private Snapshot(JsonObject root) { this.root = root; }
+    /** Compact output has no pretty-print expansion. Never reject edited data at save time:
+     * a file grown beyond the native admission bound remains valid JSON in the text editor.
+     */
+    public String json() { return JSON.toJson(root) + "\n"; }
   }
 
   public static String sourceText(JsonElement source) {

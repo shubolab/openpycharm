@@ -9,6 +9,7 @@ import java.nio.file.*;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 /** All extraction, pipe IO, process startup and owned-process disposal run off the EDT. */
@@ -20,12 +21,16 @@ public final class NotebookKernelSession implements AutoCloseable {
   private final List<OwnedProcess> owned = new CopyOnWriteArrayList<>();
   private volatile Process process;
   private volatile boolean closed;
+  private final AtomicBoolean disposalScheduled = new AtomicBoolean();
   private BufferedWriter writer;
-  private Path temporary;
+  private volatile Path temporary;
 
   private record OwnedProcess(ProcessHandle handle, Instant started) {
+    boolean isOwnedAlive() {
+      return handle.isAlive() && handle.info().startInstant().filter(started::equals).isPresent();
+    }
     void destroy(boolean force) {
-      if (handle.isAlive() && handle.info().startInstant().filter(started::equals).isPresent()) {
+      if (isOwnedAlive()) {
         if (force) handle.destroyForcibly(); else handle.destroy();
       }
     }
@@ -43,6 +48,7 @@ public final class NotebookKernelSession implements AutoCloseable {
       try {
         if (closed) return;
         if (process == null) start();
+        if (closed) return;
         if (!process.isAlive()) throw new IOException("Notebook kernel bridge exited; restart the kernel");
         JsonObject request = new JsonObject();
         request.addProperty("id", id);
@@ -56,34 +62,45 @@ public final class NotebookKernelSession implements AutoCloseable {
   private void start() throws IOException {
     Path parent = PathManager.getSystemDir().resolve("openpycharm-notebooks");
     Files.createDirectories(parent);
-    temporary = Files.createTempDirectory(parent, "bridge-");
-    Path script = temporary.resolve("kernel_bridge.py");
-    try (InputStream stream = getClass().getResourceAsStream("/kernel_bridge.py")) {
-      if (stream == null) throw new IOException("Notebook kernel bridge resource is missing");
-      Files.copy(stream, script);
-    }
-    ProcessBuilder builder = new ProcessBuilder(python, "-u", script.toString(), "--cwd", cwd);
-    builder.directory(Path.of(cwd).toFile());
-    builder.environment().put("PYTHONIOENCODING", "utf-8");
-    process = builder.start();
-    remember(process.toHandle());
-    writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream(), StandardCharsets.UTF_8));
-    Process started = process;
-    AppExecutorUtil.getAppExecutorService().execute(() -> readEvents(started));
-    AppExecutorUtil.getAppExecutorService().execute(() -> {
-      try (Reader reader = new InputStreamReader(started.getErrorStream(), StandardCharsets.UTF_8)) {
-        char[] buffer = new char[4096];
-        int total = 0, count;
-        while ((count = reader.read(buffer)) != -1) {
-          if (total < 32768) {
-            JsonObject message = new JsonObject(); message.addProperty("event", "diagnostic");
-            message.addProperty("text", new String(buffer, 0, Math.min(count, 32768 - total)));
-            events.accept(message);
+    Path directory = Files.createTempDirectory(parent, "bridge-");
+    temporary = directory;
+    boolean launched = false;
+    try {
+      Path script = directory.resolve("kernel_bridge.py");
+      try (InputStream stream = getClass().getResourceAsStream("/kernel_bridge.py")) {
+        if (stream == null) throw new IOException("Notebook kernel bridge resource is missing");
+        Files.copy(stream, script);
+      }
+      if (closed) return;
+      ProcessBuilder builder = new ProcessBuilder(python, "-u", script.toString(), "--cwd", cwd);
+      builder.directory(Path.of(cwd).toFile());
+      builder.environment().put("PYTHONIOENCODING", "utf-8");
+      Process started = builder.start();
+      launched = true;
+      writer = new BufferedWriter(new OutputStreamWriter(started.getOutputStream(), StandardCharsets.UTF_8));
+      process = started;
+      remember(started.toHandle());
+      // close() may have run while ProcessBuilder.start() was still launching.
+      // Publish first, then arrange the same independent bounded disposal path.
+      if (closed) scheduleDisposal();
+      AppExecutorUtil.getAppExecutorService().execute(() -> readEvents(started));
+      AppExecutorUtil.getAppExecutorService().execute(() -> {
+        try (Reader reader = new InputStreamReader(started.getErrorStream(), StandardCharsets.UTF_8)) {
+          char[] buffer = new char[4096];
+          int total = 0, count;
+          while ((count = reader.read(buffer)) != -1) {
+            if (!closed && total < 32768) {
+              JsonObject message = new JsonObject(); message.addProperty("event", "diagnostic");
+              message.addProperty("text", new String(buffer, 0, Math.min(count, 32768 - total)));
+              events.accept(message);
+            }
+            total += count;
           }
-          total += count;
-        }
-      } catch (IOException ignored) { }
-    });
+        } catch (IOException ignored) { }
+      });
+    } finally {
+      if (!launched) cleanupDirectory(directory);
+    }
   }
 
   private void readEvents(Process started) {
@@ -125,32 +142,83 @@ public final class NotebookKernelSession implements AutoCloseable {
   @Override public synchronized void close() {
     if (closed) return;
     closed = true;
-    commands.execute(() -> {
-      try {
-        Process started = process;
-        if (started != null) {
-          // Only this session's launched process and verified descendants are eligible.
-          started.descendants().forEach(this::remember);
-          if (writer != null) {
-            writer.write("{\"id\":\"dispose\",\"op\":\"shutdown\"}\n"); writer.flush(); writer.close();
-          }
-          if (!started.waitFor(7, TimeUnit.SECONDS)) {
-            started.destroy();
-            if (!started.waitFor(3, TimeUnit.SECONDS)) {
-              owned.reversed().forEach(value -> value.destroy(true));
-              started.waitFor(2, TimeUnit.SECONDS);
-            }
-          }
-          owned.reversed().forEach(value -> value.destroy(false));
-        }
-      } catch (Exception ignored) {
-        owned.reversed().forEach(value -> value.destroy(false));
-      } finally {
-        if (temporary != null) {
-          try { Files.deleteIfExists(temporary.resolve("kernel_bridge.py")); Files.deleteIfExists(temporary); } catch (IOException ignored) { }
-        }
-        commands.shutdown();
+    // Protocol cleanup is best effort and stays on the writer's executor. It
+    // may be queued behind a blocked flush, so lifecycle disposal never waits
+    // for this task or acquires any BufferedWriter/Process pipe lock.
+    commands.execute(this::closeProtocol);
+    commands.shutdown();
+    scheduleDisposal();
+  }
+
+  private void closeProtocol() {
+    BufferedWriter output = writer;
+    if (output == null) return;
+    try {
+      if (process != null && process.isAlive()) {
+        output.write("{\"id\":\"dispose\",\"op\":\"shutdown\"}\n");
+        output.flush();
       }
-    });
+    } catch (IOException ignored) { }
+    finally { try { output.close(); } catch (IOException ignored) { } }
+  }
+
+  private void scheduleDisposal() {
+    Process started = process;
+    if (started != null && !disposalScheduled.compareAndSet(false, true)) return;
+    Runnable dispose = () -> {
+      try {
+        if (started != null) disposeProcess(started);
+      } finally {
+        Path directory = temporary;
+        if (directory != null) cleanupDirectory(directory);
+      }
+    };
+    try { AppExecutorUtil.getAppExecutorService().execute(dispose); }
+    catch (RejectedExecutionException ignored) {
+      // Application shutdown must not strand this session's already-launched
+      // process merely because the application pool no longer accepts work.
+      Thread fallback = new Thread(dispose, "OpenPyCharm notebook disposal");
+      fallback.setDaemon(true);
+      fallback.start();
+    }
+  }
+
+  private void snapshotOwned(Process started) {
+    remember(started.toHandle());
+    started.descendants().forEach(this::remember);
+  }
+
+  private void disposeProcess(Process started) {
+    boolean interrupted = false;
+    try {
+      snapshotOwned(started);
+      if (!started.waitFor(3, TimeUnit.SECONDS)) {
+        snapshotOwned(started);
+        // Terminate only a PID whose original start instant is still present.
+        owned.stream().filter(value -> value.handle().pid() == started.pid()).forEach(value -> value.destroy(false));
+        if (!started.waitFor(2, TimeUnit.SECONDS)) {
+          snapshotOwned(started);
+          owned.reversed().forEach(value -> value.destroy(true));
+          started.waitFor(2, TimeUnit.SECONDS);
+        }
+      }
+      owned.reversed().forEach(value -> value.destroy(false));
+      long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(1);
+      while (owned.stream().anyMatch(OwnedProcess::isOwnedAlive) && System.nanoTime() < deadline) Thread.sleep(20);
+    } catch (InterruptedException ignored) {
+      interrupted = true;
+    } finally {
+      // The writer may still be blocked. Killing the verified owned process
+      // breaks its pipe; writer closure remains off this lifecycle task.
+      owned.reversed().forEach(value -> value.destroy(true));
+      if (interrupted) Thread.currentThread().interrupt();
+    }
+  }
+
+  private static void cleanupDirectory(Path directory) {
+    try {
+      Files.deleteIfExists(directory.resolve("kernel_bridge.py"));
+      Files.deleteIfExists(directory);
+    } catch (IOException ignored) { }
   }
 }

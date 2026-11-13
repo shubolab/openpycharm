@@ -10,5 +10,6 @@
   <extensions defaultExtensionNs="com.intellij">
     <fileType name="OpenPyCharm Notebook" implementationClass="dev.openpycharm.notebooks.NotebookFileType" fieldName="INSTANCE" extensions="ipynb"/>
     <fileEditorProvider implementation="dev.openpycharm.notebooks.NotebookEditorProvider"/>
+    <projectCloseHandler implementation="dev.openpycharm.notebooks.NotebookProjectCloseHandler" order="first"/>
   </extensions>
 </idea-plugin>

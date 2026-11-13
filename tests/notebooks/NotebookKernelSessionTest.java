@@ -21,6 +21,7 @@ public class NotebookKernelSessionTest {
  static void require(boolean pass,String message) {if(!pass)throw new AssertionError(message);}
  static boolean alive(long pid) {return ProcessHandle.of(pid).map(ProcessHandle::isAlive).orElse(false);}
  public static void main(String[] args) throws Exception {
+  JsonObject disposal=NotebookSessionDisposalTest.run(args[0],java.nio.file.Path.of(args[1]));
   NotebookKernelSession session=new NotebookKernelSession(args[0],args[1],queue::add);
   Process sentinel=new ProcessBuilder(args[0],"-c","import time; time.sleep(90)").start();
   long pid=-1,restartedPid=-1;
@@ -47,7 +48,7 @@ public class NotebookKernelSessionTest {
    long deadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(15);while(alive(restartedPid)&&System.nanoTime()<deadline)Thread.sleep(50);
    require(!alive(restartedPid),"Restarted owned kernel survived session close");
    Thread.sleep(200);session.close();require(sentinel.isAlive(),"Unrelated owned test process was stopped");
-   System.out.println("{\"status\":\"pass\",\"realJavaSession\":true,\"selectedPython\":true,\"streamAndResult\":true,\"interrupt\":true,\"restartWhileBusy\":true,\"stateReset\":true,\"doubleClose\":true,\"ownedKernelCleanup\":true,\"unrelatedProcessSurvived\":true,\"originalKernelPid\":"+pid+",\"restartedKernelPid\":"+restartedPid+"}");
+   System.out.println("{\"status\":\"pass\",\"realJavaSession\":true,\"selectedPython\":true,\"streamAndResult\":true,\"interrupt\":true,\"restartWhileBusy\":true,\"stateReset\":true,\"doubleClose\":true,\"ownedKernelCleanup\":true,\"unrelatedProcessSurvived\":true,\"originalKernelPid\":"+pid+",\"restartedKernelPid\":"+restartedPid+",\"disposal\":"+disposal+"}");
   } finally {session.close();sentinel.destroy();if(!sentinel.waitFor(5,TimeUnit.SECONDS))sentinel.destroyForcibly();}
   System.exit(0);
  }

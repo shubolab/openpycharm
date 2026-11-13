@@ -19,6 +19,7 @@ import build_notebook_plugin as builder
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "tests/notebooks/NotebookKernelSessionTest.java"
+DISPOSAL_SOURCE = ROOT / "tests/notebooks/NotebookSessionDisposalTest.java"
 
 
 def main() -> int:
@@ -41,7 +42,7 @@ def main() -> int:
     with tempfile.TemporaryDirectory(prefix="session-", dir=work) as directory:
         temporary = Path(directory)
         classes = temporary / "classes"
-        compilation = builder.compile_java(layout, [SOURCE], classes, temporary / "javac.args", [archive], runtime)
+        compilation = builder.compile_java(layout, [SOURCE, DISPOSAL_SOURCE], classes, temporary / "javac.args", [archive], runtime)
         cp = os.pathsep.join(map(str, [classes, archive, *builder.classpath(layout)]))
         arguments = ["-Djava.awt.headless=true", "-Didea.home.path=" + str(runtime.contents),
                      "-Didea.system.path=" + str(temporary / "system"),
@@ -70,12 +71,14 @@ def main() -> int:
                   "sourceInputsStillCurrent": sources_current,
                   "sdkReceiptSha256": receipt["identity"]["sdkReceiptSha256"],
                   "sources": {"tests/notebooks/NotebookKernelSessionTest.java": sha256(SOURCE),
+                              "tests/notebooks/NotebookSessionDisposalTest.java": sha256(DISPOSAL_SOURCE),
                               "scripts/notebook_session_probe.py": sha256(Path(__file__)),
                               **receipt["identity"]["sources"]},
                   "observed": ["Authenticated native JVM loaded the actual built NotebookKernelSession and embedded bridge",
                                "Selected Python executed code and delivered stream/result/error events over actual process pipes",
                                "Interrupt and restart while busy reached the actual kernel; state reset and old PID exited",
-                               "Repeated session disposal completed and restarted kernel PID exited; unrelated process survived"],
+                               "Repeated session disposal completed and restarted kernel PID exited; unrelated process survived",
+                               "Actual pipe-write backpressure and close-during-startup helpers exited within bounded disposal on POSIX"],
                   "unknown": ["Native NotebookFileEditor/Swing desktop behavior is not exercised by this headless class test",
                               "Windows runtime and installer acceptance require execution on Windows",
                               "Forced process-tree cleanup under OS/JVM crash is not established by normal disposal checks"]}

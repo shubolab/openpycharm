@@ -193,12 +193,16 @@ def run_model_tests(sdk: Path, plugin: Path, host_sdk: Path | None = None) -> di
     with tempfile.TemporaryDirectory(prefix="model-", dir=work) as directory:
         temporary = Path(directory)
         classes = temporary / "classes"
-        compile_java(layout, [ROOT / "tests/notebooks/NotebookModelTest.java"], classes, temporary / "javac.args",
+        compile_java(layout, [ROOT / "tests/notebooks/NotebookModelTest.java", ROOT / "tests/notebooks/NotebookPersistenceTest.java"], classes, temporary / "javac.args",
                      [plugin / "lib/notebooks.jar"], runtime)
         cp = os.pathsep.join(map(str, [classes, plugin / "lib/notebooks.jar", *classpath(layout)]))
         report = json.loads(run_java(runtime, ["-classpath", cp, "dev.openpycharm.notebooks.NotebookModelTest"], temporary).stdout)
         if report.get("status") != "pass":
             raise ValueError("Notebook persistence checks did not pass")
+        asynchronous = json.loads(run_java(runtime, ["-classpath", cp, "dev.openpycharm.notebooks.NotebookPersistenceTest"], temporary).stdout)
+        if asynchronous.get("status") != "pass":
+            raise ValueError("Notebook asynchronous persistence checks did not pass")
+        report["asynchronousPersistence"] = asynchronous
         report.update(targetPlatform=layout.platform, executionPlatform=runtime.platform,
                       nativeTargetRuntime=layout.platform == runtime.platform, jarSha256=sha256(plugin / "lib/notebooks.jar"))
         return report

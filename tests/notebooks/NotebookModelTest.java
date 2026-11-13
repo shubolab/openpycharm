@@ -44,6 +44,20 @@ public final class NotebookModelTest {
     try { NotebookModel.parse(" ".repeat(NotebookModel.MAX_CHARS + 1)); throw new AssertionError("Oversized notebook accepted"); }
     catch (IllegalArgumentException expected) { }
     require(NotebookModel.parse(model.json()).size() == 3, "Edited notebook is not parseable");
+    String large = "{\"nbformat\":4,\"metadata\":{\"foreign\":[" + "0,".repeat(1300000) + "0]},\"cells\":[{\"cell_type\":\"code\",\"source\":\"before\",\"metadata\":{},\"outputs\":[],\"execution_count\":null}]}";
+    require(large.length() < NotebookModel.MAX_CHARS, "Large regression fixture exceeds admission bound");
+    NotebookModel largeModel = NotebookModel.parse(large);
+    NotebookModel.Snapshot beforeEdit = largeModel.snapshot();
+    largeModel.source(0, "edited");
+    String compact = largeModel.json();
+    require(compact.length() < NotebookModel.MAX_CHARS, "Compact metadata expanded past admission bound");
+    require(NotebookModel.parse(compact).source(0).equals("edited"), "Large metadata prevented source persistence");
+    require(NotebookModel.parse(beforeEdit.json()).source(0).equals("before"), "Pending snapshot changed with mutable model");
+    require(JsonParser.parseString(compact).getAsJsonObject().get("metadata").equals(JsonParser.parseString(large).getAsJsonObject().get("metadata")), "Large foreign metadata was stripped");
+    largeModel.source(0, "x".repeat(NotebookModel.MAX_CHARS));
+    String grown = largeModel.json();
+    require(grown.length() > NotebookModel.MAX_CHARS && JsonParser.parseString(grown).getAsJsonObject().getAsJsonArray("cells").get(0).getAsJsonObject().get("source").getAsJsonArray().get(0).getAsString().length() == NotebookModel.MAX_CHARS,
+        "Edited data beyond the native admission bound must remain serializable JSON, never silently unsaved");
     System.out.println("{\"status\":\"pass\",\"metadataAndAttachmentsPreserved\":true,\"richOutputsPreserved\":true,\"sourceRoundTrip\":true,\"outputsAndCount\":true,\"addDeleteCells\":true,\"malformedAndOversizedRejected\":true}");
   }
 }

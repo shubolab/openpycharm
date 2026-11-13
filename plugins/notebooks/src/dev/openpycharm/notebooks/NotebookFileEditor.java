@@ -36,6 +36,7 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
   private final Project project;
   private final VirtualFile file;
   private final Document document;
+  private final NotebookPersistence persistence;
   private NotebookModel model;
   private final JPanel component = new JPanel(new BorderLayout());
   private final JPanel body = new JPanel();
@@ -49,12 +50,17 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
   private record DisplayReference(Cell cell, JsonObject output) { }
   private NotebookKernelSession session;
   private String sessionPython;
-  private boolean writing, disposed, busy, restarting;
+  private volatile boolean writing, disposed, reloading;
+  private boolean busy, restarting, saveRequested;
+  private long expectedDocumentStamp;
   private long reloadGeneration;
   private long kernelGeneration;
 
   public NotebookFileEditor(Project project, VirtualFile file, Document document, NotebookModel model, String problem) {
     this.project = project; this.file = file; this.document = document; this.model = model;
+    persistence = new NotebookPersistence(AppExecutorUtil.getAppExecutorService(), result ->
+        ApplicationManager.getApplication().invokeLater(() -> applyPersistence(result)));
+    NotebookProjectCloseHandler.register(this);
     body.setLayout(new BoxLayout(body, BoxLayout.Y_AXIS));
     JPanel toolbar = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 4));
     button(toolbar, "Run All", () -> { if (!canExecute()) return; queue.clear(); queue.addAll(cells.stream().filter(cell -> cell.kind.equals("code")).toList()); next(); });
@@ -64,7 +70,7 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
     button(toolbar, "+ Markdown", () -> add("markdown"));
     button(toolbar, "Save", this::save);
     button(toolbar, "Clear Outputs", () -> {
-      if (model == null || busy) return;
+      if (model == null || busy || reloading) return;
       displays.clear(); cells.forEach(cell -> cell.clearBeforeOutput = false);
       for (int i = 0; i < model.size(); i++) if (model.kind(i).equals("code")) model.clearOutputs(i);
       sync(); for (Cell cell : cells) cell.refreshOutput();
@@ -80,15 +86,26 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
     if (document != null) document.addDocumentListener(new DocumentListener() {
       @Override public void documentChanged(DocumentEvent event) {
         if (writing || disposed) return;
+        persistence.invalidate(); reloading = true;
         String text = document.getText(); long generation = ++reloadGeneration;
+        long stamp = document.getModificationStamp();
+        Runnable pause = () -> {
+          if (disposed || generation != reloadGeneration) return;
+          queue.clear(); if (session != null) { ++kernelGeneration; session.close(); session = null; }
+          executing.clear(); displays.clear(); busy = false; restarting = false;
+          cells.forEach(cell -> ((com.intellij.openapi.editor.ex.EditorEx)cell.editor).setViewer(true));
+          status.setText("Reloading notebook changes from the text document…");
+        };
+        if (ApplicationManager.getApplication().isDispatchThread()) pause.run();
+        else ApplicationManager.getApplication().invokeLater(pause);
         AppExecutorUtil.getAppExecutorService().execute(() -> {
           NotebookModel parsed = null; String failure = null;
           try { parsed = NotebookModel.parse(text); } catch (RuntimeException error) { failure = error.getMessage(); }
           NotebookModel replacement = parsed; String message = failure;
           ApplicationManager.getApplication().invokeLater(() -> {
-            if (disposed || generation != reloadGeneration) return;
+            if (disposed || generation != reloadGeneration || document.getModificationStamp() != stamp) return;
             queue.clear(); if (session != null) { ++kernelGeneration; session.close(); session = null; }
-            executing.clear(); displays.clear(); busy = false; restarting = false; NotebookFileEditor.this.model = replacement;
+            executing.clear(); displays.clear(); busy = false; restarting = false; reloading = false; NotebookFileEditor.this.model = replacement;
             if (replacement == null) showProblem(message); else rebuild();
           });
         });
@@ -127,7 +144,7 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
     return path;
   }
   private boolean canExecute() {
-    if (model == null || disposed) return false;
+    if (model == null || disposed || reloading) return false;
     if (!TrustedProjects.isTrusted(project)) { status.setText("Trust this project before executing notebook code"); return false; }
     String python = refreshInterpreter();
     if (python == null) { status.setText("Select a local project Python interpreter before executing cells"); return false; }
@@ -162,6 +179,7 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
     session.request("restart-" + UUID.randomUUID(), "restart", null);
   }
   private void handle(JsonObject event) {
+    if (reloading) return;
     String kind = NotebookKernelSession.string(event, "event");
     String id = NotebookKernelSession.string(event, "id");
     if (kind.equals("ready")) { status.setText("Kernel ready — " + NotebookKernelSession.string(event, "python")); return; }
@@ -230,20 +248,50 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
     displays.values().removeIf(List::isEmpty);
   }
   private void add(String kind) {
-    if (model == null || busy || document == null || !document.isWritable()) return;
+    if (model == null || busy || reloading || document == null || !document.isWritable()) return;
     try { model.add(kind); sync(); rebuild(); } catch (RuntimeException error) { status.setText(error.getMessage()); }
   }
   private void sync() {
+    if (reloading) return;
     if (document == null || !document.isWritable()) { status.setText("Notebook is read-only"); return; }
+    ++reloadGeneration; // Any queued external parse predates this newer model edit.
+    expectedDocumentStamp = document.getModificationStamp();
+    persistence.markDirty();
+    changes.firePropertyChange(FileEditor.getPropModified(), false, true);
+    try { persistence.submit(model.snapshot()); }
+    catch (RuntimeException error) { status.setText("Notebook edits are still unsaved: " + error.getMessage()); }
+  }
+  private void applyPersistence(NotebookPersistence.Result result) {
+    if (!persistence.isCurrent(result.generation())) return;
+    if (document.getModificationStamp() != expectedDocumentStamp) {
+      // A text editor or external refresh changed the authoritative document.
+      persistence.invalidate();
+      if (disposed) NotebookProjectCloseHandler.unregister(this);
+      return;
+    }
+    if (result.failure() != null) {
+      status.setText("Notebook edits are still unsaved: " + result.failure().getMessage());
+      return; // Keep dirty and retain the model; project-close guard remains active.
+    }
     try {
-      String text = model.json(); writing = true;
-      WriteCommandAction.runWriteCommandAction(project, "Edit Notebook", null, () -> document.setText(text));
-      changes.firePropertyChange(FileEditor.getPropModified(), false, true);
-    } catch (RuntimeException error) { status.setText(error.getMessage()); }
+      writing = true; ++reloadGeneration;
+      WriteCommandAction.runWriteCommandAction(project, "Edit Notebook", null, () -> document.setText(result.text()));
+      expectedDocumentStamp = document.getModificationStamp();
+      persistence.applied(result.generation());
+      changes.firePropertyChange(FileEditor.getPropModified(), true, isModified());
+      if (result.text().length() > NotebookModel.MAX_CHARS && !disposed)
+        status.setText("Notebook saved as JSON beyond the native size limit; use the text editor after reopening");
+      if (saveRequested || disposed) { saveRequested = false; saveDocument(); }
+      if (disposed) NotebookProjectCloseHandler.unregister(this);
+    } catch (RuntimeException error) { status.setText("Notebook edits are still unsaved: " + error.getMessage()); }
     finally { writing = false; }
   }
   private void save() {
     if (document == null) return;
+    if (persistence.isDirty()) { saveRequested = true; return; }
+    saveDocument();
+  }
+  private void saveDocument() {
     AppExecutorUtil.getAppExecutorService().execute(() -> {
       try {
         WriteIntentReadAction.run(() -> FileDocumentManager.getInstance().saveDocument(document));
@@ -275,14 +323,14 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
       editor.getComponent().setPreferredSize(new Dimension(800, Math.max(82, Math.min(360, 26 * (source.getLineCount() + 1)))));
       editor.getDocument().addDocumentListener(new DocumentListener() {
         @Override public void documentChanged(DocumentEvent event) {
-          int current = cells.indexOf(Cell.this); if (current < 0 || disposed) return;
+          int current = cells.indexOf(Cell.this); if (current < 0 || disposed || reloading) return;
           model.source(current, event.getDocument().getText()); sync();
         }
       }, lifetime);
       JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 2)); header.add(label);
       if (kind.equals("code")) button(header, "Run Cell", () -> execute(this));
       button(header, "Delete Cell", () -> {
-        int current = cells.indexOf(this); if (current < 0 || busy || document == null || !document.isWritable()) return;
+        int current = cells.indexOf(this); if (current < 0 || busy || reloading || document == null || !document.isWritable()) return;
         model.remove(current); sync(); rebuild();
       });
       panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(5, 9, 9, 9), BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor") == null ? Color.GRAY : UIManager.getColor("Component.borderColor"))));
@@ -328,10 +376,17 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
   @Override public JComponent getPreferredFocusedComponent() { return cells.isEmpty() ? component : cells.getFirst().editor.getContentComponent(); }
   @Override public String getName() { return "Notebook"; }
   @Override public void setState(FileEditorState state) { }
-  @Override public boolean isModified() { return document != null && FileDocumentManager.getInstance().isDocumentUnsaved(document); }
+  @Override public boolean isModified() { return persistence.isDirty() || document != null && FileDocumentManager.getInstance().isDocumentUnsaved(document); }
   @Override public boolean isValid() { return !disposed && file.isValid(); }
   @Override public VirtualFile getFile() { return file; }
   @Override public void addPropertyChangeListener(PropertyChangeListener listener) { changes.addPropertyChangeListener(listener); }
   @Override public void removePropertyChangeListener(PropertyChangeListener listener) { changes.removePropertyChangeListener(listener); }
-  @Override public void dispose() { disposed = true; queue.clear(); if (session != null) session.close(); releaseCells(); }
+  boolean ownsProject(Project value) { return project == value; }
+  boolean hasPendingEdits() { return persistence.isDirty(); }
+  void pendingCloseNotice() { status.setText("Notebook edits are still preparing; close the project again after saving finishes"); }
+  @Override public void dispose() {
+    disposed = true; queue.clear(); if (session != null) session.close(); releaseCells();
+    if (!persistence.isDirty()) NotebookProjectCloseHandler.unregister(this);
+    // A pending immutable snapshot still reaches the ordinary document after tab close.
+  }
 }
