@@ -1,0 +1,230 @@
+{
+  "schema": 1,
+  "recordedAt": "2026-11-13T22:49:55.846373+00:00",
+  "status": "pass-bounded-macos-api",
+  "sourceFixCommit": "4d0579b34a4a8089ebc11f3b3c4a1215a518a093",
+  "testHelperCommit": "b2602e384394c6c7e97b59d3ae856328aa1917c6",
+  "platform": {
+    "system": "Darwin",
+    "architecture": "arm64",
+    "macOS": "27.2"
+  },
+  "originalRejectedFailure": {
+    "candidateSource": "26da4932742e1f260b80dfdaa2e39353e6bd466c",
+    "logSource": "Own installed OpenPyCharm idea.log lines3408-3519",
+    "retainedClip": ".tools/markdown-startup-audit/installed-cold-markdown-severe.log",
+    "sha256": "87ae78fbed0743216fc81b56b7010a822c19a5666f0684674d27e5306c9a3507",
+    "diagnostic": "JBCefApp$Holder.<clinit> requested ProxyMigrationService during cold Markdown preview construction"
+  },
+  "sourceReplay": {
+    "receipt": ".tools/markdown-startup-repair-build.json",
+    "sha256": "d033dfdf75790391575f8a76074dc18f6d6d533bd4047602612cffdce0e88fc2",
+    "upstreamCommit": "456919a9624bae72ac12efafc35d2b916cb0c5c5",
+    "upstreamJarSha256": "466f1894830b7229272dcf78d412f29e443d127526aae51f3518ff005c85b32a",
+    "replayedJarSha256": "130f5feb3314b826efdb0a7e18e7b33cb324562b22bea87c1a50d732eafe5700",
+    "patchSha256": "a85759811849c72ecebe025f79708f7650bf86e9a77bb3a7c172f30f979142ef",
+    "sources": [
+      {
+        "path": "platform/ui.jcef/jcef/JBCefApp.java",
+        "sourceUrl": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/ui.jcef/jcef/JBCefApp.java",
+        "upstreamSha256": "993f47241c0b0aef73d1ee725c5cbfdf1345c1e94a41baf6b0ecd8efaf1fb42c",
+        "patchedSha256": "6357585519f3999e3324f217c4d7a106c17c3a3b3a644e357837ca9717dd2f78"
+      }
+    ],
+    "compiler": "javac 25.0.3",
+    "classSha256": {
+      "com/intellij/ui/jcef/JBCefApp$1.class": "f66e4108462a424a16412a024560cd5cf3f03e82901ba7e8d0a760a3f67c0eb9",
+      "com/intellij/ui/jcef/JBCefApp$2.class": "6f72cece5e5624b9234767a3876e58c5ad7a38a0652b68dac805698ee5ff80a6",
+      "com/intellij/ui/jcef/JBCefApp$3.class": "77e73b5391ece1445c3dfa0cb2b073c0427f1320d3310b377abc7ac8b49716fa",
+      "com/intellij/ui/jcef/JBCefApp$Holder.class": "2402e7b74a6dfac3d304f755328286cbbadff9e67c046118123aaa063d0726ba",
+      "com/intellij/ui/jcef/JBCefApp$JBCefCustomSchemeHandlerFactory.class": "6911da9f0ea72007d9978562115dffe3c2e5379ef4049e9ab10ae11ff5c09241",
+      "com/intellij/ui/jcef/JBCefApp$MyCefAppHandler.class": "2f5da55a97b4be47929581a6913bb077b7bdf2d41d852cbc12998e4b2fa1f304",
+      "com/intellij/ui/jcef/JBCefApp.class": "c58ddfe4be82c8762b37ae064820182a78e6efde16d1a8c07fca71a0747941c8"
+    },
+    "entryControl": {
+      "status": "pass",
+      "unreplacedEntries": 13821,
+      "entryDigestAlgorithm": "SHA256 of UTF-8 JSON [entry-name, entry-SHA256] records joined by LF, sorted by entry name",
+      "unreplacedEntriesSha256": "d5b1ef914aace1113b3f2cb97e3281f51319adcf81fe07890c96fc47df456b42",
+      "originalJarSha256": "466f1894830b7229272dcf78d412f29e443d127526aae51f3518ff005c85b32a",
+      "replayedJarSha256": "130f5feb3314b826efdb0a7e18e7b33cb324562b22bea87c1a50d732eafe5700",
+      "scope": "Source-replay artifact before independent product policy/branding edits"
+    }
+  },
+  "offlineControls": {
+    "receipt": ".tools/markdown-startup-controls.json",
+    "sha256": "1eac935a853c7494dbba8dc04e1072e10713d3e0b874a0c7ea338f885f3eb609",
+    "report": {
+      "status": "pass",
+      "actualPatchedHolder": {
+        "status": "pass",
+        "actualPatchedHolderColdLoad": true,
+        "outerJcefClassUninitialized": true,
+        "applicationStarted": false
+      },
+      "lifecycle": {
+        "status": "pass",
+        "scope": "source-derived first-use, publication, null, test-mode, reentry and failure controls",
+        "checks": 68
+      },
+      "originalSdkNegativeControl": {
+        "exitCode": 1,
+        "expectedColdInitFailure": true
+      },
+      "unsafePublicationNegativeControl": {
+        "exitCode": 1,
+        "expectedPrematurePublicationFailure": true
+      },
+      "sourceFragments": {
+        "getInstanceSha256": "41afe2b9a973f161c2454805ae048966d7571403aa0de9cc75e1945124bbdc12",
+        "holderFieldsSha256": "99b43d374d493a31026d308880a058187286cece15b61e50245e82abe8574bc8"
+      },
+      "helperSha256": {
+        "HolderColdLoadProbe.java": "1f884aad4fa805ecab7a3d15fc42aadc4d1599092e776e9bc88cf6871dd0ae21",
+        "HolderLifecycleProbe.java": "9b901f5c895f9426e4b355eec3694e593edddec0df1727f3f8f961e1905fb7df"
+      },
+      "limitations": [
+        "Helper JVMs do not start an IDE or native CEF; restored Markdown preview remains a native runtime gate"
+      ]
+    },
+    "pythonUnitTests": 84,
+    "helloPythonTests": 9
+  },
+  "native": {
+    "receipt": ".state/markdown-cold-4/markdown-startup.json",
+    "sha256": "835b2bfff1910e375282acfc95482ca637d073ea564204b05fbd337fe749fb28",
+    "productSource": "4d0579b34a4a8089ebc11f3b3c4a1215a518a093",
+    "assessment": {
+      "status": "pass",
+      "scope": "Cold actual Markdown panel, proxy/migration service creation and native DOM rendering"
+    },
+    "result": {
+      "invocationId": "cf6d3ff3dcc0494ba0f0af75bcff1f65",
+      "scope": "Cold actual MarkdownJCEFHtmlPanel construction and browser DOM rendering; no restored project/UI workflow",
+      "httpSettingsColdBefore": true,
+      "migrationServiceColdBefore": true,
+      "panelClass": "org.intellij.plugins.markdown.ui.preview.jcef.MarkdownJCEFHtmlPanel",
+      "jcefStartedAfterConstruction": true,
+      "httpSettingsCreatedAfter": true,
+      "migrationServiceCreatedAfter": true,
+      "renderAwaitApi": "MarkdownJCEFHtmlPanel.setHtmlAndWait (test-only, actual browser)",
+      "renderedText": "Markdown preview 中文cf6d3ff3dcc0494ba0f0af75bcff1f65",
+      "nativeBrowserRendered": true,
+      "status": "pass"
+    },
+    "nativeGracefulExit": 0,
+    "cleanup": {
+      "mode": "owned-posix-session",
+      "pid": 62952,
+      "exitCode": 0
+    },
+    "logObservation": {
+      "ideStarted": true,
+      "productIdentity": true,
+      "vendorIdentity": true,
+      "isolatedPaths": {
+        "config": true,
+        "system": true,
+        "plugins": true,
+        "log": true
+      },
+      "loadedPlugins": {
+        "Python Community Edition": true,
+        "Git": true,
+        "Terminal": true
+      },
+      "packagedPlugins": {
+        "dev.openpycharm.http": true,
+        "dev.openpycharm.frameworks": true
+      },
+      "projectOpenRequested": true,
+      "projectOpenedInLog": false,
+      "errorCount": 0,
+      "errors": [],
+      "warningCount": 4,
+      "warnings": [
+        "2026-11-14 06:45:44,096 [   1924]   WARN - #c.i.p.instanceContainer - InstanceNotOverridableException: Override failed for com.intellij.openapi.project.impl.ProjectStoreFactory: com.intellij.configurationScript.providers.ConfigurationScriptProjectStoreFactory attempts to override com.intellij.configurationStore.PlatformLangProjectStoreFactory, but the existing implementation is not overriddable (not declared as 'open=true')",
+        "2026-11-14 06:45:46,777 [   4605]   WARN - #org.intellij.plugins.markdown.ui.preview.jcef.impl.JcefBrowserPipeImpl - No subscribers for documentReady!",
+        "2026-11-14 06:45:49,094 [   6922]   WARN - #c.i.u.n.AppShutdownProxySelector - network access during/after app shutdown",
+        "2026-11-14 06:45:49,097 [   6925]   WARN - #c.i.u.n.AppShutdownProxySelector - network access during/after app shutdown"
+      ]
+    },
+    "testPlugin": {
+      "identity": {
+        "sources": {
+          "MarkdownStartupProbe.java": "c94bdbf2d87207d3e5a7d57dce073d5019a12cc151dcaaaca3b21b3d6111a8ee",
+          "plugin.xml": "4f5852fbca8205a6c40779a6c8c33ef9fe0688d62965f418b55f701df6657e78"
+        },
+        "sdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624"
+      },
+      "jarSha256": "8d8d262a0372392b35c2ca154f310fc9660fa04b1907a7f9550a5fd4056cf77d"
+    }
+  },
+  "immutability": {
+    "receipt": ".tools/markdown-startup-immutability.json",
+    "sha256": "a989311771d77d79e4384272e5b0cec042ae72751b7fced3b77e0af91f47566f",
+    "treeBefore": "4216c768833c351d10b9eba901cd4a2f156405c33fcbdf08626593b52dbd7e5a",
+    "treeAfter": "4216c768833c351d10b9eba901cd4a2f156405c33fcbdf08626593b52dbd7e5a",
+    "unchanged": true,
+    "strictSignature": "pass",
+    "sourceAndPluginValidation": "pass"
+  },
+  "failedProbeReceiptsRetained": [
+    {
+      "receipt": ".state/markdown-cold-1/markdown-startup.json",
+      "sha256": "8c776f6eb197616254484874754fabe7b5a14edca919841c522b7be6a19b25e2",
+      "assessment": {
+        "status": "fail",
+        "error": "Native cold Markdown construction/rendering proof is incomplete: java.lang.RuntimeException: java.lang.IllegalStateException: Proxy dependencies were already warm; cannot claim a cold Markdown construction"
+      },
+      "ownedPid": 61290,
+      "cleanup": {
+        "mode": "owned-posix-session",
+        "pid": 61290,
+        "exitCode": 143
+      }
+    },
+    {
+      "receipt": ".state/markdown-cold-2/markdown-startup.json",
+      "sha256": "d8a2b0e329d9f170e14747503ce51dfa74e392eefd5a4dc746a8dd95ba23e69e",
+      "assessment": {
+        "status": "fail",
+        "error": "Native product startup identity, isolated paths or packaged plugin loading was not fully observed"
+      },
+      "ownedPid": 62056,
+      "cleanup": {
+        "mode": "owned-posix-session",
+        "pid": 62056,
+        "exitCode": 0
+      }
+    },
+    {
+      "receipt": ".state/markdown-cold-3/markdown-startup.json",
+      "sha256": "2ec1073694e533d6f78c70728c9efb830a1cf43c7d960a7feb87aa4d73b30602",
+      "assessment": {
+        "status": "fail",
+        "error": "Native product startup identity, isolated paths or packaged plugin loading was not fully observed"
+      },
+      "ownedPid": 62582,
+      "cleanup": {
+        "mode": "owned-posix-session",
+        "pid": 62582,
+        "exitCode": 143
+      }
+    }
+  ],
+  "behaviorBoundaries": [
+    "First singleton construction moves out of Holder class initialization; outer JBCefApp static behavior is unchanged",
+    "Warm calls also acquire existing Holder.class monitor",
+    "Unexpected first-attempt failures remain terminal but rethrow raw cause rather than JVM EIIE/NCDFE wrappers",
+    "Existing constructor non-cancellable wrappers remain; no new whole-init NC; explicit cancelled cause is covered, not every cancellation timing",
+    "Ordinary cached-null and existing test-mode retry behavior remain; unsafe reentrant early publication is rejected by red/green controls"
+  ],
+  "limitations": [
+    "This is actual cold Markdown panel and native DOM API evidence, not restored README/editor desktop acceptance",
+    "Rendering await uses SDK test-only API and owned synthetic attributed HTML; no user project or credentials altered",
+    "Windows source/JAR controls run automatically during native assembly CI; Windows native browser acceptance is separate",
+    "Previously rejected installed candidate remains rejected; rebuilt installers and release GIF require root final acceptance",
+    "No reference PyCharm files/configuration/licenses/projects modified"
+  ]
+}

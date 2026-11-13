@@ -22,4 +22,12 @@
 
 Mac/Windows pin 绑定同一公开源码提交、源/补丁摘要及原始 JAR 摘要。回放器验证 7 个 class 和所有非替换 entry；`repairs.apply` 在两平台 CI 的组装阶段自动运行：实际 patched Holder 冷加载、原始 SDK 负对照、源码派生的并发/null/test-mode/reentry/exception 控制，以及不安全 fast-path 的负对照。控制 helper 位于 `product/patches`，纳入完整来源闭包；class SHA 和控制收据进入产品及安装器 provenance。
 
-当前离线控制通过 68 项，原始 Holder 负对照与不安全发布负对照都按预期失败。它们不启动 IDE 或原生 CEF。真实冷 Markdown panel/DOM 和最终已安装 README 恢复仍是独立运行门槛；本页在实际运行完成前不宣称候选可发布。
+当前离线控制通过 68 项，原始 Holder 负对照与不安全发布负对照都按预期失败。它们不启动 IDE 或原生 CEF。outer `JBCefApp` 静态块的既有 SettingsHelper/Registry 查询保持未改；修复范围不是“所有 JCEF 类初始化均不依赖服务”。
+
+## 已观察的 Mac 原生结果
+
+来源 `4d0579b34a4a8089ebc11f3b3c4a1215a518a093` 的独立签名候选通过实际冷 panel 检查：在 `appFrameCreated` 阶段、首次 JCEF 调用前，两项 `getServiceIfCreated` 都为 null；创建真正的 `MarkdownJCEFHtmlPanel` 后，HttpConfigurable/ProxyMigrationService 均已创建，JCEF 已启动。测试使用 SDK 的 test-only `setHtmlAndWait` 等待真实预览资源/DOM，原生浏览器回传唯一标记和中文文本。它没有打开现有项目或操作用户文件，不把这项 API 证明当成完整 README 恢复或编辑器工作流。
+
+最终 profile 为 `.state/markdown-cold-4`，自有 PID 62952 正常退出（code 0），日志 ERROR/SEVERE 为 0；4 条 WARN 原样保留。测试前后完整应用树摘要相同，严格签名与来源/JAR 校验仍通过。前 3 次失败也保留：appStarted 时已预热的路径被拒绝；两次不正确的测试 HTML/等待契约触发错误日志，没有过滤为通过。test-only 修正单列提交 `b2602e3`，不改变已审生产输入。
+
+精简证据见 [jcef-startup-20261114.json](jcef-startup-20261114.json)。最终已安装包的真实 README 冷恢复、Windows 原生浏览器和重新生成的发布资产/GIF 仍由根任务独立验收；这里不宣布 dev2 可发布。
