@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "upstream": {
+    "repository": "https://github.com/JetBrains/intellij-community",
+    "tag": "pycharm/2026.1.4",
+    "commit": "456919a9624bae72ac12efafc35d2b916cb0c5c5",
+    "license": "Apache-2.0; original public source header and upstream notices retained"
+  },
+  "platformVersion": "2026.1.4",
+  "upstreamJar": {
+    "path": "lib/intellij.platform.ide.impl.jar",
+    "sha256": "466f1894830b7229272dcf78d412f29e443d127526aae51f3518ff005c85b32a"
+  },
+  "sources": [
+    {
+      "path": "platform/ui.jcef/jcef/JBCefApp.java",
+      "sourceUrl": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/ui.jcef/jcef/JBCefApp.java",
+      "upstreamSha256": "993f47241c0b0aef73d1ee725c5cbfdf1345c1e94a41baf6b0ecd8efaf1fb42c",
+      "patchedSha256": "6357585519f3999e3324f217c4d7a106c17c3a3b3a644e357837ca9717dd2f78"
+    }
+  ],
+  "patchFile": "platform-jcef-startup-2026.1.4.patch",
+  "patchSha256": "a85759811849c72ecebe025f79708f7650bf86e9a77bb3a7c172f30f979142ef",
+  "classPrefixes": [
+    "com/intellij/ui/jcef/JBCefApp"
+  ],
+  "requiredClassNames": [
+    "com/intellij/ui/jcef/JBCefApp$1.class",
+    "com/intellij/ui/jcef/JBCefApp$2.class",
+    "com/intellij/ui/jcef/JBCefApp$3.class",
+    "com/intellij/ui/jcef/JBCefApp$Holder.class",
+    "com/intellij/ui/jcef/JBCefApp$JBCefCustomSchemeHandlerFactory.class",
+    "com/intellij/ui/jcef/JBCefApp$MyCefAppHandler.class",
+    "com/intellij/ui/jcef/JBCefApp.class"
+  ],
+  "scope": {
+    "zh": "将 JCEF 首次构造从 Holder 类初始化移入原有同步 getInstance 路径，保持代理设置与凭据处理不变，避免服务请求发生在类初始化栈中。",
+    "preserves": [
+      "Public and package API/ABI",
+      "Original JCEF constructor, support checks, proxy settings/credentials and migration service calls",
+      "Single first-use construction, cached-null behavior, existing test-mode retry path and guarded publication",
+      "Unexpected first-attempt failure remains terminal and retains its original cause on subsequent calls"
+    ],
+    "excludes": [
+      "No disabled Markdown, JCEF, proxy or service registration",
+      "No logger suppression, preload race, cache reset or configuration deletion",
+      "No writes to authenticated SDK or installed/reference app",
+      "No additional filesystem/process operations on the event dispatch thread"
+    ]
+  },
+  "verification": {
+    "scope": "Authenticated source replay and exact class/JAR entry verification; actual restored Markdown behavior remains a separate native runtime check",
+    "sourceSdkModified": false
+  },
+  "targetPlatform": "windows-x64"
+}
