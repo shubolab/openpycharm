@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "status": "pass",
-  "observedAt": "2026-11-13T20:57:10.152632+00:00",
+  "observedAt": "2026-11-13T20:58:56.477073+00:00",
   "platform": "macOS-27.2-arm64-arm-64bit",
   "targetPlatform": "macos",
   "executionPlatform": "macos",
@@ -19,8 +19,8 @@
     "doubleClose": true,
     "ownedKernelCleanup": true,
     "unrelatedProcessSurvived": true,
-    "originalKernelPid": 20056,
-    "restartedKernelPid": 20091
+    "originalKernelPid": 20511,
+    "restartedKernelPid": 20518
   },
   "compilation": {
     "stdout": "",
@@ -28,8 +28,8 @@
   },
   "stderr": "",
   "failure": null,
-  "jarSha256": "79d7bb475fe8939a64abc28141297ac5b72545b63f71c7376d980340242481b3",
-  "pluginDirectory": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebooks/.tools/notebook-plugin/8e1114996206ac383a1ccd497b864b9b7bd524fb87c7c2a81177bfd1b2b73f62/plugin",
+  "jarSha256": "6cc2af60ac64b85bf838cf70598a7ac24bb5509cb70f451671fd888679fa4589",
+  "pluginDirectory": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebooks/.tools/notebook-plugin/70ccc2a79d128b7667c58967c185567d27ff54f30e52d7ba49c9888042abc0a7/plugin",
   "sourceInputsStillCurrent": true,
   "sdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
   "sources": {
@@ -49,7 +49,7 @@
     "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookKernelSession.java": "2922fbf70518a0e73330070ed5f4ecdfb120c9d41ab28a2eb199ab694d03bc8e",
     "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookModel.java": "618d8e703138559a5264cbbcee14aac63d81f6e0c8160f3039bee7c3cdba2b32",
     "product/platform.lock.json": "2fe9e477d7e3164e362e33f3b95a2464b16a0699e1bade6cc112b166aed697bd",
-    "product/product.json": "1e881508d1bffb96dfd616fc1e90489f3f4c1eb536c7a6109ee6a6ebf93c68df",
+    "product/product.json": "f5d4a28101d3f3462b7877aeb020a1de48886a2ef06758c07531c11af01cfae3",
     "scripts/bootstrap.py": "a9f405e1fd83ed5a63e0a676efcecbb11a0a1e1975f876e33622756b5b502fff",
     "scripts/build_notebook_plugin.py": "7a0369102da3e8f2069e7ce208f1269dcc7601ab621eb9c2811bbf2429758ce6",
     "scripts/platform_layout.py": "500447561715fc996c842c614aa817a2251e7dfbc22305054f7ab40fc31c7037"

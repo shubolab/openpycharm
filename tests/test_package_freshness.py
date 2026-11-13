@@ -17,6 +17,7 @@ SPEC = importlib.util.spec_from_file_location("framework_integration_packager", 
 packager = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(packager)
 import build_framework_plugin
+import build_notebook_plugin
 import build_http_plugin
 import local_product
 import provenance
@@ -34,6 +35,7 @@ class ProductAssemblyFreshnessTests(unittest.TestCase):
             "product/platform.lock.json": "{}\n",
             "plugins/http-client/src/Client.kt": "class Client\n",
             "plugins/frameworks/src/Framework.java": "class Framework {}\n",
+            "plugins/notebooks/src/Notebook.java": "class Notebook {}\n",
             "requirements-build.txt": "Pillow==12.1.0\n",
             "LICENSE": "owned license\n",
             "NOTICE": "owned notice\n",
@@ -53,6 +55,7 @@ class ProductAssemblyFreshnessTests(unittest.TestCase):
         self.output = self.root / "build/product/OpenPyCharm"
         self.http = self.make_plugin("http", "openpycharm-http.jar", b"compiled HTTP bytes")
         self.frameworks = self.make_plugin("frameworks", "frameworks.jar", b"compiled framework bytes")
+        self.notebooks = self.make_plugin("notebooks", "notebooks.jar", b"compiled notebook bytes")
 
     def make_plugin(self, name, jar_name, payload):
         directory = self.root / ".tools" / name / "plugin"
@@ -80,6 +83,7 @@ class ProductAssemblyFreshnessTests(unittest.TestCase):
             stack.enter_context(patch.object(packager, "verify_source_inputs", side_effect=lambda manifest: provenance.verify_source_inputs(manifest, self.root), create=True))
             stack.enter_context(patch.object(build_http_plugin, "build", return_value=self.http[1]))
             stack.enter_context(patch.object(build_framework_plugin, "build_plugin", side_effect=compiled_framework))
+            stack.enter_context(patch.object(build_notebook_plugin, "build_plugin", return_value=self.notebooks))
             stack.enter_context(patch.object(repairs, "apply", return_value={}))
             stack.enter_context(patch.object(local_product, "apply", return_value={}))
             stack.enter_context(patch.object(packager, "brand_resources", return_value={}))
@@ -91,13 +95,13 @@ class ProductAssemblyFreshnessTests(unittest.TestCase):
             stack.enter_context(contextlib.redirect_stdout(io.StringIO()))
             return packager.assemble(self.sdk, "windows-x64", "0.1.0-dev.2", self.output)
 
-    def test_stable_sources_promote_both_receipted_plugin_payloads(self):
+    def test_stable_sources_promote_all_receipted_plugin_payloads(self):
         original = provenance.source_inputs(self.root)
         self.assertEqual(self.assemble(), self.output)
         report = json.loads((self.output / "openpycharm-build.json").read_text())
         self.assertEqual(report["sourceInputs"], original)
-        self.assertEqual({entry["id"] for entry in report["plugins"]}, {"dev.openpycharm.http", "dev.openpycharm.frameworks"})
-        self.assertEqual(len(provenance.verify_product_plugins(report, self.output)), 2)
+        self.assertEqual({entry["id"] for entry in report["plugins"]}, {"dev.openpycharm.http", "dev.openpycharm.frameworks", "dev.openpycharm.notebooks"})
+        self.assertEqual(len(provenance.verify_product_plugins(report, self.output)), 3)
         provenance.verify_source_inputs(report, self.root)
 
     def test_edit_after_plugin_compilation_rejects_product_before_promotion(self):

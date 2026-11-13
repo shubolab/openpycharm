@@ -1,0 +1,95 @@
+{
+  "schema": 1,
+  "candidate": "0.1.0-dev.3",
+  "status": "pass",
+  "scope": "Authenticated standalone notebook plugin, persistence and actual headless local-kernel/session checks; not desktop/product acceptance",
+  "observedAt": "2026-11-13T20:59:35.889229+00:00",
+  "pluginId": "dev.openpycharm.notebooks",
+  "version": "0.1.0-dev.3",
+  "jarSha256": "6cc2af60ac64b85bf838cf70598a7ac24bb5509cb70f451671fd888679fa4589",
+  "targetPlatform": "macos",
+  "executionPlatform": "macos",
+  "nativeTargetRuntime": true,
+  "compiler": "javac 25.0.3",
+  "sdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+  "archiveVerification": {
+    "status": "pass",
+    "reader": "HashMapZipFile",
+    "verifiedEntries": 17,
+    "closed": true,
+    "sha256": "6cc2af60ac64b85bf838cf70598a7ac24bb5509cb70f451671fd888679fa4589"
+  },
+  "compilation": {
+    "stdout": "",
+    "stderr": "注: /Users/wangshubo/develop/openpycharm/.tools/worktrees/notebooks/plugins/notebooks/src/dev/openpycharm/notebooks/NotebookFileEditor.java使用或覆盖了已过时的 API。\n注: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。\n"
+  },
+  "modelTests": {
+    "status": "pass",
+    "metadataAndAttachmentsPreserved": true,
+    "richOutputsPreserved": true,
+    "sourceRoundTrip": true,
+    "outputsAndCount": true,
+    "addDeleteCells": true,
+    "malformedAndOversizedRejected": true,
+    "targetPlatform": "macos",
+    "executionPlatform": "macos",
+    "nativeTargetRuntime": true,
+    "jarSha256": "6cc2af60ac64b85bf838cf70598a7ac24bb5509cb70f451671fd888679fa4589"
+  },
+  "tests": {
+    "repository": {
+      "command": "OPENPYCHARM_NOTEBOOK_PYTHON=/absolute/test-owned/python python3 -m unittest discover -s tests -v",
+      "count": 94,
+      "passed": 94,
+      "skipped": 0
+    },
+    "helloPythonFixture": {
+      "command": "python3 -m unittest discover -s fixtures/hello-python -v",
+      "count": 9,
+      "passed": 9
+    }
+  },
+  "sources": {
+    "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "plugins/notebooks/NOTICE": "06c09522f58b11483e42c965bd8b6d2bca8a5003430ae2a0766d711d6ecd8f39",
+    "plugins/notebooks/README.md": "7e6aa8a1109e7f93073fc7f441b427976c184c00b8ae632eba441a3524f8c37a",
+    "plugins/notebooks/build-support/VerifyNotebookArchive.java": "f0799e3467d4b03dfea8eb54aa2cc429f811ce67afd03bfc9876120295b2c555",
+    "plugins/notebooks/kernel-requirements.txt": "0206856a062580549f520ce261c636fa0b5b9bb114c847f8d10dfd2a97b713d1",
+    "plugins/notebooks/resources/META-INF/plugin.xml": "edba367ef64c85b95a46d6aee6dcfaf7f7772c81a9a59aff1e019c4c9f53d870",
+    "plugins/notebooks/resources/kernel_bridge.py": "361b86385deab957e209e5a743ea14e516e7a5840428165b1dcd29c9cae42e99",
+    "plugins/notebooks/runtime-dependencies.lock.json": "765b2b507abfd6383e3cef9f6c54700fa50ad8fbca81bdb0be401ee6151194d9",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookEditorProvider.java": "e49779c7309d07e2d560516d6ad9a6d24d6632dff7d9df53a0e57d9a4217e36c",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookFileEditor.java": "700669b5cf763bca232e21f5173f2a06ef6a9748f2ebb42b9164fed8fc003987",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookFileType.java": "8e1fe08039f9d2f954b664e344fd2d3bc8fa7fb34c8ca721288066eca5fb41f6",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookKernelSession.java": "2922fbf70518a0e73330070ed5f4ecdfb120c9d41ab28a2eb199ab694d03bc8e",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookModel.java": "618d8e703138559a5264cbbcee14aac63d81f6e0c8160f3039bee7c3cdba2b32",
+    "product/platform.lock.json": "2fe9e477d7e3164e362e33f3b95a2464b16a0699e1bade6cc112b166aed697bd",
+    "product/product.json": "f5d4a28101d3f3462b7877aeb020a1de48886a2ef06758c07531c11af01cfae3",
+    "scripts/bootstrap.py": "a9f405e1fd83ed5a63e0a676efcecbb11a0a1e1975f876e33622756b5b502fff",
+    "scripts/build_notebook_plugin.py": "7a0369102da3e8f2069e7ce208f1269dcc7601ab621eb9c2811bbf2429758ce6",
+    "scripts/platform_layout.py": "500447561715fc996c842c614aa817a2251e7dfbc22305054f7ab40fc31c7037"
+  },
+  "packagingSources": {
+    "scripts/package.py": "5e0ec318f8d052032d85e0a41fc1990e108dd3dacbb9823c6348a78614bc4f49",
+    "tests/test_package_freshness.py": "b292a3d44052fe2fc9e3f720a525b3f51e8ce08e0595f3af1c26aa6c3eade9ae",
+    "tests/test_plugin_receipts.py": "2e4d4eae822a833c0b58f64d80eba77b30e97375b4c541fdd264d6a6f7b774ec"
+  },
+  "observed": [
+    "Actual authenticated native SDK compilation and 17-entry IntelliJ/JDK JAR-reader agreement",
+    "Actual JVM nbformat source/output/count/add/delete/lossless metadata checks",
+    "Eight actual kernel bridge tests and actual Java-to-embedded-bridge session probe",
+    "Mocked product assembly authenticates three declared plugin payloads; mutated notebook payload rejected"
+  ],
+  "inferred": [
+    "Compiled native .ipynb FileEditor/provider and Python PSI widgets use the platform desktop architecture",
+    "Run/Run All/Restart check native project trust; opening a file does not launch a session",
+    "Only module/project selected local interpreter is launched; pipe/process/filesystem work is delegated off the Swing EDT"
+  ],
+  "unknown": [
+    "Actual native editor UI, completion, save/undo/reopen and Safe Mode interaction are not exercised",
+    "Actual product assembly, installed candidate, DMG/EXE installers and Release evidence for dev.3 remain pending",
+    "Windows compilation/runtime/process cleanup and native UI are not accepted",
+    "Rich media/Markdown preview, widgets, remote kernels, interactive stdin and notebook debugging are not implemented",
+    "No full PyCharm parity or publishable-release acceptance is claimed"
+  ]
+}
