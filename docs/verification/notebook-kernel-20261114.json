@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "status": "pass",
+  "observedAt": "2026-11-13T20:46:53.326634+00:00",
+  "platform": "macOS-27.2-arm64-arm-64bit",
+  "runtime": {
+    "python": "/Users/wangshubo/develop/openpycharm/.tools/notebook-kernel-venv/bin/python",
+    "version": "3.11.15 (main, Jun 11 2026, 04:04:09) [Clang 22.1.3 ]",
+    "packages": {
+      "jupyter_client": "8.6.3",
+      "ipykernel": "6.29.5",
+      "pyzmq": "27.3.0",
+      "tornado": "6.6.1",
+      "psutil": "7.2.2"
+    }
+  },
+  "command": [
+    "/Library/Developer/CommandLineTools/usr/bin/python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_notebook_kernel.py",
+    "-v"
+  ],
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": "test_closed_parent_stdout_does_not_prevent_owned_cleanup (test_notebook_kernel.NotebookKernelIntegrationTests) ... ok\ntest_interrupt_busy_restart_and_owned_cleanup (test_notebook_kernel.NotebookKernelIntegrationTests) ... ok\ntest_output_limit_and_invalid_input_keep_protocol_usable (test_notebook_kernel.NotebookKernelIntegrationTests) ... ok\ntest_restart_while_busy_and_stdin_eof_shutdown (test_notebook_kernel.NotebookKernelIntegrationTests) ... ok\ntest_selected_interpreter_state_outputs_error_and_no_stdin (test_notebook_kernel.NotebookKernelIntegrationTests) ... ok\ntest_sigterm_during_execution_stops_owned_kernel (test_notebook_kernel.NotebookKernelIntegrationTests) ... ok\ntest_missing_cwd_returns_structured_error_without_jupyter (test_notebook_kernel.NotebookKernelProtocolTests) ... ok\ntest_missing_dependencies_returns_actionable_error (test_notebook_kernel.NotebookKernelProtocolTests) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 6.337s\n\nOK\n",
+  "sources": {
+    "plugins/notebooks/resources/kernel_bridge.py": "361b86385deab957e209e5a743ea14e516e7a5840428165b1dcd29c9cae42e99",
+    "plugins/notebooks/kernel-requirements.txt": "0206856a062580549f520ce261c636fa0b5b9bb114c847f8d10dfd2a97b713d1",
+    "tests/test_notebook_kernel.py": "900fd7b07eccf30e0ca5be4182f3639b717d4233fd704b65083fe55e03188cd4",
+    "scripts/notebook_kernel_probe.py": "8f27b507ebfd64041dc485b2ccb1e59e2e0a32049f3b62632679fbd9392305a6"
+  },
+  "observed": [
+    "Selected Python executable and project cwd in actual ipykernel",
+    "Stateful execute-result, stdout, stderr, raw display data and Python traceback",
+    "Busy ping/rejection, KeyboardInterrupt, restart while busy and state reset",
+    "Per-message output cap, malformed and oversized request recovery",
+    "Normal shutdown, stdin EOF and POSIX SIGTERM remove the owned kernel PID",
+    "Unrelated test-owned process survives interrupt/restart/shutdown"
+  ],
+  "limitations": [
+    "No native notebook editor desktop acceptance is implied",
+    "Windows local kernel/process cleanup is unverified on this macOS host",
+    "No remote kernels, widget comms, interactive stdin, cell debugging or full PyCharm parity are claimed",
+    "Optional user-installed packages are external runtime dependencies, not bundled IDE implementation"
+  ]
+}

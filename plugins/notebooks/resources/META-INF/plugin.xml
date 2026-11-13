@@ -1,0 +1,15 @@
+<idea-plugin>
+  <id>dev.openpycharm.notebooks</id>
+  <name>OpenPyCharm Notebooks</name>
+  <version>@VERSION@</version>
+  <vendor url="https://github.com/shubolab/openpycharm">OpenPyCharm</vendor>
+  <description>Independent native notebook cell editing and local Jupyter kernel execution using the selected Python interpreter. Install the pinned open-source kernel requirements in that interpreter to execute cells.</description>
+  <idea-version since-build="261" until-build="261.*"/>
+  <depends>com.intellij.modules.platform</depends>
+  <depends>PythonCore</depends>
+  <extensions defaultExtensionNs="com.intellij">
+    <fileType name="OpenPyCharm Notebook" implementationClass="dev.openpycharm.notebooks.NotebookFileType" fieldName="INSTANCE" extensions="ipynb"/>
+    <fileEditorProvider implementation="dev.openpycharm.notebooks.NotebookEditorProvider"/>
+    <projectCloseHandler implementation="dev.openpycharm.notebooks.NotebookProjectCloseHandler" order="first"/>
+  </extensions>
+</idea-plugin>

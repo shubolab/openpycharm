@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "distribution": "External user-installed Python runtime dependencies; no dependency code is bundled",
+  "packages": [
+    {
+      "name": "jupyter_client",
+      "version": "8.6.3",
+      "license": "BSD-3-Clause",
+      "source": "https://github.com/jupyter/jupyter_client/tree/v8.6.3",
+      "package": "https://pypi.org/project/jupyter_client/8.6.3/",
+      "wheel": "jupyter_client-8.6.3-py3-none-any.whl",
+      "wheelSha256": "e8a19cc986cc45905ac3362915f410f3af85424b4c0905e94fa5f2cb08e8f23f"
+    },
+    {
+      "name": "ipykernel",
+      "version": "6.29.5",
+      "license": "BSD-3-Clause",
+      "source": "https://github.com/ipython/ipykernel/tree/v6.29.5",
+      "package": "https://pypi.org/project/ipykernel/6.29.5/",
+      "wheel": "ipykernel-6.29.5-py3-none-any.whl",
+      "wheelSha256": "afdb66ba5aa354b09b91379bac28ae4afebbb30e8b39510c9690afb7a10421b5"
+    }
+  ],
+  "note": "Pins document tested direct dependencies. The user's Python installer resolves their platform-specific transitive dependencies; the IDE performs no automatic installation."
+}

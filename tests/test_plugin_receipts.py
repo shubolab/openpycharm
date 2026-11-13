@@ -33,6 +33,12 @@ class PluginReceiptControls(unittest.TestCase):
                                  "jarSha256": hashlib.sha256(self.framework_jar.read_bytes()).hexdigest()}
         self.manifest = {"schema": 1, "name": "OpenPyCharm", "version": "0.1.0-dev.2", "target": "windows-x64",
                          "upstreamProduct": "PC", "sourceInputs": source_inputs(), "plugins": [self.plugin, self.framework_plugin]}
+        self.notebook_jar = self.contents / "third-party-plugins/notebooks/lib/notebooks.jar"
+        self.notebook_jar.parent.mkdir(parents=True)
+        self.notebook_jar.write_bytes(b"authenticated notebook payload")
+        self.manifest["plugins"].append({"id": "dev.openpycharm.notebooks", "name": "OpenPyCharm Notebooks", "version": "0.1.0-dev.2",
+                                         "path": "third-party-plugins/notebooks", "jar": self.notebook_jar.relative_to(self.contents).as_posix(),
+                                         "jarSha256": hashlib.sha256(self.notebook_jar.read_bytes()).hexdigest()})
 
     def test_installer_rejects_mutated_plugin_even_when_source_and_metadata_still_match(self):
         (self.contents / "openpycharm-build.json").write_text(json.dumps(self.manifest))
@@ -42,7 +48,7 @@ class PluginReceiptControls(unittest.TestCase):
             (self.contents / "bin" / name).write_bytes(b"never executed")
         with patch.object(installers, "ROOT", self.root):
             self.assertEqual(installers.validate_product(self.contents, "windows-x64", "0.1.0-dev.2")[0], self.contents)
-            for jar in (self.jar, self.framework_jar):
+            for jar in (self.jar, self.framework_jar, self.notebook_jar):
                 original = jar.read_bytes()
                 jar.write_bytes(b"changed executable plugin payload")
                 with self.subTest(plugin=jar), self.assertRaisesRegex(ValueError, "JAR digest"):
@@ -53,7 +59,7 @@ class PluginReceiptControls(unittest.TestCase):
         (self.contents / "openpycharm-build.json").write_text(json.dumps(self.manifest))
         profile = self.root / "profile"
         with patch.object(runtime_smoke.platform, "system", return_value="Windows"), patch.object(runtime_smoke.subprocess, "Popen") as process:
-            for jar in (self.jar, self.framework_jar):
+            for jar in (self.jar, self.framework_jar, self.notebook_jar):
                 original = jar.read_bytes()
                 jar.write_bytes(b"changed executable plugin payload")
                 with self.subTest(plugin=jar), self.assertRaisesRegex(ValueError, "JAR digest"):

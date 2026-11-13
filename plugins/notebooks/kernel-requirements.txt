@@ -1,0 +1,4 @@
+# Optional runtime dependencies installed by the user into the selected Python.
+# These BSD-licensed packages are not bundled with OpenPyCharm.
+jupyter_client==8.6.3
+ipykernel==6.29.5

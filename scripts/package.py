@@ -43,6 +43,8 @@ def assemble(sdk, target, version, output):
     http = build_http_plugin(sdk, ROOT / f"build/http-client-{target}", version, [ROOT / ".tools/kotlin"])
     from build_framework_plugin import build_plugin as build_framework_plugin
     framework_directory, frameworks = build_framework_plugin(sdk, version=version)
+    from build_notebook_plugin import build_plugin as build_notebook_plugin
+    notebook_directory, notebooks = build_notebook_plugin(sdk, version=version)
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="assemble-", dir=output.parent) as staging_name:
         staging = Path(staging_name) / output.name
@@ -64,6 +66,7 @@ def assemble(sdk, target, version, output):
         for plugin_id, name, directory_name, source_directory, jar_name, build in (
             ("dev.openpycharm.http", "OpenPyCharm HTTP Client", "openpycharm-http", Path(http["pluginDirectory"]), "openpycharm-http.jar", http),
             ("dev.openpycharm.frameworks", "OpenPyCharm Python Frameworks", "openpycharm-frameworks", framework_directory, "frameworks.jar", frameworks),
+            ("dev.openpycharm.notebooks", "OpenPyCharm Notebooks", "openpycharm-notebooks", notebook_directory, "notebooks.jar", notebooks),
         ):
             directory = contents / "third-party-plugins" / directory_name
             jar = directory / "lib" / jar_name

@@ -1,0 +1,152 @@
+{
+  "schema": 1,
+  "candidate": "0.1.0-dev.3",
+  "status": "pass",
+  "scope": "Authenticated standalone notebook plugin, persistence and actual headless local-kernel/session checks; not desktop/product acceptance",
+  "observedAt": "2026-11-13T22:21:11.398566+00:00",
+  "pluginId": "dev.openpycharm.notebooks",
+  "version": "0.1.0-dev.3",
+  "jarSha256": "9a1fcd4a1b11a45d87ef10aabb7faf0b53a63f4dba0e8408a738a5468de2a6fd",
+  "targetPlatform": "macos",
+  "executionPlatform": "macos",
+  "nativeTargetRuntime": true,
+  "compiler": "javac 25.0.3",
+  "sdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+  "archiveVerification": {
+    "status": "pass",
+    "reader": "HashMapZipFile",
+    "verifiedEntries": 26,
+    "closed": true,
+    "sha256": "9a1fcd4a1b11a45d87ef10aabb7faf0b53a63f4dba0e8408a738a5468de2a6fd"
+  },
+  "compilation": {
+    "stdout": "",
+    "stderr": "注: /Users/wangshubo/develop/openpycharm/.tools/worktrees/notebooks/plugins/notebooks/src/dev/openpycharm/notebooks/NotebookFileEditor.java使用或覆盖了已过时的 API。\n注: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。\n"
+  },
+  "modelTests": {
+    "status": "pass",
+    "metadataAndAttachmentsPreserved": true,
+    "richOutputsPreserved": true,
+    "sourceRoundTrip": true,
+    "outputsAndCount": true,
+    "addDeleteCells": true,
+    "malformedAndOversizedRejected": true,
+    "asynchronousPersistence": {
+      "status": "pass",
+      "offSubmittingThread": true,
+      "latestOnlyCoalescing": true,
+      "dirtyBeforeCompletion": true,
+      "staleCommitRejected": true,
+      "externalGenerationInvalidated": true,
+      "serializationFailureRemainsDirty": true,
+      "mergeSuspensionKeepsDirty": true,
+      "executorRejectionRecovers": true,
+      "completionQueueBounded": true
+    },
+    "externalMerge": {
+      "status": "pass",
+      "foreignMetadataChars": 2600000,
+      "independentSourceAndMetadata": true,
+      "localRetainedOnConflict": true,
+      "stableCellIdentities": true,
+      "structuralAndAtomicArrays": true,
+      "identicalChanges": true,
+      "missingKeysAndNull": true,
+      "immutableInputs": true,
+      "structuralSharing": true,
+      "exactLargeIntegersAndDecimals": true,
+      "extremeExponents": true,
+      "recursiveNumericEquality": true
+    },
+    "targetPlatform": "macos",
+    "executionPlatform": "macos",
+    "nativeTargetRuntime": true,
+    "jarSha256": "9a1fcd4a1b11a45d87ef10aabb7faf0b53a63f4dba0e8408a738a5468de2a6fd"
+  },
+  "tests": {
+    "repository": {
+      "command": "OPENPYCHARM_NOTEBOOK_PYTHON=/absolute/test-owned/python python3 -m unittest discover -s tests -v",
+      "count": 94,
+      "passed": 94,
+      "skipped": 0
+    },
+    "helloPythonFixture": {
+      "command": "python3 -m unittest discover -s fixtures/hello-python -v",
+      "count": 9,
+      "passed": 9
+    }
+  },
+  "sources": {
+    "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "plugins/notebooks/NOTICE": "06c09522f58b11483e42c965bd8b6d2bca8a5003430ae2a0766d711d6ecd8f39",
+    "plugins/notebooks/README.md": "4e520001577392ab52228323aab70f3c1a1a4bc8191647fafb8c0ef8a614d8e3",
+    "plugins/notebooks/build-support/VerifyNotebookArchive.java": "f0799e3467d4b03dfea8eb54aa2cc429f811ce67afd03bfc9876120295b2c555",
+    "plugins/notebooks/kernel-requirements.txt": "0206856a062580549f520ce261c636fa0b5b9bb114c847f8d10dfd2a97b713d1",
+    "plugins/notebooks/resources/META-INF/plugin.xml": "a400e740c77b1f82f27b6ece70d58d21fa143c0d42d57c0c113c642c880e3a3a",
+    "plugins/notebooks/resources/kernel_bridge.py": "361b86385deab957e209e5a743ea14e516e7a5840428165b1dcd29c9cae42e99",
+    "plugins/notebooks/runtime-dependencies.lock.json": "765b2b507abfd6383e3cef9f6c54700fa50ad8fbca81bdb0be401ee6151194d9",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookEditorProvider.java": "e49779c7309d07e2d560516d6ad9a6d24d6632dff7d9df53a0e57d9a4217e36c",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookFileEditor.java": "d97dce4d6b8af084d2c35263f7e73583f712997e0e5f72f8e1910f50671f9315",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookFileType.java": "8e1fe08039f9d2f954b664e344fd2d3bc8fa7fb34c8ca721288066eca5fb41f6",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookKernelSession.java": "3f13a2037f784532eece3e26f397f336c68fb980e7ab07a8b3f457a04ff2057b",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookMerge.java": "ea03a4be2b5ef1a0861557c93eca16ac8ec3ae8a18dbda5a44603b216de50fbb",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookModel.java": "e27dced3a99dda43ec5bf867f77688fab829cf7db65a40f1a6a125481a4704cd",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookPersistence.java": "38058e890883d44398851947f99abb20fc1e4173e7dbf58de2334a2ded76a106",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookProjectCloseHandler.java": "ea2b19d0e67442df6bf123d12c486cec613f07a2774516d2f6370bfc28114efb",
+    "product/platform.lock.json": "2fe9e477d7e3164e362e33f3b95a2464b16a0699e1bade6cc112b166aed697bd",
+    "product/product.json": "f5d4a28101d3f3462b7877aeb020a1de48886a2ef06758c07531c11af01cfae3",
+    "scripts/bootstrap.py": "a9f405e1fd83ed5a63e0a676efcecbb11a0a1e1975f876e33622756b5b502fff",
+    "scripts/build_notebook_plugin.py": "97e98a98041dccc7439d3744c8ce58eb0151ccbfed2b0a1debfb8c211b0fb819",
+    "scripts/platform_layout.py": "500447561715fc996c842c614aa817a2251e7dfbc22305054f7ab40fc31c7037"
+  },
+  "packagingSources": {
+    "scripts/package.py": "5e0ec318f8d052032d85e0a41fc1990e108dd3dacbb9823c6348a78614bc4f49",
+    "tests/test_package_freshness.py": "b292a3d44052fe2fc9e3f720a525b3f51e8ce08e0595f3af1c26aa6c3eade9ae",
+    "tests/test_plugin_receipts.py": "2e4d4eae822a833c0b58f64d80eba77b30e97375b4c541fdd264d6a6f7b774ec"
+  },
+  "observed": [
+    "Actual authenticated native SDK compilation and IntelliJ/JDK JAR-reader agreement",
+    "Actual JVM compact metadata preservation, source/output/count/add/delete persistence and snapshot isolation checks",
+    "Worker serialization off the submitting thread, immediate dirty state, latest-only snapshot/completion coalescing, stale generation rejection and failure-retained dirty state",
+    "Rejected serializer submissions recover on next submission; external merge suspension retains dirty edits",
+    "Three-way merge preserves independent pending source and external metadata changes including2.6M foreign characters; overlaps/structural conflicts retainlocal values and expose conflict paths",
+    "Eight actual kernel bridge tests and actual Java-to-embedded-bridge execution/interrupt/restart/reset session checks",
+    "Actual pipe backpressure with TERM-ignoring owned parent/child, startup-close and repeated-close tests pass within bounded disposal",
+    "Protocol executor rejection does not prevent independent owned-process disposal",
+    "Mocked product assembly authenticates three declared plugin payloads; mutated notebook payload rejected",
+    "Exact recursive numeric comparison preserves incoming adjacent integers above 2^53; long decimals, finite overflow/underflow, equivalent forms, signed zero, nested containers and 300-digit exponents pass real JVM regression tests"
+  ],
+  "inferred": [
+    "Compiled native .ipynb FileEditor/provider and Python PSI widgets retain the platform desktop architecture",
+    "Run/Run All/Restart check native project trust; opening a file does not launch a session",
+    "External text changes suspend stale commits without discarding dirty edits and use baseline/local/incoming merge on a worker",
+    "Overlapping fields keep dirty state with explicit keep/discard controls; disposed pending state restores on tab reopen",
+    "Only current generation and exact document stamp permit worker results to update the ordinary file document",
+    "An early project-close handler declines close until pending edits reach the ordinary document; actual desktop lifecycle remains unverified",
+    "Only module/project selected local interpreter is launched; pipe/process/filesystem work is delegated off the Swing EDT"
+  ],
+  "unknown": [
+    "Actual native editor UI, completion, save/undo/reopen, conflict controls, pending-tab/project-close lifecycle, text reload and Safe Mode interaction are not exercised",
+    "Actual product assembly, installed candidate, DMG/EXE installers and Release evidence for dev.3 remain pending",
+    "Windows compilation/runtime/process cleanup and native UI are not accepted",
+    "Rich media/Markdown preview, widgets, remote kernels, interactive stdin and notebook debugging are not implemented",
+    "No full PyCharm parity or publishable-release acceptance is claimed"
+  ],
+  "testSources": {
+    "tests/notebooks/NotebookModelTest.java": "190c38d1de19c2fdcc55e26b9737f3e22181a955166bfcd16946fd9e61ded0f6",
+    "tests/notebooks/NotebookPersistenceTest.java": "880c85a779690a39b043a076579a7daa183984a6a950312f1c91779e61785643",
+    "tests/notebooks/NotebookMergeTest.java": "ec68c7902517adb0a7731019d345674ca33751665b174c184b54ca12c48f47ce",
+    "tests/notebooks/NotebookKernelSessionTest.java": "19cee414b63bcec9f14a722db2181ee793f9b838bc228eb7a5f1f0a6d37a86f0",
+    "tests/notebooks/NotebookSessionDisposalTest.java": "e37ed4de1ced6e584b535627abf9b4a368263dda2f4d631e51fbaa22aee55552",
+    "scripts/notebook_session_probe.py": "155936d3509ce374865882f48e9ca8b1157b107164b0d3e3b484da184d063a40"
+  },
+  "regressionFixCommits": [
+    "d98c78b",
+    "91076da",
+    "a6536ea"
+  ],
+  "independentReview": {
+    "latestCandidateRetest": "Requested for a6536ea / JAR 9a1fcd4a; pending reviewer slot",
+    "previous910Retest": "Previous close, backpressure, serializer rejection and dirty-merge controls passed; exact numeric metadata finding is addressed by a6536ea and expanded actual JVM tests"
+  }
+}
