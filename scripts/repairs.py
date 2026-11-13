@@ -1,8 +1,9 @@
-"""Replay two bounded open-source platform repairs into an owned product copy.
+"""Replay bounded open-source platform repairs into an owned product copy.
 
-Both fixes are reused from tracked opengoland source. JDOMUtil preserves valid
+The Unicode and PSI fixes are reused from tracked opengoland source. JDOMUtil preserves valid
 supplementary Unicode in persisted XML; PsiChangeHandler initializes its Alarm
-before publishing listeners. Every original JAR, source and patch is pinned;
+before publishing listeners. JBCefApp constructs its singleton on demand outside
+class initialization. Every original JAR, source and patch is pinned;
 all non-replaced JAR entry bytes are checked after compilation and installation.
 """
 
@@ -42,7 +43,7 @@ def apply(contents: Path, sdk: Path) -> dict:
         raise ValueError("Product contents directory does not exist")
     target_app = contents.parent if layout.platform == "macos" else contents
     fixes = []
-    for name in ("unicode", "psi-listener"):
+    for name in ("unicode", "psi-listener", "jcef-startup"):
         suffix = "-windows" if layout.platform == "windows" else ""
         pin_path = ROOT / f"product/patches/platform-{name}{suffix}-2026.1.4.json"
         cache_name = f"platform-{name}-{target}"
@@ -56,9 +57,13 @@ def apply(contents: Path, sdk: Path) -> dict:
         )
         with cache_lock(cache / "build.lock"):
             result = _REPAIR.build(args)
+        startup_controls = None
+        if name == "jcef-startup":
+            from check_jcef_startup import verify
+            startup_controls = verify(layout.sdk_root, result, pin_path)
         # Keep reviewable provenance without retaining a staging-directory path
         # that becomes obsolete when the assembled application is renamed.
-        fixes.append({
+        fix = {
             "name": name,
             "jar": result["upstreamJarRelativePath"].removeprefix("Contents/"),
             "pin": str(pin_path.relative_to(ROOT)),
@@ -71,7 +76,10 @@ def apply(contents: Path, sdk: Path) -> dict:
             "classSha256": result["classSha256"],
             "marker": result["marker"],
             "unchangedEntriesVerified": True,
-        })
+        }
+        if startup_controls is not None:
+            fix["startupControls"] = startup_controls
+        fixes.append(fix)
     return {
         "schema": 1, "sourceSdk": str(layout.sdk_root), "target": target,
         "fixes": fixes, "sourceSdkModified": False,

@@ -1,0 +1,12 @@
+<idea-plugin>
+  <id>dev.openpycharm.markdown.probe</id>
+  <name>OpenPyCharm Markdown Startup Probe</name>
+  <version>1</version>
+  <vendor>OpenPyCharm</vendor>
+  <idea-version since-build="261" until-build="261.*"/>
+  <depends>com.intellij.modules.platform</depends>
+  <depends>org.intellij.plugins.markdown</depends>
+  <applicationListeners>
+    <listener class="dev.openpycharm.markdown.probe.MarkdownStartupProbe" topic="com.intellij.ide.AppLifecycleListener"/>
+  </applicationListeners>
+</idea-plugin>
