@@ -2,7 +2,7 @@
   "schema": 1,
   "compilerVersion": "2.3.21",
   "jvmTarget": "21",
-  "acquisition": "Explicit owned-cache provisioning from Maven Central; every artifact requires its exact size and SHA-256; builders never download dependencies",
+  "acquisition": "Explicit owned-cache provisioning from Maven Central; only compiler-embeddable 2.3.21 may follow its verified JetBrains GitHub release asset route; every artifact requires its exact size and SHA-256; builders never download dependencies",
   "artifacts": [
     {
       "group": "org.jetbrains.kotlin",
@@ -11,7 +11,17 @@
       "name": "kotlin-compiler-embeddable-2.3.21.jar",
       "size": 59720376,
       "sha256": "d3e70fb011675e77ef00f1a68918d3cd91eed26058977d1e3ea2a37a293233af",
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-compiler-embeddable/2.3.21/kotlin-compiler-embeddable-2.3.21.jar"
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-compiler-embeddable/2.3.21/kotlin-compiler-embeddable-2.3.21.jar",
+      "releaseRedirect": {
+        "repository": "JetBrains/kotlin",
+        "tag": "v2.3.21",
+        "assetId": 598615460,
+        "metadataUrl": "https://api.github.com/repos/JetBrains/kotlin/releases/assets/598615460",
+        "url": "https://github.com/JetBrains/kotlin/releases/download/v2.3.21/kotlin-compiler-embeddable-2.3.21.jar",
+        "assetCdnUrl": "https://release-assets.githubusercontent.com/github-production-release-asset/3432266/8c5a5b7a-09b2-47cf-9427-cdcb63c3596b",
+        "assetSize": 59720376,
+        "assetSha256": "d3e70fb011675e77ef00f1a68918d3cd91eed26058977d1e3ea2a37a293233af"
+      }
     },
     {
       "group": "org.jetbrains.kotlin",

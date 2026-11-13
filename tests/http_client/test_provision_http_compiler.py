@@ -53,6 +53,31 @@ class RedirectTransport(provision.urllib.request.BaseHandler):
     http_open = https_open
 
 
+class RouteTransport(RedirectTransport):
+    def __init__(self, exchanges):
+        self.exchanges, self.opened, self.responses = exchanges, [], []
+
+    def https_open(self, request):
+        index = len(self.opened)
+        if index >= len(self.exchanges):
+            raise AssertionError("An unapproved extra network hop was opened")
+        expected, code, destination, data = self.exchanges[index]
+        if request.full_url != expected:
+            raise AssertionError(f"Unexpected network endpoint {request.full_url}")
+        self.opened.append(request.full_url)
+        headers = Message()
+        if destination is not None:
+            headers["Location"] = destination
+        else:
+            headers["Content-Length"] = str(len(data))
+        response = urllib.response.addinfourl(io.BytesIO(data), headers, request.full_url, code)
+        response.msg = "Found" if destination is not None else "OK"
+        self.responses.append(response)
+        return response
+
+    http_open = https_open
+
+
 class CompilerProvisionControls(unittest.TestCase):
     def response_opener(self, response):
         return patch.object(provision.urllib.request, "build_opener", return_value=Mock(open=Mock(return_value=response)))
@@ -61,6 +86,16 @@ class CompilerProvisionControls(unittest.TestCase):
         return {"group": "org.jetbrains.kotlin", "artifact": "compiler", "version": "1.0",
                 "name": "compiler-1.0.jar", "size": len(data), "sha256": hashlib.sha256(data).hexdigest(),
                 "url": provision.CENTRAL + "org/jetbrains/kotlin/compiler/1.0/compiler-1.0.jar"}
+
+    def compiler_item(self, data=b"compiler"):
+        item = json.loads(provision.PIN.read_text())["artifacts"][0]
+        item["size"], item["sha256"] = len(data), hashlib.sha256(data).hexdigest()
+        item["releaseRedirect"].update(assetSize=item["size"], assetSha256=item["sha256"])
+        return item
+
+    def route_opener(self, transport):
+        build_opener = provision.urllib.request.build_opener
+        return patch.object(provision.urllib.request, "build_opener", side_effect=lambda handler: build_opener(handler, transport))
 
     def test_authenticated_bytes_promote_and_bad_or_excess_bytes_leave_no_artifact(self):
         item = self.item()
@@ -121,7 +156,7 @@ class CompilerProvisionControls(unittest.TestCase):
                 with patch.object(provision.urllib.request, "build_opener", side_effect=lambda handler: build_opener(handler, transport)):
                     with self.assertRaisesRegex(ValueError, "before following HTTP 302") as caught:
                         provision.download(item, destination)
-                self.assertIn(target, str(caught.exception))
+                self.assertIn(provision.urllib.parse.urlsplit(target).hostname, str(caught.exception))
                 self.assertEqual(transport.opened, [item["url"]])
                 self.assertTrue(transport.responses[0].closed)
                 self.assertEqual(list(destination.parent.iterdir()), [])
@@ -137,6 +172,62 @@ class CompilerProvisionControls(unittest.TestCase):
                     provision.download(item, destination)
             self.assertLessEqual(len(transport.opened), 4)
             self.assertEqual(list(destination.parent.iterdir()), [])
+
+    def test_verified_release_chain_authenticates_bytes_and_omits_temporary_signature_from_receipt(self):
+        item = self.compiler_item()
+        route = item["releaseRedirect"]
+        cdn = route["assetCdnUrl"] + "?sp=r&spr=https&sr=b&sig=test-signature"
+        for data in (b"compiler", b"tampered"):
+            exchanges = [(item["url"], 301, route["url"], b""), (route["url"], 302, cdn, b""), (cdn, 200, None, data)]
+            with self.subTest(data=data), tempfile.TemporaryDirectory() as directory:
+                transport = RouteTransport(exchanges)
+                destination = Path(directory) / item["name"]
+                with self.route_opener(transport):
+                    if data == b"compiler":
+                        receipt = provision.download(item, destination)
+                        self.assertEqual(destination.read_bytes(), data)
+                        self.assertEqual(receipt["finalUrl"], route["assetCdnUrl"])
+                        self.assertTrue(receipt["signedQueryOmitted"])
+                        self.assertEqual(len(receipt["redirects"]), 2)
+                        self.assertNotIn("test-signature", json.dumps(receipt))
+                    else:
+                        with self.assertRaisesRegex(ValueError, "SHA-256"):
+                            provision.download(item, destination)
+                        self.assertEqual(list(destination.parent.iterdir()), [])
+                self.assertEqual(transport.opened, [item["url"], route["url"], cdn])
+
+    def test_release_route_cannot_skip_the_primary_release_or_open_another_asset(self):
+        item = self.compiler_item()
+        route = item["releaseRedirect"]
+        cdn = route["assetCdnUrl"] + "?sp=r&spr=https&sr=b&sig=test-signature"
+        bad_cdn = (cdn.replace("8c5a5b7a", "aaaaaaaa"), cdn.replace("3432266", "1234567"),
+                   cdn.replace("release-assets.githubusercontent.com", "unexpected.invalid"), cdn.replace("https:", "http:"),
+                   cdn.replace("spr=https", "spr=http"), cdn.replace("sp=r", "sp=w"),
+                   cdn.replace("sig=test-signature", "sig="), cdn + "&unknown=redirect", cdn + "&sp=r")
+        cases = [[(item["url"], 301, cdn, b"")],
+                 [(item["url"], 301, route["url"].replace("JetBrains/kotlin", "untrusted/kotlin"), b"")],
+                 *[[(item["url"], 301, route["url"], b""), (route["url"], 302, target, b"")] for target in bad_cdn]]
+        for exchanges in cases:
+            with self.subTest(target=exchanges[-1][2]), tempfile.TemporaryDirectory() as directory:
+                transport = RouteTransport(exchanges)
+                destination = Path(directory) / item["name"]
+                with self.route_opener(transport), self.assertRaisesRegex(ValueError, "before following HTTP"):
+                    provision.download(item, destination)
+                self.assertEqual(len(transport.opened), len(exchanges))
+                self.assertTrue(transport.responses[-1].closed)
+                self.assertEqual(list(destination.parent.iterdir()), [])
+
+    def test_an_unrelated_artifact_or_changed_asset_pin_cannot_inherit_the_release_route(self):
+        item = self.compiler_item()
+        unrelated = json.loads(provision.PIN.read_text())["artifacts"][1]
+        unrelated["releaseRedirect"] = item["releaseRedirect"]
+        with self.assertRaisesRegex(ValueError, "Only the verified"):
+            provision.artifact_url(unrelated)
+        for key, value in (("assetId", 1), ("assetSize", 0), ("assetSha256", "0" * 64),
+                           ("assetCdnUrl", item["releaseRedirect"]["assetCdnUrl"] + "/another")):
+            candidate = {**item, "releaseRedirect": {**item["releaseRedirect"], key: value}}
+            with self.subTest(changed=key), self.assertRaisesRegex(ValueError, "verified asset identity"):
+                provision.artifact_url(candidate)
 
     def test_coordinate_and_remote_origin_are_fixed_by_the_lock(self):
         for change in ({"group": "../../outside"}, {"url": "https://unexpected.invalid/compiler.jar"},
