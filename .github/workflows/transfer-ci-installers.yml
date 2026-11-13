@@ -1,0 +1,83 @@
+name: Transfer verified CI installers to draft
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing DRAFT release tag, for example v0.1.0-dev.2'
+        required: true
+        type: string
+      source_commit:
+        description: 'Full production commit SHA of the successful native build'
+        required: true
+        type: string
+      documentation_commit:
+        description: 'Full reviewed release-doc/GIF commit SHA; must be the draft target'
+        required: true
+        type: string
+      run_id:
+        description: 'Successful official Build native installers run ID'
+        required: true
+        type: string
+      mac_artifact_id:
+        description: 'macOS artifact ID from that run'
+        required: true
+        type: string
+      mac_sha256:
+        description: 'Verified standalone DMG SHA-256 (not the artifact ZIP digest)'
+        required: true
+        type: string
+      windows_artifact_id:
+        description: 'Windows artifact ID from that run'
+        required: true
+        type: string
+      windows_sha256:
+        description: 'Verified standalone EXE SHA-256 (not the artifact ZIP digest)'
+        required: true
+        type: string
+
+permissions: {}
+
+concurrency:
+  group: draft-installer-transfer-${{ inputs.tag }}
+  cancel-in-progress: false
+
+jobs:
+  transfer:
+    if: github.repository == 'shubolab/openpycharm' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      actions: read
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GODEBUG: http2client=0
+      TAG: ${{ inputs.tag }}
+      SOURCE_COMMIT: ${{ inputs.source_commit }}
+      DOCUMENTATION_COMMIT: ${{ inputs.documentation_commit }}
+      BUILD_RUN_ID: ${{ inputs.run_id }}
+      MAC_ARTIFACT_ID: ${{ inputs.mac_artifact_id }}
+      MAC_SHA256: ${{ inputs.mac_sha256 }}
+      WINDOWS_ARTIFACT_ID: ${{ inputs.windows_artifact_id }}
+      WINDOWS_SHA256: ${{ inputs.windows_sha256 }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - name: Check transfer identity, tamper and path controls
+        run: python -m unittest discover -s .github/tests -v
+      - name: Verify both CI artifacts and attach installers to the unchanged draft
+        shell: bash
+        run: |
+          python .github/scripts/transfer_ci_installers.py \
+            --tag "$TAG" --source-commit "$SOURCE_COMMIT" \
+            --documentation-commit "$DOCUMENTATION_COMMIT" --run-id "$BUILD_RUN_ID" \
+            --mac-artifact-id "$MAC_ARTIFACT_ID" --mac-sha256 "$MAC_SHA256" \
+            --windows-artifact-id "$WINDOWS_ARTIFACT_ID" --windows-sha256 "$WINDOWS_SHA256" \
+            --upload
