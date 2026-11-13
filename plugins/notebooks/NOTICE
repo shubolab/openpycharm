@@ -1,0 +1,17 @@
+OpenPyCharm Notebooks
+Copyright OpenPyCharm contributors
+
+This independent implementation uses the public Apache-2.0 IntelliJ Platform
+and open-source PythonCore APIs. No proprietary notebook implementation is
+included. Notebook persistence implements the public nbformat v4 specification.
+
+The optional runtime dependencies jupyter_client and ipykernel are separately
+installed in the user's selected interpreter. Their BSD-3-Clause licenses and
+their dependencies' notices remain in those packages; no dependency source is
+vendored in this plugin. The kernel requirements are pinned separately.
+
+Public specifications and APIs:
+https://nbformat.readthedocs.io/en/stable/format_description.html
+https://jupyter-client.readthedocs.io/en/stable/api/client.html
+https://jupyter-client.readthedocs.io/en/stable/messaging.html
+https://github.com/JetBrains/intellij-community/tree/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/editor-ui-api/src/com/intellij/openapi/fileEditor
