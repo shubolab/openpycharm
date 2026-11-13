@@ -3,10 +3,10 @@
   "candidate": "0.1.0-dev.3",
   "status": "pass",
   "scope": "Authenticated standalone notebook plugin, persistence and actual headless local-kernel/session checks; not desktop/product acceptance",
-  "observedAt": "2026-11-13T21:47:08.520347+00:00",
+  "observedAt": "2026-11-13T22:21:11.398566+00:00",
   "pluginId": "dev.openpycharm.notebooks",
   "version": "0.1.0-dev.3",
-  "jarSha256": "54e3bdebb24d932a14b209bd90a4a3eb649215a0ee8b16d626bcfb80d788d1ad",
+  "jarSha256": "9a1fcd4a1b11a45d87ef10aabb7faf0b53a63f4dba0e8408a738a5468de2a6fd",
   "targetPlatform": "macos",
   "executionPlatform": "macos",
   "nativeTargetRuntime": true,
@@ -15,9 +15,9 @@
   "archiveVerification": {
     "status": "pass",
     "reader": "HashMapZipFile",
-    "verifiedEntries": 25,
+    "verifiedEntries": 26,
     "closed": true,
-    "sha256": "54e3bdebb24d932a14b209bd90a4a3eb649215a0ee8b16d626bcfb80d788d1ad"
+    "sha256": "9a1fcd4a1b11a45d87ef10aabb7faf0b53a63f4dba0e8408a738a5468de2a6fd"
   },
   "compilation": {
     "stdout": "",
@@ -53,12 +53,15 @@
       "identicalChanges": true,
       "missingKeysAndNull": true,
       "immutableInputs": true,
-      "structuralSharing": true
+      "structuralSharing": true,
+      "exactLargeIntegersAndDecimals": true,
+      "extremeExponents": true,
+      "recursiveNumericEquality": true
     },
     "targetPlatform": "macos",
     "executionPlatform": "macos",
     "nativeTargetRuntime": true,
-    "jarSha256": "54e3bdebb24d932a14b209bd90a4a3eb649215a0ee8b16d626bcfb80d788d1ad"
+    "jarSha256": "9a1fcd4a1b11a45d87ef10aabb7faf0b53a63f4dba0e8408a738a5468de2a6fd"
   },
   "tests": {
     "repository": {
@@ -86,7 +89,7 @@
     "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookFileEditor.java": "d97dce4d6b8af084d2c35263f7e73583f712997e0e5f72f8e1910f50671f9315",
     "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookFileType.java": "8e1fe08039f9d2f954b664e344fd2d3bc8fa7fb34c8ca721288066eca5fb41f6",
     "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookKernelSession.java": "3f13a2037f784532eece3e26f397f336c68fb980e7ab07a8b3f457a04ff2057b",
-    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookMerge.java": "a95d2b136bfe3de77abd826d65d786cbcba5bf66e451cd7e58931131c660f2be",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookMerge.java": "ea03a4be2b5ef1a0861557c93eca16ac8ec3ae8a18dbda5a44603b216de50fbb",
     "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookModel.java": "e27dced3a99dda43ec5bf867f77688fab829cf7db65a40f1a6a125481a4704cd",
     "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookPersistence.java": "38058e890883d44398851947f99abb20fc1e4173e7dbf58de2334a2ded76a106",
     "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookProjectCloseHandler.java": "ea2b19d0e67442df6bf123d12c486cec613f07a2774516d2f6370bfc28114efb",
@@ -110,7 +113,8 @@
     "Eight actual kernel bridge tests and actual Java-to-embedded-bridge execution/interrupt/restart/reset session checks",
     "Actual pipe backpressure with TERM-ignoring owned parent/child, startup-close and repeated-close tests pass within bounded disposal",
     "Protocol executor rejection does not prevent independent owned-process disposal",
-    "Mocked product assembly authenticates three declared plugin payloads; mutated notebook payload rejected"
+    "Mocked product assembly authenticates three declared plugin payloads; mutated notebook payload rejected",
+    "Exact recursive numeric comparison preserves incoming adjacent integers above 2^53; long decimals, finite overflow/underflow, equivalent forms, signed zero, nested containers and 300-digit exponents pass real JVM regression tests"
   ],
   "inferred": [
     "Compiled native .ipynb FileEditor/provider and Python PSI widgets retain the platform desktop architecture",
@@ -131,17 +135,18 @@
   "testSources": {
     "tests/notebooks/NotebookModelTest.java": "190c38d1de19c2fdcc55e26b9737f3e22181a955166bfcd16946fd9e61ded0f6",
     "tests/notebooks/NotebookPersistenceTest.java": "880c85a779690a39b043a076579a7daa183984a6a950312f1c91779e61785643",
-    "tests/notebooks/NotebookMergeTest.java": "4ddb5302434634f77529ff3265054d1d7557c2cd555dc7cc600771cbbcb0e283",
+    "tests/notebooks/NotebookMergeTest.java": "ec68c7902517adb0a7731019d345674ca33751665b174c184b54ca12c48f47ce",
     "tests/notebooks/NotebookKernelSessionTest.java": "19cee414b63bcec9f14a722db2181ee793f9b838bc228eb7a5f1f0a6d37a86f0",
     "tests/notebooks/NotebookSessionDisposalTest.java": "e37ed4de1ced6e584b535627abf9b4a368263dda2f4d631e51fbaa22aee55552",
     "scripts/notebook_session_probe.py": "155936d3509ce374865882f48e9ca8b1157b107164b0d3e3b484da184d063a40"
   },
   "regressionFixCommits": [
     "d98c78b",
-    "91076da"
+    "91076da",
+    "a6536ea"
   ],
   "independentReview": {
-    "latestCandidateRetest": "Requested for91076da/JAR54e3bde; pending external reviewer availability",
-    "previousD98Retest": "Original pipe/large-metadata probes passed; follow-up dirty merge/executor rejection findings addressed by91076da and expanded owned tests"
+    "latestCandidateRetest": "Requested for a6536ea / JAR 9a1fcd4a; pending reviewer slot",
+    "previous910Retest": "Previous close, backpressure, serializer rejection and dirty-merge controls passed; exact numeric metadata finding is addressed by a6536ea and expanded actual JVM tests"
   }
 }
