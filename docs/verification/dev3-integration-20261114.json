@@ -1,0 +1,548 @@
+{
+  "schema": 1,
+  "candidateVersion": "0.1.0-dev.3",
+  "status": "Static integration verified; no application startup or release acceptance",
+  "baseCommit": "42b48a382bf31c0b30c913e10910fad236d8b88a",
+  "mergedBranches": {
+    "codex_notebooks": "736e72d",
+    "notebookAcceptedCore": "a6536ea",
+    "codex_database": "13d6dc5"
+  },
+  "reviewedPlatformFixes": {
+    "96607ad": "396c53e",
+    "77f33ba": "e2ddbfd"
+  },
+  "productionSourceCommit": "e2ddbfd980d69e1f5da852088aeca6c9c59656fc",
+  "integrationChanges": [
+    "All four HTTP/framework/notebook/database plugins retained in source-coherent assembly",
+    "Database complete lib/legal file maps used by generic copier/verifier; legacy single-JAR receipts remain accepted",
+    "Notebook existing runtime dependency lock embedded as installed metadata; all accepted code/resource entries otherwise byte-identical",
+    "Malformed copy paths are rejected before product promotion",
+    "CI retains notebook/database compile and backend reports plus the reviewed macOS cold-Markdown gate",
+    "Development instructions provision both authenticated caches and use dev.3 installer version"
+  ],
+  "tests": {
+    "repository": {
+      "python": "3.10.18",
+      "count": 112,
+      "passed": 112,
+      "skipped": 0,
+      "actualNotebookKernelRuntime": "Existing project-owned test venv; jupyter_client8.6.3/ipykernel6.29.5; no packages installed by this integration"
+    },
+    "helloPythonFixture": {
+      "passed": 9,
+      "mainExecuted": true
+    },
+    "logs": [
+      ".tools/dev3-final-unit-tests.log",
+      ".tools/dev3-fixture-tests.log",
+      ".tools/dev3-example.txt"
+    ]
+  },
+  "pluginBuilds": {
+    "notebook-macos": {
+      "jarSha256": "4c3ff6c07e35e5f174fc25e5897e6cac37e40e9789b3d4d819035b5e5bafe8cf",
+      "targetPlatform": "macos",
+      "executionPlatform": "macos",
+      "nativeTargetRuntime": true,
+      "archiveVerification": {
+        "status": "pass",
+        "reader": "HashMapZipFile",
+        "verifiedEntries": 27,
+        "closed": true,
+        "sha256": "4c3ff6c07e35e5f174fc25e5897e6cac37e40e9789b3d4d819035b5e5bafe8cf"
+      },
+      "modelTests": {
+        "status": "pass",
+        "metadataAndAttachmentsPreserved": true,
+        "richOutputsPreserved": true,
+        "sourceRoundTrip": true,
+        "outputsAndCount": true,
+        "addDeleteCells": true,
+        "malformedAndOversizedRejected": true,
+        "asynchronousPersistence": {
+          "status": "pass",
+          "offSubmittingThread": true,
+          "latestOnlyCoalescing": true,
+          "dirtyBeforeCompletion": true,
+          "staleCommitRejected": true,
+          "externalGenerationInvalidated": true,
+          "serializationFailureRemainsDirty": true,
+          "mergeSuspensionKeepsDirty": true,
+          "executorRejectionRecovers": true,
+          "completionQueueBounded": true
+        },
+        "externalMerge": {
+          "status": "pass",
+          "foreignMetadataChars": 2600000,
+          "independentSourceAndMetadata": true,
+          "localRetainedOnConflict": true,
+          "stableCellIdentities": true,
+          "structuralAndAtomicArrays": true,
+          "identicalChanges": true,
+          "missingKeysAndNull": true,
+          "immutableInputs": true,
+          "structuralSharing": true,
+          "exactLargeIntegersAndDecimals": true,
+          "extremeExponents": true,
+          "recursiveNumericEquality": true
+        },
+        "targetPlatform": "macos",
+        "executionPlatform": "macos",
+        "nativeTargetRuntime": true,
+        "jarSha256": "4c3ff6c07e35e5f174fc25e5897e6cac37e40e9789b3d4d819035b5e5bafe8cf"
+      },
+      "reportPath": ".tools/dev3-notebook-macos.json",
+      "reportSha256": "9a581c9e980e6fdad6a6cb5e36df4d248f6636776187f67f46d603715fcc3a7b"
+    },
+    "database-macos": {
+      "jarSha256": "2adad125ed5bcfd31afe4c044dd1d0ea6b47eb58c5ec72561c897ae279202d8e",
+      "targetPlatform": "macos",
+      "executionPlatform": "macos",
+      "nativeTargetRuntime": true,
+      "archiveVerification": {
+        "status": "pass",
+        "reader": "HashMapZipFile",
+        "verifiedEntries": 38,
+        "closed": true,
+        "sha256": "2adad125ed5bcfd31afe4c044dd1d0ea6b47eb58c5ec72561c897ae279202d8e"
+      },
+      "integrationTests": {
+        "status": "pass",
+        "checks": 80,
+        "sqliteRealConnections": true,
+        "queryCancelAndDeadline": true,
+        "transactionsAndMetadata": true,
+        "connectionsClosed": true,
+        "networkServersTested": false,
+        "nativeDesktopTested": false,
+        "jarSha256": "2adad125ed5bcfd31afe4c044dd1d0ea6b47eb58c5ec72561c897ae279202d8e",
+        "testSourceSha256": "ecdf0344967a7b766c0ead01d0dd66d3fcf3a7525f6c30fb186cffcc2fc9695a",
+        "targetPlatform": "macos",
+        "executionPlatform": "macos",
+        "nativeTargetRuntime": true
+      },
+      "reportPath": ".tools/dev3-database-macos.json",
+      "reportSha256": "935f186e23a5521b934df619060cda339993492118e1fce71973a2f313ad40f9"
+    },
+    "notebook-windows-classpath": {
+      "jarSha256": "4c3ff6c07e35e5f174fc25e5897e6cac37e40e9789b3d4d819035b5e5bafe8cf",
+      "targetPlatform": "windows",
+      "executionPlatform": "macos",
+      "nativeTargetRuntime": false,
+      "archiveVerification": {
+        "status": "pass",
+        "reader": "HashMapZipFile",
+        "verifiedEntries": 27,
+        "closed": true,
+        "sha256": "4c3ff6c07e35e5f174fc25e5897e6cac37e40e9789b3d4d819035b5e5bafe8cf"
+      },
+      "modelTests": {
+        "status": "pass",
+        "metadataAndAttachmentsPreserved": true,
+        "richOutputsPreserved": true,
+        "sourceRoundTrip": true,
+        "outputsAndCount": true,
+        "addDeleteCells": true,
+        "malformedAndOversizedRejected": true,
+        "asynchronousPersistence": {
+          "status": "pass",
+          "offSubmittingThread": true,
+          "latestOnlyCoalescing": true,
+          "dirtyBeforeCompletion": true,
+          "staleCommitRejected": true,
+          "externalGenerationInvalidated": true,
+          "serializationFailureRemainsDirty": true,
+          "mergeSuspensionKeepsDirty": true,
+          "executorRejectionRecovers": true,
+          "completionQueueBounded": true
+        },
+        "externalMerge": {
+          "status": "pass",
+          "foreignMetadataChars": 2600000,
+          "independentSourceAndMetadata": true,
+          "localRetainedOnConflict": true,
+          "stableCellIdentities": true,
+          "structuralAndAtomicArrays": true,
+          "identicalChanges": true,
+          "missingKeysAndNull": true,
+          "immutableInputs": true,
+          "structuralSharing": true,
+          "exactLargeIntegersAndDecimals": true,
+          "extremeExponents": true,
+          "recursiveNumericEquality": true
+        },
+        "targetPlatform": "windows",
+        "executionPlatform": "macos",
+        "nativeTargetRuntime": false,
+        "jarSha256": "4c3ff6c07e35e5f174fc25e5897e6cac37e40e9789b3d4d819035b5e5bafe8cf"
+      },
+      "reportPath": ".tools/dev3-notebook-windows-classpath.json",
+      "reportSha256": "16a8aacd53b5fc79f3092fe46abc02983254b46ad663607d8684b2d4de68a4cd"
+    },
+    "database-windows-classpath": {
+      "jarSha256": "2adad125ed5bcfd31afe4c044dd1d0ea6b47eb58c5ec72561c897ae279202d8e",
+      "targetPlatform": "windows",
+      "executionPlatform": "macos",
+      "nativeTargetRuntime": false,
+      "archiveVerification": {
+        "status": "pass",
+        "reader": "HashMapZipFile",
+        "verifiedEntries": 38,
+        "closed": true,
+        "sha256": "2adad125ed5bcfd31afe4c044dd1d0ea6b47eb58c5ec72561c897ae279202d8e"
+      },
+      "integrationTests": {
+        "status": "pass",
+        "checks": 80,
+        "sqliteRealConnections": true,
+        "queryCancelAndDeadline": true,
+        "transactionsAndMetadata": true,
+        "connectionsClosed": true,
+        "networkServersTested": false,
+        "nativeDesktopTested": false,
+        "jarSha256": "2adad125ed5bcfd31afe4c044dd1d0ea6b47eb58c5ec72561c897ae279202d8e",
+        "testSourceSha256": "ecdf0344967a7b766c0ead01d0dd66d3fcf3a7525f6c30fb186cffcc2fc9695a",
+        "targetPlatform": "windows",
+        "executionPlatform": "macos",
+        "nativeTargetRuntime": false
+      },
+      "reportPath": ".tools/dev3-database-windows-classpath.json",
+      "reportSha256": "1ca24c57a99c94c76d34b11adc48c9a385cb22a78481320e8f6534d2bc336ed8"
+    }
+  },
+  "productionInventory": {
+    "sourceCount": 129,
+    "sourcesSha256": "b2ff61b5a7b098dd6bb600f80eafbfe9cf0334cbe7b67875b4763eb0412d2b6f",
+    "notebookAndDatabaseInputs": [
+      "plugins/notebooks/NOTICE",
+      "plugins/notebooks/README.md",
+      "plugins/notebooks/build-support/VerifyNotebookArchive.java",
+      "plugins/notebooks/kernel-requirements.txt",
+      "plugins/notebooks/resources/META-INF/plugin.xml",
+      "plugins/notebooks/resources/kernel_bridge.py",
+      "plugins/notebooks/runtime-dependencies.lock.json",
+      "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookEditorProvider.java",
+      "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookFileEditor.java",
+      "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookFileType.java",
+      "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookKernelSession.java",
+      "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookMerge.java",
+      "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookModel.java",
+      "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookPersistence.java",
+      "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookProjectCloseHandler.java",
+      "plugins/database/NOTICE",
+      "plugins/database/README.md",
+      "plugins/database/README.zh-CN.md",
+      "plugins/database/build-support/VerifyDatabaseArchive.java",
+      "plugins/database/drivers.lock.json",
+      "plugins/database/legal/GPL-2.0.txt",
+      "plugins/database/legal/LGPL-2.1.txt",
+      "plugins/database/legal/postgresql-42.7.13.jar-META-INF_LICENSE",
+      "plugins/database/legal/postgresql-42.7.13.jar-META-INF_licenses_com.ongres.scram_scram-client-3.2_META-INF_LICENSE",
+      "plugins/database/legal/postgresql-42.7.13.jar-META-INF_licenses_com.ongres.scram_scram-common-3.2_META-INF_LICENSE",
+      "plugins/database/legal/postgresql-42.7.13.jar-META-INF_licenses_com.ongres.stringprep_saslprep-2.2_META-INF_LICENSE",
+      "plugins/database/legal/postgresql-42.7.13.jar-META-INF_licenses_com.ongres.stringprep_stringprep-2.2_META-INF_LICENSE",
+      "plugins/database/legal/sqlite-jdbc-3.54.1.0.jar-META-INF_maven_org.xerial_sqlite-jdbc_LICENSE",
+      "plugins/database/legal/sqlite-jdbc-3.54.1.0.jar-META-INF_maven_org.xerial_sqlite-jdbc_LICENSE.zentus",
+      "plugins/database/resources/META-INF/plugin.xml",
+      "plugins/database/src/dev/openpycharm/database/CredentialScope.java",
+      "plugins/database/src/dev/openpycharm/database/DatabaseProfile.java",
+      "plugins/database/src/dev/openpycharm/database/DatabaseService.java",
+      "plugins/database/src/dev/openpycharm/database/DatabaseToolWindow.java",
+      "plugins/database/src/dev/openpycharm/database/JdbcSession.java",
+      "plugins/database/src/dev/openpycharm/database/RunSqlAction.java",
+      "plugins/database/src/dev/openpycharm/database/SqlLanguage.java",
+      "plugins/database/src/dev/openpycharm/database/SqlParserDefinition.java",
+      "plugins/database/src/dev/openpycharm/database/SqlText.java"
+    ]
+  },
+  "staticMacProduct": {
+    "schema": 1,
+    "version": "0.1.0-dev.3",
+    "productionSourceCommit": "e2ddbfd980d69e1f5da852088aeca6c9c59656fc",
+    "productManifestSha256": "224d416a3d43dad51022c50d338788cafbd92924ccaef47576731ad48ecef051",
+    "sourceInputCount": 129,
+    "sourceInputsCurrent": true,
+    "plugins": [
+      {
+        "id": "dev.openpycharm.http",
+        "version": "0.1.0-dev.3",
+        "path": "third-party-plugins/openpycharm-http",
+        "jar": "third-party-plugins/openpycharm-http/lib/openpycharm-http.jar",
+        "jarSha256": "3514e6a321be38bcfbe61c1e0f33f0642897fc61a0220e034a732547f16ffd01",
+        "files": {
+          "lib/openpycharm-http.jar": "3514e6a321be38bcfbe61c1e0f33f0642897fc61a0220e034a732547f16ffd01"
+        }
+      },
+      {
+        "id": "dev.openpycharm.frameworks",
+        "version": "0.1.0-dev.3",
+        "path": "third-party-plugins/openpycharm-frameworks",
+        "jar": "third-party-plugins/openpycharm-frameworks/lib/frameworks.jar",
+        "jarSha256": "0fbd9bfc94d2588ecafcac93522b834bc48acd474bb4f815545d44d8e15e9ce2",
+        "files": {
+          "lib/frameworks.jar": "0fbd9bfc94d2588ecafcac93522b834bc48acd474bb4f815545d44d8e15e9ce2"
+        }
+      },
+      {
+        "id": "dev.openpycharm.notebooks",
+        "version": "0.1.0-dev.3",
+        "path": "third-party-plugins/openpycharm-notebooks",
+        "jar": "third-party-plugins/openpycharm-notebooks/lib/notebooks.jar",
+        "jarSha256": "4c3ff6c07e35e5f174fc25e5897e6cac37e40e9789b3d4d819035b5e5bafe8cf",
+        "files": {
+          "lib/notebooks.jar": "4c3ff6c07e35e5f174fc25e5897e6cac37e40e9789b3d4d819035b5e5bafe8cf"
+        }
+      },
+      {
+        "id": "dev.openpycharm.database",
+        "version": "0.1.0-dev.3",
+        "path": "third-party-plugins/openpycharm-database",
+        "jar": "third-party-plugins/openpycharm-database/lib/database.jar",
+        "jarSha256": "2adad125ed5bcfd31afe4c044dd1d0ea6b47eb58c5ec72561c897ae279202d8e",
+        "files": {
+          "lib/database.jar": "2adad125ed5bcfd31afe4c044dd1d0ea6b47eb58c5ec72561c897ae279202d8e",
+          "lib/sqlite-jdbc-3.54.1.0.jar": "f8dce420a6016278497f4f0560f65602b9db858de141b541cf91a4644ebe4639",
+          "lib/postgresql-42.7.13.jar": "6e0e4cc2d8cae902084f8a2b18728b073a6fd9d1f87c9d8bff8f298c18185b93",
+          "lib/mariadb-java-client-3.5.11.jar": "42604178b9e57ec08ee0035079961516f086e455d0141f0b22c6eff29fb2fff4",
+          "legal/mariadb-java-client-3.5.11-sources.jar": "b0ded5b6f00b86d35f3682aa5fa4f39fd6d159c568aa1841705df981e6c4e04a"
+        }
+      }
+    ],
+    "notebookPackagedResources": {
+      "META-INF/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "META-INF/NOTICE": "06c09522f58b11483e42c965bd8b6d2bca8a5003430ae2a0766d711d6ecd8f39",
+      "kernel-requirements.txt": "0206856a062580549f520ce261c636fa0b5b9bb114c847f8d10dfd2a97b713d1",
+      "kernel_bridge.py": "361b86385deab957e209e5a743ea14e516e7a5840428165b1dcd29c9cae42e99",
+      "META-INF/notebook-runtime-dependencies.lock.json": "765b2b507abfd6383e3cef9f6c54700fa50ad8fbca81bdb0be401ee6151194d9"
+    },
+    "notebookAcceptedPayloadEntriesUnchanged": 26,
+    "notebookAcceptedClassEntriesUnchanged": 21,
+    "notebookOnlyAddedPayloads": [
+      "META-INF/notebook-runtime-dependencies.lock.json"
+    ],
+    "databaseEmbeddedNoticesAndLicenses": {
+      "META-INF/legal/postgresql-42.7.13.jar-META-INF_licenses_com.ongres.scram_scram-client-3.2_META-INF_LICENSE": "7c89807167a03a92d2fbfc936aff4f87d8ce31434637381c89e38282c8c99198",
+      "META-INF/legal/GPL-2.0.txt": "edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6",
+      "META-INF/legal/postgresql-42.7.13.jar-META-INF_LICENSE": "08bb580d3cb8f9a4a05f008466a294fdb019e0e177d03a035d46f1eb94077de5",
+      "META-INF/legal/postgresql-42.7.13.jar-META-INF_licenses_com.ongres.scram_scram-common-3.2_META-INF_LICENSE": "7c89807167a03a92d2fbfc936aff4f87d8ce31434637381c89e38282c8c99198",
+      "META-INF/legal/sqlite-jdbc-3.54.1.0.jar-META-INF_maven_org.xerial_sqlite-jdbc_LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "META-INF/legal/LGPL-2.1.txt": "20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95",
+      "META-INF/legal/postgresql-42.7.13.jar-META-INF_licenses_com.ongres.stringprep_saslprep-2.2_META-INF_LICENSE": "5c49fc155ebccd206277e0d1f424aadbf365f0a9ccfb54d400d728a375d523f9",
+      "META-INF/legal/sqlite-jdbc-3.54.1.0.jar-META-INF_maven_org.xerial_sqlite-jdbc_LICENSE.zentus": "5001f15a0a6a49a86e3d39f403b71acd9f33275f591b4ab35441e0aecb65e42d",
+      "META-INF/legal/postgresql-42.7.13.jar-META-INF_licenses_com.ongres.stringprep_stringprep-2.2_META-INF_LICENSE": "5c49fc155ebccd206277e0d1f424aadbf365f0a9ccfb54d400d728a375d523f9",
+      "META-INF/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "META-INF/NOTICE": "24da0a8ee481e7d1c0b58cbc5664fa7c7065f9d3d144e2c49ec5155dc00605bc",
+      "META-INF/jdbc-drivers.lock.json": "82eb4999860754b63d9c1ce1c9e01bf940c15c59d56280d3d31ced0eece36f2c"
+    },
+    "mariaDbSourceJarSha256": "b0ded5b6f00b86d35f3682aa5fa4f39fd6d159c568aa1841705df981e6c4e04a",
+    "mariaDbSourceJavaFileCount": 261,
+    "installerInputValidation": "passed without creating an installer or launching the app",
+    "codesignDeepStrict": "pass",
+    "pythonHelperResources": {
+      "resource": "plugins/python-ce/helpers",
+      "directories": 1468,
+      "directoryWriteBitsRemoved": true,
+      "userPythonEnvironmentModified": false
+    },
+    "platformRepairs": {
+      "schema": 1,
+      "sourceSdk": "/Users/wangshubo/develop/openpycharm/.tools/platform/pycharm-2026.1.4-macos-arm64/PyCharm.app",
+      "target": "macos-arm64",
+      "fixes": [
+        {
+          "name": "unicode",
+          "jar": "lib/util-8.jar",
+          "pin": "product/patches/platform-unicode-2026.1.4.json",
+          "upstreamJarSha256": "ee053200e3d18d0a9b544dcc330c73669d56c3475729a58406cc36798ca2a22f",
+          "patchedJarSha256": "b2524a73f5c06343069a99f072feef0d2f60aee165efeda406c417cc6d765db1",
+          "upstreamCommit": "456919a9624bae72ac12efafc35d2b916cb0c5c5",
+          "patchSha256": "cdb3a11b5f4f55cc9a63e94d5bc149d0d9c5bcfc378306cf354e6244eb0eaaee",
+          "sources": [
+            {
+              "path": "platform/util/src/com/intellij/openapi/util/JDOMUtil.java",
+              "sourceUrl": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/util/src/com/intellij/openapi/util/JDOMUtil.java",
+              "upstreamSha256": "b0289509b126f631e964d7bb03c5c1996f9a3536b27ef0134353417d898a438d",
+              "patchedSha256": "3c6dd6ce4e103f9a466e144d1a9ac0a8e43d9089676eb63ce38241af4b8ecaed"
+            }
+          ],
+          "compiler": "javac 25.0.3",
+          "classSha256": {
+            "com/intellij/openapi/util/JDOMUtil$ElementInfo.class": "64e2c71492b3986105ab69a7bb0b3722dbaa57826a43ae97e4fb7759d3fd85e7",
+            "com/intellij/openapi/util/JDOMUtil$ElementOutputFilter.class": "97ff0a4899dbbaf7548ceca19f1bd7900e641e6a1dedc12fb517fde3e886a088",
+            "com/intellij/openapi/util/JDOMUtil$LoggerHolder.class": "da8780466c46cca1613756bd87c4d25906ad679bf042731fd3e13d3b40cbd08d",
+            "com/intellij/openapi/util/JDOMUtil$MergeAttribute.class": "6d233c9f4799dd88607d2cbe2cd41cd89517cc75b57048083cced9ce50b0e5aa",
+            "com/intellij/openapi/util/JDOMUtil$MyXMLOutputter.class": "71d7766cbe6ef9af61f82d197f8f5080ba04b06324f99846a26b44bfb84945d3",
+            "com/intellij/openapi/util/JDOMUtil.class": "6d678abec629b2ae55ab8e29d3efa7dd591622d00411b5464f19885d94e0baa3"
+          },
+          "marker": "META-INF/openpycharm-platform-unicode.json",
+          "unchangedEntriesVerified": true
+        },
+        {
+          "name": "psi-listener",
+          "jar": "lib/intellij.platform.lang.impl.jar",
+          "pin": "product/patches/platform-psi-listener-2026.1.4.json",
+          "upstreamJarSha256": "91d51056718b24c9f15241b04faf8a7f922c0a548e3993eac60d2a5ef7947542",
+          "patchedJarSha256": "b41c0de0f643be1b08053de4f71a66912e628274cc57c2de88fca1cd6950878a",
+          "upstreamCommit": "456919a9624bae72ac12efafc35d2b916cb0c5c5",
+          "patchSha256": "089b0292b4d44fe15d19460d9dd76de28cc06fc2c4bb622ca6b907f7b0b76f3b",
+          "sources": [
+            {
+              "path": "platform/lang-impl/src/com/intellij/codeInsight/daemon/impl/PsiChangeHandler.java",
+              "sourceUrl": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/lang-impl/src/com/intellij/codeInsight/daemon/impl/PsiChangeHandler.java",
+              "upstreamSha256": "2d55ab1eb0766ef3acf8b38b5c5fa5ff20a32544e0abe44ff82a8e76a3b667e4",
+              "patchedSha256": "2ddd7029c246ee9b8f31b8e126e291be6d0c2f8acaca7702c389bf2541e3dfb7"
+            }
+          ],
+          "compiler": "javac 25.0.3",
+          "classSha256": {
+            "com/intellij/codeInsight/daemon/impl/PsiChangeHandler$1.class": "8ef95e86a6b40822938ef17936213f8e619148ffd0a831723bb020ad22479731",
+            "com/intellij/codeInsight/daemon/impl/PsiChangeHandler$Change.class": "1f5c1e878f54a28680d76dba8a576755e71e001172a79a6511aa5a496fdb8d6d",
+            "com/intellij/codeInsight/daemon/impl/PsiChangeHandler.class": "796447b9a42f0488ee18741c0192c15972e463632591f37a75ae14d6514d2fbc"
+          },
+          "marker": "META-INF/openpycharm-platform-psi-listener.json",
+          "unchangedEntriesVerified": true
+        },
+        {
+          "name": "jcef-startup",
+          "jar": "lib/intellij.platform.ide.impl.jar",
+          "pin": "product/patches/platform-jcef-startup-2026.1.4.json",
+          "upstreamJarSha256": "466f1894830b7229272dcf78d412f29e443d127526aae51f3518ff005c85b32a",
+          "patchedJarSha256": "1805f934266a231eda4da7959a848de456dae9928fccaf4cdbc07859fbe99234",
+          "upstreamCommit": "456919a9624bae72ac12efafc35d2b916cb0c5c5",
+          "patchSha256": "a85759811849c72ecebe025f79708f7650bf86e9a77bb3a7c172f30f979142ef",
+          "sources": [
+            {
+              "path": "platform/ui.jcef/jcef/JBCefApp.java",
+              "sourceUrl": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/ui.jcef/jcef/JBCefApp.java",
+              "upstreamSha256": "993f47241c0b0aef73d1ee725c5cbfdf1345c1e94a41baf6b0ecd8efaf1fb42c",
+              "patchedSha256": "6357585519f3999e3324f217c4d7a106c17c3a3b3a644e357837ca9717dd2f78"
+            }
+          ],
+          "compiler": "javac 25.0.3",
+          "classSha256": {
+            "com/intellij/ui/jcef/JBCefApp$1.class": "f66e4108462a424a16412a024560cd5cf3f03e82901ba7e8d0a760a3f67c0eb9",
+            "com/intellij/ui/jcef/JBCefApp$2.class": "6f72cece5e5624b9234767a3876e58c5ad7a38a0652b68dac805698ee5ff80a6",
+            "com/intellij/ui/jcef/JBCefApp$3.class": "77e73b5391ece1445c3dfa0cb2b073c0427f1320d3310b377abc7ac8b49716fa",
+            "com/intellij/ui/jcef/JBCefApp$Holder.class": "2402e7b74a6dfac3d304f755328286cbbadff9e67c046118123aaa063d0726ba",
+            "com/intellij/ui/jcef/JBCefApp$JBCefCustomSchemeHandlerFactory.class": "6911da9f0ea72007d9978562115dffe3c2e5379ef4049e9ab10ae11ff5c09241",
+            "com/intellij/ui/jcef/JBCefApp$MyCefAppHandler.class": "2f5da55a97b4be47929581a6913bb077b7bdf2d41d852cbc12998e4b2fa1f304",
+            "com/intellij/ui/jcef/JBCefApp.class": "c58ddfe4be82c8762b37ae064820182a78e6efde16d1a8c07fca71a0747941c8"
+          },
+          "marker": "META-INF/openpycharm-platform-jcef-startup.json",
+          "unchangedEntriesVerified": true,
+          "startupControls": {
+            "status": "pass",
+            "actualPatchedHolder": {
+              "status": "pass",
+              "actualPatchedHolderColdLoad": true,
+              "outerJcefClassUninitialized": true,
+              "applicationStarted": false
+            },
+            "lifecycle": {
+              "status": "pass",
+              "scope": "source-derived first-use, publication, null, test-mode, reentry and failure controls",
+              "checks": 68
+            },
+            "originalSdkNegativeControl": {
+              "exitCode": 1,
+              "expectedColdInitFailure": true
+            },
+            "unsafePublicationNegativeControl": {
+              "exitCode": 1,
+              "expectedPrematurePublicationFailure": true
+            },
+            "sourceFragments": {
+              "getInstanceSha256": "41afe2b9a973f161c2454805ae048966d7571403aa0de9cc75e1945124bbdc12",
+              "holderFieldsSha256": "99b43d374d493a31026d308880a058187286cece15b61e50245e82abe8574bc8"
+            },
+            "helperSha256": {
+              "HolderColdLoadProbe.java": "1f884aad4fa805ecab7a3d15fc42aadc4d1599092e776e9bc88cf6871dd0ae21",
+              "HolderLifecycleProbe.java": "9b901f5c895f9426e4b355eec3694e593edddec0df1727f3f8f961e1905fb7df"
+            },
+            "limitations": [
+              "Helper JVMs do not start an IDE or native CEF; restored Markdown preview remains a native runtime gate"
+            ]
+          }
+        }
+      ],
+      "sourceSdkModified": false,
+      "limitations": [
+        "Source replay and entry verification do not replace native behavior acceptance"
+      ]
+    },
+    "productTreeSha256": "9544f9a86bfc8cab7ae42c376ec040377d262f57dc4e4100ee24c4f4c09edc69",
+    "nativeApplicationLaunched": false
+  },
+  "dependencyReuse": [
+    {
+      "name": "kotlin-compiler-embeddable-2.3.21.jar",
+      "sha256": "d3e70fb011675e77ef00f1a68918d3cd91eed26058977d1e3ea2a37a293233af",
+      "source": "existing authenticated HTTP worktree compiler cache"
+    },
+    {
+      "name": "kotlin-stdlib-2.3.21.jar",
+      "sha256": "6f64eac736db9434dd6925b4a518b9d1d17177652320c37916cf9ba3ce7d7d7a",
+      "source": "existing authenticated HTTP worktree compiler cache"
+    },
+    {
+      "name": "kotlin-script-runtime-2.3.21.jar",
+      "sha256": "ec61bf1229c837fa9f4255f34ca69816138b73158e7ae9b8d964cf92ca6dfd2e",
+      "source": "existing authenticated HTTP worktree compiler cache"
+    },
+    {
+      "name": "kotlin-reflect-1.6.10.jar",
+      "sha256": "3277ac102ae17aad10a55abec75ff5696c8d109790396434b496e75087854203",
+      "source": "existing authenticated HTTP worktree compiler cache"
+    },
+    {
+      "name": "kotlin-daemon-embeddable-2.3.21.jar",
+      "sha256": "222fc10a3c22e74d30369bf8a0ca6c4f9372eac7d4a0081e290c256fa4d30fb2",
+      "source": "existing authenticated HTTP worktree compiler cache"
+    },
+    {
+      "name": "kotlinx-coroutines-core-jvm-1.8.0.jar",
+      "sha256": "9860906a1937490bf5f3b06d2f0e10ef451e65b95b269f22daf68a3d1f5065c5",
+      "source": "existing authenticated HTTP worktree compiler cache"
+    },
+    {
+      "name": "annotations-13.0.jar",
+      "sha256": "ace2a10dc8e2d5fd34925ecac03e4988b2c0f851650c94b8cef49ba1bd111478",
+      "source": "existing authenticated HTTP worktree compiler cache"
+    },
+    {
+      "name": "sqlite-jdbc-3.54.1.0.jar",
+      "sha256": "f8dce420a6016278497f4f0560f65602b9db858de141b541cf91a4644ebe4639",
+      "source": "existing authenticated Database worktree JDBC cache"
+    },
+    {
+      "name": "postgresql-42.7.13.jar",
+      "sha256": "6e0e4cc2d8cae902084f8a2b18728b073a6fd9d1f87c9d8bff8f298c18185b93",
+      "source": "existing authenticated Database worktree JDBC cache"
+    },
+    {
+      "name": "mariadb-java-client-3.5.11.jar",
+      "sha256": "42604178b9e57ec08ee0035079961516f086e455d0141f0b22c6eff29fb2fff4",
+      "source": "existing authenticated Database worktree JDBC cache"
+    },
+    {
+      "name": "mariadb-java-client-3.5.11-sources.jar",
+      "sha256": "b0ded5b6f00b86d35f3682aa5fa4f39fd6d159c568aa1841705df981e6c4e04a",
+      "source": "existing authenticated Database worktree JDBC cache"
+    }
+  ],
+  "preservedBoundaries": [
+    "Pinned OSS SDKs and installed reference applications remained read-only",
+    "Only this dev.3 integration worktree/branch was changed; root dev.2 checkout was not changed/merged/pushed",
+    "No IDE/native product startup, CUA, service account, or user database access",
+    "JDBC checks used owned disposable SQLite; PostgreSQL/MySQL drivers were loaded/URL-checked without contacting servers",
+    "No installer or release was created or published"
+  ],
+  "remainingScope": [
+    "Native four-plugin loading/editor/Run/Save/Undo/Notebook conflict/project-close and Database desktop acceptance",
+    "Cold Markdown startup on this exact combined candidate; CI gate is configured but was not run locally per no-startup instruction",
+    "Windows actual native JVM/runtime and both future dev.3 installers; current Windows checks used authenticated macOS host JVM",
+    "Actual installed-version bilingual README GIF update before any dev.3 release",
+    "Real PostgreSQL/MySQL TLS/authentication/cancellation and full PyCharm1:1 parity"
+  ]
+}
