@@ -37,6 +37,8 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
   private final VirtualFile file;
   private final Document document;
   private final NotebookPersistence persistence;
+  private NotebookModel.Snapshot baseline;
+  record PendingState(NotebookModel.Snapshot baseline, NotebookModel.Snapshot local) { }
   private NotebookModel model;
   private final JPanel component = new JPanel(new BorderLayout());
   private final JPanel body = new JPanel();
@@ -51,15 +53,24 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
   private NotebookKernelSession session;
   private String sessionPython;
   private volatile boolean writing, disposed, reloading;
-  private boolean busy, restarting, saveRequested;
+  private boolean busy, restarting, saveRequested, persistenceFailed;
   private long expectedDocumentStamp;
+  private NotebookModel conflictText, conflictMerged;
+  private String conflictProblem;
+  private boolean conflicted;
+  private final JButton keepNotebook = new JButton("Keep Notebook Edits");
+  private final JButton useText = new JButton("Discard Notebook Edits and Use Text");
   private long reloadGeneration;
   private long kernelGeneration;
 
   public NotebookFileEditor(Project project, VirtualFile file, Document document, NotebookModel model, String problem) {
-    this.project = project; this.file = file; this.document = document; this.model = model;
-    persistence = new NotebookPersistence(AppExecutorUtil.getAppExecutorService(), result ->
-        ApplicationManager.getApplication().invokeLater(() -> applyPersistence(result)));
+    this.project = project; this.file = file; this.document = document;
+    PendingState restored = NotebookProjectCloseHandler.takePending(project, file);
+    this.model = restored == null ? model : restored.local().mutableModel();
+    baseline = restored == null ? model == null ? null : model.snapshot() : restored.baseline();
+    persistence = new NotebookPersistence(AppExecutorUtil.getAppExecutorService(), action ->
+        ApplicationManager.getApplication().invokeLater(action), this::applyPersistence);
+    if (restored != null) persistence.markDirty();
     NotebookProjectCloseHandler.register(this);
     body.setLayout(new BoxLayout(body, BoxLayout.Y_AXIS));
     JPanel toolbar = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 4));
@@ -69,6 +80,11 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
     button(toolbar, "+ Code", () -> add("code"));
     button(toolbar, "+ Markdown", () -> add("markdown"));
     button(toolbar, "Save", this::save);
+    keepNotebook.setVisible(false); useText.setVisible(false);
+    keepNotebook.setToolTipText("Keep notebook values for overlapping fields and preserve independent text changes");
+    keepNotebook.addActionListener(event -> resolveConflict(true));
+    useText.addActionListener(event -> resolveConflict(false));
+    toolbar.add(keepNotebook); toolbar.add(useText);
     button(toolbar, "Clear Outputs", () -> {
       if (model == null || busy || reloading) return;
       displays.clear(); cells.forEach(cell -> cell.clearBeforeOutput = false);
@@ -82,35 +98,74 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
     heading.add(information, BorderLayout.CENTER); component.add(heading, BorderLayout.NORTH);
     component.add(new JBScrollPane(body), BorderLayout.CENTER);
     refreshInterpreter();
-    if (model == null) showProblem(problem); else rebuild();
+    if (this.model == null) showProblem(problem); else rebuild();
     if (document != null) document.addDocumentListener(new DocumentListener() {
       @Override public void documentChanged(DocumentEvent event) {
         if (writing || disposed) return;
-        persistence.invalidate(); reloading = true;
-        String text = document.getText(); long generation = ++reloadGeneration;
-        long stamp = document.getModificationStamp();
-        Runnable pause = () -> {
-          if (disposed || generation != reloadGeneration) return;
-          queue.clear(); if (session != null) { ++kernelGeneration; session.close(); session = null; }
-          executing.clear(); displays.clear(); busy = false; restarting = false;
-          cells.forEach(cell -> ((com.intellij.openapi.editor.ex.EditorEx)cell.editor).setViewer(true));
-          status.setText("Reloading notebook changes from the text document…");
-        };
-        if (ApplicationManager.getApplication().isDispatchThread()) pause.run();
-        else ApplicationManager.getApplication().invokeLater(pause);
-        AppExecutorUtil.getAppExecutorService().execute(() -> {
-          NotebookModel parsed = null; String failure = null;
-          try { parsed = NotebookModel.parse(text); } catch (RuntimeException error) { failure = error.getMessage(); }
-          NotebookModel replacement = parsed; String message = failure;
-          ApplicationManager.getApplication().invokeLater(() -> {
-            if (disposed || generation != reloadGeneration || document.getModificationStamp() != stamp) return;
-            queue.clear(); if (session != null) { ++kernelGeneration; session.close(); session = null; }
-            executing.clear(); displays.clear(); busy = false; restarting = false; reloading = false; NotebookFileEditor.this.model = replacement;
-            if (replacement == null) showProblem(message); else rebuild();
-          });
-        });
+        reloadFromDocument();
       }
     }, this);
+    if (restored != null && document != null) reloadFromDocument();
+  }
+
+  private void reloadFromDocument() {
+    boolean dirty = persistence.isDirty();
+    NotebookModel.Snapshot local = dirty && model != null ? model.snapshot() : null;
+    NotebookModel.Snapshot base = baseline;
+    persistence.suspend(); reloading = true;
+    String text = document.getText(); long generation = ++reloadGeneration;
+    long stamp = document.getModificationStamp();
+    Runnable pause = () -> {
+      if (disposed || generation != reloadGeneration) return;
+      conflicted = false; keepNotebook.setVisible(false); useText.setVisible(false);
+      conflictText = null; conflictMerged = null; conflictProblem = null;
+      queue.clear(); if (session != null) { ++kernelGeneration; session.close(); session = null; }
+      executing.clear(); displays.clear(); busy = false; restarting = false;
+      cells.forEach(cell -> ((com.intellij.openapi.editor.ex.EditorEx)cell.editor).setViewer(true));
+      status.setText("Preparing notebook changes from the text document…");
+    };
+    if (ApplicationManager.getApplication().isDispatchThread()) pause.run();
+    else ApplicationManager.getApplication().invokeLater(pause);
+    AppExecutorUtil.getAppExecutorService().execute(() -> {
+      NotebookModel incoming = null, merged = null; String failure = null; List<String> conflicts = List.of();
+      try {
+        incoming = NotebookModel.parse(text);
+        if (dirty && local != null && base != null) {
+          NotebookMerge.Result result = NotebookMerge.merge(base.tree(), local.tree(), incoming.snapshot().tree());
+          merged = NotebookModel.fromTree(result.merged()); conflicts = result.conflicts();
+        } else merged = incoming;
+      } catch (RuntimeException error) { failure = error.getMessage(); }
+      NotebookModel received = incoming, replacement = merged; String message = failure; List<String> overlaps = conflicts;
+      ApplicationManager.getApplication().invokeLater(() -> {
+        if (disposed || generation != reloadGeneration || document.getModificationStamp() != stamp) return;
+        if (dirty && (message != null || !overlaps.isEmpty())) {
+          conflicted = true; conflictText = received; conflictMerged = replacement; conflictProblem = message;
+          keepNotebook.setVisible(true); useText.setVisible(true);
+          status.setText(message != null ? "Text changes cannot be merged: " + message
+              : "Notebook and text both changed " + String.join(", ", overlaps.stream().limit(3).toList()) + ". Choose which values to keep.");
+          return; // Local edits remain dirty and available until explicit resolution.
+        }
+        conflicted = false; keepNotebook.setVisible(false); useText.setVisible(false);
+        reloading = false; model = replacement; baseline = received == null ? null : received.snapshot();
+        if (replacement == null) { persistence.invalidate(); showProblem(message); }
+        else { rebuild(); if (dirty) sync(); else persistence.invalidate(); }
+      });
+    });
+  }
+
+  private void resolveConflict(boolean keepLocal) {
+    if (!conflicted) return;
+    conflicted = false; reloading = false; keepNotebook.setVisible(false); useText.setVisible(false);
+    if (keepLocal) {
+      if (conflictMerged != null) model = conflictMerged;
+      if (conflictText != null) baseline = conflictText.snapshot();
+      rebuild(); sync();
+    } else {
+      persistence.invalidate(); model = conflictText; baseline = model == null ? null : model.snapshot();
+      if (model == null) showProblem(conflictProblem); else rebuild();
+      status.setText("Notebook edits discarded; using the text document");
+    }
+    conflictText = null; conflictMerged = null; conflictProblem = null;
   }
 
   private static void button(JPanel panel, String text, Runnable action) {
@@ -256,20 +311,22 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
     if (document == null || !document.isWritable()) { status.setText("Notebook is read-only"); return; }
     ++reloadGeneration; // Any queued external parse predates this newer model edit.
     expectedDocumentStamp = document.getModificationStamp();
+    persistenceFailed = false;
     persistence.markDirty();
     changes.firePropertyChange(FileEditor.getPropModified(), false, true);
     try { persistence.submit(model.snapshot()); }
-    catch (RuntimeException error) { status.setText("Notebook edits are still unsaved: " + error.getMessage()); }
+    catch (RuntimeException error) { persistenceFailed = true; status.setText("Notebook edits are still unsaved: " + error.getMessage()); }
   }
   private void applyPersistence(NotebookPersistence.Result result) {
     if (!persistence.isCurrent(result.generation())) return;
     if (document.getModificationStamp() != expectedDocumentStamp) {
-      // A text editor or external refresh changed the authoritative document.
-      persistence.invalidate();
-      if (disposed) NotebookProjectCloseHandler.unregister(this);
+      // Preserve pending edits until an external version can be merged or resolved.
+      persistence.suspend();
+      if (!disposed) reloadFromDocument();
       return;
     }
     if (result.failure() != null) {
+      persistenceFailed = true;
       status.setText("Notebook edits are still unsaved: " + result.failure().getMessage());
       return; // Keep dirty and retain the model; project-close guard remains active.
     }
@@ -277,18 +334,23 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
       writing = true; ++reloadGeneration;
       WriteCommandAction.runWriteCommandAction(project, "Edit Notebook", null, () -> document.setText(result.text()));
       expectedDocumentStamp = document.getModificationStamp();
+      baseline = model.snapshot();
       persistence.applied(result.generation());
       changes.firePropertyChange(FileEditor.getPropModified(), true, isModified());
       if (result.text().length() > NotebookModel.MAX_CHARS && !disposed)
         status.setText("Notebook saved as JSON beyond the native size limit; use the text editor after reopening");
       if (saveRequested || disposed) { saveRequested = false; saveDocument(); }
       if (disposed) NotebookProjectCloseHandler.unregister(this);
-    } catch (RuntimeException error) { status.setText("Notebook edits are still unsaved: " + error.getMessage()); }
+    } catch (RuntimeException error) { persistenceFailed = true; status.setText("Notebook edits are still unsaved: " + error.getMessage()); }
     finally { writing = false; }
   }
   private void save() {
     if (document == null) return;
-    if (persistence.isDirty()) { saveRequested = true; return; }
+    if (persistence.isDirty()) {
+      saveRequested = true;
+      if (persistenceFailed && !reloading) sync();
+      return;
+    }
     saveDocument();
   }
   private void saveDocument() {
@@ -383,7 +445,16 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
   @Override public void removePropertyChangeListener(PropertyChangeListener listener) { changes.removePropertyChangeListener(listener); }
   boolean ownsProject(Project value) { return project == value; }
   boolean hasPendingEdits() { return persistence.isDirty(); }
-  void pendingCloseNotice() { status.setText("Notebook edits are still preparing; close the project again after saving finishes"); }
+  boolean canRestorePending() { return disposed && persistence.isDirty(); }
+  PendingState detachPending() {
+    PendingState state = new PendingState(baseline, model.snapshot()); persistence.invalidate(); return state;
+  }
+  void pendingCloseNotice() {
+    status.setText("Notebook edits are still preparing or need conflict resolution");
+    if (disposed) ApplicationManager.getApplication().invokeLater(() -> {
+      if (!project.isDisposed() && persistence.isDirty()) FileEditorManager.getInstance(project).openFile(file, true);
+    });
+  }
   @Override public void dispose() {
     disposed = true; queue.clear(); if (session != null) session.close(); releaseCells();
     if (!persistence.isDirty()) NotebookProjectCloseHandler.unregister(this);

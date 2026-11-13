@@ -139,6 +139,18 @@ public final class NotebookSessionDisposalTest {
       starting.close();
       for (Helper helper : startupHelpers.reversed()) helper.forceIfStillOwned();
     }
+    NotebookKernelSession rejected = new NotebookKernelSession(fake.toString(), fixture.toString(), event -> { });
+    List<Helper> rejectedHelpers = List.of(); long rejectedMillis;
+    try {
+      rejected.request("rejected-close", "ping", null);
+      Process process = awaitProcess(rejected);
+      Thread.sleep(100); rejectedHelpers = ownedHelpers(process);
+      Field commands = NotebookKernelSession.class.getDeclaredField("commands"); commands.setAccessible(true);
+      ((ExecutorService)commands.get(rejected)).shutdown();
+      rejectedMillis = closeAndAwait(rejected, process, rejectedHelpers);
+    } finally {
+      rejected.close(); for (Helper helper : rejectedHelpers.reversed()) helper.forceIfStillOwned();
+    }
     result.addProperty("status", "pass");
     result.addProperty("actualBlockedPipe", true);
     result.addProperty("closeBeforeRequest", true);
@@ -147,6 +159,8 @@ public final class NotebookSessionDisposalTest {
     result.addProperty("boundedOwnedProcessAndDescendantCleanup", true);
     result.addProperty("blockedWriterCloseMillis", blockedMillis);
     result.addProperty("startupCloseMillis", startupMillis);
+    result.addProperty("protocolExecutorRejectionCleanup", true);
+    result.addProperty("rejectedProtocolCloseMillis", rejectedMillis);
     return result;
   }
 }

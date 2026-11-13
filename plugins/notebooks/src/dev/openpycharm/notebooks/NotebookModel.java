@@ -18,7 +18,10 @@ public final class NotebookModel {
 
   public static NotebookModel parse(String text) {
     if (text.length() > MAX_CHARS) throw new IllegalArgumentException("Notebook exceeds the 8 MiB native editor limit; use the JSON editor");
-    JsonObject root = JsonParser.parseString(text).getAsJsonObject();
+    return fromTree(JsonParser.parseString(text).getAsJsonObject());
+  }
+  static NotebookModel fromTree(JsonObject tree) {
+    JsonObject root = capture(tree);
     if (!root.has("nbformat") || root.get("nbformat").getAsInt() != 4)
       throw new IllegalArgumentException("Only nbformat 4 notebooks are supported");
     if (!root.has("cells") || !root.get("cells").isJsonArray() || root.getAsJsonArray("cells").size() > MAX_CELLS)
@@ -81,9 +84,13 @@ public final class NotebookModel {
    * This bounded capture is cheap on the EDT; traversal/serialization happens on a worker.
    */
   public Snapshot snapshot() {
+    return new Snapshot(capture(root));
+  }
+  private static JsonObject capture(JsonObject root) {
     JsonObject copy = shallow(root);
     JsonArray capturedCells = new JsonArray();
-    for (JsonElement value : cells) {
+    if (!root.has("cells") || !root.get("cells").isJsonArray()) return copy;
+    for (JsonElement value : root.getAsJsonArray("cells")) {
       JsonObject cell = shallow(value.getAsJsonObject());
       if (cell.has("outputs") && cell.get("outputs").isJsonArray()) {
         JsonArray outputs = new JsonArray();
@@ -94,7 +101,7 @@ public final class NotebookModel {
       capturedCells.add(cell);
     }
     copy.add("cells", capturedCells);
-    return new Snapshot(copy);
+    return copy;
   }
   private static JsonObject shallow(JsonObject input) {
     JsonObject copy = new JsonObject();
@@ -104,6 +111,8 @@ public final class NotebookModel {
   public static final class Snapshot {
     private final JsonObject root;
     private Snapshot(JsonObject root) { this.root = root; }
+    JsonObject tree() { return root; }
+    NotebookModel mutableModel() { return NotebookModel.fromTree(root); }
     /** Compact output has no pretty-print expansion. Never reject edited data at save time:
      * a file grown beyond the native admission bound remains valid JSON in the text editor.
      */

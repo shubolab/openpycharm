@@ -45,11 +45,35 @@ public final class NotebookPersistenceTest {
       queued.removeFirst().run();
       require(callbacks.size() == 1 && callbacks.getFirst().generation() == newEdit && !delayed.isCurrent(externalSnapshot), "Queued external-era snapshot overwrote a newer edit");
 
-      NotebookPersistence failing = new NotebookPersistence(queued::add, callbacks::add, snapshot -> { throw new IllegalStateException("expected failure"); });
+      NotebookPersistence failing = new NotebookPersistence(queued::add, (java.util.function.Consumer<NotebookPersistence.Result>)callbacks::add,
+          snapshot -> { throw new IllegalStateException("expected failure"); });
       long failureGeneration = failing.submit(model.snapshot()); queued.removeFirst().run();
       require(failing.isDirty() && callbacks.getLast().generation() == failureGeneration && callbacks.getLast().failure() != null,
           "Serialization failure silently cleared dirty state");
-      System.out.println("{\"status\":\"pass\",\"offSubmittingThread\":true,\"latestOnlyCoalescing\":true,\"dirtyBeforeCompletion\":true,\"staleCommitRejected\":true,\"externalGenerationInvalidated\":true,\"serializationFailureRemainsDirty\":true}");
+      delayed.suspend();
+      require(delayed.isDirty() && !delayed.isCurrent(newEdit), "External merge suspension discarded pending edits");
+
+      AtomicInteger attempts = new AtomicInteger();
+      NotebookPersistence retrying = new NotebookPersistence(command -> {
+        if (attempts.incrementAndGet() == 1) throw new RejectedExecutionException("reject once");
+        queued.add(command);
+      }, callbacks::add);
+      retrying.submit(model.snapshot()); require(retrying.isDirty(), "Rejected submission lost dirty state");
+      long retried = retrying.submit(model.snapshot()); queued.removeFirst().run();
+      require(attempts.get() == 2 && callbacks.getLast().generation() == retried && callbacks.getLast().failure() == null,
+          "Rejected executor left the serializer worker permanently latched");
+
+      ArrayDeque<Runnable> deliveries = new ArrayDeque<>(); List<NotebookPersistence.Result> delivered = new ArrayList<>();
+      NotebookPersistence bounded = new NotebookPersistence(queued::add, deliveries::add, delivered::add);
+      long boundedLatest = 0;
+      for (int i = 0; i < 25; i++) {
+        model.source(0, "delivery-" + i); boundedLatest = bounded.submit(model.snapshot()); queued.removeFirst().run();
+        require(deliveries.size() == 1, "UI completion queue grew beyond one scheduled delivery");
+      }
+      deliveries.removeFirst().run();
+      require(delivered.size() == 1 && delivered.getFirst().generation() == boundedLatest,
+          "Prepared results were not coalesced to the newest UI completion");
+      System.out.println("{\"status\":\"pass\",\"offSubmittingThread\":true,\"latestOnlyCoalescing\":true,\"dirtyBeforeCompletion\":true,\"staleCommitRejected\":true,\"externalGenerationInvalidated\":true,\"serializationFailureRemainsDirty\":true,\"mergeSuspensionKeepsDirty\":true,\"executorRejectionRecovers\":true,\"completionQueueBounded\":true}");
     } finally { worker.shutdownNow(); }
   }
 }

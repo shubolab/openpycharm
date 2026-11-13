@@ -44,6 +44,10 @@ public final class NotebookModelTest {
     try { NotebookModel.parse(" ".repeat(NotebookModel.MAX_CHARS + 1)); throw new AssertionError("Oversized notebook accepted"); }
     catch (IllegalArgumentException expected) { }
     require(NotebookModel.parse(model.json()).size() == 3, "Edited notebook is not parseable");
+    JsonObject shared = JsonParser.parseString(fixture).getAsJsonObject();
+    NotebookModel editableCopy = NotebookModel.fromTree(shared); editableCopy.source(1, "changed after merge");
+    require(shared.getAsJsonArray("cells").get(1).getAsJsonObject().get("source").getAsString().equals("print('before')"),
+        "Mutable merged model corrupted an immutable incoming/baseline snapshot");
     String large = "{\"nbformat\":4,\"metadata\":{\"foreign\":[" + "0,".repeat(1300000) + "0]},\"cells\":[{\"cell_type\":\"code\",\"source\":\"before\",\"metadata\":{},\"outputs\":[],\"execution_count\":null}]}";
     require(large.length() < NotebookModel.MAX_CHARS, "Large regression fixture exceeds admission bound");
     NotebookModel largeModel = NotebookModel.parse(large);

@@ -145,9 +145,9 @@ public final class NotebookKernelSession implements AutoCloseable {
     // Protocol cleanup is best effort and stays on the writer's executor. It
     // may be queued behind a blocked flush, so lifecycle disposal never waits
     // for this task or acquires any BufferedWriter/Process pipe lock.
-    commands.execute(this::closeProtocol);
-    commands.shutdown();
-    scheduleDisposal();
+    try { commands.execute(this::closeProtocol); }
+    catch (RejectedExecutionException ignored) { /* Independent disposal still owns cleanup. */ }
+    finally { commands.shutdown(); scheduleDisposal(); }
   }
 
   private void closeProtocol() {

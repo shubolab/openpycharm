@@ -16,6 +16,10 @@ Use **Run Cell**, **Shift+Enter**, **Run All**, **Interrupt**, and **Restart Ker
 
 使用 **Run Cell**、**Shift+Enter**、**Run All**、**Interrupt** 和 **Restart Kernel**。变量在重启前保留，工作目录为 notebook 所在目录。原生界面显示标准输出、文本结果和 Python 错误。普通保存保留元数据及未支持的富媒体数据。源码、输出和执行次数写入 IntelliJ 文档；可使用标准保存/撤销操作。
 
+While edits are being prepared, changes in the text editor are merged against the last committed notebook. Independent cell and metadata changes are preserved. Overlapping changes remain dirty and show explicit **Keep Notebook Edits** / **Discard Notebook Edits and Use Text** choices. Closing a tab retains pending edits; reopening restores them for merging or conflict resolution. Both pending snapshots and prepared UI completions are coalesced to the latest value.
+
+编辑内容在后台准备期间，文本编辑器中的改动会与 notebook 改动合并，保留互不冲突的源码和元数据。同一字段的冲突不会自动丢弃修改，界面提供保留 Notebook 或明确丢弃 Notebook、使用文本的选项。关闭标签仍保留待处理编辑，再次打开可继续合并或解决冲突。
+
 The fixture `fixtures/notebooks/native-demo.ipynb` has empty outputs until actually run. Native admission bounds are 1,000 cells and 8 Mi characters. Existing metadata is preserved without pretty-print expansion. If edits grow a notebook beyond the admission bound, saving still preserves valid JSON; reopen it with the text editor. Execution bounds are 512 KiB source, 1 MiB per kernel event and 4 MiB per execution. Reaching the output cap interrupts the owned kernel and displays a real limit notice. Only processes launched by this notebook session, verified by PID and start time, are cleanup candidates. Disposal runs independently of protocol writes, including when an interpreter blocks without reading its input pipe.
 
 Current verified scope: authenticated SDK compilation, JAR-reader validation, nbformat persistence tests and actual local-kernel/process tests on macOS. Native editor desktop acceptance, installed-product saving/undo, Windows execution and installers are separate checks. Rich HTML/images, rendered Markdown preview, widget comms, remote kernels, interactive stdin and notebook debugging are not implemented. This is a bounded addition, not full PyCharm 1:1 acceptance.
