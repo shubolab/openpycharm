@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "sourceCommit": "6f9ae45dad50f2ddb288e8c5b0274d5a26467e13",
+  "version": "0.1.0-dev.2",
+  "application": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/http-client/build/http-preview-final/OpenPyCharm.app",
+  "installedFromDmg": false,
+  "normalProjectTrustAccepted": true,
+  "profile": "own default OpenPyCharm product profile",
+  "singleRequest": {
+    "status": 200,
+    "bodyService": "OpenPyCharm HTTP example"
+  },
+  "runAll": {
+    "requests": 3,
+    "completed": 3,
+    "failed": 0,
+    "statusCodes": [
+      200,
+      200,
+      200
+    ]
+  },
+  "unicodeEcho": "你好 OpenPyCharm 🚀",
+  "nativeBinarySave": {
+    "bytes": 16,
+    "exact00to0f": true,
+    "sha256": "be45cb2605bf36bebde684841a28f0fd43c69850a3dce5fedba69928ee3a8991"
+  },
+  "nativeStopAll": {
+    "before": {
+      "running": 1
+    },
+    "after": {
+      "running": 0,
+      "cancelled": 1
+    },
+    "visibleResult": "HTTP request cancelled."
+  },
+  "postWorkflowTreeSha256": "5e6061ce2d83397fe4b6df033a61c7ed23cd6bba1d20bf088a7f074531f4a851",
+  "treeUnchanged": true,
+  "signaturePassed": true,
+  "log": {
+    "sessionSha256": "120c924d361af853e1fa1b93bfcd3d8ee0a9ea5fbab3d71bf3d06e4d148bb3a6",
+    "errorCount": 0,
+    "warningCount": 12
+  },
+  "limitations": [
+    "This is a development candidate desktop observation, not the published dev.1 installer",
+    "Request headers tab/full response details and project-close cancellation are not independently accepted here",
+    "Windows desktop HTTP workflow remains unverified"
+  ]
+}

@@ -37,7 +37,7 @@ python3 -m pip install -r requirements-build.txt
 python3 -m unittest discover -s tests -v
 python3 scripts/build.py --target macos-arm64
 python3 scripts/launch.py --profile .state/development fixtures/hello-python
-python3 scripts/installers.py --target macos-arm64 --version 0.1.0-dev.1 --product build/product/OpenPyCharm.app
+python3 scripts/installers.py --target macos-arm64 --version 0.1.0-dev.2 --product build/product/OpenPyCharm.app
 ```
 
 Windows 使用 `python` 和 `--target windows-x64`，产物目录为
