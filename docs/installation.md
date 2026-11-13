@@ -4,9 +4,15 @@ Development targets are macOS Apple silicon and Windows x64. A source build is
 not a published release or proof of all native workflows. The current acceptance
 status is in [acceptance.md](acceptance.md).
 
+Download the first preview's DMG or EXE and `SHA256SUMS.txt` from
+[v0.1.0-dev.1](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.1).
+Verify a download on macOS with `shasum -a 256 INSTALLER.dmg`, or on Windows
+PowerShell with `Get-FileHash .\INSTALLER.exe -Algorithm SHA256`, and compare the
+result with the checksum file. Use your own downloaded filename.
+
 ## macOS
 
-Build `OpenPyCharm-VERSION-macos-arm64.dmg` with `scripts/installers.py`, mount it,
+Download `OpenPyCharm-VERSION-macos-arm64.dmg` (or build it with `scripts/installers.py`), mount it,
 and drag **OpenPyCharm.app** to **Applications** or `~/Applications`. Open the
 installed app. Local builds use an ad-hoc signature and are not notarized.
 Check the installer SHA-256 against its generated `.sha256` file before use.
@@ -18,8 +24,8 @@ application does not delete projects or these settings.
 
 ## Windows
 
-Build the Windows x64 product on Windows, then use `scripts/installers.py` to
-create the `.exe` installer. It installs per user, offers optional `.py` file
+Download the Windows x64 `.exe` installer, or build the product on Windows and
+use `scripts/installers.py` to create it. It installs per user, offers optional `.py` file
 association, and does not require an administrator. The first release candidates
 are unsigned. The silent installation check is a separate build option; native
 Run/Test/Debug acceptance is required as well.

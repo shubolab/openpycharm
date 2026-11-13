@@ -8,11 +8,22 @@
 
 **当前正在开发，完整 1:1 对齐尚未完成。** [验收矩阵](docs/acceptance.md)保留了
 待验证的原生工作流，以及框架、数据库、Notebook、前端与远程开发等工作。
-安装包通过实际检查后再发布。
+
+首个原生预览版：[v0.1.0-dev.1](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.1)。
+
+| 系统 | 安装包 |
+| --- | --- |
+| macOS Apple silicon | [DMG 下载](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.1/OpenPyCharm-0.1.0-dev.1-macos-arm64.dmg) |
+| Windows x64 | [EXE 下载](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.1/OpenPyCharm-0.1.0-dev.1-windows-x64-setup.exe) |
+
+见[安装说明](docs/installation.md)、[校验和](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.1/SHA256SUMS.txt)
+与[本版验收记录](docs/verification/2026-11-14-preview-release.md)。macOS 实际安装版已通过
+运行、unittest 和调试；Windows 已通过安装和原生启动，Python 桌面工作流仍待验收。
+Mac 应用使用临时签名且未公证，Windows 安装器未签名。
 
 ![OpenPyCharm 原生功能演示](docs/demo/openpycharm-native.gif)
 
-实际录制候选版 **0.1.0-dev.1**，系统 **macOS 27.2 arm64**，Python 3.14.0。
+实际安装版 **0.1.0-dev.1**，系统 **macOS 27.2 arm64**，Python 3.14.0。
 依次展示运行、unittest 结果、断点求值和单步执行，详见[拍摄记录](docs/demo/README.md)。
 每个可发版版本会同步更新实际安装版的演示和版本标记。
 

@@ -1,0 +1,101 @@
+{
+  "sourceCommit": "3b45fda2ceb2a4d81c8eaf1169f953dd8b1b8b5e",
+  "installer": "OpenPyCharm-0.1.0-dev.1-macos-arm64.dmg",
+  "installerSha256": "4b6954fb3a3116b5b05f6933d9e603840de28cce364e6fce42d0c35fda4b9c27",
+  "application": "/Users/wangshubo/Applications/OpenPyCharm.app",
+  "productTreeSha256": "b5888e27d7b389487839266675614243cfb3efe5974ce10d1051581cb0bd799a",
+  "installedFromMountedDmg": true,
+  "adHocSignatureVerified": true,
+  "previousOwnedAppArchived": "build/superseded-9c-installed/OpenPyCharm.app",
+  "schema": 1,
+  "recordedAt": "2026-11-14",
+  "version": "0.1.0-dev.1",
+  "system": "macOS 27.2 arm64",
+  "python": "3.14.0",
+  "profile": "Default OpenPyCharm isolated product profile",
+  "launchedFromInstalledApplication": true,
+  "projectTrustBypassed": false,
+  "referenceInstallationModified": false,
+  "checks": {
+    "nativeProjectOpen": true,
+    "ownExistingProjectRestoredAfterRestart": true,
+    "ownFixtureVenvDetected": true,
+    "run": {
+      "stdout": "OpenPyCharm demo: subtotal=34.00, tax=2.04, total=36.04",
+      "exitCode": 0
+    },
+    "unittest": {
+      "runner": "_jb_unittest_runner.py",
+      "methods": 9,
+      "itemsIncludingSubtests": 20,
+      "status": "passed",
+      "exitCode": 0
+    },
+    "debug": {
+      "breakpoint": "hello_python/calculator.py:20",
+      "subtotal": "Decimal('34.00')",
+      "expression": "subtotal * self.tax_rate",
+      "result": "Decimal('2.0400')",
+      "stepOverToLine": 21,
+      "taxAfterStep": "Decimal('2.04')",
+      "resumeExitCode": 0
+    },
+    "about": {
+      "name": "OpenPyCharm",
+      "platformVersion": "2026.1.4",
+      "build": "PC-261.26222.68",
+      "runtime": "25.0.3+9-b329.124 aarch64"
+    },
+    "postWorkflowProductTreeUnchanged": true,
+    "postWorkflowAdHocSignatureVerified": true,
+    "helperBytecodeFiles": 0,
+    "projectBytecodeCachingRetained": true,
+    "sharedHomeMiscProjectAbsent": true
+  },
+  "log": {
+    "sessionSha256": "ecfbfeb016cdb17355df06a2784e8410da3ee10f35a4f55b6977180201aced8d",
+    "errorCount": 0,
+    "warningCount": 22,
+    "warnings": [
+      "2026-11-14 01:14:57,661 [    617]   WARN - #c.i.p.instanceContainer - InstanceNotOverridableException: Override failed for com.intellij.openapi.project.impl.ProjectStoreFactory: com.intellij.configurationScript.providers.ConfigurationScriptProjectStoreFactory attempts to override com.intellij.configurationStore.PlatformLangProjectStoreFactory, but the existing implementation is not overriddable (not declared as 'open=true')",
+      "2026-11-14 01:14:59,795 [   2751]   WARN - #c.i.i.u.UiThemePaletteCheckBoxScope - Theme Islands Darcula: Checkbox.Background.Default.Dark is deprecated for new UI themes, use Checkbox.Background.Default instead",
+      "2026-11-14 01:14:59,796 [   2752]   WARN - #c.i.i.u.UiThemePaletteCheckBoxScope - Theme Islands Darcula: Checkbox.Border.Default.Dark is deprecated for new UI themes, use Checkbox.Border.Default instead",
+      "2026-11-14 01:14:59,797 [   2753]   WARN - #c.i.i.u.UiThemePaletteCheckBoxScope - Theme Islands Darcula: Checkbox.Border.Selected.Dark is deprecated for new UI themes, use Checkbox.Border.Selected instead",
+      "2026-11-14 01:14:59,799 [   2755]   WARN - #c.i.i.u.UiThemePaletteCheckBoxScope - Theme Islands Darcula: Checkbox.Foreground.Selected.Dark is deprecated for new UI themes, use Checkbox.Foreground.Selected instead",
+      "2026-11-14 01:14:59,799 [   2755]   WARN - #c.i.i.u.UiThemePaletteCheckBoxScope - Theme Islands Darcula: Checkbox.Focus.Wide.Dark is deprecated for new UI themes, use Checkbox.Focus.Wide instead",
+      "2026-11-14 01:14:59,799 [   2755]   WARN - #c.i.i.u.UiThemePaletteCheckBoxScope - Theme Islands Darcula: color key Checkbox.Focus.Thin.Default.Dark is not supported and therefore ignored",
+      "2026-11-14 01:14:59,799 [   2755]   WARN - #c.i.i.u.UiThemePaletteCheckBoxScope - Theme Islands Darcula: color key Checkbox.Focus.Thin.Selected.Dark is not supported and therefore ignored",
+      "2026-11-14 01:14:59,799 [   2755]   WARN - #c.i.i.u.UiThemePaletteCheckBoxScope - Theme Islands Darcula: Checkbox.Background.Disabled.Dark is deprecated for new UI themes, use Checkbox.Background.Disabled instead",
+      "2026-11-14 01:14:59,799 [   2755]   WARN - #c.i.i.u.UiThemePaletteCheckBoxScope - Theme Islands Darcula: Checkbox.Background.Selected.Dark is deprecated for new UI themes, use Checkbox.Background.Selected instead",
+      "2026-11-14 01:14:59,800 [   2756]   WARN - #c.i.i.u.UiThemePaletteCheckBoxScope - Theme Islands Darcula: Checkbox.Border.Disabled.Dark is deprecated for new UI themes, use Checkbox.Border.Disabled instead",
+      "2026-11-14 01:14:59,800 [   2756]   WARN - #c.i.i.u.UiThemePaletteCheckBoxScope - Theme Islands Darcula: Checkbox.Foreground.Disabled.Dark is deprecated for new UI themes, use Checkbox.Foreground.Disabled instead",
+      "2026-11-14 01:15:05,647 [   8603]   WARN - #c.i.p.c.s.s.i.p.UtilsKt - Path /usr/local/Cellar/python is inaccessible",
+      "2026-11-14 01:15:05,653 [   8609]   WARN - #c.i.p.c.s.s.i.p.UtilsKt - Path /Library/Frameworks/Python.framework/Versions is inaccessible",
+      "2026-11-14 01:15:05,655 [   8611]   WARN - #c.i.p.c.s.s.i.p.UtilsKt - Path /System/Library/Frameworks/Python.framework/Versions is inaccessible",
+      "2026-11-14 01:15:09,026 [  11982]   WARN - #c.i.o.a.i.ActionUpdater - 2305 ms to call on BGT ExecutorRegistryImpl$ExecutorAction#presentation@NewUiRunToolbar (com.intellij.execution.ExecutorRegistryImpl$ExecutorAction(id=Debug)) \"Debug\"",
+      "2026-11-14 01:15:09,058 [  12014]   WARN - #c.i.o.a.i.ActionUpdater - 2340 ms to call on BGT ExecutorRegistryImpl$ExecutorAction#presentation@NewUiRunToolbar (com.intellij.execution.ExecutorRegistryImpl$ExecutorAction(id=Run)) \"Run\"",
+      "2026-11-14 01:19:31,639 [ 274595]   WARN - #c.i.w.i.i.WorkspaceModelMessageDeliveryListener - Long WSM event processing. Topic=WorkspaceModelChangeListener, offender=class com.intellij.workspaceModel.ide.impl.legacyBridge.module.LegacyProjectModelListenersBridge, message=beforeChanged, time=1031ms",
+      "2026-11-14 01:19:32,653 [ 275609]   WARN - #c.i.w.i.i.WorkspaceModelMessageDeliveryListener - Long WSM event processing. Topic=WorkspaceModelChangeListener, offender=class com.intellij.psi.impl.file.impl.PsiWsmListener, message=changed, time=1009ms",
+      "2026-11-14 01:19:32,952 [ 275908]   WARN - #c.i.v.g.r.GitRepositoriesHolder - State of repository RepositoryId(projectId=ProjectId#gnmc1i88t421b445v2e5, rootPath=/Users/wangshubo/develop/openpycharm) is not synchronized. Known repositories are: ",
+      "2026-11-14 01:21:42,862 [ 405818]   WARN - #c.i.x.i.f.XFramesView - Frame was not found, it was either hidden without placeholder (class com.intellij.xdebugger.impl.frame.HiddenStackFramesItem) or class com.intellij.platform.debugger.impl.frontend.frame.FrontendXStackFrame must correctly override equals",
+      "2026-11-14 01:22:22,549 [ 445505]   WARN - #c.j.p.d.p.MultiProcessDebugger - Accept timed out"
+    ],
+    "fullLogSha256": "bac91cdd084c96dae1d40d3afc6f8eef7351e5188de11e60b236199e7e148556",
+    "publicRawLogIncluded": false
+  },
+  "ci": {
+    "runId": 43470135186,
+    "headSha": "3b45fda2ceb2a4d81c8eaf1169f953dd8b1b8b5e",
+    "overallConclusion": "success",
+    "macosJob": "success",
+    "windowsJob": "success",
+    "note": "The delivered Mac DMG is the locally built and installed artifact identified above; CI separately passed the same source."
+  },
+  "limitations": [
+    "Full 1:1 acceptance remains open",
+    "Mac app is ad-hoc signed and not notarized",
+    "Windows native Python Run/Test/Debug remains unverified",
+    "Warnings are retained; no claim of warning-free startup",
+    "About currently shows the upstream platform version; the release version is in the build manifest"
+  ]
+}

@@ -10,12 +10,24 @@ verification.
 
 **Development is in progress. Full 1:1 parity is not yet verified.** See the
 [acceptance matrix](docs/acceptance.md) for pending native workflows and framework,
-database, notebook, frontend and remote-development work. Installers are not
-published until their evidence is ready.
+database, notebook, frontend and remote-development work.
+
+First native preview: [v0.1.0-dev.1](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.1).
+
+| System | Installer |
+| --- | --- |
+| macOS Apple silicon | [DMG](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.1/OpenPyCharm-0.1.0-dev.1-macos-arm64.dmg) |
+| Windows x64 | [EXE](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.1/OpenPyCharm-0.1.0-dev.1-windows-x64-setup.exe) |
+
+See [installation](docs/installation.md), [checksums](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.1/SHA256SUMS.txt)
+and [release verification](docs/verification/2026-11-14-preview-release.md).
+macOS Run/unittest/Debug passed in the installed app. Windows installation and
+native startup passed; Python desktop workflows remain unverified there.
+The Mac app is ad-hoc signed and not notarized; the Windows installer is unsigned.
 
 ![OpenPyCharm native workflow](docs/demo/openpycharm-native.gif)
 
-Native development-candidate capture: **0.1.0-dev.1**, **macOS 27.2 arm64**,
+Actual installed-app capture: **0.1.0-dev.1**, **macOS 27.2 arm64**,
 Python 3.14.0. Run, unittest results, breakpoint evaluation and Step Over.
 [Capture details](docs/demo/README.md). The demo is refreshed for each publishable version.
 

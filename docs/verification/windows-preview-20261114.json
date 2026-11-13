@@ -1,0 +1,143 @@
+{
+  "schema": 1,
+  "recordedAt": "2026-11-14T01:20:40+08:00",
+  "status": "verified-downloaded-windows-ci-preview",
+  "ci": {
+    "repository": "shubolab/openpycharm",
+    "runId": 43470135186,
+    "headSha": "3b45fda2ceb2a4d81c8eaf1169f953dd8b1b8b5e",
+    "jobId": 132039549680,
+    "jobUrl": "https://github.com/shubolab/openpycharm/actions/runs/43470135186/job/132039549680",
+    "jobConclusion": "success",
+    "jobCompletedAt": "2026-11-14T01:14:19+08:00",
+    "repositoryTestsPassed": 49,
+    "fixtureTestsPassed": 9,
+    "repositoryTestsRun": 51,
+    "repositoryTestsSkipped": 2,
+    "skippedChecks": [
+      "Windows does not preserve POSIX executable modes",
+      "Read-only helper directory import test requires macOS/Linux filesystem permissions and a normal user"
+    ]
+  },
+  "artifact": {
+    "id": 14061175799,
+    "name": "OpenPyCharm-windows-x64-3b45fda2ceb2a4d81c8eaf1169f953dd8b1b8b5e",
+    "url": "https://github.com/shubolab/openpycharm/actions/runs/43470135186/artifacts/14061175799",
+    "bytes": 597644684,
+    "sha256": "bb5dc02b4e84814e6ba39c68ac781571d19082fc524223cd95cdbd1d7b8c3c02",
+    "matchesGitHubUploadDigest": true,
+    "localArchive": ".tools/ci/final-3b45/windows-artifact-14061175799.zip"
+  },
+  "installer": {
+    "name": "OpenPyCharm-0.1.0-dev.1-windows-x64-setup.exe",
+    "version": "0.1.0-dev.1",
+    "target": "windows-x64",
+    "bytes": 596721591,
+    "sha256": "97249b3e261bf9d427a39cd1ad6652d780ea5d507e35a168cf8e2c490326d374",
+    "receiptAndChecksumSidecarMatch": true,
+    "localPath": ".tools/ci/final-3b45/artifact/installers/OpenPyCharm-0.1.0-dev.1-windows-x64-setup.exe",
+    "productTreeSha256": "acbe9a1b2c3f48975ec25f06ec94d5c6bf1131088466e907be7e2ab8432aa14f",
+    "checksRecordedInCI": [
+      "pinned-Inno-Setup",
+      "official-tool-Authenticode",
+      "executable-installer",
+      "silent-install-file-identity",
+      "installed-native-startup"
+    ],
+    "installationLogReportsSuccess": true,
+    "silentUninstallProcessReturnedSuccessfully": true,
+    "uninstallDetailedLogBytes": 0,
+    "codeSigned": false
+  },
+  "sourceBinding": {
+    "sourceCommit": "3b45fda2ceb2a4d81c8eaf1169f953dd8b1b8b5e",
+    "productManifestSha256": "9053f558896a73611843624f731ebb12ba872f296211690f1b5ce953b26eaa70",
+    "assembledAndInstallerManifestCopiesIdentical": true,
+    "capturedInputCount": 31,
+    "gitBlobByteMatches": 26,
+    "exactLFToCRLFCheckoutMatches": [
+      "LICENSE",
+      "NOTICE",
+      "product/icon.svg",
+      "product/windows/openpycharm.iss",
+      "requirements-build.txt"
+    ],
+    "unexplainedDifferences": [],
+    "note": "Windows receipt captures raw checkout bytes. Five listed files match exactly after LF-to-CRLF conversion; executable inputs otherwise match the frozen commit byte-for-byte."
+  },
+  "upstream": {
+    "product": "PC",
+    "build": "261.26222.68",
+    "sourceCommit": "456919a9624bae72ac12efafc35d2b916cb0c5c5",
+    "archiveSha256": "01bd83cf9987c7ffc3b03f31112f310c28d2942c95d3d30a137d89e2d73a8b54"
+  },
+  "installedStartup": {
+    "status": "passed-startup",
+    "receipt": ".tools/ci/final-3b45/artifact/installers/provenance/0.1.0-dev.1-windows-x64/installed-startup/startup.json",
+    "productManifestSha256": "9053f558896a73611843624f731ebb12ba872f296211690f1b5ce953b26eaa70",
+    "nativeLauncher": "bin/pycharm64.exe",
+    "productIdentity": true,
+    "vendorIdentity": true,
+    "isolatedPaths": {
+      "config": true,
+      "system": true,
+      "plugins": true,
+      "log": true
+    },
+    "loadedPlugins": {
+      "Python Community Edition": true,
+      "Git": true,
+      "Terminal": true
+    },
+    "errorCount": 0,
+    "warningCount": 1,
+    "knownWarning": "Upstream Configuration Script ProjectStoreFactory override is not declared open.",
+    "projectTrustBypassed": false,
+    "projectOpenRequested": true,
+    "projectOpenedInLog": false,
+    "elapsedSeconds": 11.36,
+    "cleanup": {
+      "mode": "owned-windows-job",
+      "pid": 556,
+      "exitCode": 0
+    },
+    "logSha256": "0cdbe63f030b541eb41f8a8eadf10fb51365dcd26b6240a3a8bdaf0daa4fd3e2",
+    "downloadedLogHashVerified": true
+  },
+  "assembledStartup": {
+    "status": "passed-startup",
+    "errorCount": 0,
+    "warningCount": 1,
+    "logSha256": "ec3e73c6283d07edcff9cffb1eb905e3bceb7dcfa22052dd787425e3ebe451ea",
+    "downloadedLogHashVerified": true
+  },
+  "staticPE": {
+    "evidenceId": "ev_abd9c6445f094961b06df40064f9ef6b2f3ae406d9ee92906e601377a0600b9b",
+    "format": "PE32",
+    "machine": "0x014c (x86 installer bootstrap)",
+    "resourceCount": 31,
+    "iconGroupCount": 1,
+    "prefixBytes": 893952,
+    "prefixSha256": "2cc3e9711d044ccac7115f4a48cc9089047f506e7d53cea7f33038d08a140c13",
+    "derivation": "Exact original byte range [0, max section PointerToRawData+SizeOfRawData); excludes only appended Inno installer payload. Original unchanged.",
+    "limitation": "Resource inventory covers the exact PE image prefix, not appended Inno payload. The complete installer hash is separately verified. No Windows executable was run on the audit Mac."
+  },
+  "limitations": [
+    "Installer is unsigned.",
+    "Windows Run/Test/Debug desktop workflows and full UI parity remain unverified.",
+    "The normal project-trust dialog was not bypassed; this bounded installed startup did not establish that the project opened.",
+    "CI executed silent uninstall successfully; its detailed uninstall log is empty, so independent uninstall residue acceptance is not claimed.",
+    "This record verifies the Windows artifact only and does not assert completion of the macOS CI job or full product acceptance."
+  ],
+  "previousRunFailure": {
+    "runId": 43466034301,
+    "headSha": "9c5343e9b30ce5254fdd28383e4e28776c1507fa",
+    "windowsJobConclusion": "success",
+    "macosJobId": 132029796522,
+    "macosJobConclusion": "cancelled",
+    "macosJobHadBuildSteps": false,
+    "failureAnnotation": "The job was not acquired by Runner of type hosted even after multiple attempts",
+    "capacityNotice": "Due to capacity constraints, jobs targeting macOS arm64 runners may experience longer queue times.",
+    "classification": "hosted-runner-capacity; no macOS product build executed"
+  }
+}
