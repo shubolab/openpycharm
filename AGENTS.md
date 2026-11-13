@@ -12,5 +12,6 @@ Build an independent native Python IDE matching the installed PyCharm 2026.1.4.
 - Keep at least 20 GiB free before large builds. Reuse pinned downloads and compact evidence; retain the latest verified installer and app.
 - Delivered versions need actual macOS DMG and Windows EXE installers, checksums, installation instructions, and GitHub Release evidence. Mark unverified platforms explicitly.
 - Maintain English and clear Chinese READMEs with real native example captures. Never use mock screenshots as runtime evidence.
+- User explicitly requires the feature-demo GIF in README to be updated with each publishable release. Capture the actual installed version and state its version, OS and workflow; retain the capture manifest.
 
 Checks: python3 -m unittest discover -s tests -v; fixture tests; authenticated native product build; real Python edit/run/test/debug desktop checks.

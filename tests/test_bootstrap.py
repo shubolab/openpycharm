@@ -125,6 +125,28 @@ class BootstrapTests(unittest.TestCase):
                     bootstrap.extract_windows(archive, staging)
         self.assertFalse((self.root / "escaped").exists())
 
+    def test_windows_archive_accepts_a_product_at_archive_root(self):
+        self.check_windows_archive_layout("")
+
+    def test_windows_archive_accepts_a_wrapped_product_root(self):
+        self.check_windows_archive_layout("pycharm-2026.1.4/")
+
+    def check_windows_archive_layout(self, prefix):
+        archive = self.root / "valid-windows-sdk.zip"
+        metadata = b'{"productCode":"PC","version":"2026.1.4"}'
+        with zipfile.ZipFile(archive, "w") as bundle:
+            bundle.writestr(prefix + "product-info.json", metadata)
+            bundle.writestr(prefix + "bin/pycharm64.exe", b"native launcher")
+            bundle.writestr(prefix + "plugins/python-ce/lib/python-ce.jar", b"python plugin")
+        staging = self.root / "valid-staging"
+        staging.mkdir()
+        sdk = bootstrap.extract_windows(archive, staging)
+        self.assertEqual(sdk, staging / "pycharm")
+        self.assertEqual((sdk / "product-info.json").read_bytes(), metadata)
+        self.assertEqual((sdk / "bin/pycharm64.exe").read_bytes(), b"native launcher")
+        self.assertEqual((sdk / "plugins/python-ce/lib/python-ce.jar").read_bytes(), b"python plugin")
+        self.assertEqual(list(staging.iterdir()), [sdk])
+
 
 if __name__ == "__main__":
     unittest.main()

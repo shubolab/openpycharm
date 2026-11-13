@@ -13,6 +13,12 @@ verification.
 database, notebook, frontend and remote-development work. Installers are not
 published until their evidence is ready.
 
+![OpenPyCharm native workflow](docs/demo/openpycharm-native.gif)
+
+Native development-candidate capture: **0.1.0-dev.1**, **macOS 27.2 arm64**,
+Python 3.14.0. Run, unittest results, breakpoint evaluation and Step Over.
+[Capture details](docs/demo/README.md). The demo is refreshed for each publishable version.
+
 ## Build
 
 Python 3.10+ is required to assemble the product. The application includes its

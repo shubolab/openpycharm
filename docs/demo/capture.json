@@ -1,0 +1,35 @@
+{
+  "productVersion": "0.1.0-dev.1",
+  "upstreamVersion": "2026.1.4",
+  "upstreamBuild": "PC-261.26222.68",
+  "system": "macOS 27.2 arm64",
+  "python": "3.14.0",
+  "captureDate": "2026-11-13",
+  "method": "Real native OpenPyCharm app screenshots assembled into an animated sequence",
+  "states": [
+    "Python Run exited 0",
+    "Native unittest tree: 20 items passed / 9 methods",
+    "Breakpoint, stack, locals and Decimal expression evaluation",
+    "Step over to next line"
+  ],
+  "captures": [
+    {
+      "file": "run.png",
+      "sha256": "692cdda59194edae54b7555fbaf95a567fb3e250f934f0c7493609564d632762"
+    },
+    {
+      "file": "tests.png",
+      "sha256": "ca1f1deec5cd1e63bd77fbe3086a1bbdde053f674b96b5c35ca01213087523b8"
+    },
+    {
+      "file": "debug.png",
+      "sha256": "ce3ff7e32147d0fc0f8b1cdc28d1df12e6de0300282363777e770c81486cd905"
+    },
+    {
+      "file": "step.png",
+      "sha256": "c8480df887d435eacab164517b301af065f919cd941e8590750a5d05fd8b7fc1"
+    }
+  ],
+  "gifSha256": "3404c697a3713cdc0b415b6098bbc3ee8085e2bb525e7f954c9870d7ff6fbfec",
+  "releaseStatus": "development candidate; refresh captures for the published release"
+}

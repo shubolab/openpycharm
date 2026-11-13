@@ -157,7 +157,8 @@ def extract_windows(archive: Path, staging: Path) -> Path:
         raise ValueError("SDK zip must contain one product root")
     sdk = staging / "pycharm"
     candidates[0].rename(sdk)
-    shutil.rmtree(unpacked)
+    if unpacked.exists():
+        shutil.rmtree(unpacked)
     return sdk
 
 

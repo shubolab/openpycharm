@@ -158,10 +158,13 @@ def log_observation(text: str, profile: Path, project: Path, build: str) -> dict
         matches = re.findall(r"^\s*idea\." + name + r"\.path=(.+)$", text, re.MULTILINE)
         paths[name] = any(normalized(value.split(" -> ", 1)[0].strip()) == normalized(str(profile / name))
                           for value in matches)
-    errors = [line for line in text.splitlines() if re.search(r"\b(?:ERROR|SEVERE)\s+-", line)]
-    warnings = [line for line in text.splitlines() if re.search(r"\bWARN\s+-", line)]
-    identity = bool(re.search(r"IDE: OpenPyCharm \(build #PC-" + re.escape(build) + r"\b", text))
-    vendor = "-Didea.vendor.name=OpenPyCharm" in text
+    severity = re.compile(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d+ \[\s*\d+\]\s+(ERROR|SEVERE|WARN)\s+-")
+    levels = [(line, match.group(1)) for line in text.splitlines() if (match := severity.search(line))]
+    errors = [line for line, level in levels if level in {"ERROR", "SEVERE"}]
+    warnings = [line for line, level in levels if level == "WARN"]
+    identity = bool(re.search(r"IDE: OpenPyCharm \(build #PC-" + re.escape(build) + r"(?:,|\))", text))
+    vendor = any(re.search(r"-Didea\.vendor\.name=OpenPyCharm(?=[,\]\s]|$)", line)
+                 for line in text.splitlines() if "JVM options:" in line)
     project_requested = normalized(str(project)) in normalized(text)
     project_opened = bool(re.search(r"Project " + re.escape(project.name) + r" was added to the list of open projects", text))
     return {"ideStarted": "IDE STARTED" in text, "productIdentity": identity,
@@ -172,9 +175,13 @@ def log_observation(text: str, profile: Path, project: Path, build: str) -> dict
 
 
 def startup_ready(observation: dict) -> bool:
-    return (observation["ideStarted"] and observation["productIdentity"] and observation["vendorIdentity"]
-            and all(observation["isolatedPaths"].values()) and all(observation["loadedPlugins"].values())
-            and observation["projectOpenRequested"])
+    return (all(observation.get(key, False) for key in
+                ("ideStarted", "productIdentity", "vendorIdentity", "projectOpenRequested"))
+            and all(observation.get("isolatedPaths", {}).get(name, False)
+                    for name in ("config", "system", "plugins", "log"))
+            and all(observation.get("loadedPlugins", {}).get(name, False)
+                    for name in ("Python Community Edition", "Git", "Terminal"))
+            and observation.get("errorCount", 1) == 0)
 
 
 def run_smoke(app: Path, profile: Path | None = None, *, timeout: int = 120, observe: int = 10) -> dict:

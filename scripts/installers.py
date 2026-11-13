@@ -173,6 +173,7 @@ def windows_installer(product: Path, image: Path, proof: Path, version: str, ver
         if stream.read(2) != b"MZ":
             raise ValueError("Inno Setup output has no Windows executable header")
     checks = ["pinned-Inno-Setup", "official-tool-Authenticode", "executable-installer"]
+    startup = None
     if verify_install:
         # Intended for a fresh CI VM: installation registers this product for the
         # current Windows user. Never silently run it on an existing user install.
@@ -185,11 +186,24 @@ def windows_installer(product: Path, image: Path, proof: Path, version: str, ver
                     if source.is_file() and sha256(source) != sha256(installed / source.relative_to(product)):
                         raise ValueError("Installed product file differs: " + str(source.relative_to(product)))
                 checks.append("silent-install-file-identity")
+                from runtime_smoke import run_smoke
+                startup_profile = proof / "installed-startup"
+                observed = run_smoke(installed, startup_profile)
+                startup = {"status": observed["status"], "receipt": "installed-startup/startup.json",
+                           "productManifestSha256": observed["productManifestSha256"],
+                           "projectTrustBypassed": observed["projectTrustBypassed"]}
+                checks.append("installed-native-startup")
             finally:
                 uninstaller = installed / "unins000.exe"
                 if uninstaller.is_file():
                     run([uninstaller, "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART"], proof / "windows-uninstall.log")
+                # The owned startup process has stopped. Keep logs/config and
+                # its receipt, rather than uploading disposable index caches.
+                system_cache = proof / "installed-startup/system"
+                if system_cache.is_dir() and not system_cache.is_symlink():
+                    shutil.rmtree(system_cache)
     return {"tool": {**INNO, "compilerSha256": sha256(compiler)}, "checks": checks,
+            "installedStartup": startup,
             "limitations": ["Installer is not code signed", "Windows native Python Run/Test/Debug and UI acceptance remain open"]}
 
 

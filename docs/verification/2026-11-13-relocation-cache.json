@@ -1,0 +1,92 @@
+{
+  "schema": 1,
+  "status": "unresolved",
+  "sourceCheckpoint": "acf6722",
+  "observed": [
+    "The original development profile first ran nine unittest methods, then after moving the same product family from build/product to build/final, current-file execution selected Python Script and more editor warnings were observed by the root agent.",
+    "SDK table preserved five existing class roots; global and project workspace caches contained final app typeshed paths. Stdlib unittest/case.py and bundled typeshed unittest/case.pyi existed.",
+    "A fresh system/index profile copied only the saved SDK table, opened the same fixture with the same final app and Python 3.14, and the root agent observed native unittest execution of all nine methods and one editor warning.",
+    "The copied SDK table initially pointed at old development python_stubs; the updater logged replacement with relocation-control/system/python_stubs.",
+    "Final PythonCore fast-loader descriptor exactly matched the intended policy transformation of the original SDK: removing the Pro suggestion provider and Grazie integration. All run/test producer registrations remained."
+  ],
+  "inferences": [
+    "The profile state or index/cache contents are a candidate discriminator. The exact component causing the old-profile regression is not yet identified."
+  ],
+  "ruledOut": [
+    "The .idea/hello-python.iml MODULE_DIR spelling is valid. The pinned PathMacroUtil.getModuleDir deliberately maps an iml in .idea to its project parent; the workspace JPS reader uses ModulePathMacroManager.",
+    "Bundled .pyi stub roots:[] alone does not establish missing stdlib: it occurred in the initially working baseline and the saved SDK contains an explicit typeshed stdlib root."
+  ],
+  "sourceFindings": [
+    {
+      "url": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/lang-impl/src/com/intellij/util/indexing/projectFilter/ProjectIndexableFilesFilterHealthCheck.kt",
+      "finding": "The old-path 1310-file report is a false-positive filter group. The source explicitly permits lazy stale membership and fixes membership before logging. This report cannot by itself prove the type/test regression cause."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/lang-impl/src/com/intellij/util/indexing/projectFilter/PersistentProjectIndexableFilesFilter.kt",
+      "finding": "Persistent filter framing validates format and VFS creation timestamp. Scanner dependency tokens separately govern reuse. A home-path-specific invalidation repair is not justified by this file alone."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/jps/model-serialization/src/org/jetbrains/jps/model/serialization/PathMacroUtil.java",
+      "finding": "MODULE_DIR special-cases an iml stored directly in .idea."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/platform-impl/src/com/intellij/workspaceModel/ide/impl/jps/serialization/CachingJpsFileContentReader.kt",
+      "finding": "The current workspace reader delegates iml expansion to ModulePathMacroManager."
+    }
+  ],
+  "remaining": [
+    "Compare read-only diagnostic plugin module membership/SDK/PSI/test-producer reports on old and fresh profiles.",
+    "Do not silently delete user caches or modify project roots based on the unproven initial path hypothesis.",
+    "A complete application relocation regression and source-correlated durable fix remain open."
+  ],
+  "logs": {
+    "development": {
+      "path": ".state/development/log/idea.log",
+      "snapshotSha256": "75007d188faff49846821d5318953ab77956935025e5d989a734c843f7beec89",
+      "excerptRecords": [
+        {
+          "startLine": 994,
+          "text": "2026-11-13 23:32:33,978 [ 167437] SEVERE - #c.i.u.IdempotenceChecker - Non-idempotent computation: it returns different results when invoked multiple times or on different threads:\n  0 != 1\n  which is length of [] and [PyFunction('subTest')@0]\n\nRecomputation gives [PyFunction('subTest')@0] (interface com.intellij.psi.ResolveResult[]) which is equivalent to 'fresh'\nRecomputation log:\n  Resolving PyQualifiedReference(PyReferenceExpression: subTest,com.jetbrains.python.psi.resolve.PyResolveContext@69fc47fe) of class com.jetbrains.python.psi.impl.references.PyQualifiedReference (class com.jetbrains.python.psi.impl.references.PyQualifiedReference) [Plugin: PythonCore]\ncom.intellij.diagnostic.PluginException: Non-idempotent computation: it returns different results when invoked multiple times or on different threads:"
+        },
+        {
+          "startLine": 1001,
+          "text": "com.intellij.diagnostic.PluginException: Non-idempotent computation: it returns different results when invoked multiple times or on different threads:\n  0 != 1\n  which is length of [] and [PyFunction('subTest')@0]\n\nRecomputation gives [PyFunction('subTest')@0] (interface com.intellij.psi.ResolveResult[]) which is equivalent to 'fresh'\nRecomputation log:\n  Resolving PyQualifiedReference(PyReferenceExpression: subTest,com.jetbrains.python.psi.resolve.PyResolveContext@69fc47fe) of class com.jetbrains.python.psi.impl.references.PyQualifiedReference (class com.jetbrains.python.psi.impl.references.PyQualifiedReference) [Plugin: PythonCore]\n\tat com.intellij.diagnostic.PluginProblemReporterImpl.createPluginExceptionByClass(PluginProblemReporterImpl.java:23)"
+        },
+        {
+          "startLine": 1437,
+          "text": "2026-11-13 23:37:30,329 [   9856] SEVERE - #c.i.s.ComponentManagerImpl - com.intellij.ui.jcef.JBCefApp$Holder <clinit> requests com.intellij.util.net.internal.ProxyMigrationService instance. Class initialization must not depend on services. Consider using instance of the service on-demand instead.\njava.lang.Throwable: com.intellij.ui.jcef.JBCefApp$Holder <clinit> requests com.intellij.util.net.internal.ProxyMigrationService instance. Class initialization must not depend on services. Consider using instance of the service on-demand instead.\n\tat com.intellij.openapi.diagnostic.Logger.error(Logger.java:375)\n\tat com.intellij.serviceContainer.ComponentManagerImplKt.checkOutsideClassInitializer(ComponentManagerImpl.kt:1724)\n\tat com.intellij.serviceContainer.ComponentManagerImplKt.getOrCreateInstanceBlocking(ComponentManagerImpl.kt:1680)\n\tat com.intellij.serviceContainer.ComponentManagerImpl.doGetService(ComponentManagerImpl.kt:803)\n\tat com.intellij.serviceContainer.ComponentManagerImpl.getService(ComponentManagerImpl.kt:741)\n\tat com.intellij.util.net.internal.ProxyMigrationService$Companion.getInstance(ProxyMigrationService.kt:19)"
+        },
+        {
+          "startLine": 1438,
+          "text": "java.lang.Throwable: com.intellij.ui.jcef.JBCefApp$Holder <clinit> requests com.intellij.util.net.internal.ProxyMigrationService instance. Class initialization must not depend on services. Consider using instance of the service on-demand instead.\n\tat com.intellij.openapi.diagnostic.Logger.error(Logger.java:375)\n\tat com.intellij.serviceContainer.ComponentManagerImplKt.checkOutsideClassInitializer(ComponentManagerImpl.kt:1724)\n\tat com.intellij.serviceContainer.ComponentManagerImplKt.getOrCreateInstanceBlocking(ComponentManagerImpl.kt:1680)\n\tat com.intellij.serviceContainer.ComponentManagerImpl.doGetService(ComponentManagerImpl.kt:803)\n\tat com.intellij.serviceContainer.ComponentManagerImpl.getService(ComponentManagerImpl.kt:741)\n\tat com.intellij.util.net.internal.ProxyMigrationService$Companion.getInstance(ProxyMigrationService.kt:19)\n\tat com.intellij.util.net.internal.ProxyMigrationService.getInstance(ProxyMigrationService.kt)"
+        },
+        {
+          "startLine": 1159,
+          "text": "2026-11-13 23:35:21,612 [ 335071]   INFO - #c.i.u.i.p.ProjectIndexableFilesFilterHealthCheck - Following files are NOT indexable but they were found in filter. Errors count: 21. Examples:\nfile id=273 path=/Users/wangshubo/develop/openpycharm/fixtures/hello-python/.venv\nfile id=274 path=/Users/wangshubo/develop/openpycharm/fixtures/hello-python/.venv/lib\nfile id=275 path=/Users/wangshubo/develop/openpycharm/fixtures/hello-python/.venv/CACHEDIR.TAG\nfile id=276 path=/Users/wangshubo/develop/openpycharm/fixtures/hello-python/.venv/.gitignore\nfile id=277 path=/Users/wangshubo/develop/openpycharm/fixtures/hello-python/.venv/pyvenv.cfg\n...\n2026-11-13 23:36:53,586 [ 427045]   INFO - #c.i.o.u.r.RegistryValue - Registry value 'i18n.locale' has changed to '' by SYSTEM"
+        },
+        {
+          "startLine": 1785,
+          "text": "2026-11-13 23:42:30,952 [ 310479]   INFO - #c.i.u.i.p.ProjectIndexableFilesFilterHealthCheck - Following files are NOT indexable but they were found in filter. Errors count: 1310. Examples:\nfile id=865 path=/Users/wangshubo/develop/openpycharm/build/product/OpenPyCharm.app/Contents/plugins/python-ce/helpers/typeshed/stdlib\nfile id=871 path=/Users/wangshubo/develop/openpycharm/build/product/OpenPyCharm.app/Contents/plugins/python-ce/helpers/typeshed/stdlib/inspect.pyi\nfile id=872 path=/Users/wangshubo/develop/openpycharm/build/product/OpenPyCharm.app/Contents/plugins/python-ce/helpers/typeshed/stdlib/time.pyi\nfile id=873 path=/Users/wangshubo/develop/openpycharm/build/product/OpenPyCharm.app/Contents/plugins/python-ce/helpers/typeshed/stdlib/bisect.pyi\nfile id=874 path=/Users/wangshubo/develop/openpycharm/build/product/OpenPyCharm.app/Contents/plugins/python-ce/helpers/typeshed/stdlib/abc.pyi\n...\n2026-11-13 23:44:22,513 [ 422040]   INFO - #c.i.i.p.m.MarketplaceRequests - Looking for the last compatible plugin updates for:"
+        }
+      ]
+    },
+    "relocation-control": {
+      "path": ".state/relocation-control/log/idea.log",
+      "snapshotSha256": "c0a25ff071eef10d6a26bb92cd5c0184b3bf360232b26c7412e237dab3eb90cc",
+      "excerptRecords": [
+        {
+          "startLine": 107,
+          "text": "2026-11-13 23:47:56,709 [  59191]   INFO - #c.i.w.i.i.l.m.ModuleBridgeLoaderService - Workspace model loaded without cache. Loading real project state into workspace model. Thread[#27,DefaultDispatcher-worker-5,5,main]\n2026-11-13 23:47:56,914 [  59396]   INFO - #c.i.w.i.i.GlobalWorkspaceModel - Sync global entities with mutable entity storage\n2026-11-13 23:47:56,951 [  59433]   INFO - #c.i.w.i.i.l.l.ProjectLibraryTableBridgeImpl - Initial load of project-level (project=hello-python) libraries. There are 0 libraries to load.\n2026-11-13 23:47:56,953 [  59435]   INFO - #c.i.w.i.i.j.s.JpsProjectModelSynchronizer - Attempt 1: Apply JPS storage (iml files)\n2026-11-13 23:47:57,683 [  60165]   INFO - sun.awt.AWTThreading - InvocationEvent has timed out (awaiting 1002 ms). Originated at java.desktop/sun.lwawt.macosx.CAccessibility.getFocusOwner(CAccessibility.java:648)\n2026-11-13 23:47:57,714 [  60196]   INFO - #c.i.o.w.i.ProjectFrameHelper - Creating status bar\n2026-11-13 23:47:57,732 [  60214]   INFO - #c.i.o.w.i.ProjectFrameHelper - Status bar created\n2026-11-13 23:47:57,740 [  60222]   INFO - #c.i.o.w.i.ProjectFrameHelper - Setting project frame to Project(name=hello-python, containerState=PRE_INIT, componentStore=/Users/wangshubo/develop/openpycharm/fixtures/hello-python)"
+        },
+        {
+          "startLine": 351,
+          "text": "2026-11-13 23:48:13,989 [  76471]   WARN - #c.i.o.a.ApplicationManager - Cannot execute background write action in 10 seconds. Thread dump is stored in file:///Users/wangshubo/develop/openpycharm/.state/relocation-control/log/bg-wa/thread-dump-706565205.txt\n2026-11-13 23:48:43,392 [ 105874]   INFO - #c.i.i.p.i.ProjectViewInitNotifier - Project View initialization started\n2026-11-13 23:48:43,547 [ 106029]   INFO - #c.i.i.p.i.ProjectViewInitNotifier - Project View initialization completed\n2026-11-13 23:48:43,893 [ 106375]   INFO - #c.i.o.p.MergingQueueGuiExecutor - Running task: (dumb mode task) com.jetbrains.python.psi.impl.PythonLanguageLevelPusher$MyDumbModeTask@3440f4e9\n2026-11-13 23:48:43,917 [ 106399]   INFO - #c.i.o.p.MergingQueueGuiExecutor - Task finished: (dumb mode task) com.jetbrains.python.psi.impl.PythonLanguageLevelPusher$MyDumbModeTask@3440f4e9\n2026-11-13 23:48:43,918 [ 106400]   INFO - #c.i.o.p.MergingQueueGuiExecutor - Running task: (dumb mode task) UnindexedFilesIndexer[hello-python, reasons: [On project open, On refresh of files in hello-python]]\n2026-11-13 23:48:43,921 [ 106403]   INFO - #c.i.u.i.FileBasedIndexImpl - Indexes are already loaded\n2026-11-13 23:48:43,953 [ 106435]   INFO - #c.i.u.i.c.IndexUpdateRunner - Using 7 workers for indexing and 4 for writing indexes"
+        },
+        {
+          "startLine": 475,
+          "text": "2026-11-13 23:51:23,270 [ 265752]   INFO - #c.j.p.c.BeforeFileOpenLoggerListener - fileOpened test_calculator.py\n2026-11-13 23:51:45,615 [ 288097]   INFO - #c.i.o.p.DumbServiceImpl - enter dumb mode [hello-python]\n2026-11-13 23:51:45,625 [ 288107]   INFO - #c.i.o.p.MergingQueueGuiExecutor - Running task: (dumb mode task) com.intellij.openapi.roots.impl.PushedFilePropertiesUpdaterImpl$MyDumbModeTask@4e785a50 (reason: Push on VFS changes)\n2026-11-13 23:51:45,676 [ 288158]   INFO - #c.i.o.p.MergingQueueGuiExecutor - Task finished: (dumb mode task) com.intellij.openapi.roots.impl.PushedFilePropertiesUpdaterImpl$MyDumbModeTask@4e785a50 (reason: Push on VFS changes)\n2026-11-13 23:51:45,803 [ 288285]   INFO - #c.i.o.p.DumbServiceImpl - exit dumb mode [hello-python]\n2026-11-13 23:52:58,960 [ 361442]   INFO - #c.i.u.i.p.ProjectIndexableFilesFilterHealthCheck - Following files are NOT indexable but they were found in filter. Errors count: 112. Examples:\nfile id=25 path=/Users/wangshubo/develop/openpycharm/.state/development/system/python_stubs/-1323336871\nfile id=55 path=/Users/wangshubo/develop/openpycharm/.state/development/system/python_stubs/-1323336871/_random.py"
+        }
+      ]
+    }
+  }
+}

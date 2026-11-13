@@ -10,6 +10,12 @@
 待验证的原生工作流，以及框架、数据库、Notebook、前端与远程开发等工作。
 安装包通过实际检查后再发布。
 
+![OpenPyCharm 原生功能演示](docs/demo/openpycharm-native.gif)
+
+实际录制候选版 **0.1.0-dev.1**，系统 **macOS 27.2 arm64**，Python 3.14.0。
+依次展示运行、unittest 结果、断点求值和单步执行，详见[拍摄记录](docs/demo/README.md)。
+每个可发版版本会同步更新实际安装版的演示和版本标记。
+
 ## 本机构建
 
 打包需要 Python 3.10 或更新版本，并在构建空间之外保留至少 20 GiB 可用磁盘。
