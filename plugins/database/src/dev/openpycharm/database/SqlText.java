@@ -2,6 +2,8 @@ package dev.openpycharm.database;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.Locale;
 
 /** Statement boundaries preserve quoted SQL, comments and PostgreSQL dollar strings. */
 public final class SqlText {
@@ -67,7 +69,25 @@ public final class SqlText {
       String escaped=single(text,engine==DatabaseProfile.Engine.POSTGRESQL,true);
       if(!standard.equals(escaped))throw new IllegalArgumentException("Ambiguous backslash-escaped SQL; use standard doubled quotes");
     }
+    String first=leadingKeyword(standard,engine==DatabaseProfile.Engine.POSTGRESQL);
+    if(Set.of("ABORT","BEGIN","START","COMMIT","END","ROLLBACK","SAVEPOINT","RELEASE","SET","PREPARE","DISCARD","LOCK","UNLOCK").contains(first))
+      throw new IllegalArgumentException("Use Begin transaction, Commit and Rollback buttons; direct transaction/session-control SQL is not supported in this console");
     return standard;
+  }
+  private static String leadingKeyword(String text,boolean nested) {
+    int i=0;
+    while(i<text.length()) {
+      if(Character.isWhitespace(text.charAt(i))){i++;continue;}
+      if(text.startsWith("--",i)){int n=text.indexOf('\n',i+2);i=n<0?text.length():n+1;continue;}
+      if(text.startsWith("/*",i)){
+        int depth=1;i+=2;
+        while(i<text.length()&&depth>0){if(nested&&text.startsWith("/*",i)){depth++;i+=2;}else if(text.startsWith("*/",i)){depth--;i+=2;}else i++;}
+        continue;
+      }
+      int start=i;while(i<text.length()&&Character.isJavaIdentifierPart(text.charAt(i)))i++;
+      return text.substring(start,i).toUpperCase(Locale.ROOT);
+    }
+    return "";
   }
   public static String atCaret(String text,int caret) {
     List<Span> parts=statements(text);

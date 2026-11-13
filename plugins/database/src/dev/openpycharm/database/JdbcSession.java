@@ -13,8 +13,12 @@ public final class JdbcSession implements AutoCloseable {
   public static final int MAX_ROWS=500, MAX_COLUMNS=100, MAX_CELL=4096, MAX_RESULT_CHARS=2*1024*1024;
   private Connection connection;
   private DatabaseProfile.Engine engine;
-  private volatile Statement active;
-  private final AtomicBoolean cancelled = new AtomicBoolean();
+  public static final class CancelTicket {
+    private final Statement statement;
+    private final AtomicBoolean cancelled=new AtomicBoolean();
+    private CancelTicket(Statement s){statement=s;}
+  }
+  private volatile CancelTicket active;
   private final ScheduledExecutorService deadline=Executors.newSingleThreadScheduledExecutor(r->{Thread t=new Thread(r,"OpenPyCharm-JDBC-deadline");t.setDaemon(true);return t;});
   public record Result(List<String> columns,List<List<String>> rows,int updateCount,boolean truncated,long elapsedMillis) {}
   public record Table(String catalog,String schema,String name,String type) {
@@ -43,17 +47,24 @@ public final class JdbcSession implements AutoCloseable {
   public void commit() throws SQLException { connected().commit(); }
   public void rollback() throws SQLException { connected().rollback(); }
   public Result execute(String sql) throws Exception {
-    Connection c=connected(); sql=SqlText.forEngine(sql,engine); cancelled.set(false); long start=System.nanoTime();
+    Connection c=connected(); sql=SqlText.forEngine(sql,engine);long start=System.nanoTime();
     ScheduledFuture<?> alarm=null;
     try(Statement s=c.createStatement()) {
-      active=s; s.setQueryTimeout(15); s.setMaxRows(MAX_ROWS+1);
+      CancelTicket ticket=new CancelTicket(s);active=ticket;s.setQueryTimeout(15); s.setMaxRows(MAX_ROWS+1);
       alarm=deadline.schedule(()->{try{s.cancel();}catch(SQLException ignored){}},15,TimeUnit.SECONDS);
-      if(cancelled.get()) throw new SQLException("Query cancelled");
+      if(ticket.cancelled.get()) throw new SQLException("Query cancelled");
       if(s.execute(sql)) try(ResultSet rs=s.getResultSet()) { return read(rs,start); }
       return new Result(List.of(),List.of(),s.getUpdateCount(),false,(System.nanoTime()-start)/1_000_000);
     } finally { if(alarm!=null)alarm.cancel(false);active=null; }
   }
-  public void cancel() throws SQLException { background(); cancelled.set(true); Statement s=active;if(s!=null) s.cancel(); }
+  /** Non-blocking snapshot is safe on EDT; actual cancellation is background-only. */
+  public CancelTicket cancellation() {return active;}
+  public void cancel(CancelTicket ticket) throws SQLException {
+    background();if(ticket==null)return;ticket.cancelled.set(true);
+    // Capture identity, never resolve a newer statement when a queued request runs.
+    if(active==ticket)ticket.statement.cancel();
+  }
+  public void cancel() throws SQLException {cancel(cancellation());}
   static Result read(ResultSet rs,long start) throws Exception {
     ResultSetMetaData md=rs.getMetaData(); int count=Math.min(md.getColumnCount(),MAX_COLUMNS), chars=0;
     boolean truncated=md.getColumnCount()>count; List<String> columns=new ArrayList<>(); List<List<String>> rows=new ArrayList<>();
@@ -89,7 +100,13 @@ public final class JdbcSession implements AutoCloseable {
   }
   public Result columns(Table t) throws Exception {
     DatabaseMetaData m=connected().getMetaData();long start=System.nanoTime();
-    try(ResultSet rs=m.getColumns(t.catalog,t.schema,t.name,"%")) {return read(rs,start);}
+    String escape=m.getSearchStringEscape();
+    try(ResultSet rs=m.getColumns(t.catalog,pattern(t.schema,escape),pattern(t.name,escape),"%")) {return read(rs,start);}
+  }
+  private static String pattern(String text,String escape) {
+    if(text==null)return null;
+    if(escape==null||escape.isEmpty())throw new IllegalStateException("This driver cannot escape metadata name patterns");
+    return text.replace(escape,escape+escape).replace("%",escape+"%").replace("_",escape+"_");
   }
   public String selectSql(Table t) throws SQLException {
     String q=connected().getMetaData().getIdentifierQuoteString().trim(); if(q.isEmpty()) q="\"";

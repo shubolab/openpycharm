@@ -78,7 +78,8 @@ public final class DatabaseService implements PersistentStateComponent<DatabaseS
   }
   public void cancel(Consumer<Throwable> failure) {
     if(disposed)return;
-    control.execute(()->{try{session.cancel();}catch(Exception e){ApplicationManager.getApplication().invokeLater(()->{if(!disposed&&!project.isDisposed())failure.accept(e);});}});
+    JdbcSession.CancelTicket ticket=session.cancellation();if(ticket==null)return;
+    control.execute(()->{try{session.cancel(ticket);}catch(Exception e){ApplicationManager.getApplication().invokeLater(()->{if(!disposed&&!project.isDisposed())failure.accept(e);});}});
   }
   @Override public void dispose() {
     disposed=true;

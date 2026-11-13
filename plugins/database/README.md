@@ -12,6 +12,9 @@ console uses a native IntelliJ editor. `.sql` files have independent token/PSI
 support and an editor popup **Run SQL Statement** action. Execution uses the
 selection, or the statement containing the caret; scripts are not run implicitly.
 SQL with ambiguous backslash quoting is rejected; use standard doubled quotes.
+Use the transaction buttons for Begin/Commit/Rollback. Direct transaction and
+session-control commands are rejected to keep JDBC and the UI state consistent.
+Normal database-specific implicit-commit rules still apply to DDL.
 
 Profiles persist in the isolated project's workspace file. Passwords are only
 stored via IntelliJ PasswordSafe, whose memory/keychain policy remains under

@@ -100,7 +100,7 @@ public final class DatabaseToolWindow implements ToolWindowFactory {
       Object[][] rows=r.rows().stream().map(List::toArray).toArray(Object[][]::new);
       grid.setModel(new DefaultTableModel(rows,r.columns().toArray()){@Override public boolean isCellEditable(int row,int column){return false;}});
       for(int i=0;i<grid.getColumnCount();i++)grid.getColumnModel().getColumn(i).setPreferredWidth(160);
-      status.setText((r.updateCount()<0?r.rows().size()+" rows":r.updateCount()+" rows affected")+" · "+r.elapsedMillis()+" ms"+(r.truncated()?" · Preview truncated":"")+(manual?" · Uncommitted transaction":" · Auto commit"));
+      status.setText((r.updateCount()<0?r.rows().size()+" rows":r.updateCount()+" rows affected")+" · "+r.elapsedMillis()+" ms"+(r.truncated()?" · Preview truncated":"")+(manual?" · Manual transaction":" · Auto commit"));
     }
     private void update(){boolean idle=!service.busy();boolean profile=selected()!=null;boolean valid=profile;try{if(profile)selected().validate();}catch(RuntimeException e){valid=false;}
       profiles.setEnabled(idle&&!connected);add.setEnabled(idle&&!connected);edit.setEnabled(idle&&!connected&&profile);remove.setEnabled(idle&&!connected&&profile);connect.setEnabled(idle&&!connected&&valid);disconnect.setEnabled(idle&&connected);

@@ -47,12 +47,23 @@ public final class DatabaseIntegrationProbe {
     check(first.rows().getFirst().get(1).startsWith("0x0001ff"),"bounded binary preview");
     session.setAutoCommit(false);session.execute("INSERT INTO sample(id,title) VALUES(3,'rolled back')");session.rollback();session.setAutoCommit(true);
     check(session.execute("SELECT count(*) FROM sample").rows().getFirst().getFirst().equals("2"),"rollback changes nothing");
+    session.setAutoCommit(false);boolean directCommitRejected=false;
+    try{session.execute("-- direct control must not desynchronize JDBC\n COMMIT");}catch(IllegalArgumentException expected){directCommitRejected=true;}
+    session.execute("INSERT INTO sample(id,title) VALUES(4,'must remain rollbackable')");session.rollback();session.setAutoCommit(true);
+    check(directCommitRejected&&session.execute("SELECT count(*) FROM sample").rows().getFirst().getFirst().equals("2"),"raw COMMIT rejected and subsequent DML remains rollbackable");
     session.setAutoCommit(false);session.execute("INSERT INTO sample(id,title) VALUES(3,'committed')");session.commit();session.setAutoCommit(true);
     check(session.execute("SELECT count(*) FROM sample").rows().getFirst().getFirst().equals("3"),"commit persists");
     session.setAutoCommit(false);session.execute("INSERT INTO sample(id,title) VALUES(4,'close rollback')");session.close();session.connect(p,null);
     check(session.execute("SELECT count(*) FROM sample").rows().getFirst().getFirst().equals("3"),"disconnect rolls back open transaction");
     var table=session.tables().stream().filter(t->t.name().equals("sample")).findFirst().orElseThrow();
     check(!session.columns(table).rows().isEmpty(),"real JDBC column metadata");
+    session.execute("CREATE TABLE a_b(exact_column INTEGER)");session.execute("CREATE TABLE axb(other_column INTEGER)");
+    var underscore=session.tables().stream().filter(t->t.name().equals("a_b")).findFirst().orElseThrow();
+    var exact=session.columns(underscore);int nameColumn=exact.columns().indexOf("TABLE_NAME");
+    check(exact.rows().size()==1&&exact.rows().getFirst().get(nameColumn).equals("a_b"),"metadata underscore is an exact table name rather than a wildcard");
+    session.execute("CREATE TABLE \"p%q\"(exact_column INTEGER)");session.execute("CREATE TABLE pxxq(other_column INTEGER)");
+    var percent=session.tables().stream().filter(t->t.name().equals("p%q")).findFirst().orElseThrow();
+    check(session.columns(percent).rows().size()==1,"metadata percent is an exact table name rather than a wildcard");
     check(session.selectSql(table).equals("SELECT * FROM \"sample\";"),"quoted generated SELECT");
     session.execute("CREATE TABLE \"odd\"\"name\"(n INTEGER)");
     var odd=session.tables().stream().filter(t->t.name().equals("odd\"name")).findFirst().orElseThrow();
@@ -70,7 +81,14 @@ public final class DatabaseIntegrationProbe {
       CountDownLatch started=new CountDownLatch(1);
       Future<Boolean> query=executor.submit(()->{started.countDown();try{session.execute("WITH RECURSIVE n(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM n WHERE x<1000000000) SELECT sum(x) FROM n");return false;}catch(SQLException cancelled){return true;}});
       check(started.await(2,TimeUnit.SECONDS),"owned query started");
-      Thread.sleep(200);session.cancel();check(query.get(5,TimeUnit.SECONDS),"Statement.cancel interrupts real SQLite CPU query");
+      long readyDeadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(2);while(session.cancellation()==null&&System.nanoTime()<readyDeadline)Thread.sleep(5);
+      JdbcSession.CancelTicket previous=session.cancellation();check(previous!=null,"cancellation binds an owned active statement");
+      Thread.sleep(200);session.cancel(previous);check(query.get(5,TimeUnit.SECONDS),"Statement.cancel interrupts real SQLite CPU query");
+      Future<Boolean> next=executor.submit(()->{try{session.execute("WITH RECURSIVE n(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM n WHERE x<1000000000) SELECT sum(x) FROM n");return false;}catch(SQLException cancelled){return true;}});
+      readyDeadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(2);while(session.cancellation()==null&&System.nanoTime()<readyDeadline)Thread.sleep(5);
+      JdbcSession.CancelTicket current=session.cancellation();check(current!=null&&current!=previous,"new query has a distinct cancellation identity");
+      session.cancel(previous);Thread.sleep(150);check(!next.isDone(),"queued stale cancellation cannot cancel the next statement");
+      session.cancel(current);check(next.get(5,TimeUnit.SECONDS),"current query remains cancellable after stale request");
       check(session.execute("SELECT 42").rows().getFirst().getFirst().equals("42"),"session usable after cancellation");
       long start=System.nanoTime();boolean timedOut=false;
       try{session.execute("WITH RECURSIVE n(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM n WHERE x<1000000000) SELECT sum(x) FROM n");}catch(SQLException expected){timedOut=true;}
@@ -96,6 +114,7 @@ public final class DatabaseIntegrationProbe {
     rejects(()->SqlText.single("x".repeat(SqlText.MAX_SQL+1)),"SQL size bounded");
     rejects(()->SqlText.forEngine("/* outer /* inner */ SELECT 1; */ SELECT 2;",DatabaseProfile.Engine.SQLITE),"SQLite non-nested comments cannot conceal extra statements");
     rejects(()->SqlText.forEngine("SELECT 'a\\'; DELETE FROM sample; --'",DatabaseProfile.Engine.MYSQL),"ambiguous MySQL escaped quotes cannot conceal extra statements");
+    for(String control:List.of("BEGIN","COMMIT","ROLLBACK","END","SAVEPOINT x","RELEASE x","SET autocommit=0","START TRANSACTION"))rejects(()->SqlText.forEngine("/* comment */ "+control,DatabaseProfile.Engine.SQLITE),"session and transaction SQL must use managed controls");
     check(Arrays.stream(DatabaseProfile.class.getFields()).noneMatch(f->f.getName().toLowerCase(Locale.ROOT).contains("password")),"persistent profile has no password field");
     String lexText="SELECT 'a;''b', $$multiline\n;string$$; /* nested /* x */ y */ SELECT 2;";
     var lexer=new SqlLanguage.SqlLexer();lexer.start(lexText);List<String> tokens=new ArrayList<>();List<Integer> offsets=new ArrayList<>();
