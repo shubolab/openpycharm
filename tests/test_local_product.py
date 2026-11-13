@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 from xml.sax.saxutils import escape
 
-from scripts.local_product import apply, cache_records, owned_file, xml_filter
+from scripts.local_product import LOCKED_RUN_CONFIGURATION_TYPES, apply, cache_records, owned_file, xml_filter
 
 
 class LocalProductDescriptorTests(unittest.TestCase):
@@ -55,6 +55,31 @@ class LocalProductDescriptorTests(unittest.TestCase):
                 filtered, report = xml_filter(prefix + before + suffix, set())
                 self.assertEqual(prefix + after + suffix, filtered)
                 self.assertEqual('intellij.python.community.impl', report[0]['embeddedModule'])
+
+    def test_only_exact_non_runnable_framework_promotion_types_are_omitted(self):
+        ordinary = b'<configurationType implementation="com.jetbrains.python.run.PythonConfigurationType"/><configurationType implementation="com.jetbrains.python.testing.PythonTestConfigurationType"/><typeProvider implementationClass="example.PythonLockedTypeProvider"/>'
+        locked = ''.join('<configurationType implementation="' + name + '" order="first"/>' for name in sorted(LOCKED_RUN_CONFIGURATION_TYPES)).encode()
+        before = b'<idea-plugin><extensions>' + locked + ordinary + b'</extensions></idea-plugin>'
+        after = b'<idea-plugin><extensions>' + ordinary + b'</extensions></idea-plugin>'
+        self.assertEqual(after, xml_filter(before, set())[0])
+        encoded = escape(before.decode(), {'"': '&quot;'}).encode()
+        wrapper = lambda value: b'<idea-plugin><content><module name="intellij.python.community.impl">' + value + b'</module></content></idea-plugin>'
+        self.assertEqual(wrapper(escape(after.decode(), {'"': '&quot;'}).encode()), xml_filter(wrapper(encoded), set())[0])
+
+    def test_unified_marketing_removed_without_removing_native_tours_or_git_features(self):
+        promo = b'<startPagePromoter implementation="com.intellij.pycharm.community.ide.impl.promo.WelcomeToUnifiedWelcomeScreenBanner"/>'
+        migration = b'<listener class="com.intellij.pycharm.community.ide.impl.promo.CommunityToUnifiedListener" topic="com.intellij.ide.AppLifecycleListener"/>'
+        retained = b'<startPagePromoter implementation="com.intellij.pycharm.community.ide.implTraining.PyOnboardingTourPromoter"/><editorNotificationProvider implementation="git4idea.ui.GitEditorPromo"/><codeInsight.declarativeInlayProvider implementationClass="com.jetbrains.python.inlayHints.PyNumericPromotionInlayHintsProvider"/>'
+        before = b'<idea-plugin><extensions>' + promo + retained + b'</extensions><applicationListeners>' + migration + b'</applicationListeners></idea-plugin>'
+        after = b'<idea-plugin><extensions>' + retained + b'</extensions><applicationListeners></applicationListeners></idea-plugin>'
+        self.assertEqual(after, xml_filter(before, set())[0])
+
+    def test_upstream_whats_new_auto_open_removed_but_help_and_tour_stay(self):
+        startup = b'<postStartupActivity implementation="com.intellij.platform.whatsNew.WhatsNewShowOnStartCheckService" order="last"/>'
+        kept = b'<postStartupActivity implementation="com.intellij.platform.ide.newUiOnboarding.newUi.NewUiOnboardingStartupActivity"/><action id="WhatsNewAction" class="com.intellij.platform.whatsNew.WhatsNewAction" overrides="true"/>'
+        before = b'<idea-plugin><extensions>' + startup + kept + b'</extensions></idea-plugin>'
+        expected = b'<idea-plugin><extensions>' + kept + b'</extensions></idea-plugin>'
+        self.assertEqual(expected, xml_filter(before, set())[0])
 
     def test_cache_preserves_non_xml_record_bytes_and_rejects_truncation(self):
         core = b'<idea-plugin><id>core</id></idea-plugin>'

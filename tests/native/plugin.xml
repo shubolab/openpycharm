@@ -1,0 +1,12 @@
+<idea-plugin>
+  <id>dev.openpycharm.native.probe</id>
+  <name>OpenPyCharm Native Acceptance Probe</name>
+  <version>1</version>
+  <vendor>OpenPyCharm</vendor>
+  <idea-version since-build="261" until-build="261.*"/>
+  <depends>com.intellij.modules.platform</depends>
+  <depends>PythonCore</depends>
+  <extensions defaultExtensionNs="com.intellij">
+    <postStartupActivity implementation="dev.openpycharm.probe.DiagnosticProbe"/>
+  </extensions>
+</idea-plugin>

@@ -19,6 +19,7 @@ import subprocess
 import tempfile
 
 from bootstrap import ROOT, check_space, sha256, tree_digest
+from provenance import verify_source_inputs
 
 # Official release and its published digest, also used by opengoland.
 INNO = {
@@ -47,6 +48,7 @@ def validate_product(product: Path, target: str, version: str) -> tuple[Path, di
     contents = product / "Contents" if target == "macos-arm64" else product
     manifest_path = contents / "openpycharm-build.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    verify_source_inputs(manifest)
     if any(manifest.get(key) != value for key, value in {
         "schema": 1, "name": "OpenPyCharm", "version": version, "target": target,
         "upstreamProduct": "PC",
@@ -226,6 +228,7 @@ def package(target: str, version: str, product: Path, output: Path, verify_insta
               else windows_installer(product, image, proof, version, verify_install))
     if tree_digest(product) != expected_tree:
         raise ValueError("Product changed during installer creation")
+    verify_source_inputs(manifest)
     digest = sha256(image)
     receipt = {"schema": 1, "target": target, "version": version, "installer": image.name,
                "sha256": digest, "size": image.stat().st_size, "productTreeSha256": expected_tree, **result}

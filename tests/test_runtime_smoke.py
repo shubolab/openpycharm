@@ -1,10 +1,11 @@
 import copy
+import itertools
 import json
 from pathlib import Path
 import sys
 import tempfile
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 from runtime_smoke import log_observation, run_smoke, startup_ready
@@ -122,6 +123,71 @@ class RuntimeStartupEvidenceTests(unittest.TestCase):
             with self.subTest(timeout=timeout, observe=observe), patch("runtime_smoke.platform.system", return_value="Darwin"):
                 with self.assertRaisesRegex(ValueError, "timeout"):
                     run_smoke(Path("not-an-application"), timeout=timeout, observe=observe)
+
+    def windows_product(self, root):
+        app = root / "OpenPyCharm"
+        (app / "bin").mkdir(parents=True)
+        (app / "bin/pycharm64.exe").write_bytes(b"mock launcher, never executed")
+        (app / "openpycharm-build.json").write_text(json.dumps({
+            "name": "OpenPyCharm", "upstreamProduct": "PC", "upstreamBuild": self.build,
+            "target": "windows-x64", "version": "0.1.0-dev.1",
+        }))
+        return app
+
+    def test_windows_launch_is_suspended_until_job_assignment_without_subprocess_constant(self):
+        # This executes the Windows orchestration on any host, without starting
+        # a GUI or requiring platform-only subprocess constants. The observed CI
+        # failure happened before Popen because CREATE_SUSPENDED is not exported.
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            app = self.windows_product(root)
+            profile = root / "new-profile"
+            process = Mock(pid=4242, returncode=0)
+            process.poll.return_value = None
+            job = Mock()
+            events = []
+
+            def launch(*args, **kwargs):
+                self.assertEqual(kwargs["creationflags"] & 0x00000004, 0x00000004)
+                self.assertEqual(kwargs["creationflags"] & 0x00000200, 0x00000200)
+                self.assertNotIn("start_new_session", kwargs)
+                events.append("created-suspended")
+                return process
+
+            def assign_and_resume(owned):
+                self.assertIs(owned, process)
+                events.append("assigned-before-resume")
+                text = self.log.replace(str(self.profile), str(profile))
+                (profile / "log/idea.log").write_text(text)
+
+            job.assign_and_resume.side_effect = assign_and_resume
+            job.stop.side_effect = lambda: events.append("owned-job-terminated")
+            with patch("runtime_smoke.platform.system", return_value="Windows"), \
+                    patch("runtime_smoke.WindowsJob", return_value=job), \
+                    patch("runtime_smoke.subprocess.Popen", side_effect=launch), \
+                    patch("runtime_smoke.time.sleep"), \
+                    patch("runtime_smoke.time.monotonic", side_effect=itertools.count()):
+                receipt = run_smoke(app, profile, observe=1)
+            self.assertEqual(receipt["status"], "passed-startup")
+            self.assertEqual(events, ["created-suspended", "assigned-before-resume", "owned-job-terminated"])
+            self.assertEqual(receipt["cleanup"]["mode"], "owned-windows-job")
+            process.kill.assert_not_called()
+            process.wait.assert_called_once_with(timeout=15)
+
+    def test_windows_job_initialization_failure_is_retained_without_launch(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            app = self.windows_product(root)
+            profile = root / "new-profile"
+            with patch("runtime_smoke.platform.system", return_value="Windows"), \
+                    patch("runtime_smoke.WindowsJob", side_effect=OSError("job initialization failed")), \
+                    patch("runtime_smoke.subprocess.Popen") as popen:
+                with self.assertRaisesRegex(ValueError, "job initialization failed"):
+                    run_smoke(app, profile)
+                popen.assert_not_called()
+            receipt = json.loads((profile / "startup.json").read_text())
+            self.assertEqual(receipt["status"], "failed")
+            self.assertEqual(receipt["failure"], "job initialization failed")
 
 
 if __name__ == "__main__":

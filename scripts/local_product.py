@@ -23,6 +23,12 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 POLICY = ROOT / "product/local-policy.json"
+LOCKED_RUN_CONFIGURATION_TYPES = frozenset({
+    "com.jetbrains.python.run.DjangoServerLockedRunConfigurationType",
+    "com.jetbrains.python.run.FlaskServerLockedRunConfigurationType",
+    "com.jetbrains.python.run.DbtRunLockedConfigurationType",
+    "com.jetbrains.python.run.FastAPILockedRunConfigurationType",
+})
 
 
 def sha(data: bytes) -> str:
@@ -150,6 +156,11 @@ def xml_filter(data: bytes, excluded: set[str]) -> tuple[bytes, list[dict]]:
             or (tag == "action" and attrs.get("id") == "CheckSuggestedPlugins" and attrs.get("class") == advertiser + "CheckSuggestedPluginsAction")
             or (tag == "applicationConfigurable" and attrs.get("instance") == "com.intellij.ide.gdpr.ConsentConfigurable" and attrs.get("id") == "consents")
             or (tag == "depends" and attrs.get("optional") == "true" and text.strip() == "tanvd.grazi")
+            or (tag == "configurationType" and attrs.get("implementation") in LOCKED_RUN_CONFIGURATION_TYPES)
+            or (tag == "startPagePromoter" and attrs.get("implementation") == "com.intellij.pycharm.community.ide.impl.promo.WelcomeToUnifiedWelcomeScreenBanner")
+            or (tag == "listener" and attrs.get("class") == "com.intellij.pycharm.community.ide.impl.promo.CommunityToUnifiedListener"
+                and attrs.get("topic") == "com.intellij.ide.AppLifecycleListener")
+            or (tag == "postStartupActivity" and attrs.get("implementation") == "com.intellij.platform.whatsNew.WhatsNewShowOnStartCheckService")
         )
         if selected:
             targets.append((begin, finish, {"tag": tag, "attributes": attrs, "sha256": sha(data[begin:finish])}, b""))
@@ -309,7 +320,9 @@ def apply(contents: Path, sdk_contents: Path | None = None) -> dict:
     if check_core != core or len(check_records) != len(kept):
         raise ValueError("Filtered plugin classpath roundtrip failed")
     jars = []
-    tokens = [b"settingsSync", b"ultimatePromo", b"grazie", b".promotion", b"PycharmProSuggestionProvider", b"pluginsAdvertisement", b"TryUltimateActionHandler", b"ConsentConfigurable"]
+    tokens = [b"settingsSync", b"ultimatePromo", b"grazie", b".promotion", b"PycharmProSuggestionProvider", b"pluginsAdvertisement", b"TryUltimateActionHandler", b"ConsentConfigurable",
+              b"LockedRunConfigurationType", b"DbtRunLockedConfigurationType", b"WelcomeToUnifiedWelcomeScreenBanner", b"CommunityToUnifiedListener",
+              b"WhatsNewShowOnStartCheckService"]
     for path in sorted(contents.rglob("*.jar")):
         if path == module_jar:
             continue

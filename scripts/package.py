@@ -13,6 +13,7 @@ import tempfile
 
 from product import IDENTITY, ROOT, brand_plist, brand_product_info, brand_resources, sha, write_paths
 from bootstrap import PIN_PATH, validate_cached
+from provenance import source_inputs
 
 
 def assemble(sdk, target, version, output):
@@ -75,10 +76,7 @@ def assemble(sdk, target, version, output):
                   "limitations": ["Full 1:1 acceptance remains open"]}
         import PIL
         report["buildDependencies"] = {"Pillow": PIL.__version__}
-        inputs = [path for directory in ("scripts", "product") for path in (ROOT / directory).rglob("*")
-                  if path.is_file() and "__pycache__" not in path.parts]
-        inputs += [ROOT / name for name in ("requirements-build.txt", "LICENSE", "NOTICE")]
-        report["sourceInputs"] = {path.relative_to(ROOT).as_posix(): sha(path) for path in sorted(inputs)}
+        report["sourceInputs"] = source_inputs()
         try:
             report["sourceCommit"] = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True, stderr=subprocess.DEVNULL).strip()
         except subprocess.CalledProcessError:

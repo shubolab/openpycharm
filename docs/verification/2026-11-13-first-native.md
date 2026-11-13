@@ -23,6 +23,11 @@ not full parity acceptance or a published release.
   with the expected output and exit0.
 - Final candidate includes the two source-replayed platform fixes and embedded
   promotion-descriptor fix; native main.py run passed again.
+- A new isolated system-cache control on the same final candidate/Python SDK
+  restored the native unittest tree: all 20 items (9 methods plus subtests)
+  passed. Final-candidate Debug again stopped at calculator.py:20, evaluated
+  `Decimal('2.0400')`, stepped to line21, and resumed to exit0. Its log contained
+  no ERROR/SEVERE during these workflows; warnings remain recorded.
 - macOS DMG image verified, mounted contents and copied app match the sealed
   product tree; drag-to-Applications link and signatures passed.
 - Fresh isolated automated startup observation loaded Python/Git/Terminal,
@@ -44,7 +49,10 @@ final source state separately.
   cache produced 9 type warnings and generic script execution for a test file.
   The log reported 1310 old typeshed paths in the project index filter. SDK
   paths, content root and test registrations were checked and retained. A fresh
-  cache control is in progress; this workflow is not marked passed.
+  cache control recovered native detection, and a later diagnostic run on the
+  original profile also resolved the TestCase and selected the native test
+  producer. Root cause remains unknown; the original generic execution is
+  preserved as a real failure rather than attributed solely to old filter paths.
 - Upstream Configuration Script reports a service override warning. It has not
   been suppressed, and the experimental configuration feature is retained.
 - Windows installer build/startup/native workflows and complete editor,
@@ -58,4 +66,5 @@ Installer evidence: `build/installers/provenance/0.1.0-dev.1-macos-arm64`.
 Baseline/final relocation logs: `.state/development/log/idea.log`.
 Bounded fresh-start receipt: `build/runtime-smoke-agent/startup.json`.
 The [Run capture](../demo/run.png) is a real native screenshot of the final
-candidate, not a mockup.
+candidate, not a mockup. The [README GIF](../demo/README.md) combines the real Run,
+test-tree, breakpoint and Step Over captures with version/system/hash metadata.

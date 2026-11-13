@@ -22,6 +22,12 @@ import time
 
 from bootstrap import ROOT, sha256
 
+# Win32 CreateProcess flags. CREATE_SUSPENDED is deliberately not accessed
+# through subprocess: Python 3.12's module does not export that constant.
+# https://learn.microsoft.com/en-us/windows/win32/procthread/process-creation-flags
+WINDOWS_CREATE_SUSPENDED = 0x00000004
+WINDOWS_CREATE_NEW_PROCESS_GROUP = 0x00000200
+
 
 class WindowsJob:
     """Own a suspended launcher and its descendants in a kill-on-close job."""
@@ -223,7 +229,7 @@ def run_smoke(app: Path, profile: Path | None = None, *, timeout: int = 120, obs
     environment["OPENPYCHARM_PROPERTIES"] = str(properties)
     command = [str(executable), str(project)]
     windows = platform.system() == "Windows"
-    job = WindowsJob() if windows else None
+    job = None
     process = None
     receipt = {"schema": 1, "status": "failed", "application": str(app), "profile": str(profile),
                "target": manifest.get("target"), "version": manifest.get("version"),
@@ -235,8 +241,9 @@ def run_smoke(app: Path, profile: Path | None = None, *, timeout: int = 120, obs
     ready_at = None
     log_path = profile / "log/idea.log"
     try:
+        job = WindowsJob() if windows else None
         with (profile / "launcher-output.log").open("wb") as output:
-            options = ({"creationflags": subprocess.CREATE_SUSPENDED | subprocess.CREATE_NEW_PROCESS_GROUP}
+            options = ({"creationflags": WINDOWS_CREATE_SUSPENDED | WINDOWS_CREATE_NEW_PROCESS_GROUP}
                        if windows else {"start_new_session": True})
             process = subprocess.Popen(command, env=environment, stdin=subprocess.DEVNULL,
                                        stdout=output, stderr=subprocess.STDOUT, **options)

@@ -1,0 +1,183 @@
+{
+  "schema": 1,
+  "operation": "read-only native Python test detection snapshot after smart mode",
+  "application": "build/final/OpenPyCharm.app",
+  "diagnosticPluginSha256": "d14814cab0830def9c94fdb9445bb0c9e49ccf2ca04a95eb1b3e22baad83e970",
+  "lifecycle": [
+    {
+      "profile": "development",
+      "pid": 69936,
+      "report": "/Users/wangshubo/develop/openpycharm/.state/diagnostic-report-oldcache.json",
+      "reportExists": true,
+      "exitBeforeStop": null,
+      "finalExit": 143
+    },
+    {
+      "profile": "relocation-control",
+      "pid": 70097,
+      "report": "/Users/wangshubo/develop/openpycharm/.state/diagnostic-report-newcache.json",
+      "reportExists": true,
+      "exitBeforeStop": null,
+      "finalExit": 143
+    }
+  ],
+  "profiles": {
+    "previousDevelopmentProfile": {
+      "capturedAt": "2026-11-13T15:58:57.391406Z",
+      "smartMode": true,
+      "project": "fixtures/hello-python",
+      "module": "hello-python",
+      "contentRootCount": 1,
+      "testFile": {
+        "module": "hello-python",
+        "inContent": true,
+        "excluded": false,
+        "projectFilenameIndexCount": 1,
+        "allScopeFilenameIndexCount": 1,
+        "basicTestFile": true,
+        "settingsTestFile": true
+      },
+      "sdk": {
+        "name": "Python 3.14 (hello-python)",
+        "version": "Python 3.14.0",
+        "homePath": "/Users/wangshubo/develop/openpycharm/fixtures/hello-python/.venv/bin/python",
+        "rootCount": 5,
+        "allRootsValidAndExist": true,
+        "rootUrls": [
+          "file:///Users/wangshubo/.local/share/uv/python/cpython-3.14-macos-aarch64-none/lib/python3.14",
+          "file:///Users/wangshubo/.local/share/uv/python/cpython-3.14-macos-aarch64-none/lib/python3.14/lib-dynload",
+          "file:///Users/wangshubo/develop/openpycharm/fixtures/hello-python/.venv/lib/python3.14/site-packages",
+          "file:///Users/wangshubo/develop/openpycharm/.state/development/system/python_stubs/-1323336871",
+          "file:///Users/wangshubo/develop/openpycharm/build/final/OpenPyCharm.app/Contents/plugins/python-ce/helpers/typeshed/stdlib"
+        ]
+      },
+      "testRunner": "Autodetect",
+      "testClass": {
+        "qualifiedName": "tests.test_calculator.QuoteCalculatorTest",
+        "superTypes": [
+          "unittest.case.TestCase"
+        ],
+        "isUnitTestCaseClass": true,
+        "basicTestClass": true,
+        "settingsTestClass": true,
+        "testMethodCount": 9,
+        "allMethodsRecognized": true,
+        "producerCandidates": [
+          {
+            "producer": "com.jetbrains.python.run.PythonRunConfigurationProducer",
+            "contextModule": "hello-python",
+            "lightConfiguration": {
+              "class": "com.jetbrains.python.run.PythonRunConfiguration",
+              "name": "test_calculator",
+              "type": "PythonConfigurationType"
+            }
+          },
+          {
+            "producer": "com.jetbrains.python.testing.doctest.PythonDocTestConfigurationProducer",
+            "contextModule": "hello-python",
+            "lightConfiguration": null
+          },
+          {
+            "producer": "com.jetbrains.python.testing.tox.PyToxConfigurationProducer",
+            "contextModule": "hello-python",
+            "lightConfiguration": null
+          },
+          {
+            "producer": "com.jetbrains.python.testing.PyTestsConfigurationProducer",
+            "contextModule": "hello-python",
+            "lightConfiguration": {
+              "class": "com.jetbrains.python.testing.autoDetectTests.PyAutoDetectTestConfiguration",
+              "name": "Python tests for tests.test_calculator.QuoteCalculatorTest",
+              "type": "tests"
+            }
+          }
+        ]
+      }
+    },
+    "cleanRelocationControlProfile": {
+      "capturedAt": "2026-11-13T15:59:25.543112Z",
+      "smartMode": true,
+      "project": "fixtures/hello-python",
+      "module": "hello-python",
+      "contentRootCount": 1,
+      "testFile": {
+        "module": "hello-python",
+        "inContent": true,
+        "excluded": false,
+        "projectFilenameIndexCount": 1,
+        "allScopeFilenameIndexCount": 1,
+        "basicTestFile": true,
+        "settingsTestFile": true
+      },
+      "sdk": {
+        "name": "Python 3.14 (hello-python)",
+        "version": "Python 3.14.0",
+        "homePath": "/Users/wangshubo/develop/openpycharm/fixtures/hello-python/.venv/bin/python",
+        "rootCount": 5,
+        "allRootsValidAndExist": true,
+        "rootUrls": [
+          "file:///Users/wangshubo/.local/share/uv/python/cpython-3.14-macos-aarch64-none/lib/python3.14",
+          "file:///Users/wangshubo/.local/share/uv/python/cpython-3.14-macos-aarch64-none/lib/python3.14/lib-dynload",
+          "file:///Users/wangshubo/develop/openpycharm/fixtures/hello-python/.venv/lib/python3.14/site-packages",
+          "file:///Users/wangshubo/develop/openpycharm/.state/relocation-control/system/python_stubs/-1323336871",
+          "file:///Users/wangshubo/develop/openpycharm/build/final/OpenPyCharm.app/Contents/plugins/python-ce/helpers/typeshed/stdlib"
+        ]
+      },
+      "testRunner": "Autodetect",
+      "testClass": {
+        "qualifiedName": "tests.test_calculator.QuoteCalculatorTest",
+        "superTypes": [
+          "unittest.case.TestCase"
+        ],
+        "isUnitTestCaseClass": true,
+        "basicTestClass": true,
+        "settingsTestClass": true,
+        "testMethodCount": 9,
+        "allMethodsRecognized": true,
+        "producerCandidates": [
+          {
+            "producer": "com.jetbrains.python.run.PythonRunConfigurationProducer",
+            "contextModule": "hello-python",
+            "lightConfiguration": {
+              "class": "com.jetbrains.python.run.PythonRunConfiguration",
+              "name": "test_calculator",
+              "type": "PythonConfigurationType"
+            }
+          },
+          {
+            "producer": "com.jetbrains.python.testing.doctest.PythonDocTestConfigurationProducer",
+            "contextModule": "hello-python",
+            "lightConfiguration": null
+          },
+          {
+            "producer": "com.jetbrains.python.testing.tox.PyToxConfigurationProducer",
+            "contextModule": "hello-python",
+            "lightConfiguration": null
+          },
+          {
+            "producer": "com.jetbrains.python.testing.PyTestsConfigurationProducer",
+            "contextModule": "hello-python",
+            "lightConfiguration": {
+              "class": "com.jetbrains.python.testing.autoDetectTests.PyAutoDetectTestConfiguration",
+              "name": "Python tests for tests.test_calculator.QuoteCalculatorTest",
+              "type": "tests"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "observed": [
+    "Both profiles resolve QuoteCalculatorTest to unittest.case.TestCase and pass basic/settings file/class/method test predicates.",
+    "Both create a Python test light configuration from the class context; each still also exposes the ordinary Python script candidate.",
+    "Both have one valid content root and five valid Python3.14 SDK roots; typeshed resolves inside the final app.",
+    "The SDK roots differ only in the profile-owned python_stubs directory."
+  ],
+  "conclusion": "The previously observed old-profile test-discovery failure is not reproduced by these later native smart-mode snapshots. The precise earlier cause remains unestablished.",
+  "limitations": [
+    "No source, application, cache repair or project configuration edits were made by the probe; ordinary IDE persistence and in-memory resolution caching still occur.",
+    "The diagnostic probe itself requests type resolution and can populate in-memory resolution caches.",
+    "These snapshots do not replay the native context-menu UI or establish that all relocation/restart timing cases are fixed.",
+    "No runtime test configurations were persisted or executed by this probe."
+  ]
+}

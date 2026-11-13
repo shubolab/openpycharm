@@ -1,0 +1,41 @@
+# Native Python semantic probe
+
+The Java plugin reads the running native IDE's project/module roots, Python SDK,
+PSI classes and resolved superclasses, filename indexes, test detectors and light
+run-configuration candidates. It never saves or executes a run configuration.
+Ordinary resolution requests can populate IDE caches.
+
+Build the probe against the authenticated SDK and read its complete JAR with the
+actual application's IntelliJ archive reader, without launching a window:
+
+```sh
+python3 scripts/native_probe.py --app build/product/OpenPyCharm.app --build-only
+```
+
+Run against a disposable Python fixture with an isolated profile:
+
+```sh
+python3 scripts/native_probe.py --app build/product/OpenPyCharm.app \
+  --profile .state/native-python-check --project fixtures/hello-python \
+  --report .state/native-python-check/report.json
+```
+
+On Windows, pass the installed or assembled `OpenPyCharm` directory to `--app`.
+The driver uses the real native launcher and actual product JVM on both systems.
+All temporary plugin and VM-options files stay outside the application. It stops
+only its native process/session (or Windows job) and records the owned PID and
+exit status. Windows launch remains suspended until assigned to the owned job.
+
+An existing profile's `idea.properties` is read without modification and must
+already isolate its four configuration/cache/plugin/log paths. A new profile may
+require normal **Trust Project** confirmation and Python SDK selection. This
+probe does not grant trust, change an SDK or create `.idea` project metadata;
+prepare those using the ordinary native IDE before a noninteractive regression
+run. The default fixture test is `tests/test_calculator.py`; use `--test-file` for
+another existing unittest/pytest file.
+
+The assessment requires smart-mode PSI evidence, a valid Python SDK, a test file
+inside project content and a native Python test configuration candidate. It does
+not establish actual Run/Test/Debug execution, context-menu behavior or full 1:1
+acceptance. `--build-only` proves archive readability; actual plugin startup is
+proved only by an invocation-matched report from the launched IDE.
