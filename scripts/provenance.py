@@ -1,13 +1,14 @@
 """Bind an assembled product to the exact source inputs used to create it.
 
-This inventory includes packaging/repair scripts, product resources and pins,
-and the build requirements and notices. It never follows source symlinks.
+This inventory includes packaging/repair scripts, product/plugin sources,
+resources and pins, and the build requirements and notices. It never follows
+source symlinks.
 """
 
 from __future__ import annotations
 
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 import stat
 
@@ -20,7 +21,7 @@ def source_inputs(root: Path = ROOT) -> dict[str, str]:
         raise ValueError("Source root must be a regular directory")
     root = root.resolve()
     paths = []
-    for name in ("scripts", "product"):
+    for name in ("scripts", "product", "plugins"):
         directory = root / name
         if directory.is_symlink() or not directory.is_dir():
             raise ValueError(f"Source {name} must be a regular directory")
@@ -63,3 +64,43 @@ def verify_source_inputs(manifest: dict, root: Path = ROOT) -> None:
             if paths:
                 details.append(f"{label}: {', '.join(paths[:20])}" + (" …" if len(paths) > 20 else ""))
         raise ValueError("Product source inputs are stale; rebuild the product (" + "; ".join(details) + ")")
+
+
+def verify_product_plugins(manifest: dict, contents: Path) -> list[dict]:
+    """Authenticate declared plugin bytes before startup or installer creation."""
+    entries = manifest.get("plugins", [])
+    if not isinstance(entries, list):
+        raise ValueError("Product plugins must be a list")
+    seen_ids, seen_jars, verified = set(), set(), []
+    for entry in entries:
+        if not isinstance(entry, dict) or not all(isinstance(entry.get(key), str) for key in ("id", "name", "version", "path", "jar", "jarSha256")):
+            raise ValueError("Product plugin receipt is incomplete")
+        if re.fullmatch(r"[A-Za-z0-9_.-]+", entry["id"]) is None or re.fullmatch(r"[a-f0-9]{64}", entry["jarSha256"]) is None:
+            raise ValueError("Invalid product plugin identity or digest")
+        paths = {}
+        for key in ("path", "jar"):
+            raw, path = entry[key], PurePosixPath(entry[key])
+            if (not raw or not path.parts or path.is_absolute() or path.as_posix() != raw or any(char in raw for char in "\\:\0")
+                    or any(part in {".", ".."} for part in path.parts) or path.parts[0] != "third-party-plugins"):
+                raise ValueError("Product plugin paths must stay below third-party-plugins")
+            paths[key] = path
+        if not paths["jar"].is_relative_to(paths["path"]) or paths["jar"].suffix != ".jar":
+            raise ValueError("Product plugin JAR must belong to its declared plugin directory")
+        if entry["id"] in seen_ids or entry["jar"] in seen_jars:
+            raise ValueError("Duplicate product plugin receipt")
+        seen_ids.add(entry["id"])
+        seen_jars.add(entry["jar"])
+        current = Path(contents)
+        for index, part in enumerate(paths["jar"].parts):
+            current /= part
+            if current.is_symlink():
+                raise ValueError("Product plugin paths cannot contain symlinks")
+            mode = current.stat().st_mode if current.exists() else 0
+            if index < len(paths["jar"].parts) - 1 and not stat.S_ISDIR(mode):
+                raise ValueError("Product plugin parent must be a regular directory")
+        if not stat.S_ISREG(mode) or current.stat().st_size > 128 * 1024**2:
+            raise ValueError("Product plugin JAR must be a bounded regular file")
+        if sha256(current) != entry["jarSha256"]:
+            raise ValueError("Product plugin JAR digest differs from its build receipt")
+        verified.append({key: entry[key] for key in ("id", "version", "jar", "jarSha256")})
+    return verified

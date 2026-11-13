@@ -13,6 +13,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import shutil
 import subprocess
 import tempfile
 import time
@@ -52,7 +53,8 @@ def build_plugin(sdk: Path) -> tuple[Path, dict]:
     pin = json.loads(PIN_PATH.read_text(encoding="utf-8"))
     if validate_cached(layout.sdk_root.parent, pin, target) != layout.sdk_root:
         raise ValueError("Compile only against the authenticated open-source SDK")
-    source_files = [SOURCES / "DiagnosticProbe.java", SOURCES / "plugin.xml"]
+    java_sources = [SOURCES / "DiagnosticProbe.java", SOURCES / "HttpPluginProbe.java"]
+    source_files = [*java_sources, SOURCES / "plugin.xml"]
     identity = {"sources": {file.name: sha(file) for file in source_files},
                 "sdkReceiptSha256": sha(layout.sdk_root.parent / ".openpycharm-platform.json"),
                 "compiler": subprocess.check_output([str(layout.javac), "-version"], text=True, stderr=subprocess.STDOUT, timeout=15).strip()}
@@ -72,7 +74,7 @@ def build_plugin(sdk: Path) -> tuple[Path, dict]:
             classes.mkdir()
             jars = sorted(layout.lib.glob("*.jar")) + sorted((layout.contents / "plugins/python-ce/lib").rglob("*.jar"))
             arguments = ["--release", "21", "-encoding", "UTF-8", "-proc:none", "-classpath",
-                         os.pathsep.join(map(str, jars)), "-d", str(classes), str(SOURCES / "DiagnosticProbe.java")]
+                         os.pathsep.join(map(str, jars)), "-d", str(classes), *map(str, java_sources)]
             invocation = java_compiler_invocation(layout.javac, arguments, temporary / "javac.args")
             result = subprocess.run(invocation.command, cwd=invocation.cwd, text=True, capture_output=True, timeout=90)
             if result.returncode:
@@ -99,23 +101,41 @@ def verify_archive(app: Path, plugin: Path) -> dict:
     """Use the actual product's JVM and IntelliJ ZIP reader, without launching UI."""
     layout = app_layout(app)
     archive = plugin / "lib/native-probe.jar"
-    arguments = ["--add-opens=java.base/sun.nio.ch=ALL-UNNAMED", "--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED",
-                 "--class-path", os.pathsep.join(str(layout.lib / name) for name in ("platform-loader.jar", "annotations.jar")),
-                 str(SOURCES / "VerifyProbeArchive.java"), str(archive)]
-    cwd = None
-    command = [str(layout.java), *arguments]
-    if os.name == "nt":
-        argument_file = plugin.parent / "verify-probe.args"
-        _write_java_arguments(argument_file, arguments)
-        command = [str(layout.java), "@" + argument_file.name]
-        cwd = argument_file.parent
-    completed = subprocess.run(command, cwd=cwd, text=True, capture_output=True, timeout=60)
+    # The standalone JDK source launcher's standard classpath loader cannot
+    # resolve a non-BMP app path, even when NIO/ZipFile can read it. Stage exact
+    # actual-product reader bytes in an owned temporary path; the product and
+    # its native launcher remain untouched. The running JVM is still the app's.
+    with tempfile.TemporaryDirectory(prefix="openpycharm-archive-") as directory:
+        temporary = Path(directory)
+        libraries = []
+        for name in ("platform-loader.jar", "annotations.jar"):
+            original, copied = layout.lib / name, temporary / name
+            if original.is_symlink() or not original.is_file() or original.stat().st_size > 16 * 1024**2:
+                raise ValueError("Actual product archive-reader library must be a bounded regular file")
+            digest = sha(original)
+            shutil.copyfile(original, copied)
+            if sha(copied) != digest or sha(original) != digest:
+                raise ValueError("Actual product archive-reader bytes changed while staging")
+            libraries.append({"name": name, "sha256": digest})
+        arguments = ["--add-opens=java.base/sun.nio.ch=ALL-UNNAMED", "--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED",
+                     "--class-path", os.pathsep.join(str(temporary / item["name"]) for item in libraries),
+                     str(SOURCES / "VerifyProbeArchive.java"), str(archive)]
+        cwd = None
+        command = [str(layout.java), *arguments]
+        if os.name == "nt":
+            argument_file = temporary / "verify-probe.args"
+            _write_java_arguments(argument_file, arguments)
+            command = [str(layout.java), "@" + argument_file.name]
+            cwd = temporary
+        completed = subprocess.run(command, cwd=cwd, text=True, capture_output=True, timeout=60)
     if completed.returncode:
         raise ValueError("Actual product archive reader rejected the probe:\n" + completed.stdout + completed.stderr)
     report = json.loads(completed.stdout)
     if report.get("status") != "pass" or not report.get("closed") or report.get("sha256") != sha(archive):
         raise ValueError("Incomplete actual-product archive verification")
     report["helperSha256"] = sha(SOURCES / "VerifyProbeArchive.java")
+    report["actualProductLibraries"] = libraries
+    report["classpathStaging"] = "Owned temporary copies; exact actual-product reader-library digests verified"
     report["scope"] = "Actual product ZIP reader and all plugin payload bytes; plugin startup is verified separately"
     return report
 
@@ -179,8 +199,40 @@ def validate_report(report: dict, invocation_id: str) -> dict:
             "validSdkRoots": len(sdk["classRootFiles"]), "testConfigurationCandidates": len(test_candidates)}
 
 
+def validate_http_report(report: dict, invocation_id: str, layout, manifest: dict) -> dict:
+    if report.get("invocationId") != invocation_id:
+        raise ValueError("The native HTTP report belongs to another invocation")
+    if report.get("pluginId") != PLUGIN_ID or not report.get("pluginEnabled"):
+        raise ValueError("The expected native probe did not report startup")
+    if report.get("failure") or report.get("isDispatchThread") or report.get("isDumbAtCapture") or not report.get("isReadAccessAllowed"):
+        raise ValueError("Native HTTP inspection failed or did not run in pooled smart read mode")
+    if report.get("inspectionMode") != "application-registration-and-default-project-in-memory-PSI":
+        raise ValueError("HTTP registration evidence must identify its in-memory PSI scope")
+    expected = next((item for item in manifest.get("plugins", []) if item["id"] == "dev.openpycharm.http"), None)
+    actual = report.get("httpPlugin", {})
+    if expected is None or any(actual.get(key) != expected[key] for key in ("id", "version", "jarSha256")):
+        raise ValueError("Loaded HTTP plugin identity/digest differs from the product manifest")
+    if not actual.get("enabled") or not actual.get("bundled") or Path(actual.get("path", "")).resolve() != (layout.contents / expected["path"]).resolve():
+        raise ValueError("HTTP plugin was not loaded from this application's bundled third-party directory")
+    if Path(actual.get("jar", "")).resolve() != (layout.contents / expected["jar"]).resolve():
+        raise ValueError("HTTP JAR path differs from the relocated product manifest")
+    if report.get("fileType") != "dev.openpycharm.http.lang.HttpRequestFileType" or report.get("language") != "OpenPyCharmHttpRequest":
+        raise ValueError("The native HTTP file type/language was not registered")
+    if report.get("parserDefinition") != "dev.openpycharm.http.lang.HttpRequestParserDefinition" or report.get("syntaxHighlighter") != "dev.openpycharm.http.lang.HttpRequestSyntaxHighlighter":
+        raise ValueError("The native HTTP parser/highlighter was not registered")
+    expected_actions = {"OpenPyCharm.Http.RunRequest": "dev.openpycharm.http.RunHttpRequestAction",
+                        "OpenPyCharm.Http.RunAllRequests": "dev.openpycharm.http.RunAllHttpRequestsAction",
+                        "OpenPyCharm.Http.SaveResponse": "dev.openpycharm.http.SaveHttpResponseAction"}
+    if report.get("actions") != expected_actions:
+        raise ValueError("The three native HTTP actions were not registered")
+    if report.get("servicesContributor") != ["dev.openpycharm.http.HttpServicesContributor"] or not report.get("tokens"):
+        raise ValueError("Native HTTP Services/highlighting did not resolve")
+    return {"status": "pass", "pluginId": actual["id"], "version": actual["version"], "jarSha256": actual["jarSha256"],
+            "scope": "Actual plugin loading, native file type/in-memory PSI/highlighting/actions/Services registration; actions were not invoked"}
+
+
 def run_probe(app: Path, sdk: Path, profile: Path, project: Path, report: Path, test_file: Path,
-              timeout: int = 90, delay: int = 10) -> dict:
+              timeout: int = 90, delay: int = 10, mode: str = "python") -> dict:
     layout = app_layout(app)
     app, sdk, project, report = app.resolve(), sdk.resolve(), project.resolve(), report.resolve()
     if not project.is_dir() or not test_file.is_file():
@@ -193,8 +245,11 @@ def run_probe(app: Path, sdk: Path, profile: Path, project: Path, report: Path, 
     invocation_id = uuid.uuid4().hex
     report.parent.mkdir(parents=True, exist_ok=True)
     result = {"schema": 1, "application": str(app), "profile": str(profile.resolve()), "project": str(project),
+              "mode": mode, "projectTrustBypassed": False,
+              "productManifestSha256": sha(layout.contents / "openpycharm-build.json"),
               "invocationId": invocation_id, "probeBuild": build, "archiveVerification": verification,
-              "limitations": ["Ordinary project trust and Python SDK selection remain required",
+              "limitations": ["Ordinary project trust remains active; this probe does not grant trust",
+                              "HTTP registration uses default-project in-memory PSI; Python mode requires the ordinary configured SDK",
                               "Probe requests can populate ordinary resolution caches",
                               "No Run/Test/Debug execution or full UI acceptance is established"]}
     with tempfile.TemporaryDirectory(prefix="launch-", dir=plugin.parent) as directory:
@@ -203,7 +258,8 @@ def run_probe(app: Path, sdk: Path, profile: Path, project: Path, report: Path, 
         original_options = layout.contents / ("bin/pycharm.vmoptions" if layout.platform == "macos" else "bin/pycharm64.exe.vmoptions")
         flags = {"plugin.path": plugin.as_posix(), "openpycharm.probe.report": report.as_posix(),
                  "openpycharm.probe.output.root": report.parent.as_posix(), "openpycharm.probe.invocation.id": invocation_id,
-                 "openpycharm.probe.file": test_file.resolve().as_posix(), "openpycharm.probe.delay.seconds": str(delay)}
+                 "openpycharm.probe.file": test_file.resolve().as_posix(), "openpycharm.probe.delay.seconds": str(delay),
+                 "openpycharm.probe.mode": mode}
         options.write_text(original_options.read_text(encoding="utf-8") + "\n" +
                            "\n".join(f"-D{key}={value}" for key, value in flags.items()) + "\n", encoding="utf-8")
         environment = dict(os.environ, OPENPYCHARM_PROPERTIES=str(properties), OPENPYCHARM_VM_OPTIONS=str(options))
@@ -228,7 +284,9 @@ def run_probe(app: Path, sdk: Path, profile: Path, project: Path, report: Path, 
                 if not report.is_file():
                     raise ValueError("No native report before timeout/process exit; inspect the launch log and ordinary trust/SDK setup")
                 native = json.loads(report.read_text(encoding="utf-8"))
-                result["assessment"] = validate_report(native, invocation_id)
+                result["assessment"] = (validate_http_report(native, invocation_id, layout,
+                                          json.loads((layout.contents / "openpycharm-build.json").read_text(encoding="utf-8")))
+                                        if mode == "http" else validate_report(native, invocation_id))
                 result["native"] = native
             except Exception as error:
                 result["assessment"] = {"status": "fail", "error": str(error)}
@@ -261,6 +319,7 @@ def main() -> None:
     parser.add_argument("--project", type=Path, default=ROOT / "fixtures/hello-python")
     parser.add_argument("--report", type=Path)
     parser.add_argument("--test-file", type=Path, help="Defaults to PROJECT/tests/test_calculator.py")
+    parser.add_argument("--mode", choices=("python", "http"), default="python", help="HTTP checks bundled plugin registration without invoking actions")
     parser.add_argument("--timeout", type=int, default=90)
     parser.add_argument("--delay", type=int, default=10)
     parser.add_argument("--build-only", action="store_true", help="Compile and verify with the actual app ZIP reader; do not launch UI")
@@ -276,7 +335,7 @@ def main() -> None:
             profile = args.profile or ROOT / ".state" / ("native-probe-" + uuid.uuid4().hex[:12])
             report = args.report or profile / "native-probe-report.json"
             result = run_probe(args.app, args.sdk, profile, args.project, report,
-                               args.test_file or args.project / "tests/test_calculator.py", args.timeout, args.delay)
+                               args.test_file or args.project / "tests/test_calculator.py", args.timeout, args.delay, args.mode)
             print(json.dumps({"report": str(report.resolve()), "assessment": result["assessment"]}, ensure_ascii=False))
             if result["assessment"]["status"] != "pass":
                 raise SystemExit(1)

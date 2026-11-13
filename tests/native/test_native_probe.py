@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import sys
 import tempfile
+from types import SimpleNamespace
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -78,6 +79,42 @@ class NativeProbeBoundaryTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "line break"):
                 probe._write_java_arguments(path, ["one\n-Dunwanted=true"])
             self.assertEqual(path.read_bytes(), before)
+
+    def test_http_report_requires_actual_bundled_identity_registration_and_current_location(self):
+        with tempfile.TemporaryDirectory() as directory:
+            contents = Path(directory) / "relocated app/Contents"
+            plugin = {"id": "dev.openpycharm.http", "version": "0.1.0-dev.2", "jarSha256": "a" * 64,
+                      "path": "third-party-plugins/openpycharm-http", "jar": "third-party-plugins/openpycharm-http/lib/openpycharm-http.jar"}
+            report = {"invocationId": "current", "pluginId": probe.PLUGIN_ID, "pluginEnabled": True,
+                      "isDispatchThread": False, "isDumbAtCapture": False, "isReadAccessAllowed": True,
+                      "inspectionMode": "application-registration-and-default-project-in-memory-PSI",
+                      "httpPlugin": {**plugin, "enabled": True, "bundled": True,
+                                     "path": str(contents / plugin["path"]), "jar": str(contents / plugin["jar"])},
+                      "fileType": "dev.openpycharm.http.lang.HttpRequestFileType", "language": "OpenPyCharmHttpRequest",
+                      "parserDefinition": "dev.openpycharm.http.lang.HttpRequestParserDefinition",
+                      "syntaxHighlighter": "dev.openpycharm.http.lang.HttpRequestSyntaxHighlighter",
+                      "actions": {"OpenPyCharm.Http.RunRequest": "dev.openpycharm.http.RunHttpRequestAction",
+                                  "OpenPyCharm.Http.RunAllRequests": "dev.openpycharm.http.RunAllHttpRequestsAction",
+                                  "OpenPyCharm.Http.SaveResponse": "dev.openpycharm.http.SaveHttpResponseAction"},
+                      "servicesContributor": ["dev.openpycharm.http.HttpServicesContributor"], "tokens": ["METHOD", "URL"]}
+            layout = SimpleNamespace(contents=contents)
+            self.assertEqual(probe.validate_http_report(report, "current", layout, {"plugins": [plugin]})["status"], "pass")
+            mutations = (
+                lambda item: item.update(invocationId="stale"),
+                lambda item: item.update(isDispatchThread=True),
+                lambda item: item["httpPlugin"].update(jarSha256="b" * 64),
+                lambda item: item["httpPlugin"].update(path=str(Path(directory) / "old app/Contents" / plugin["path"])),
+                lambda item: item["httpPlugin"].update(bundled=False),
+                lambda item: item.update(language="TEXT"),
+                lambda item: item.update(parserDefinition=None),
+                lambda item: item.update(actions={}),
+                lambda item: item.update(servicesContributor=[]),
+            )
+            for mutate in mutations:
+                candidate = copy.deepcopy(report)
+                mutate(candidate)
+                with self.subTest(candidate=candidate), self.assertRaises(ValueError):
+                    probe.validate_http_report(candidate, "current", layout, {"plugins": [plugin]})
 
     @staticmethod
     def good_report():

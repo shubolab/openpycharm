@@ -67,10 +67,20 @@ class RuntimeStartupEvidenceTests(unittest.TestCase):
             text = self.log.replace(f"{name} (261)", f"{name} Extra (261)")
             with self.subTest(plugin=name):
                 self.assertFalse(startup_ready(self.observe(text)))
+
         for name in ("config", "system", "plugins", "log"):
             text = self.log.replace(f"idea.{name}.path={self.profile / name}", f"idea.{name}.path=/reference/PyCharm/{name}")
             with self.subTest(path=name):
                 self.assertFalse(startup_ready(self.observe(text)))
+
+    def test_packaged_plugin_requires_its_exact_name_and_version_in_bundled_log(self):
+        expected = [{"id": "dev.openpycharm.http", "name": "OpenPyCharm HTTP Client", "version": "0.1.0-dev.2"}]
+        for name in ("OpenPyCharm HTTP Client (0.1.0-dev.2)", "OpenPyCharm HTTP Client (0.1.0-dev.1)",
+                     "OpenPyCharm HTTP Client Extra (0.1.0-dev.2)", "unrelated (0.1.0-dev.2)"):
+            text = self.log.replace("Terminal (261)", "Terminal (261), " + name)
+            observed = log_observation(text, self.profile, self.project, self.build, expected)
+            with self.subTest(plugin=name):
+                self.assertEqual(startup_ready(observed), name == "OpenPyCharm HTTP Client (0.1.0-dev.2)")
 
     def test_errors_fail_readiness_and_evidence_lists_are_bounded(self):
         errors = [f"2026-11-13 10:11:12,123 [  1] {level} - #Test - problem {number}"

@@ -10,14 +10,24 @@ from build_http_plugin import ROOT, PLUGIN, sha
 from platform_layout import detect_platform_layout
 
 
-def prepare(app: Path, plugin: Path, output: Path) -> dict:
-    app, plugin, output = app.resolve(), plugin.resolve(), output.resolve()
+def prepare(app: Path, plugin: Path | None, output: Path) -> dict:
+    app, output = app.resolve(), output.resolve()
     layout = detect_platform_layout(app)
     if output.exists() or not any(output.is_relative_to((ROOT / name).resolve()) for name in (".state", "build")):
         raise ValueError("Choose a new owned acceptance directory below this worktree's .state or build")
+    manifest = json.loads((layout.contents / "openpycharm-build.json").read_text(encoding="utf-8"))
+    packaged = next((item for item in manifest.get("plugins", []) if item["id"] == "dev.openpycharm.http"), None)
+    external = plugin is not None
+    if external and packaged is not None:
+        raise ValueError("The candidate already bundles HTTP; do not load a duplicate external plugin")
+    if plugin is None:
+        if packaged is None:
+            raise ValueError("Select a candidate with bundled HTTP, or supply an explicit development --plugin")
+        plugin = layout.contents / packaged["path"]
+    plugin = plugin.resolve()
     jar = plugin / "lib/openpycharm-http.jar"
-    if not jar.is_file() or not (layout.contents / "openpycharm-build.json").is_file():
-        raise ValueError("Build the HTTP plugin and select an independent OpenPyCharm app first")
+    if not jar.is_file() or packaged is not None and sha(jar) != packaged["jarSha256"]:
+        raise ValueError("HTTP plugin is missing or differs from the packaged manifest")
     product = json.loads(layout.product_info.read_text(encoding="utf-8"))
     launch = product["launch"][0]
     if any(argument.startswith("-Dplugin.path=") for argument in launch.get("additionalJvmArguments", [])):
@@ -33,10 +43,11 @@ def prepare(app: Path, plugin: Path, output: Path) -> dict:
     base = (layout.product_info.parent / launch["vmOptionsFilePath"]).resolve()
     options = output / "http.vmoptions"
     lines = [line for line in base.read_text(encoding="utf-8").splitlines() if not line.startswith("-Dplugin.path=")]
-    options.write_text("\n".join(lines + ["-Dplugin.path=" + plugin.as_posix()]) + "\n", encoding="utf-8")
+    options.write_text("\n".join(lines + (["-Dplugin.path=" + plugin.as_posix()] if external else [])) + "\n", encoding="utf-8")
     executable = layout.contents / ("MacOS/pycharm" if layout.platform == "macos" else "bin/pycharm64.exe")
     result = {"schema": 1, "preparedOnly": True, "nativeApplicationLaunched": False,
               "projectTrustBypassed": False, "application": str(app), "pluginSha256": sha(jar),
+              "pluginLoading": "explicit development plugin.path" if external else "packaged third-party-plugins",
               "project": str(project), "profile": str(profile),
               "serverCommand": [sys.executable, str(project / "server.py")],
               "nativeCommand": [str(executable), str(project)],
@@ -50,7 +61,7 @@ def prepare(app: Path, plugin: Path, output: Path) -> dict:
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--app", type=Path, required=True)
-    parser.add_argument("--plugin", type=Path, default=ROOT / "build/http-client/plugin")
+    parser.add_argument("--plugin", type=Path, help="Standalone development plugin only; omit for an integrated candidate")
     parser.add_argument("--output", type=Path, default=ROOT / ".state/http-acceptance")
     args = parser.parse_args()
     try:

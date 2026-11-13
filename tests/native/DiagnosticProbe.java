@@ -46,6 +46,7 @@ import java.util.function.Supplier;
 /** Read-only native acceptance probe. Never executes or saves a run configuration. */
 public final class DiagnosticProbe implements StartupActivity.DumbAware {
   public void runActivity(Project project) {
+    if ("http".equals(System.getProperty("openpycharm.probe.mode"))) return;
     String destination = System.getProperty("openpycharm.probe.report");
     if (destination == null || destination.isBlank()) return;
     Path report = Path.of(destination).toAbsolutePath().normalize();

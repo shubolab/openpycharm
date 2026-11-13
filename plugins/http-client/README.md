@@ -23,19 +23,35 @@ remain plain native-editor text; they are never evaluated or loaded in a WebView
 `Content-Length` and `Transfer-Encoding` belong to the transport and cannot be
 set manually, regardless of letter case.
 
-Build against the read-only authenticated SDK with the already cached pinned
-Kotlin compiler. Python 3.10+ is required; no Gradle/compiler download occurs:
+Python 3.10+ is required. Provision the seven pinned compiler artifacts explicitly
+from Maven Central into this checkout's `.tools/kotlin`, then build offline
+against the read-only authenticated SDK. No Gradle installation is used:
 
 ```sh
+python3 scripts/provision_http_compiler.py
 python3 scripts/build_http_plugin.py --sdk /absolute/path/to/PyCharm.app --test
 ```
 
 The result is `build/http-client/plugin`, with `build.json` and
 `protocol-tests.json`. A relocated compiler cache can be selected with
 `--compiler-cache`. Missing or altered compiler artifacts fail closed; the
-compiler pin lists the required filenames and hashes.
+compiler pin lists primary download URLs, exact sizes and hashes. Interrupted,
+oversized or altered responses are never promoted into the compiler cache.
 
-For an isolated development launch, add this plugin directory to `plugin.path`
+`scripts/package.py` includes the compiled JAR under
+`Contents/third-party-plugins/openpycharm-http/lib` on macOS, or
+`third-party-plugins/openpycharm-http/lib` in the Windows product root. The pinned
+platform discovers this home-relative directory directly, including after app
+relocation; production packaging does not set an absolute `plugin.path`. The
+product manifest binds the plugin version, JAR digest, build identity and source
+inventory before helper-directory sealing and macOS signing.
+
+CI provisions the cache and runs `--test` with the target SDK's native JVM on
+both operating systems. A Mac-host classpath check against the Windows SDK may
+use `--host-sdk /absolute/path/to/macOS/PyCharm.app`; its report explicitly marks
+`nativeTargetRuntime: false` and does not establish Windows runtime acceptance.
+
+For an isolated standalone development launch, add this plugin directory to `plugin.path`
 using an owned temporary VM-options file. Multiple plugin paths are comma
 separated. Do not modify the reference installation or its configuration.
 
@@ -57,3 +73,13 @@ The fixture listens only on loopback and makes no external service requests.
 prepares a disposable copy and isolated profile and prints exact argv/environment
 without launching either process. Its native command always supplies that
 explicit project directory; no home-directory welcome project is requested.
+
+For read-only native registration evidence, use `scripts/native_probe.py --mode
+http --app ... --sdk ... --project /owned/copied/http-fixture --test-file
+/owned/copied/http-fixture/demo.http --profile /owned/isolated/profile --report
+/owned/evidence.json`. The probe checks the actual bundled descriptor/version/
+JAR path and digest, native file type/in-memory PSI/highlighter, three registered
+actions and Services contributor. Its application listener uses the default
+project for in-memory HTTP PSI and does not wait for project trust. It does not
+invoke those actions, inspect the untrusted project's execution settings or bypass normal
+project trust. Repeat against a relocated copy to verify home-relative loading.

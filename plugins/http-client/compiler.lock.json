@@ -2,7 +2,7 @@
   "schema": 1,
   "compilerVersion": "2.3.21",
   "jvmTarget": "21",
-  "acquisition": "Existing authenticated local compiler cache only; build never downloads Gradle or compiler artifacts",
+  "acquisition": "Explicit owned-cache provisioning from Maven Central; every artifact requires its exact size and SHA-256; builders never download dependencies",
   "artifacts": [
     {
       "group": "org.jetbrains.kotlin",
@@ -10,7 +10,8 @@
       "version": "2.3.21",
       "name": "kotlin-compiler-embeddable-2.3.21.jar",
       "size": 59720376,
-      "sha256": "d3e70fb011675e77ef00f1a68918d3cd91eed26058977d1e3ea2a37a293233af"
+      "sha256": "d3e70fb011675e77ef00f1a68918d3cd91eed26058977d1e3ea2a37a293233af",
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-compiler-embeddable/2.3.21/kotlin-compiler-embeddable-2.3.21.jar"
     },
     {
       "group": "org.jetbrains.kotlin",
@@ -18,7 +19,8 @@
       "version": "2.3.21",
       "name": "kotlin-stdlib-2.3.21.jar",
       "size": 1804721,
-      "sha256": "6f64eac736db9434dd6925b4a518b9d1d17177652320c37916cf9ba3ce7d7d7a"
+      "sha256": "6f64eac736db9434dd6925b4a518b9d1d17177652320c37916cf9ba3ce7d7d7a",
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.3.21/kotlin-stdlib-2.3.21.jar"
     },
     {
       "group": "org.jetbrains.kotlin",
@@ -26,7 +28,8 @@
       "version": "2.3.21",
       "name": "kotlin-script-runtime-2.3.21.jar",
       "size": 44972,
-      "sha256": "ec61bf1229c837fa9f4255f34ca69816138b73158e7ae9b8d964cf92ca6dfd2e"
+      "sha256": "ec61bf1229c837fa9f4255f34ca69816138b73158e7ae9b8d964cf92ca6dfd2e",
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-script-runtime/2.3.21/kotlin-script-runtime-2.3.21.jar"
     },
     {
       "group": "org.jetbrains.kotlin",
@@ -34,7 +37,8 @@
       "version": "1.6.10",
       "name": "kotlin-reflect-1.6.10.jar",
       "size": 3038560,
-      "sha256": "3277ac102ae17aad10a55abec75ff5696c8d109790396434b496e75087854203"
+      "sha256": "3277ac102ae17aad10a55abec75ff5696c8d109790396434b496e75087854203",
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-reflect/1.6.10/kotlin-reflect-1.6.10.jar"
     },
     {
       "group": "org.jetbrains.kotlin",
@@ -42,7 +46,8 @@
       "version": "2.3.21",
       "name": "kotlin-daemon-embeddable-2.3.21.jar",
       "size": 368344,
-      "sha256": "222fc10a3c22e74d30369bf8a0ca6c4f9372eac7d4a0081e290c256fa4d30fb2"
+      "sha256": "222fc10a3c22e74d30369bf8a0ca6c4f9372eac7d4a0081e290c256fa4d30fb2",
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-daemon-embeddable/2.3.21/kotlin-daemon-embeddable-2.3.21.jar"
     },
     {
       "group": "org.jetbrains.kotlinx",
@@ -50,7 +55,8 @@
       "version": "1.8.0",
       "name": "kotlinx-coroutines-core-jvm-1.8.0.jar",
       "size": 1548360,
-      "sha256": "9860906a1937490bf5f3b06d2f0e10ef451e65b95b269f22daf68a3d1f5065c5"
+      "sha256": "9860906a1937490bf5f3b06d2f0e10ef451e65b95b269f22daf68a3d1f5065c5",
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.8.0/kotlinx-coroutines-core-jvm-1.8.0.jar"
     },
     {
       "group": "org.jetbrains",
@@ -58,7 +64,8 @@
       "version": "13.0",
       "name": "annotations-13.0.jar",
       "size": 17536,
-      "sha256": "ace2a10dc8e2d5fd34925ecac03e4988b2c0f851650c94b8cef49ba1bd111478"
+      "sha256": "ace2a10dc8e2d5fd34925ecac03e4988b2c0f851650c94b8cef49ba1bd111478",
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/annotations/13.0/annotations-13.0.jar"
     }
   ]
 }

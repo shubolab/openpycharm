@@ -1,5 +1,16 @@
 # Native Python semantic probe
 
+HTTP mode checks the packaged `dev.openpycharm.http` plugin: add `--mode http
+--project /owned/copied/http-fixture --test-file
+/owned/copied/http-fixture/demo.http`. Its application listener checks the actual
+bundled descriptor/version/JAR path and digest, file type, in-memory PSI and
+highlighter, three action registrations and Services contributor. It schedules
+all work off the EDT and uses the default project; the ordinary Trust Project
+dialog can remain unanswered. It never executes requests/actions, grants trust
+or verifies desktop Run/Stop/Save behavior. CI retains this evidence separately
+from startup and real user workflow acceptance. Repeat with the same isolated
+profile against a relocated app to test home-relative plugin discovery.
+
 The Java plugin reads the running native IDE's project/module roots, Python SDK,
 PSI classes and resolved superclasses, filename indexes, test detectors and light
 run-configuration candidates. It never saves or executes a run configuration.

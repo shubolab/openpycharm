@@ -38,6 +38,8 @@ def assemble(sdk, target, version, output):
         raise ValueError("Choose a new output below this repository's build directory")
     if shutil.disk_usage(ROOT).free < 24 * 1024**3:
         raise ValueError("The build needs 20 GiB reserve plus assembly space")
+    from build_http_plugin import build as build_http_plugin
+    http = build_http_plugin(sdk, ROOT / f"build/http-client-{target}", version, [ROOT / ".tools/kotlin"])
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="assemble-", dir=output.parent) as staging_name:
         staging = Path(staging_name) / output.name
@@ -55,6 +57,13 @@ def assemble(sdk, target, version, output):
         branding = brand_resources(contents)
         from local_product import apply
         local_policy = apply(contents, source_contents)
+        http_directory = contents / "third-party-plugins/openpycharm-http"
+        http_directory.parent.mkdir(exist_ok=True)
+        http_jar = http_directory / "lib/openpycharm-http.jar"
+        http_jar.parent.mkdir(parents=True)
+        shutil.copyfile(Path(http["pluginDirectory"]) / "lib/openpycharm-http.jar", http_jar)
+        if sha(http_jar) != http["jarSha256"]:
+            raise ValueError("Packaged HTTP plugin digest differs from its authenticated build")
         if macos:
             from icons import mac_icon
             mac_icon(contents)
@@ -73,6 +82,10 @@ def assemble(sdk, target, version, output):
                   "upstreamBuild": original_info["buildNumber"], "upstreamProduct": "PC",
                   "platformReceipt": receipt, "branding": branding, "paths": paths,
                   "localProduct": local_policy, "platformRepairs": repairs,
+                  "plugins": [{"id": "dev.openpycharm.http", "name": "OpenPyCharm HTTP Client", "version": version,
+                               "path": http_directory.relative_to(contents).as_posix(),
+                               "jar": http_jar.relative_to(contents).as_posix(),
+                               "jarSha256": http["jarSha256"], "build": http}],
                   "limitations": ["Full 1:1 acceptance remains open"]}
         import PIL
         report["buildDependencies"] = {"Pillow": PIL.__version__}
