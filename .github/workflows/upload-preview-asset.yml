@@ -1,0 +1,75 @@
+name: Upload verified preview Windows asset
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  upload:
+    if: github.repository == 'shubolab/openpycharm'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      actions: read
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GODEBUG: http2client=0
+    steps:
+      - name: Authenticate existing CI artifact and upload to the matching draft
+        shell: python
+        run: |
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import shutil
+          import subprocess
+          import zipfile
+
+          repository = os.environ["GITHUB_REPOSITORY"]
+          tag = "v0.1.0-dev.1"
+          production = "3b45fda2ceb2a4d81c8eaf1169f953dd8b1b8b5e"
+          documentation = "c406f163e243ac4d9cffa4acb65f04aed2e26d6c"
+          artifact_id = "14061175799"
+          archive_digest = "bb5dc02b4e84814e6ba39c68ac781571d19082fc524223cd95cdbd1d7b8c3c02"
+          installer_digest = "97249b3e261bf9d427a39cd1ad6652d780ea5d507e35a168cf8e2c490326d374"
+          name = "OpenPyCharm-0.1.0-dev.1-windows-x64-setup.exe"
+
+          def gh(*args):
+              return json.loads(subprocess.check_output(["gh", *args], text=True))
+
+          def digest(path):
+              with path.open("rb") as stream:
+                  result = hashlib.sha256()
+                  for block in iter(lambda: stream.read(1024 * 1024), b""):
+                      result.update(block)
+                  return result.hexdigest()
+
+          release = gh("release", "view", tag, "--repo", repository,
+                       "--json", "isDraft,targetCommitish,assets")
+          assert release["isDraft"] and release["targetCommitish"] == documentation
+          assert not any(item["name"] == name for item in release["assets"])
+          metadata = gh("api", f"repos/{repository}/actions/artifacts/{artifact_id}")
+          assert metadata["digest"] == f"sha256:{archive_digest}"
+          assert metadata["workflow_run"]["head_sha"] == production
+          archive = Path("verified-windows-artifact.zip")
+          with archive.open("wb") as stream:
+              subprocess.run(["gh", "api", f"repos/{repository}/actions/artifacts/{artifact_id}/zip"],
+                             stdout=stream, check=True)
+          assert digest(archive) == archive_digest
+          prefix = "installers/provenance/0.1.0-dev.1-windows-x64/"
+          with zipfile.ZipFile(archive) as package:
+              manifest = json.loads(package.read(prefix + "product-build.json"))
+              receipt = json.loads(package.read(prefix + "installer.json"))
+              assert manifest["sourceCommit"] == production
+              assert receipt["sha256"] == installer_digest
+              assert receipt["target"] == "windows-x64"
+              with package.open("installers/" + name) as source, Path(name).open("wb") as target:
+                  shutil.copyfileobj(source, target)
+          assert digest(Path(name)) == installer_digest
+          subprocess.run(["gh", "release", "upload", tag, name, "--repo", repository], check=True)
+          print(json.dumps({"asset": name, "sha256": installer_digest,
+                            "productionSourceCommit": production, "draftPublished": False}))
