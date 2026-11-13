@@ -35,7 +35,7 @@
 
 | 范围 | 尚需核对与完成的工作 | 状态 |
 | --- | --- | --- |
-| Web 框架 | Django/Flask/FastAPI 的项目创建、路由、模板、运行调试及框架相关导航 | dev.2 开发候选已实现原生运行配置/生成器并通过 API、真实 venv/服务检查；实际向导/调试桌面和更广语义支持待验收 |
+| Web 框架 | Django/Flask/FastAPI 的项目创建、路由、模板、运行调试及框架相关导航 | dev.2 开发候选通过 API、真实 venv/服务检查；Mac CI 安装候选通过 FastAPI 原生创建、请求断点、求值、继续和停止，见[候选记录](verification/dev2-26da-desktop-checkpoint.json)。Django/Flask 桌面与更广语义支持待验收 |
 | 数据库 | 连接管理、凭据、查询编辑、执行、结果表、事务与数据库导航 | 待调研、待实现或验证 |
 | Notebook/科学计算 | Jupyter 内核、单元格、变量、图表、数据查看与错误恢复 | 待调研、待实现或验证 |
 | 前端开发 | JavaScript/TypeScript、HTML/CSS 与前端框架语义支持及调试 | 待调研、待实现或验证 |
@@ -46,5 +46,7 @@
 ## 记录要求
 
 每条通过记录应注明产品版本、安装包 SHA-256、系统、Python 版本、示例项目、操作、可见结果、日志与剩余限制。失败记录保留复现步骤，不用“已实现入口”替代“已通过”。
+
+dev.2 的 `26da493` CI 安装候选恢复 Markdown 预览时记录了代理服务在 JCEF 静态初始化中创建的 SEVERE；该候选不满足发版要求。其 Python 和 FastAPI 检查是历史观察，修复后的安装包仍需重新检查并录制 GIF。当前公开演示与下载继续对应 dev.1。
 
 首个可复用项目是 [hello-python](../fixtures/hello-python/README.md)，它给出确定的运行输出与 9 个 unittest 用例。其命令行测试结果与 IDE 桌面验收分别记录。
