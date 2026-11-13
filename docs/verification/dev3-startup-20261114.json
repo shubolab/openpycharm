@@ -1,0 +1,139 @@
+{
+  "schema": 1,
+  "status": "passed-startup",
+  "application": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/dev3-integration/build/dev3-static/OpenPyCharm.app",
+  "profile": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/dev3-integration/.state/dev3-startup-20261114",
+  "target": "macos-arm64",
+  "version": "0.1.0-dev.3",
+  "productManifestSha256": "224d416a3d43dad51022c50d338788cafbd92924ccaef47576731ad48ecef051",
+  "verifiedPluginJars": [
+    {
+      "id": "dev.openpycharm.http",
+      "version": "0.1.0-dev.3",
+      "jar": "third-party-plugins/openpycharm-http/lib/openpycharm-http.jar",
+      "jarSha256": "3514e6a321be38bcfbe61c1e0f33f0642897fc61a0220e034a732547f16ffd01"
+    },
+    {
+      "id": "dev.openpycharm.frameworks",
+      "version": "0.1.0-dev.3",
+      "jar": "third-party-plugins/openpycharm-frameworks/lib/frameworks.jar",
+      "jarSha256": "0fbd9bfc94d2588ecafcac93522b834bc48acd474bb4f815545d44d8e15e9ce2"
+    },
+    {
+      "id": "dev.openpycharm.notebooks",
+      "version": "0.1.0-dev.3",
+      "jar": "third-party-plugins/openpycharm-notebooks/lib/notebooks.jar",
+      "jarSha256": "4c3ff6c07e35e5f174fc25e5897e6cac37e40e9789b3d4d819035b5e5bafe8cf"
+    },
+    {
+      "id": "dev.openpycharm.database",
+      "version": "0.1.0-dev.3",
+      "jar": "third-party-plugins/openpycharm-database/lib/database.jar",
+      "jarSha256": "2adad125ed5bcfd31afe4c044dd1d0ea6b47eb58c5ec72561c897ae279202d8e"
+    }
+  ],
+  "command": [
+    "/Users/wangshubo/develop/openpycharm/.tools/worktrees/dev3-integration/build/dev3-static/OpenPyCharm.app/Contents/MacOS/pycharm",
+    "/Users/wangshubo/develop/openpycharm/.tools/worktrees/dev3-integration/.state/dev3-startup-20261114/project/hello-python"
+  ],
+  "projectTrustBypassed": false,
+  "limitations": [
+    "Project trust and first-run dialogs remain normal and may await user input",
+    "Startup logs do not establish Run/Test/Debug or other native UI acceptance"
+  ],
+  "pid": 64459,
+  "observation": {
+    "ideStarted": true,
+    "productIdentity": true,
+    "vendorIdentity": true,
+    "isolatedPaths": {
+      "config": true,
+      "system": true,
+      "plugins": true,
+      "log": true
+    },
+    "loadedPlugins": {
+      "Python Community Edition": true,
+      "Git": true,
+      "Terminal": true
+    },
+    "packagedPlugins": {
+      "dev.openpycharm.http": true,
+      "dev.openpycharm.frameworks": true,
+      "dev.openpycharm.notebooks": true,
+      "dev.openpycharm.database": true
+    },
+    "projectOpenRequested": true,
+    "projectOpenedInLog": false,
+    "errorCount": 0,
+    "errors": [],
+    "warningCount": 1,
+    "warnings": [
+      "2026-11-14 06:52:35,196 [    638]   WARN - #c.i.p.instanceContainer - InstanceNotOverridableException: Override failed for com.intellij.openapi.project.impl.ProjectStoreFactory: com.intellij.configurationScript.providers.ConfigurationScriptProjectStoreFactory attempts to override com.intellij.configurationStore.PlatformLangProjectStoreFactory, but the existing implementation is not overriddable (not declared as 'open=true')"
+    ]
+  },
+  "cleanup": {
+    "mode": "owned-posix-session",
+    "pid": 64459,
+    "exitCode": 143,
+    "pidAbsentAfterCleanup": true
+  },
+  "elapsedSeconds": 9.82,
+  "logSha256": "9ab6b89329284cdcfecd7e8a150afbb3669dfc3e8a88fcc06854137aeee958c0",
+  "finalObservation": {
+    "ideStarted": true,
+    "productIdentity": true,
+    "vendorIdentity": true,
+    "isolatedPaths": {
+      "config": true,
+      "system": true,
+      "plugins": true,
+      "log": true
+    },
+    "loadedPlugins": {
+      "Python Community Edition": true,
+      "Git": true,
+      "Terminal": true
+    },
+    "packagedPlugins": {
+      "dev.openpycharm.http": true,
+      "dev.openpycharm.frameworks": true,
+      "dev.openpycharm.notebooks": true,
+      "dev.openpycharm.database": true
+    },
+    "projectOpenRequested": true,
+    "projectOpenedInLog": false,
+    "errorCount": 0,
+    "errors": [],
+    "warningCount": 2,
+    "warnings": [
+      "2026-11-14 06:52:35,196 [    638]   WARN - #c.i.p.instanceContainer - InstanceNotOverridableException: Override failed for com.intellij.openapi.project.impl.ProjectStoreFactory: com.intellij.configurationScript.providers.ConfigurationScriptProjectStoreFactory attempts to override com.intellij.configurationStore.PlatformLangProjectStoreFactory, but the existing implementation is not overriddable (not declared as 'open=true')",
+      "2026-11-14 06:52:38,073 [   3515]   WARN - #c.i.o.v.i.l.NativeFileWatcherImpl - Watcher terminated with exit code 143"
+    ]
+  },
+  "verificationCommit": "29be7d049355815949d0ec22748547b16fbc9950",
+  "scope": "Single fresh-profile macOS native startup; no CUA or project interactions. Normal project trust was retained and project opening was not established.",
+  "productionInputs": {
+    "sourceCommit": "e2ddbfd980d69e1f5da852088aeca6c9c59656fc",
+    "count": 129,
+    "currentBeforeAndAfter": true,
+    "manifestSha256": "224d416a3d43dad51022c50d338788cafbd92924ccaef47576731ad48ecef051",
+    "treeSha256BeforeAndAfter": "9544f9a86bfc8cab7ae42c376ec040377d262f57dc4e4100ee24c4f4c09edc69",
+    "treeUnchanged": true,
+    "codesignDeepStrictExitCode": 0,
+    "testOnlyCherryPick": "d5fc10d19e295d02707598832fabee20d8d01bee",
+    "testOnlyIntegrationCommit": "29be7d049355815949d0ec22748547b16fbc9950"
+  },
+  "evidence": {
+    "startupReceipt": ".state/dev3-startup-20261114/startup.json",
+    "startupReceiptSha256": "1abc57598910fb1db3cbf459794782e6aeac452290c082d93bc1838172b02505",
+    "log": ".state/dev3-startup-20261114/log/idea.log",
+    "logSha256": "9ab6b89329284cdcfecd7e8a150afbb3669dfc3e8a88fcc06854137aeee958c0"
+  },
+  "remaining": [
+    "Notebook/database native editing, persistence, Run/Stop and desktop workflows",
+    "Four-plugin native relocation and Windows runtime acceptance",
+    "Cold native Markdown render gate on this dev.3 candidate",
+    "DMG/EXE installers, installed-version GIF and release evidence"
+  ]
+}
