@@ -124,6 +124,10 @@ jobs:
       - name: Check native product startup with an isolated profile
         shell: bash
         run: python scripts/runtime_smoke.py --app "$PRODUCT" --profile "build/runtime-startup-${TARGET}"
+      - name: Check actual cold Markdown preview rendering on macOS
+        if: matrix.target == 'macos-arm64'
+        shell: bash
+        run: python scripts/markdown_probe.py --app "$PRODUCT" --sdk "$SDK" --profile "build/native-markdown-${TARGET}"
       - name: Check actual bundled HTTP registration with an isolated native API probe
         shell: bash
         run: |
@@ -165,6 +169,11 @@ jobs:
             build/runtime-startup-*/idea.properties
             build/runtime-startup-*/launcher-output.log
             build/runtime-startup-*/log/
+            build/native-markdown-*/markdown-startup.json
+            build/native-markdown-*/markdown-native.json
+            build/native-markdown-*/idea.properties
+            build/native-markdown-*/markdown-launch.log
+            build/native-markdown-*/log/
             build/native-http-*/http-plugin.json
             build/native-http-*/idea.properties
             build/native-http-*/native-probe-launch.log
