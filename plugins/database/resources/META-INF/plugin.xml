@@ -1,0 +1,20 @@
+<idea-plugin>
+  <id>dev.openpycharm.database</id>
+  <name>OpenPyCharm Database</name>
+  <version>@VERSION@</version>
+  <vendor>OpenPyCharm contributors</vendor>
+  <description>Independent native JDBC data sources, SQL console, metadata and bounded result previews.</description>
+  <idea-version since-build="261" until-build="261.*"/>
+  <depends>com.intellij.modules.platform</depends>
+  <extensions defaultExtensionNs="com.intellij">
+    <toolWindow id="Database" anchor="right" icon="AllIcons.Toolwindows.ToolWindowDataView" factoryClass="dev.openpycharm.database.DatabaseToolWindow"/>
+    <fileType name="OpenPyCharm SQL" language="OpenPyCharmSQL" implementationClass="dev.openpycharm.database.SqlLanguage$FileType" fieldName="INSTANCE" extensions="sql"/>
+    <lang.parserDefinition language="OpenPyCharmSQL" implementationClass="dev.openpycharm.database.SqlParserDefinition"/>
+    <lang.syntaxHighlighterFactory language="OpenPyCharmSQL" implementationClass="dev.openpycharm.database.SqlLanguage$HighlighterFactory"/>
+  </extensions>
+  <actions>
+    <action id="OpenPyCharm.Database.RunSql" class="dev.openpycharm.database.RunSqlAction" text="Run SQL Statement" description="Run selected SQL or the statement at the caret with the connected data source">
+      <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+    </action>
+  </actions>
+</idea-plugin>

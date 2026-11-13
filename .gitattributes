@@ -8,3 +8,5 @@
 *.patch text eol=lf -whitespace
 *.png binary
 *.gif binary
+# Retain exact upstream license/notice bytes across Windows/macOS checkouts.
+/plugins/database/legal/* -text

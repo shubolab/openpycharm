@@ -102,5 +102,54 @@ def verify_product_plugins(manifest: dict, contents: Path) -> list[dict]:
             raise ValueError("Product plugin JAR must be a bounded regular file")
         if sha256(current) != entry["jarSha256"]:
             raise ValueError("Product plugin JAR digest differs from its build receipt")
+        verify_plugin_payloads(entry, contents)
         verified.append({key: entry[key] for key in ("id", "version", "jar", "jarSha256")})
     return verified
+
+
+def verify_plugin_payloads(entry: dict, contents: Path) -> None:
+    """Bind separate driver binaries and corresponding source to the same receipt."""
+    files = entry.get("files")
+    if files is None:
+        if entry["id"] == "dev.openpycharm.database":
+            raise ValueError("Database plugin requires its complete driver/source payload receipt")
+        return
+    if not isinstance(files, dict) or not 1 <= len(files) <= 32:
+        raise ValueError("Plugin payload receipt must be a bounded file map")
+    directory = Path(contents) / entry["path"]
+    primary = PurePosixPath(entry["jar"]).relative_to(PurePosixPath(entry["path"])).as_posix()
+    if files.get(primary) != entry["jarSha256"]:
+        raise ValueError("Plugin payload receipt must include the exact primary JAR")
+    build_files = entry.get("build", {}).get("files") if isinstance(entry.get("build"), dict) else None
+    if entry["id"] == "dev.openpycharm.database" and (files != build_files or len(files) != 5):
+        raise ValueError("Database plugin driver/source files differ from its authenticated build receipt")
+    for name, digest in files.items():
+        if not isinstance(name, str) or not isinstance(digest, str) or re.fullmatch(r"[a-f0-9]{64}", digest) is None:
+            raise ValueError("Invalid plugin payload name or digest")
+        relative = PurePosixPath(name)
+        if (not name or not relative.parts or relative.is_absolute() or relative.as_posix() != name
+                or any(c in name for c in "\\:\0") or any(p in {".", ".."} for p in relative.parts)
+                or relative.parts[0] not in {"lib", "legal"}):
+            raise ValueError("Plugin payload paths must stay below lib/legal")
+        current = directory
+        for index, part in enumerate(relative.parts):
+            current /= part
+            if current.is_symlink():
+                raise ValueError("Plugin payload paths cannot contain symlinks")
+            mode = current.stat().st_mode if current.exists() else 0
+            if index < len(relative.parts) - 1 and not stat.S_ISDIR(mode):
+                raise ValueError("Plugin payload parent must be a regular directory")
+        if not stat.S_ISREG(mode) or current.stat().st_size > 128 * 1024**2:
+            raise ValueError("Plugin payload must be a bounded regular file")
+        if sha256(current) != digest:
+            raise ValueError("Plugin payload digest differs from its build receipt")
+    actual = set()
+    for parent, directories, names in os.walk(directory, followlinks=False):
+        for name in directories + names:
+            path = Path(parent) / name
+            if path.is_symlink():
+                raise ValueError("Plugin payload directories cannot contain symlinks")
+            if name in names:
+                actual.add(path.relative_to(directory).as_posix())
+    if actual != set(files):
+        raise ValueError("Plugin directory contains missing or unreceipted payload files")
