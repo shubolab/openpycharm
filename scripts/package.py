@@ -11,7 +11,7 @@ import shutil
 import subprocess
 import tempfile
 
-from product import IDENTITY, ROOT, brand_plist, brand_product_info, brand_resources, sha, write_paths
+from product import IDENTITY, ROOT, brand_plist, brand_product_info, brand_resources, seal_python_helper_directories, sha, write_paths
 from bootstrap import PIN_PATH, validate_cached
 from provenance import source_inputs
 
@@ -84,6 +84,8 @@ def assemble(sdk, target, version, output):
         shutil.copyfile(ROOT / "NOTICE", contents / "license/OPENPYCHARM-NOTICE.txt")
         (contents / "openpycharm-build.json").write_text(json.dumps(report, indent=2) + "\n")
         if macos:
+            report["pythonHelperResources"] = seal_python_helper_directories(contents)
+            (contents / "openpycharm-build.json").write_text(json.dumps(report, indent=2) + "\n")
             subprocess.run(["codesign", "--force", "--deep", "--sign", "-", str(staging)], check=True)
             subprocess.run(["codesign", "--verify", "--deep", "--strict", str(staging)], check=True)
         staging.rename(output)

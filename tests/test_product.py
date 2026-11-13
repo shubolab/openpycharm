@@ -1,17 +1,64 @@
 import copy
 import json
+import os
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 import xml.etree.ElementTree as ET
 import zipfile
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-from product import brand_application_info, brand_plist, brand_product_info, rewrite_jar, write_paths
+from product import brand_application_info, brand_plist, brand_product_info, rewrite_jar, seal_python_helper_directories, write_paths
 
 
 class ProductTests(unittest.TestCase):
+    @unittest.skipIf(sys.platform == "win32" or getattr(os, "geteuid", lambda: 0)() == 0,
+                     "Requires macOS/Linux filesystem permissions and a normal user")
+    def test_native_helper_import_keeps_bundle_immutable_and_user_bytecode_enabled(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            contents = root / "build/owned/Contents"
+            helpers = contents / "plugins/python-ce/helpers"
+            helpers.mkdir(parents=True)
+            (helpers / "sealed_helper.py").write_text("VALUE = 42\n")
+            project = root / "project"
+            project.mkdir()
+            (project / "user_module.py").write_text("VALUE = 21\n")
+            with patch("product.ROOT", root):
+                report = seal_python_helper_directories(contents)
+            env = {key: value for key, value in os.environ.items()
+                   if key not in {"PYTHONDONTWRITEBYTECODE", "PYTHONPYCACHEPREFIX"}}
+            env["PYTHONPATH"] = os.pathsep.join([str(helpers), str(project)])
+            result = subprocess.run([sys.executable, "-c",
+                                     "import sealed_helper, user_module; print(sealed_helper.VALUE + user_module.VALUE)"],
+                                    env=env, capture_output=True, text=True, check=True)
+            self.assertEqual(result.stdout.strip(), "63")
+            self.assertFalse((helpers / "__pycache__").exists())
+            self.assertTrue((project / "__pycache__").is_dir())
+            self.assertFalse(report["userPythonEnvironmentModified"])
+
+    def test_helper_permission_change_rejects_source_sdk_and_linked_directories(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            sdk = root / "sdk/Contents"
+            helper = sdk / "plugins/python-ce/helpers"
+            helper.mkdir(parents=True)
+            with patch("product.ROOT", root), self.assertRaises(ValueError):
+                seal_python_helper_directories(sdk)
+            self.assertTrue(helper.stat().st_mode & 0o200)
+            if sys.platform != "win32":
+                owned = root / "build/owned/Contents"
+                owned_helper = owned / "plugins/python-ce/helpers"
+                owned_helper.mkdir(parents=True)
+                (owned_helper / "escape").symlink_to(helper, target_is_directory=True)
+                with patch("product.ROOT", root), self.assertRaises(ValueError):
+                    seal_python_helper_directories(owned)
+                self.assertTrue(owned_helper.stat().st_mode & 0o200)
+                self.assertTrue(helper.stat().st_mode & 0o200)
+
     def test_branding_keeps_compatibility_and_one_override_per_key(self):
         source = {"productCode": "PC", "version": "2026.1.4", "buildNumber": "261.26222.68",
                   "bundledPlugins": ["PythonCore", "Git4Idea"],
