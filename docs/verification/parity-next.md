@@ -34,7 +34,7 @@ startup registration is omitted. This removes the unsolicited upstream release
 tab while preserving the Help action, native onboarding and feature tours.
 Routing the manual What's New action to our own release notes remains open.
 
-Controls: 12 local-product tests pass, covering exact framework omissions,
+Controls: 13 local-product tests pass, covering exact framework omissions,
 embedded XML, untouched Python/test configuration types, retained native tours,
 Git authentication/feature discovery and numeric-promotion inlay hints, plus
 source-SDK/symlink ownership. The original pinned cached/JAR descriptors were
@@ -63,6 +63,20 @@ The product therefore omits only the exact
 including its embedded cached copy. This allows the ordinary native welcome
 fallback and retains New Project, Open and Clone registrations. An existing
 Advanced Settings value cannot re-enable the removed provider.
+
+The ordinary welcome screen's optional New Script shortcut has the same shared
+path problem. Its dynamic `WelcomeScreen.PyScratchFileActionGroup` creates
+`PyMiscFileAction` instances; their
+[action handler](https://github.com/JetBrains/intellij-community/blob/456919a9624bae72ac12efafc35d2b916cb0c5c5/python/ide/impl/src/com/intellij/pycharm/community/ide/impl/miscProject/impl/PyMiscFileAction.kt)
+calls `PyMiscService.createMiscProject` without a project-path argument. There
+is no directory chooser before project/venv creation. The product omits that
+exact optional group, `welcome.screen.left.tab.new.py.script`, and the New
+Script/New Notebook feature backends declared in
+[PyWelcomeFeatures.kt](https://github.com/JetBrains/intellij-community/blob/456919a9624bae72ac12efafc35d2b916cb0c5c5/python/ide/impl/src/com/intellij/pycharm/community/ide/impl/newProjectWizard/welcome/PyWelcomeFeatures.kt).
+The latter two call the same service. Ordinary project `NewPythonFile`, native
+scratch files, Import File, Learn, New Project, Open and Clone are retained.
+These shortcuts can return with a product-owned miscellaneous-project location;
+omission is an isolation measure for this preview, not full welcome parity.
 
 The upstream `welcome.screen.non.modal.enabled` control is an Advanced Setting,
 not a demonstrated JVM property: `AdvancedSettingsImpl.getSetting` reads saved

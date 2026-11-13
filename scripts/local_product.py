@@ -162,6 +162,14 @@ def xml_filter(data: bytes, excluded: set[str]) -> tuple[bytes, list[dict]]:
                 and attrs.get("topic") == "com.intellij.ide.AppLifecycleListener")
             or (tag == "postStartupActivity" and attrs.get("implementation") == "com.intellij.platform.whatsNew.WhatsNewShowOnStartCheckService")
             or (tag == "welcomeScreenProjectProvider" and attrs.get("implementation") == "com.intellij.pycharm.community.ide.impl.welcomeScreen.PyCharmWelcomeScreenProjectProvider")
+            or (tag == "group" and attrs.get("id") == "WelcomeScreen.PyScratchFileActionGroup"
+                and attrs.get("class") == "com.intellij.pycharm.community.ide.impl.miscProject.impl.PyMiscFileActionGroup")
+            or (tag == "action" and attrs.get("id") == "welcome.screen.left.tab.new.py.script"
+                and attrs.get("class") == "com.intellij.pycharm.community.ide.impl.miscProject.impl.PyNewMiscScriptAction")
+            or (tag == "platform.ide.welcomeScreenFeatureBackend" and attrs.get("implementation") in {
+                "com.intellij.pycharm.community.ide.impl.newProjectWizard.welcome.PyNewScriptWelcomeScreenFeature",
+                "com.intellij.pycharm.community.ide.impl.newProjectWizard.welcome.PyNewNotebookWelcomeScreenFeature",
+            })
         )
         if selected:
             targets.append((begin, finish, {"tag": tag, "attributes": attrs, "sha256": sha(data[begin:finish])}, b""))
@@ -323,7 +331,8 @@ def apply(contents: Path, sdk_contents: Path | None = None) -> dict:
     jars = []
     tokens = [b"settingsSync", b"ultimatePromo", b"grazie", b".promotion", b"PycharmProSuggestionProvider", b"pluginsAdvertisement", b"TryUltimateActionHandler", b"ConsentConfigurable",
               b"LockedRunConfigurationType", b"DbtRunLockedConfigurationType", b"WelcomeToUnifiedWelcomeScreenBanner", b"CommunityToUnifiedListener",
-              b"WhatsNewShowOnStartCheckService", b"PyCharmWelcomeScreenProjectProvider"]
+              b"WhatsNewShowOnStartCheckService", b"PyCharmWelcomeScreenProjectProvider",
+              b"PyMiscFileActionGroup", b"PyNewMiscScriptAction", b"PyNewScriptWelcomeScreenFeature", b"PyNewNotebookWelcomeScreenFeature"]
     for path in sorted(contents.rglob("*.jar")):
         if path == module_jar:
             continue

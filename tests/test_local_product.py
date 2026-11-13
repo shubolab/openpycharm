@@ -90,6 +90,15 @@ class LocalProductDescriptorTests(unittest.TestCase):
         wrap = lambda data: b'<idea-plugin><content><module name="intellij.pycharm.community.ide.impl">' + escape(data.decode(), {'"': '&quot;'}).encode() + b'</module></content></idea-plugin>'
         self.assertEqual(wrap(expected), xml_filter(wrap(before), set())[0])
 
+    def test_misc_welcome_shortcuts_removed_without_touching_project_file_creation(self):
+        removed = b'<group id="WelcomeScreen.PyScratchFileActionGroup" class="com.intellij.pycharm.community.ide.impl.miscProject.impl.PyMiscFileActionGroup" compact="true"/><action id="welcome.screen.left.tab.new.py.script" class="com.intellij.pycharm.community.ide.impl.miscProject.impl.PyNewMiscScriptAction"/><platform.ide.welcomeScreenFeatureBackend implementation="com.intellij.pycharm.community.ide.impl.newProjectWizard.welcome.PyNewScriptWelcomeScreenFeature"/><platform.ide.welcomeScreenFeatureBackend implementation="com.intellij.pycharm.community.ide.impl.newProjectWizard.welcome.PyNewNotebookWelcomeScreenFeature"/>'
+        kept = b'<action id="NewPythonFile" class="com.jetbrains.python.actions.CreatePythonFileAction"/><action id="NewScratchFile" class="example.NativeScratchFile"/><platform.ide.welcomeScreenFeatureBackend implementation="com.intellij.pycharm.community.ide.impl.newProjectWizard.welcome.PyImportFileWelcomeScreenFeature"/><platform.ide.welcomeScreenFeatureBackend implementation="com.intellij.pycharm.community.ide.impl.newProjectWizard.welcome.PyLearnWelcomeScreenFeature"/>'
+        before = b'<idea-plugin><actions>' + removed + kept + b'</actions></idea-plugin>'
+        expected = b'<idea-plugin><actions>' + kept + b'</actions></idea-plugin>'
+        self.assertEqual(expected, xml_filter(before, set())[0])
+        wrap = lambda data: b'<idea-plugin><content><module name="intellij.pycharm.community.ide.impl">' + escape(data.decode(), {'"': '&quot;'}).encode() + b'</module></content></idea-plugin>'
+        self.assertEqual(wrap(expected), xml_filter(wrap(before), set())[0])
+
     def test_cache_preserves_non_xml_record_bytes_and_rejects_truncation(self):
         core = b'<idea-plugin><id>core</id></idea-plugin>'
         descriptor = b'<idea-plugin><id>Git4Idea</id></idea-plugin>'
