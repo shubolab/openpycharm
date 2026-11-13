@@ -22,6 +22,7 @@ import javax.swing.JFrame;
 @SuppressWarnings("removal")
 public final class MarkdownStartupProbe implements AppLifecycleListener {
   private final AtomicBoolean scheduled = new AtomicBoolean();
+  @Override public void appFrameCreated(List<String> arguments) { request(); }
   @Override public void appStarted() { request(); }
   @Override public void welcomeScreenDisplayed() { request(); }
 
@@ -62,13 +63,18 @@ public final class MarkdownStartupProbe implements AppLifecycleListener {
         frame.setContentPane(panel.getComponent());
         frame.setSize(640, 420);
         frame.setVisible(true);
-        panel.createImmediately();
-        panel.setHtml("<h1>Markdown preview 中文</h1><p>" + nonce + "</p>", 0, (com.intellij.openapi.vfs.VirtualFile)null);
         result.put("panelClass", panel.getClass().getName());
         result.put("jcefStartedAfterConstruction", JBCefApp.isStarted());
         result.put("httpSettingsCreatedAfter", application.getServiceIfCreated(HttpConfigurable.class) != null);
         result.put("migrationServiceCreatedAfter", application.getServiceIfCreated(ProxyMigrationService.class) != null);
       });
+      String sourceAttribute = org.intellij.markdown.html.HtmlGenerator.Companion.getSRC_ATTRIBUTE_NAME();
+      String html = "<div " + sourceAttribute + "=\"0..256\"><h1>Markdown preview 中文</h1><p>" + nonce + "</p></div>";
+      // The SDK's test-only await helper uses the real preview resource load,
+      // IncrementalDOMBuilder and browser JS; wait on the worker, never the EDT.
+      kotlinx.coroutines.BuildersKt.runBlocking(kotlin.coroutines.EmptyCoroutineContext.INSTANCE,
+          (scope, continuation) -> panelRef.get().setHtmlAndWait(html, continuation));
+      result.put("renderAwaitApi", "MarkdownJCEFHtmlPanel.setHtmlAndWait (test-only, actual browser)");
       long deadline = System.nanoTime() + 40_000_000_000L;
       while (rendered.get() == null && System.nanoTime() < deadline) {
         ApplicationManager.getApplication().invokeAndWait(() -> {
@@ -89,9 +95,9 @@ public final class MarkdownStartupProbe implements AppLifecycleListener {
     } finally {
       try {
         ApplicationManager.getApplication().invokeAndWait(() -> {
+          if (panelRef.get() != null && !panelRef.get().isDisposed()) Disposer.dispose(panelRef.get());
           if (queryRef.get() != null && !queryRef.get().isDisposed()) Disposer.dispose(queryRef.get());
           if (frameRef.get() != null) frameRef.get().dispose();
-          if (panelRef.get() != null && !panelRef.get().isDisposed()) Disposer.dispose(panelRef.get());
         });
       } catch (Throwable error) { result.put("status", "fail"); result.put("cleanupFailure", error.toString()); }
       try {
