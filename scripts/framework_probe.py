@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 from pathlib import Path
 import subprocess
 import tempfile
@@ -49,7 +50,67 @@ def assess(native: dict, invocation: str, python: str, working_directory: str) -
             "scope": "Native EP registration, editor/state, runner selection and persistence"}
 
 
-def run_probe(app: Path, sdk: Path, python: Path, profile: Path, timeout: int = 90) -> dict:
+def assess_generators(native: dict, invocation: str, python: str, optout_python: str) -> dict:
+    if (native.get("invocationId") != invocation or native.get("status") != "pass" or native.get("failure") or native.get("cleanupFailure")
+            or native.get("nativeGuiCreateClicked") is not False):
+        raise ValueError("Native generator integration failed or belongs to another invocation: " + str(native.get("failure", native.get("cleanupFailure"))))
+    peers = native.get("generatorPeers", [])
+    if len(peers) != 3 or {peer.get("framework") for peer in peers} != {"DJANGO", "FLASK", "FASTAPI"}:
+        raise ValueError("All three native framework generator peers must be observed")
+    for peer in peers:
+        if (peer.get("nativePeer") != "com.jetbrains.python.newProjectWizard.impl.PyV3GeneratorPeer"
+                or peer.get("dependencyCheckboxDefault") is not False or peer.get("dependencyCheckboxBinding") != "pass"):
+            raise ValueError("Native SDK peer or opt-in dependency UI evidence is incomplete")
+
+    def normalized(path):
+        return str(path).replace("\\", "/").casefold() if os.name == "nt" else str(path)
+
+    projects = native.get("projects", [])
+    if len(projects) != 4 or {(project.get("framework"), project.get("installDependencies")) for project in projects} != {
+        ("django", True), ("flask", True), ("fastapi", True), ("flask", False)}:
+        raise ValueError("Native generation must exercise all three opt-in projects and a no-install project")
+    for project in projects:
+        expected = python if project["installDependencies"] else optout_python
+        run = project.get("runConfiguration", {})
+        required = {"requirements.txt", "README.md", "manage.py", "project_config/settings.py", "project_config/urls.py"} if project["framework"] == "django" else {"requirements.txt", "README.md", "app.py"}
+        files = project.get("files", {})
+        if (project.get("status") != "pass" or not project.get("collisionRejected")
+                or normalized(project.get("sdkHome")) != normalized(expected)
+                or normalized(project.get("moduleSdkAfterNativeStage")) != normalized(expected)
+                or normalized(run.get("interpreter")) != normalized(expected)
+                or normalized(run.get("workingDirectory")) != normalized(project.get("path")) or run.get("moduleSdk") is not True
+                or run.get("typeId") != {"django": "OpenPyCharmDjango", "flask": "OpenPyCharmFlask", "fastapi": "OpenPyCharmFastAPI"}[project["framework"]]
+                or not project.get("sdkCreatorContext", "").endswith("$ModuleAndProject")
+                or not required.issubset(files) or not all(isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value) for value in files.values())):
+            raise ValueError("Generated project lost its selected venv/module, files or native run configuration")
+    processes = native.get("processLifecycle", {})
+    for key in ("cancellationPreserved", "nonzeroExitPropagated", "timeoutPropagated", "normalExitChildrenCleaned", "failedExitChildrenCleaned"):
+        if processes.get(key) is not True:
+            raise ValueError("Owned dependency helper failure/cancellation evidence is incomplete")
+    if processes.get("status") != "pass" or processes.get("ownedPidsAliveAfterCancellation") is not False:
+        raise ValueError("Owned dependency helper cleanup did not pass")
+    for key in ("ownedPids", "normalExitOwnedPids", "failedExitOwnedPids"):
+        pids = processes.get(key, {})
+        if not {"parent", "child"}.issubset(pids) or not all(isinstance(pid, (int, float)) and not isinstance(pid, bool) and pid > 0 for pid in pids.values()):
+            raise ValueError("No owned parent/child process evidence was retained")
+    return {"status": "pass", "frameworks": 3, "generatedProjects": 4, "nativeGuiCreateClicked": False,
+            "scope": "Native generator UI/API, real selected venv/module, opt-in/out and helper lifecycle"}
+
+
+def assess_venvs(selected: dict, no_install: dict, python: Path, optout_python: Path) -> None:
+    expected = {"Django": "5.2.8", "Flask": "3.1.2", "fastapi": "0.121.0", "uvicorn": "0.38.0"}
+    # Resolve the venv directory, never the executable symlink to its base Python.
+    selected_root = python.parent.parent.resolve()
+    optout_root = optout_python.parent.parent.resolve()
+    if (selected.get("packages") != expected or selected.get("prefix") == selected.get("basePrefix")
+            or no_install.get("prefix") == no_install.get("basePrefix")
+            or Path(selected.get("prefix", "")).resolve() != selected_root
+            or Path(no_install.get("prefix", "")).resolve() != optout_root
+            or no_install.get("frameworkPackagesPresent") is not False):
+        raise ValueError("Pinned dependencies or opt-out did not stay within the selected real venvs")
+
+
+def run_probe(app: Path, sdk: Path, python: Path, profile: Path, timeout: int = 90, generators: bool = False) -> dict:
     if not 10 <= timeout <= 180:
         raise ValueError("Use a 10–180 second native probe timeout")
     profile = profile.resolve()
@@ -70,6 +131,15 @@ def run_probe(app: Path, sdk: Path, python: Path, profile: Path, timeout: int = 
     work.mkdir()
     isolated_home = profile / "home"
     isolated_home.mkdir()
+    optout_python = None
+    if generators:
+        # Real clean venvs make installation and opt-out effects observable.
+        original_python = python
+        for name in ("selected-venv", "no-install-venv"):
+            subprocess.run([str(original_python), "-m", "venv", str(profile / name)], check=True, timeout=60)
+        executable = "Scripts/python.exe" if os.name == "nt" else "bin/python"
+        python = profile / "selected-venv" / executable
+        optout_python = profile / "no-install-venv" / executable
     result = {"schema": 1, "application": str(app.resolve()), "profile": str(profile),
               "applicationBuild": {"version": app_manifest.get("version"), "upstreamBuild": app_manifest.get("upstreamBuild"),
                                    "sourceCommit": app_manifest.get("sourceCommit"), "manifestSha256": sha256(app_manifest_path)},
@@ -89,6 +159,16 @@ def run_probe(app: Path, sdk: Path, python: Path, profile: Path, timeout: int = 
                           "openpycharm.framework.probe.invocation.id": invocation,
                           "openpycharm.framework.probe.python": python.as_posix(),
                           "openpycharm.framework.probe.working.dir": work.as_posix()}
+        if generators:
+            properties_map.update({
+                "openpycharm.framework.generator.probe.root": (profile / "generated projects 中文").as_posix(),
+                "openpycharm.framework.generator.probe.optout.python": optout_python.as_posix(),
+                "openpycharm.framework.generator.probe.python.version": subprocess.check_output([str(python), "--version"], text=True).strip(),
+            })
+            result["limitations"] = ["Native generator UI/API with a controlled SDK creator selecting real clean existing venvs",
+                                     "The actual wizard Create/Cancel clicks and Windows desktop flow remain separate acceptance gates",
+                                     "Pinned dependency installation is opt-in and targets only the disposable selected venv",
+                                     "Portable process cleanup tracks observed descendants; an instant-spawn orphan before observation is not covered by a native OS job/session container"]
         if any(any(character in value for character in "\r\n\0") for value in properties_map.values()):
             raise ValueError("Native probe VM property contains a line break or NUL")
         vmoptions.write_text(base.read_text(encoding="utf-8") + "\n" +
@@ -115,12 +195,15 @@ def run_probe(app: Path, sdk: Path, python: Path, profile: Path, timeout: int = 
                     raise ValueError("Native framework probe produced no report before timeout/process exit")
                 native = json.loads(native_path.read_text(encoding="utf-8"))
                 result["native"] = native
-                result["assessment"] = assess(native, invocation, python.as_posix(), work.as_posix())
+                result["assessment"] = (assess_generators(native, invocation, python.as_posix(), optout_python.as_posix()) if generators
+                                        else assess(native, invocation, python.as_posix(), work.as_posix()))
                 try:
                     process.wait(timeout=20)
                     result["nativeGracefulExit"] = process.returncode
                 except subprocess.TimeoutExpired:
                     result["nativeGracefulExit"] = "timed-out; owned-session cleanup required"
+                if result["nativeGracefulExit"] != 0:
+                    result["assessment"] = {"status": "fail", "error": "Native probe did not exit normally: " + str(result["nativeGracefulExit"])}
             except Exception as error:
                 result["assessment"] = {"status": "fail", "error": str(error)}
             finally:
@@ -141,6 +224,17 @@ def run_probe(app: Path, sdk: Path, python: Path, profile: Path, timeout: int = 
             result["assessment"] = {"status": "fail", "error": "Native IDEA log contains ERROR or SEVERE entries"}
     else:
         result["assessment"] = {"status": "fail", "error": "Native IDEA log is missing"}
+    if generators and result.get("assessment", {}).get("status") == "pass":
+        try:
+            check = "import importlib.metadata,json,sys;names=['Django','Flask','fastapi','uvicorn'];print(json.dumps({'executable':sys.executable,'prefix':sys.prefix,'basePrefix':sys.base_prefix,'packages':{n:importlib.metadata.version(n) for n in names}}))"
+            selected = json.loads(subprocess.check_output([str(python), "-I", "-c", check], text=True, stderr=subprocess.STDOUT))
+            no_install = json.loads(subprocess.check_output([str(optout_python), "-I", "-c",
+                "import importlib.util,json,sys;print(json.dumps({'prefix':sys.prefix,'basePrefix':sys.base_prefix,'frameworkPackagesPresent':any(importlib.util.find_spec(n) for n in ['django','flask','fastapi','uvicorn'])}))"], text=True, stderr=subprocess.STDOUT))
+            result["selectedVenvAfterInstallation"] = selected
+            result["optOutVenvAfterGeneration"] = no_install
+            assess_venvs(selected, no_install, python, optout_python)
+        except (subprocess.SubprocessError, json.JSONDecodeError, KeyError, ValueError) as error:
+            result["assessment"] = {"status": "fail", "error": "Venv package verification failed: " + str(error)}
     (profile / "framework-probe.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return result
 
@@ -152,8 +246,9 @@ def main():
     parser.add_argument("--python", type=Path, required=True)
     parser.add_argument("--profile", type=Path, required=True)
     parser.add_argument("--timeout", type=int, default=90)
+    parser.add_argument("--generators", action="store_true", help="Exercise generator UI/API with clean disposable venvs and opt-in dependency installation")
     args = parser.parse_args()
-    result = run_probe(args.app, args.sdk, args.python, args.profile, args.timeout)
+    result = run_probe(args.app, args.sdk, args.python, args.profile, args.timeout, args.generators)
     print(json.dumps({"assessment": result["assessment"], "profile": result["profile"]}))
     if result["assessment"]["status"] != "pass":
         raise SystemExit(1)

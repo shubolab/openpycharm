@@ -36,6 +36,10 @@ public final class FrameworkProbe implements AppLifecycleListener {
     if (destination == null || boundary == null || !requested.compareAndSet(false, true)) return;
     Path report = Path.of(destination).toAbsolutePath().normalize();
     if (!report.startsWith(Path.of(boundary).toAbsolutePath().normalize())) return;
+    if (System.getProperty("openpycharm.framework.generator.probe.root") != null) {
+      FrameworkGeneratorProbe.start(report);
+      return;
+    }
     ApplicationManager.getApplication().invokeLater(() -> {
       Map<String, Object> result = new LinkedHashMap<>();
       result.put("invocationId", System.getProperty("openpycharm.framework.probe.invocation.id"));

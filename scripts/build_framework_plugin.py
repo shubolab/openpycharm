@@ -98,7 +98,8 @@ def run_command_tests(sdk: Path, plugin: Path) -> dict:
     with tempfile.TemporaryDirectory(prefix="framework-tests-", dir=plugin.parent) as directory:
         temporary = Path(directory)
         classes = temporary / "classes"
-        compile_java(layout, [ROOT / "tests/frameworks/FrameworkCommandTest.java"], classes, temporary / "javac.args",
+        compile_java(layout, [ROOT / "tests/frameworks/FrameworkCommandTest.java", ROOT / "tests/frameworks/FrameworkProjectFilesTest.java",
+                             ROOT / "tests/frameworks/FrameworkProjectSettingsTest.java"], classes, temporary / "javac.args",
                      [plugin / "lib/frameworks.jar"])
         cp = os.pathsep.join(map(str, [classes, plugin / "lib/frameworks.jar", *classpath(layout)]))
         arguments = ["-classpath", cp, "dev.openpycharm.frameworks.FrameworkCommandTest"]
@@ -114,6 +115,32 @@ def run_command_tests(sdk: Path, plugin: Path) -> dict:
         report = json.loads(result.stdout)
         if report.get("status") != "pass":
             raise ValueError("Framework argument checks returned no passing report")
+        template_arguments = ["-classpath", cp, "dev.openpycharm.frameworks.FrameworkProjectFilesTest"]
+        template_command, template_cwd = [str(layout.java), *template_arguments], None
+        if os.name == "nt":
+            from native_probe import _write_java_arguments
+            argument_file = temporary / "template-tests.args"
+            _write_java_arguments(argument_file, template_arguments)
+            template_command, template_cwd = [str(layout.java), "@" + argument_file.name], temporary
+        templates = subprocess.run(template_command, cwd=template_cwd, text=True, capture_output=True, timeout=45)
+        if templates.returncode:
+            raise ValueError("Framework template checks failed:\n" + templates.stdout + templates.stderr)
+        report["templateTests"] = json.loads(templates.stdout)
+        if report["templateTests"].get("status") != "pass":
+            raise ValueError("Framework template checks returned no passing report")
+        settings_arguments = ["-classpath", cp, "dev.openpycharm.frameworks.FrameworkProjectSettingsTest"]
+        settings_command, settings_cwd = [str(layout.java), *settings_arguments], None
+        if os.name == "nt":
+            from native_probe import _write_java_arguments
+            argument_file = temporary / "settings-tests.args"
+            _write_java_arguments(argument_file, settings_arguments)
+            settings_command, settings_cwd = [str(layout.java), "@" + argument_file.name], temporary
+        settings = subprocess.run(settings_command, cwd=settings_cwd, text=True, capture_output=True, timeout=45)
+        if settings.returncode:
+            raise ValueError("Framework request-isolation checks failed:\n" + settings.stdout + settings.stderr)
+        report["settingsTests"] = json.loads(settings.stdout)
+        if report["settingsTests"].get("status") != "pass":
+            raise ValueError("Framework request-isolation checks returned no passing report")
         return report
 
 
@@ -129,7 +156,7 @@ def build_native_probe(sdk: Path, plugin: Path) -> Path:
     with tempfile.TemporaryDirectory(prefix="probe-compile-", dir=output) as directory:
         temporary = Path(directory)
         classes = temporary / "classes"
-        compile_java(layout, [sources / "FrameworkProbe.java"], classes, temporary / "javac.args", [plugin / "lib/frameworks.jar"])
+        compile_java(layout, sorted(sources.glob("*.java")), classes, temporary / "javac.args", [plugin / "lib/frameworks.jar"])
         archive.parent.mkdir(exist_ok=True)
         with zipfile.ZipFile(archive, "w", zipfile.ZIP_DEFLATED) as bundle:
             for path in sorted(classes.rglob("*.class")):
