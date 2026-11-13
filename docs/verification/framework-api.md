@@ -131,4 +131,8 @@ python3 scripts/framework_server_smoke.py \
 
 产品 `plugins[]` 清单记录 id、名称、版本、相对目录、JAR 与摘要及完整构建收据。来源闭包包含全部 `plugins/`。安装器与启动检查复用 `verify_product_plugins`，框架与 HTTP JAR 任一字节变化均被拒绝。`framework_probe.py --packaged` 在创建配置或启动之前检查来源和两份 JAR；只注入测试监听器，要求原生 descriptor 的 bundled 标记、版本、路径、JAR 摘要及应用 home 都与产品一致。生产插件没有通过 `plugin.path` 注入。探针编译和临时文件始终位于工作树 `.tools` 或隔离 profile，不写入签名产品。
 
-本次集成的真实原生运行验证尚待执行；前述历史记录仍是独立加载的切片证据，不能当作集成产品验收。Windows native CI 和实际桌面操作继续由主线候选检查。
+集成候选 `0.1.0-dev.2`、来源提交 `80cea80c27623d76859d14b19f35b4ca5427c52b` 已在 macOS arm64 通过实际原生 API 检查。HTTP 和框架插件均由原生产品目录加载，框架 descriptor 的 bundled 状态、路径、版本、JAR 摘要完全匹配清单；只额外注入测试监听器。三个原生 peer、四个生成项目、所选真实 venv 的依赖安装/关闭安装、原生 SDK/模块配置和运行配置，以及取消/超时/失败/已观察后代清理均通过。三个刚生成项目的真实 HTTP 路由均返回预期 200 和环境标记。
+
+原生进程 PID 8506 正常退出（code 0），日志 ERROR/SEVERE 为 0；一个已知上游 ConfigurationScript WARN 保留。完整应用文件树在测试前后摘要相同，`codesign --verify --deep --strict` 和来源/JAR 校验在测试后仍通过。精简证据见 [framework-integration-20261114.json](framework-integration-20261114.json)。77 项 Python 控制、9 项基础示例测试、254 项模板检查和 16 项请求隔离检查通过；Windows SDK 的 classpath 编译/检查使用 macOS 宿主 JBR，不能当作 Windows 原生运行证据。
+
+这些证据支持原生产品加载与生成器 API 集成；前面的独立加载历史记录继续单列。实际向导 Create/Cancel、框架 Run/Debug 桌面操作、Windows native CI、正式安装包及发布 GIF 仍由后续主线候选验收，瞬时未观察孤儿进程的容器边界也仍开放。

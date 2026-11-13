@@ -1,0 +1,377 @@
+{
+  "schema": 1,
+  "status": "pass",
+  "sourceCommit": "80cea80c27623d76859d14b19f35b4ca5427c52b",
+  "application": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frameworks/build/framework-integration/OpenPyCharm.app",
+  "applicationManifestSha256": "8f09bc4e3818abe9d51d967d06acd4d69e162f26627d5264acbab15da0efd167",
+  "version": "0.1.0-dev.2",
+  "sourceInputCount": 78,
+  "plugins": [
+    {
+      "id": "dev.openpycharm.http",
+      "version": "0.1.0-dev.2",
+      "path": "third-party-plugins/openpycharm-http",
+      "jar": "third-party-plugins/openpycharm-http/lib/openpycharm-http.jar",
+      "jarSha256": "968be1b17338800eab6d7d796137916e01b9a502db9b183ba2cadc13db8e52d5"
+    },
+    {
+      "id": "dev.openpycharm.frameworks",
+      "version": "0.1.0-dev.2",
+      "path": "third-party-plugins/openpycharm-frameworks",
+      "jar": "third-party-plugins/openpycharm-frameworks/lib/frameworks.jar",
+      "jarSha256": "7f191b13f6ac9762e074424cd94fdc982b3620cc7f5f69eb02150ec541e01956"
+    }
+  ],
+  "checks": {
+    "unitTests": {
+      "status": "pass",
+      "count": 77
+    },
+    "helloPython": {
+      "status": "pass",
+      "count": 9
+    },
+    "deepStrictSignature": "pass",
+    "installerSourceAndJarValidation": "pass",
+    "windowsClasspath": {
+      "status": "pass",
+      "receipt": ".tools/framework-integration-build-windows.json",
+      "sha256": "e5ee2da783ddd201efbdd7cf2d417e101b34da1c4b61f93d892e705ec0ff8d14",
+      "nativeTargetRuntime": false,
+      "archiveVerification": {
+        "status": "pass",
+        "reader": "HashMapZipFile",
+        "verifiedEntries": 23,
+        "closed": true,
+        "sha256": "7f191b13f6ac9762e074424cd94fdc982b3620cc7f5f69eb02150ec541e01956"
+      },
+      "templateTests": {
+        "status": "pass",
+        "scope": "template plans and transactional filesystem writer",
+        "checks": 254,
+        "symlinksTested": true
+      },
+      "settingsTests": {
+        "status": "pass",
+        "scope": "per-module dependency opt-in request isolation",
+        "checks": 16
+      }
+    },
+    "httpProtocol": {
+      "status": "pass",
+      "receipt": ".tools/http-framework-integration-build.json",
+      "sha256": "ede86fe3c01ce4a388e35ffed46cef3c5a28130d5bfb38486acfc9570cd54c8a",
+      "protocolTests": {
+        "status": "pass",
+        "serverOwnedClosed": true,
+        "requestFraming": {
+          "rejectedHeaderVariants": 6,
+          "wireContentLength": 5,
+          "wireTransferEncodingAbsent": true,
+          "rejectedRequestsOpenedSockets": false
+        },
+        "checkCount": 9,
+        "checks": [
+          "real UTF-8 POST preserves body whitespace, request/response headers and HTTP error status",
+          "raw response bytes are preserved and binary data is not rendered as text",
+          "redirect responses are visible and requests do not acquire a shared cookie jar",
+          "streaming response limit applies without Content-Length",
+          "cancel completes the pending call and disconnects the active streaming socket",
+          "deadline includes a response body stalled after headers",
+          "file variables, named requests, caret selection and ordered plan requests reach the server",
+          "unsupported credentials, managed headers, variable cycles, missing variables, file bodies and oversized request bodies fail explicitly",
+          "raw HTTP/1.1 wire has one matching Content-Length and no Transfer-Encoding; six manual framing variants fail before connecting"
+        ],
+        "responsePresentationAndRawSave": {
+          "status": "pass",
+          "nativeEditorPresentationPrepared": true,
+          "binaryPreserved": true,
+          "atomicRawSaveBytesMatch": true,
+          "temporarySaveFilesCleaned": true
+        },
+        "nativeLexerRestartRestore": {
+          "status": "pass",
+          "documents": 26,
+          "physicalLineCases": 20,
+          "restartSuffixTokenChecks": 4915,
+          "restoreChecks": 451
+        },
+        "targetPlatform": "macos",
+        "executionPlatform": "macos",
+        "nativeTargetRuntime": true,
+        "jarSha256": "968be1b17338800eab6d7d796137916e01b9a502db9b183ba2cadc13db8e52d5"
+      }
+    }
+  },
+  "limitations": [
+    "Windows runtime is not validated by macOS-hosted classpath checks",
+    "Actual framework wizard Create/Cancel and Run/Debug desktop workflows remain separate acceptance",
+    "Instant pre-observation orphan process cleanup still lacks an OS container guarantee",
+    "Controlled native SDK creator selected real pre-created clean venvs; actual native new-venv UI was not exercised",
+    "The root HTTP desktop workflow is separate evidence; this receipt only requires its bundled loading",
+    "No installer or GitHub release created by this integration task; release demo GIF remains a publication gate"
+  ],
+  "recordedAt": "2026-11-13T19:17:02.202560+00:00",
+  "platform": {
+    "system": "Darwin",
+    "architecture": "arm64",
+    "macOS": "27.2"
+  },
+  "native": {
+    "receipt": ".state/framework-packaged-final/framework-probe.json",
+    "sha256": "a1b44abbc2413eb3b19e56ea1a840e0f63dc793fb33d6a9a1d768c9680a5e628",
+    "assessment": {
+      "status": "pass",
+      "frameworks": 3,
+      "generatedProjects": 4,
+      "nativeGuiCreateClicked": false,
+      "scope": "Native generator UI/API, real selected venv/module, opt-in/out and helper lifecycle"
+    },
+    "packagedAssessment": {
+      "status": "pass",
+      "id": "dev.openpycharm.frameworks",
+      "version": "0.1.0-dev.2",
+      "jarSha256": "7f191b13f6ac9762e074424cd94fdc982b3620cc7f5f69eb02150ec541e01956",
+      "loading": "Native home-relative third-party-plugins; only the test listener is injected"
+    },
+    "invocationId": "0c6f1ab2cb4e45f2aa176fc9f4fa60af",
+    "nativeGracefulExit": 0,
+    "cleanup": {
+      "mode": "owned-posix-session",
+      "pid": 8506,
+      "exitCode": 0
+    },
+    "plugin": {
+      "id": "dev.openpycharm.frameworks",
+      "version": "0.1.0-dev.2",
+      "enabled": true,
+      "bundled": true,
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frameworks/build/framework-integration/OpenPyCharm.app/Contents/third-party-plugins/openpycharm-frameworks",
+      "jar": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frameworks/build/framework-integration/OpenPyCharm.app/Contents/third-party-plugins/openpycharm-frameworks/lib/frameworks.jar",
+      "jarSha256": "7f191b13f6ac9762e074424cd94fdc982b3620cc7f5f69eb02150ec541e01956",
+      "applicationHome": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frameworks/build/framework-integration/OpenPyCharm.app/Contents",
+      "pluginPathProperty": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frameworks/.tools/framework-native-probe/360919480aaa12ecb50550ac8dcdb8195824014ea7c35ae915451346b516bfe5"
+    },
+    "logObservation": {
+      "ideStarted": true,
+      "productIdentity": true,
+      "vendorIdentity": true,
+      "isolatedPaths": {
+        "config": true,
+        "system": true,
+        "plugins": true,
+        "log": true
+      },
+      "loadedPlugins": {
+        "Python Community Edition": true,
+        "Git": true,
+        "Terminal": true
+      },
+      "packagedPlugins": {
+        "dev.openpycharm.http": true,
+        "dev.openpycharm.frameworks": true
+      },
+      "projectOpenRequested": true,
+      "projectOpenedInLog": false,
+      "errorCount": 0,
+      "errors": [],
+      "warningCount": 1,
+      "warnings": [
+        "2026-11-14 03:14:52,312 [   1151]   WARN - #c.i.p.instanceContainer - InstanceNotOverridableException: Override failed for com.intellij.openapi.project.impl.ProjectStoreFactory: com.intellij.configurationScript.providers.ConfigurationScriptProjectStoreFactory attempts to override com.intellij.configurationStore.PlatformLangProjectStoreFactory, but the existing implementation is not overriddable (not declared as 'open=true')"
+      ]
+    },
+    "generatorPeers": [
+      {
+        "nativeComponent": "com.intellij.openapi.ui.DialogPanel",
+        "dependencyCheckboxDefault": false,
+        "dependencyCheckboxBinding": "pass",
+        "nativePeer": "com.jetbrains.python.newProjectWizard.impl.PyV3GeneratorPeer",
+        "framework": "DJANGO",
+        "generator": "dev.openpycharm.frameworks.DjangoProjectGenerator"
+      },
+      {
+        "nativeComponent": "com.intellij.openapi.ui.DialogPanel",
+        "dependencyCheckboxDefault": false,
+        "dependencyCheckboxBinding": "pass",
+        "nativePeer": "com.jetbrains.python.newProjectWizard.impl.PyV3GeneratorPeer",
+        "framework": "FLASK",
+        "generator": "dev.openpycharm.frameworks.FlaskProjectGenerator"
+      },
+      {
+        "nativeComponent": "com.intellij.openapi.ui.DialogPanel",
+        "dependencyCheckboxDefault": false,
+        "dependencyCheckboxBinding": "pass",
+        "nativePeer": "com.jetbrains.python.newProjectWizard.impl.PyV3GeneratorPeer",
+        "framework": "FASTAPI",
+        "generator": "dev.openpycharm.frameworks.FastApiProjectGenerator"
+      }
+    ],
+    "projects": [
+      {
+        "framework": "django",
+        "installDependencies": true,
+        "files": {
+          "requirements.txt": "399419ca0dc48d150fb2f06e8c7acd67e0f3864da366ade3d5604c81a621652e",
+          "manage.py": "f2f599c3197d812fe0fe4ebf212ae73a4960af6aa0434a844fdf10511f762db7",
+          "project_config/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "project_config/settings.py": "bef5f59fa5c52e2d18b81f2ef83b89a1fbd74b7126079017e91f86d471944cd4",
+          "project_config/urls.py": "f35a3cbdff6a5e7a50dc0f781a9c52409bb4136373c4a942178a379f6b06a039",
+          "README.md": "390a8a4b7dc302b0c8503a8f669a919f59b5c57f9b31545b30e469739f52210b"
+        },
+        "typeId": "OpenPyCharmDjango",
+        "moduleSdk": true,
+        "sdkCreatorContext": "com.jetbrains.python.sdk.ModuleOrProject$ModuleAndProject",
+        "collisionRejected": true,
+        "status": "pass"
+      },
+      {
+        "framework": "flask",
+        "installDependencies": true,
+        "files": {
+          "requirements.txt": "6979faed9b4726634bb0ff2b36f3e5a080e4d89a162dc1f264fce99bae332a8a",
+          "app.py": "4e05788b8e317707dd6ea1cc7ec430407c572575d8eb52d0f7acf59cfb3623e5",
+          "README.md": "2b90473ad97fcb2e0b23e965ddf81b410c9c9cba0bfe48ee6352794aa4f5f4b8"
+        },
+        "typeId": "OpenPyCharmFlask",
+        "moduleSdk": true,
+        "sdkCreatorContext": "com.jetbrains.python.sdk.ModuleOrProject$ModuleAndProject",
+        "collisionRejected": true,
+        "status": "pass"
+      },
+      {
+        "framework": "fastapi",
+        "installDependencies": true,
+        "files": {
+          "requirements.txt": "a5ee2ca15213db4da4f16c58eef6ff1f332f10ae9bb04b9fbd652df5815b9539",
+          "app.py": "1ef4d59ecb2aba41ad1860fd55dfd14b99611bb5c14b01a0765a8266790ca4f0",
+          "README.md": "a40b2c0797b67a7304a41694b8a7e3e65c3bac38575b8f561b555a0dbe264c5b"
+        },
+        "typeId": "OpenPyCharmFastAPI",
+        "moduleSdk": true,
+        "sdkCreatorContext": "com.jetbrains.python.sdk.ModuleOrProject$ModuleAndProject",
+        "collisionRejected": true,
+        "status": "pass"
+      },
+      {
+        "framework": "flask",
+        "installDependencies": false,
+        "files": {
+          "requirements.txt": "6979faed9b4726634bb0ff2b36f3e5a080e4d89a162dc1f264fce99bae332a8a",
+          "app.py": "4e05788b8e317707dd6ea1cc7ec430407c572575d8eb52d0f7acf59cfb3623e5",
+          "README.md": "2b90473ad97fcb2e0b23e965ddf81b410c9c9cba0bfe48ee6352794aa4f5f4b8"
+        },
+        "typeId": "OpenPyCharmFlask",
+        "moduleSdk": true,
+        "sdkCreatorContext": "com.jetbrains.python.sdk.ModuleOrProject$ModuleAndProject",
+        "collisionRejected": true,
+        "status": "pass"
+      }
+    ],
+    "selectedVenvPackages": {
+      "Django": "5.2.8",
+      "Flask": "3.1.2",
+      "fastapi": "0.121.0",
+      "uvicorn": "0.38.0"
+    },
+    "optOutFrameworkPackagesPresent": false,
+    "processLifecycle": {
+      "ownedPidsAliveAfterCancellation": false,
+      "status": "pass",
+      "failedExitChildrenCleaned": true,
+      "ownedPids": {
+        "parent": 8558.0,
+        "child": 8559.0
+      },
+      "nonzeroExitPropagated": true,
+      "normalExitOwnedPids": {
+        "parent": 8564.0,
+        "child": 8565.0
+      },
+      "cancellationPreserved": true,
+      "normalExitChildrenCleaned": true,
+      "failedExitOwnedPids": {
+        "parent": 8582.0,
+        "child": 8583.0
+      },
+      "timeoutPropagated": true
+    }
+  },
+  "generatedServers": {
+    "receipt": ".tools/framework-packaged-servers-final/framework-servers.json",
+    "sha256": "afed852c88f50548020ec91f4c248de68024795f2eba3087a2a5a0ed22466d19",
+    "jarSha256": "7f191b13f6ac9762e074424cd94fdc982b3620cc7f5f69eb02150ec541e01956",
+    "servers": [
+      {
+        "framework": "django",
+        "status": "pass",
+        "httpStatus": 200,
+        "response": {
+          "framework": "django",
+          "marker": "django-9225080ac7264b71a759123930a7fbc4"
+        },
+        "cleanup": {
+          "mode": "owned-posix-session",
+          "pid": 8666,
+          "exitCode": -15
+        }
+      },
+      {
+        "framework": "flask",
+        "status": "pass",
+        "httpStatus": 200,
+        "response": {
+          "framework": "flask",
+          "marker": "flask-28687fc513274e4594668e104aaaa048"
+        },
+        "cleanup": {
+          "mode": "owned-posix-session",
+          "pid": 8667,
+          "exitCode": -15
+        }
+      },
+      {
+        "framework": "fastapi",
+        "status": "pass",
+        "httpStatus": 200,
+        "response": {
+          "framework": "fastapi",
+          "marker": "fastapi-1b7a5a65ddf740988ab2d2edc98f375c"
+        },
+        "cleanup": {
+          "mode": "owned-posix-session",
+          "pid": 8668,
+          "exitCode": -15
+        }
+      }
+    ]
+  },
+  "immutability": {
+    "application": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frameworks/build/framework-integration/OpenPyCharm.app",
+    "treeSha256BeforeNativeProbe": "00e1c9fe496b6369451ea66afeda3c09dae61b13ba015b6044a469340c1053da",
+    "treeSha256AfterNativeProbe": "00e1c9fe496b6369451ea66afeda3c09dae61b13ba015b6044a469340c1053da",
+    "unchanged": true,
+    "strictSignature": "pass",
+    "sourceAndPluginValidation": "pass",
+    "receipt": ".tools/framework-integration-immutability.json",
+    "sha256": "f255a9534285c58eedd00b9a62522d182e10e692b76e0ff200286aae433c53a2"
+  },
+  "frameworkBuild": {
+    "jarSha256": "7f191b13f6ac9762e074424cd94fdc982b3620cc7f5f69eb02150ec541e01956",
+    "targetPlatform": "macos",
+    "executionPlatform": "macos",
+    "nativeTargetRuntime": true,
+    "archiveVerification": {
+      "status": "pass",
+      "reader": "HashMapZipFile",
+      "verifiedEntries": 23,
+      "closed": true,
+      "sha256": "7f191b13f6ac9762e074424cd94fdc982b3620cc7f5f69eb02150ec541e01956"
+    }
+  },
+  "sourceInventorySha256": "8b53f8ed6bcea7d2199a13e93f00cd339d076bdb86d00f3e998d6a9880bab171",
+  "probeSourceSha256": {
+    "tests/frameworks/native/FrameworkGeneratorProbe.java": "2daa2df0e0a7f5bc6b360d8b236a9cbd182aad5fac08084f22450d7501e127d7",
+    "tests/frameworks/native/FrameworkProbe.java": "f7f1fdd41a7102012ebe3a0f8c3592d20c91717493e71d0ec6ed6ff1bbf834bc",
+    "tests/frameworks/native/plugin.xml": "6726991f9ebbaf4b186894d178dc62138fca139a56df3c4446cbc01397247ac2"
+  }
+}
