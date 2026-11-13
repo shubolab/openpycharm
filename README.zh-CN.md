@@ -6,26 +6,43 @@
 以本机 **PyCharm 2026.1.4** 为对照。工作台、编辑器和 Python 代码分析沿用同版本
 开源基础；本仓库负责独立产品身份、发行、集成修改和实际验收。
 
-**当前正在开发，完整 1:1 对齐尚未完成。** [验收矩阵](docs/acceptance.md)保留了
-待验证的原生工作流，以及框架、数据库、Notebook、前端与远程开发等工作。
+**当前正在开发，完整 1:1 对齐尚未完成。**
 
-首个原生预览版：[v0.1.0-dev.1](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.1)。
+**0.1.0-dev.2 候选版**增加原生 HTTP 请求工具，以及我们独立实现的
+Django、Flask、FastAPI 项目生成器和运行/调试配置：
+
+- 编辑 `.http` 文件，运行当前请求或批量请求，在 Services 查看响应，保存原始响应
+  字节，并停止正在执行的请求。
+- 通过原生解释器/venv 选择器创建小型框架项目。依赖安装可选，默认关闭；运行与
+  调试沿用所选 Python SDK、工作目录和环境变量。
+- 有界回放开源 JCEF 初始化修复，处理冷启动 Markdown 预览；保留 Markdown 渲染、
+  代理配置及服务认证。
+
+项目模板和运行/调试支持不代表完整框架语义支持：模板与 ORM 智能分析、框架导航
+和更广的框架行为仍待补齐。**dev.2 不包含 Notebook 和数据库工具。**
+详见[验收矩阵](docs/acceptance.md)与[dev.2 发行说明草稿](docs/releases/v0.1.0-dev.2.md)。
+
+**dev.2 尚未发布。** 最终 macOS 安装版的运行、测试、FastAPI 调试、HTTP、README
+预览恢复和新版 GIF 均待完成验收；Windows 桌面工作流仍未验收。候选来源和证据见
+[dev.2 验收草稿](docs/verification/2026-11-14-dev2-release.md)。
+
+当前已发布的原生预览版为
+[v0.1.0-dev.1](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.1)：
 
 | 系统 | 安装包 |
 | --- | --- |
 | macOS Apple silicon | [DMG 下载](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.1/OpenPyCharm-0.1.0-dev.1-macos-arm64.dmg) |
 | Windows x64 | [EXE 下载](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.1/OpenPyCharm-0.1.0-dev.1-windows-x64-setup.exe) |
 
-见[安装说明](docs/installation.md)、[校验和](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.1/SHA256SUMS.txt)
-与[本版验收记录](docs/verification/2026-11-14-preview-release.md)。macOS 实际安装版已通过
-运行、unittest 和调试；Windows 已通过安装和原生启动，Python 桌面工作流仍待验收。
+见[安装说明](docs/installation.md)、[dev.1 校验和](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.1/SHA256SUMS.txt)
+与[dev.1 验收记录](docs/verification/2026-11-14-preview-release.md)。dev.1 的 macOS
+实际安装版通过运行、unittest 和调试；Windows 通过安装和原生启动，Python 桌面
+工作流仍待验收。
 Mac 应用使用临时签名且未公证，Windows 安装器未签名。
 
-![OpenPyCharm 原生功能演示](docs/demo/openpycharm-native.gif)
-
-实际安装版 **0.1.0-dev.1**，系统 **macOS 27.2 arm64**，Python 3.14.0。
-依次展示运行、unittest 结果、断点求值和单步执行，详见[拍摄记录](docs/demo/README.md)。
-每个可发版版本会同步更新实际安装版的演示和版本标记。
+**dev.2 实际安装版演示待录制。** 每个可发版版本必须更新真实录屏，并记录版本、
+操作系统、工作流和拍摄清单。[dev.1 演示](docs/demo/README.md)仅保留为历史证据，
+不代表 dev.2 的实际表现。
 
 ## 本机构建
 
@@ -41,13 +58,22 @@ python3 scripts/launch.py --profile .state/development fixtures/hello-python
 python3 scripts/installers.py --target macos-arm64 --version 0.1.0-dev.2 --product build/product/OpenPyCharm.app
 ```
 
+在 Python 示例自己的目录运行其测试：
+
+```sh
+cd fixtures/hello-python
+python3 main.py
+python3 -m unittest discover -s tests -v
+```
+
 Windows 使用 `python` 和 `--target windows-x64`，产物目录为
 `build/product/OpenPyCharm`。安装器构建器按需取得并验证 Inno Setup 编译器。
 详见[安装说明](docs/installation.md)。
 
 基础包来自[官方开源发行页](https://github.com/JetBrains/intellij-community/releases/tag/pycharm/2026.1.4)，
 下载时核对大小和 SHA-256，复用缓存时核对完整文件树。已安装的商业 IDE 及其用户
-数据只用于只读比对，不作为分发输入。Git、GitHub 和私有仓库认证保留。
+数据只用于只读比对，不作为分发输入。本地 IDE 使用不包含 IDE 账号、计费、订阅、
+试用和升级推广流程；Git、GitHub、私有仓库及用户选择的开发服务认证保留。
 
 ## 示例与验收
 

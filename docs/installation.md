@@ -1,47 +1,125 @@
-# Installation and local profiles
+# Installation / 安装说明
 
-Development targets are macOS Apple silicon and Windows x64. A source build is
-not a published release or proof of all native workflows. The current acceptance
-status is in [acceptance.md](acceptance.md).
+## Release status / 发行状态
 
-Download the first preview's DMG or EXE and `SHA256SUMS.txt` from
+The currently published preview is
 [v0.1.0-dev.1](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.1).
-Verify a download on macOS with `shasum -a 256 INSTALLER.dmg`, or on Windows
-PowerShell with `Get-FileHash .\INSTALLER.exe -Algorithm SHA256`, and compare the
-result with the checksum file. Use your own downloaded filename.
+Download its macOS Apple silicon DMG or Windows x64 EXE together with
+`SHA256SUMS.txt`. **0.1.0-dev.2 is a candidate, not a published release**;
+its installer hashes, final installed-app acceptance and updated demo are pending.
+See the [dev.2 verification draft](verification/2026-11-14-dev2-release.md).
 
-## macOS
+当前已发布预览版为
+[v0.1.0-dev.1](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.1)。
+请同时下载对应的 macOS Apple silicon DMG 或 Windows x64 EXE 与
+`SHA256SUMS.txt`。**0.1.0-dev.2 仍是候选版，尚未发布**；安装包摘要、最终安装版
+验收及新版演示待完成，见 [dev.2 验收草稿](verification/2026-11-14-dev2-release.md)。
 
-Download `OpenPyCharm-VERSION-macos-arm64.dmg` (or build it with `scripts/installers.py`), mount it,
-and drag **OpenPyCharm.app** to **Applications** or `~/Applications`. Open the
-installed app. Local builds use an ad-hoc signature and are not notarized.
-Check the installer SHA-256 against its generated `.sha256` file before use.
+## Verify a download / 核对下载
 
-The app uses its own bundle ID `dev.openpycharm.ide`. Configuration and plugins
-live under `~/Library/Application Support/OpenPyCharm`; caches and logs are in
-`~/Library/Caches/OpenPyCharm` and `~/Library/Logs/OpenPyCharm`. Uninstalling the
-application does not delete projects or these settings.
+On macOS, replace the filename with your downloaded DMG:
 
-## Windows
+在 macOS 中，将文件名替换为你实际下载的 DMG：
 
-Download the Windows x64 `.exe` installer, or build the product on Windows and
-use `scripts/installers.py` to create it. It installs per user, offers optional `.py` file
-association, and does not require an administrator. The first release candidates
-are unsigned. The silent installation check is a separate build option; native
-Run/Test/Debug acceptance is required as well.
+```sh
+shasum -a 256 OpenPyCharm-VERSION-macos-arm64.dmg
+```
 
-Configuration/plugins are under `%USERPROFILE%\AppData\Roaming\OpenPyCharm`;
-caches/logs are under `%USERPROFILE%\AppData\Local\OpenPyCharm`.
+On Windows PowerShell / Windows PowerShell：
 
-## Interpreter and test profiles
+```powershell
+Get-FileHash .\OpenPyCharm-VERSION-windows-x64-setup.exe -Algorithm SHA256
+```
 
-Choose an installed Python interpreter or create a virtual environment through
-the native project/interpreter settings. OpenPyCharm's Java runtime is included;
-the project Python interpreter is separate.
+Compare the complete SHA-256 with that release's `SHA256SUMS.txt`. Do not use a
+checksum from a different version or an earlier candidate.
 
-For development use `python3 scripts/launch.py --profile .state/development
-fixtures/hello-python`. This test profile has its own config, cache, plugins and
-logs. It does not import the installed PyCharm configuration.
+将完整 SHA-256 与同一版本的 `SHA256SUMS.txt` 对照。不要使用其他版本或较早候选
+安装包的摘要。
 
-Upstream licenses and third-party notices remain in the application's `license`
-directory. The installed reference PyCharm is never modified.
+## macOS Apple silicon
+
+Mount `OpenPyCharm-VERSION-macos-arm64.dmg`, then drag **OpenPyCharm.app** to
+**Applications** or `~/Applications`. Launch that installed copy. The application
+includes its Java runtime. It is ad-hoc signed and **not notarized**; this preview
+does not have an Apple Developer ID signature.
+
+打开 `OpenPyCharm-VERSION-macos-arm64.dmg`，将 **OpenPyCharm.app** 拖到
+**Applications** 或 `~/Applications`，再启动安装后的应用。应用内置 Java 运行时。
+预览版使用临时签名，**未经 Apple 公证**，没有 Apple Developer ID 签名。
+
+The independent bundle ID is `dev.openpycharm.ide`.
+
+| Data / 数据 | Location / 位置 |
+| --- | --- |
+| Configuration and plugins / 配置与插件 | `~/Library/Application Support/OpenPyCharm` |
+| Caches / 缓存 | `~/Library/Caches/OpenPyCharm` |
+| Logs / 日志 | `~/Library/Logs/OpenPyCharm` |
+
+Remove the app to uninstall. Project files and these settings are retained.
+The installed reference PyCharm and its data are not modified.
+
+卸载时移除应用即可，项目文件和上述设置会保留。不会修改作为对照的已安装 PyCharm
+及其数据。
+
+## Windows x64
+
+Run `OpenPyCharm-VERSION-windows-x64-setup.exe`. The installer installs per user,
+does not require an administrator, and offers an optional `.py` association.
+The EXE is **unsigned**. Silent install/startup/uninstall checks on a native
+Windows runner do not establish interactive Python or HTTP desktop acceptance;
+those workflows remain unverified on Windows.
+
+运行 `OpenPyCharm-VERSION-windows-x64-setup.exe`。安装器按当前用户安装，不需要管理员
+权限，并提供可选的 `.py` 文件关联。EXE **未签名**。原生 Windows CI 中的静默安装、
+启动与卸载检查不等于交互式 Python 或 HTTP 桌面验收；Windows 桌面工作流仍未验证。
+
+| Data / 数据 | Location / 位置 |
+| --- | --- |
+| Configuration and plugins / 配置与插件 | `%USERPROFILE%\AppData\Roaming\OpenPyCharm` |
+| Caches and logs / 缓存与日志 | `%USERPROFILE%\AppData\Local\OpenPyCharm` |
+
+Use the installed uninstaller to remove the application. Projects and user
+settings are retained.
+
+使用安装后的卸载程序移除应用，项目和用户设置会保留。
+
+## Python and framework projects / Python 与框架项目
+
+Select an installed Python interpreter or create a virtual environment in the
+native project settings. Java is included; the project's Python interpreter is
+separate. In the dev.2 candidate, Django/Flask/FastAPI generators use this native
+interpreter/venv flow. Installing their pinned example dependencies is optional
+and off by default; it uses the selected Python environment and network access.
+
+通过原生项目设置选择本机 Python 解释器或创建虚拟环境。应用内置 Java，但 Python
+项目解释器需要另行选择。dev.2 候选版的 Django/Flask/FastAPI 生成器沿用原生解释器/
+venv 流程。示例依赖安装可选、默认关闭；开启后使用所选 Python 环境并需要网络。
+
+Framework examples and their Run/Debug configurations are a bounded starting
+point. They do not imply complete framework, template or ORM intelligence.
+Notebook and database tools are not included in dev.2.
+
+框架示例及其运行/调试配置仅覆盖当前实现范围，不代表完整框架、模板或 ORM 智能
+支持。dev.2 不包含 Notebook 和数据库工具。
+
+## Isolated development profile / 隔离开发配置
+
+```sh
+python3 scripts/launch.py --profile .state/development fixtures/hello-python
+```
+
+This source-development profile has separate configuration, caches, plugins and
+logs. It does not import the reference PyCharm configuration. Use `python` on
+Windows. A source build or successful launch is not complete desktop acceptance.
+
+这个源码开发配置使用独立的设置、缓存、插件和日志，不导入对照 PyCharm 的配置。
+Windows 使用 `python`。源码构建或启动成功不等于完整桌面验收。
+
+Local IDE use has no IDE account, billing, subscription, trial or upgrade-promotion
+flow. Git/GitHub/private-repository and user-selected service authentication are
+preserved. Upstream licenses and third-party notices remain in the application's
+`license` directory.
+
+本地 IDE 使用不包含 IDE 账号、计费、订阅、试用和升级推广流程；保留 Git、GitHub、
+私有仓库及用户选择的服务认证。应用 `license` 目录保留上游与第三方声明。
