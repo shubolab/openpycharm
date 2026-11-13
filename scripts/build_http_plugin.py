@@ -161,10 +161,10 @@ def protocol_tests(sdk: Path, output: Path, caches: list[Path] | None = None) ->
         plugin_jar = output.resolve() / "plugin/lib/openpycharm-http.jar"
         presentation_classes = temporary / "presentation-classes"
         presentation_classes.mkdir()
-        java_sources = ROOT / "tests/http_client/HttpPresentationProbe.java"
+        java_sources = [ROOT / "tests/http_client/HttpPresentationProbe.java", ROOT / "tests/http_client/HttpLexerProbe.java"]
         compiler_arguments = ["--release", "21", "-encoding", "UTF-8", "-proc:none", "-classpath",
                               os.pathsep.join([str(plugin_jar), *map(str, sorted(layout.lib.glob("*.jar")))]),
-                              "-d", str(presentation_classes), str(java_sources)]
+                              "-d", str(presentation_classes), *map(str, java_sources)]
         invocation = java_compiler_invocation(layout.javac, compiler_arguments, temporary / "presentation-javac.args")
         compiled = subprocess.run(invocation.command, cwd=invocation.cwd, capture_output=True, text=True, timeout=60)
         if compiled.returncode:
@@ -174,6 +174,11 @@ def protocol_tests(sdk: Path, output: Path, caches: list[Path] | None = None) ->
         result["responsePresentationAndRawSave"] = json.loads(presented.stdout)
         if result["responsePresentationAndRawSave"].get("status") != "pass":
             raise ValueError("Response presentation/raw-save controls failed")
+        lexed = run_java(layout.java, ["-cp", os.pathsep.join([str(presentation_classes), str(plugin_jar), str(layout.lib / "*")]),
+                                      "dev.openpycharm.http.HttpLexerProbe"], temporary, timeout=30)
+        result["nativeLexerRestartRestore"] = json.loads(lexed.stdout)
+        if result["nativeLexerRestartRestore"].get("status") != "pass":
+            raise ValueError("Native lexer restart/restore controls failed")
         (output / "protocol-tests.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
         return result
 

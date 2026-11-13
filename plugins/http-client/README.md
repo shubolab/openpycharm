@@ -20,6 +20,8 @@ Services response tree. Source provenance is retained in `upstream.json` and
 An explicit `Authorization` or `Cookie` header can be supplied by the developer.
 URL credentials and executable/file-body syntax are rejected. HTML responses
 remain plain native-editor text; they are never evaluated or loaded in a WebView.
+`Content-Length` and `Transfer-Encoding` belong to the transport and cannot be
+set manually, regardless of letter case.
 
 Build against the read-only authenticated SDK with the already cached pinned
 Kotlin compiler. Python 3.10+ is required; no Gradle/compiler download occurs:
@@ -42,6 +44,9 @@ statuses, redirect/cookie policy, streaming limits, socket cancellation and the
 whole-body deadline. Compilation and protocol checks do not establish that the
 native toolbar, Services selection, stop controls and save dialog have passed
 desktop acceptance in OpenPyCharm. Those checks remain separate release gates.
+The headless SDK controls also restart the HTTP lexer at every token and restore
+saved lexer positions; these verify the incremental-lexer contract rather than
+claiming a desktop editing session.
 
 For desktop acceptance, start `python3 plugins/http-client/examples/server.py`,
 open `examples/demo.http` in the native IDE, run the current request and Run All,

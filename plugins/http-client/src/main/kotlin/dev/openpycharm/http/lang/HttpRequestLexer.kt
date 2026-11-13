@@ -34,6 +34,7 @@ class HttpRequestLexer : LexerBase() {
     private var next = 0
     private var type: IElementType? = null
     private var expectRequestTarget = false
+    private var tokenStartState = 0
 
     override fun start(buffer: CharSequence, startOffset: Int, endOffset: Int, initialState: Int) {
         text = buffer
@@ -42,7 +43,7 @@ class HttpRequestLexer : LexerBase() {
         expectRequestTarget = initialState == STATE_EXPECT_TARGET
         advance()
     }
-    override fun getState() = if (expectRequestTarget) STATE_EXPECT_TARGET else 0
+    override fun getState() = tokenStartState
     override fun getTokenType() = type
     override fun getTokenStart() = start
     override fun getTokenEnd() = next
@@ -50,6 +51,8 @@ class HttpRequestLexer : LexerBase() {
     override fun getBufferEnd() = end
 
     override fun advance() {
+        // IntelliJ restarts at this token's beginning, before scanning changes the state.
+        tokenStartState = if (expectRequestTarget) STATE_EXPECT_TARGET else 0
         start = next
         if (start >= end) {
             type = null

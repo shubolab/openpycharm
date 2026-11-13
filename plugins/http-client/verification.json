@@ -10,18 +10,24 @@
     "sdkVersion": "2026.1.4",
     "sdkBuild": "261.26222.68",
     "pluginClassCount": 66,
-    "pluginSha256": "85d1f572bc15cc61bf1ba64f3235de663f54eefd3609873b34f29d6cf6bab4dc",
+    "pluginSha256": "ae063778b2f260002a12d8f87fc6708632322779c0c3235f679c071bf1232169",
     "intellijArchiveReader": {
       "status": "pass",
       "reader": "HashMapZipFile",
       "verifiedEntries": 70,
       "closed": true,
-      "sha256": "85d1f572bc15cc61bf1ba64f3235de663f54eefd3609873b34f29d6cf6bab4dc"
+      "sha256": "ae063778b2f260002a12d8f87fc6708632322779c0c3235f679c071bf1232169"
     },
     "realLoopbackProtocol": {
       "status": "pass",
       "serverOwnedClosed": true,
-      "checkCount": 8,
+      "requestFraming": {
+        "rejectedHeaderVariants": 6,
+        "wireContentLength": 5,
+        "wireTransferEncodingAbsent": true,
+        "rejectedRequestsOpenedSockets": false
+      },
+      "checkCount": 9,
       "checks": [
         "real UTF-8 POST preserves body whitespace, request/response headers and HTTP error status",
         "raw response bytes are preserved and binary data is not rendered as text",
@@ -30,7 +36,8 @@
         "cancel completes the pending call and disconnects the active streaming socket",
         "deadline includes a response body stalled after headers",
         "file variables, named requests, caret selection and ordered plan requests reach the server",
-        "unsupported credentials, managed headers, variable cycles, missing variables, file bodies and oversized request bodies fail explicitly"
+        "unsupported credentials, managed headers, variable cycles, missing variables, file bodies and oversized request bodies fail explicitly",
+        "raw HTTP/1.1 wire has one matching Content-Length and no Transfer-Encoding; six manual framing variants fail before connecting"
       ],
       "responsePresentationAndRawSave": {
         "status": "pass",
@@ -38,6 +45,12 @@
         "binaryPreserved": true,
         "atomicRawSaveBytesMatch": true,
         "temporarySaveFilesCleaned": true
+      },
+      "nativeLexerRestartRestore": {
+        "status": "pass",
+        "documents": 6,
+        "restartSuffixTokenChecks": 1133,
+        "restoreChecks": 73
       }
     },
     "repositoryUnitTests": {
@@ -60,5 +73,33 @@
     "Windows plugin compilation, runtime and installer integration remain pending.",
     "The first builder uses already cached hash-pinned Kotlin compiler artifacts; clean CI compiler provisioning is separate integration work."
   ],
-  "scope": "Protocol/data preparation and native artifact readability only; no full HTTP feature parity or native UI acceptance claim."
+  "scope": "Protocol/data preparation and native artifact readability only; no full HTTP feature parity or native UI acceptance claim.",
+  "regressions": [
+    {
+      "finding": "Manual Transfer-Encoding could conflict with JDK Content-Length framing",
+      "before": "e3cd222 parser accepted the header; independent raw-wire review observed Content-Length:5 and Transfer-Encoding:chunked with an unchunked hello body. The new regression failed on its forbidden-header send path.",
+      "fix": "Reject Transfer-Encoding through the existing case-insensitive managed-header check before constructing a network call.",
+      "after": {
+        "rejectedHeaderVariants": 6,
+        "wireContentLength": 5,
+        "wireTransferEncodingAbsent": true,
+        "rejectedRequestsOpenedSockets": false
+      }
+    },
+    {
+      "finding": "Lexer reported state after its current token rather than token-start state",
+      "before": "New SDK contract probe failed restarting GET as URL at offset0.",
+      "fix": "Capture expectRequestTarget at the beginning of advance and expose that token-start state.",
+      "after": {
+        "status": "pass",
+        "documents": 6,
+        "restartSuffixTokenChecks": 1133,
+        "restoreChecks": 73
+      }
+    }
+  ],
+  "regressionTestSources": {
+    "tests/http_client/HttpProtocolProbe.kt": "df73a9dc13d73609c6a3a30daa5b60eb076f8539ff490f93b68de644356f7176",
+    "tests/http_client/HttpLexerProbe.java": "51099fc9e2b480af22771ba322eeb0273d42505dfbaf27b7e56628013a2f5d85"
+  }
 }

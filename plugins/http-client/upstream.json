@@ -5,7 +5,9 @@
   "basis": "User-directed reuse of the same author's existing native HTTP implementation",
   "adaptations": [
     "Isolated OpenPyCharm package/language/action/service identities",
-    "No Go, LSP4IJ or terminal integration dependency"
+    "No Go, LSP4IJ or terminal integration dependency",
+    "Reject manual Transfer-Encoding case-insensitively so the transport owns request framing",
+    "Expose token-start lexer state for IntelliJ incremental restart and position restore"
   ],
   "files": [
     {
@@ -24,7 +26,7 @@
       "originalPath": "src/main/kotlin/dev/openidea/goide/http/HttpRequestDocument.kt",
       "originalSha256": "104d88efe8ecc8ef85716f6008e762abda92203a417302f222858c152644060b",
       "adaptedPath": "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpRequestDocument.kt",
-      "adaptedSha256": "1d562b04a850337eb316ab79cc98d86ccccd62cd90c678865ac35ab5b9992d26"
+      "adaptedSha256": "3c39cb305517db1b54e14dd885a677c5a0bc2f597355ea6af5bed4c965b70b7e"
     },
     {
       "originalPath": "src/main/kotlin/dev/openidea/goide/http/HttpRequestRun.kt",
@@ -72,7 +74,7 @@
       "originalPath": "src/main/kotlin/dev/openidea/goide/lang/HttpRequestLexer.kt",
       "originalSha256": "a48e56b03fb86d629f5e4d56ea02ed2c368d97ed2d15f29bebdda1b102ea5e35",
       "adaptedPath": "plugins/http-client/src/main/kotlin/dev/openpycharm/http/lang/HttpRequestLexer.kt",
-      "adaptedSha256": "4a2622ad6037f56eb0d29913b158825a8c0217a90ed529468636f7f9c2a4569b"
+      "adaptedSha256": "c6c1f2cdb6dd6f2d7118f4482d61a94948b7b4406332436cb09996b31bc4f0d8"
     },
     {
       "originalPath": "src/main/kotlin/dev/openidea/goide/lang/HttpRequestParserDefinition.kt",

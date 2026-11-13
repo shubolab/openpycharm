@@ -3,7 +3,11 @@ package dev.openpycharm.http
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpServer
 import java.io.IOException
+import java.io.ByteArrayOutputStream
+import java.net.InetAddress
 import java.net.InetSocketAddress
+import java.net.ServerSocket
+import java.net.SocketTimeoutException
 import java.time.Duration
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.CountDownLatch
@@ -43,8 +47,71 @@ private inline fun rejected(block: () -> Unit) {
     error("Expected unsupported/malformed request to be rejected")
 }
 
+/** Read the actual HTTP/1.1 bytes; an HTTP server parser can hide framing errors. */
+private fun verifyRequestFraming(): Int {
+    ServerSocket(0, 4, InetAddress.getByName("127.0.0.1")).use { server ->
+        server.soTimeout = 3000
+        val executor = Executors.newSingleThreadExecutor()
+        try {
+            val wire = executor.submit<ByteArray> {
+                server.accept().use { socket ->
+                    socket.soTimeout = 3000
+                    val input = socket.getInputStream()
+                    val header = ByteArrayOutputStream()
+                    var tail = 0
+                    var headerComplete = false
+                    while (header.size() < 64 * 1024) {
+                        val value = input.read()
+                        check(value >= 0) { "Request closed before its headers completed" }
+                        header.write(value)
+                        tail = (tail shl 8) or value
+                        if (tail == 0x0d0a0d0a) { headerComplete = true; break }
+                    }
+                    check(headerComplete) { "Request headers exceeded the capture limit" }
+                    val headers = header.toString(Charsets.ISO_8859_1.name()).split("\r\n")
+                    val lengths = headers.filter { it.startsWith("Content-Length:", ignoreCase = true) }
+                    check(lengths.size == 1 && lengths.single().substringAfter(':').trim() == "5")
+                    check(headers.none { it.startsWith("Transfer-Encoding:", ignoreCase = true) })
+                    val body = input.readNBytes(5)
+                    check(body.contentEquals("hello".toByteArray()))
+                    socket.getOutputStream().write("HTTP/1.1 200 OK\r\nContent-Length: 0\r\nConnection: close\r\n\r\n".toByteArray())
+                    header.toByteArray() + body
+                }
+            }
+            val url = "http://127.0.0.1:${server.localPort}/"
+            val ordinary = HttpRequestDocument.requestAt("POST $url\n\nhello", 0)
+            check(HttpRequestCall(ordinary, Duration.ofSeconds(3)).use { it.await() }.status == 200)
+            check(String(wire.get(3, TimeUnit.SECONDS), Charsets.ISO_8859_1).endsWith("\r\n\r\nhello"))
+            var rejectedVariants = 0
+            for (name in listOf("Transfer-Encoding", "transfer-encoding", "tRaNsFeR-EnCoDiNg")) {
+                for (value in listOf("chunked", "")) {
+                    val failure = try {
+                        // The same parse-then-send ordering used by the native batch.
+                        HttpRequestCall(HttpRequestDocument.requestAt("POST $url\n$name: $value\n\nhello", 0),
+                            Duration.ofMillis(250)).use { it.await() }
+                        null
+                    } catch (error: IllegalArgumentException) { error }
+                    check(failure?.message == "$name is managed by the HTTP transport and cannot be set manually.") {
+                        "Framing header must be rejected by the document parser: $name / '$value'"
+                    }
+                    rejectedVariants++
+                }
+            }
+            server.soTimeout = 500
+            try {
+                server.accept().use { error("A rejected framing request opened a socket") }
+            } catch (_: SocketTimeoutException) { /* All six documents failed before network I/O. */ }
+            return rejectedVariants
+        } finally {
+            executor.shutdownNow()
+            check(executor.awaitTermination(5, TimeUnit.SECONDS)) { "Owned raw-wire worker did not stop" }
+        }
+    }
+}
+
 fun main() {
     val checks = mutableListOf<String>()
+    var framingVariants = 0
     val fixture = Fixture()
     fixture.use {
         val captured = AtomicReference<String>()
@@ -147,8 +214,10 @@ fun main() {
         rejected { HttpRequestDocument.requestAt("POST ${fixture.base}/\n\n< ./payload.json", 0) }
         rejected { HttpRequestDocument.requestAt("POST ${fixture.base}/\n\n" + "x".repeat(1024 * 1024 + 1), 0) }
         checks += "unsupported credentials, managed headers, variable cycles, missing variables, file bodies and oversized request bodies fail explicitly"
+        framingVariants = verifyRequestFraming()
+        checks += "raw HTTP/1.1 wire has one matching Content-Length and no Transfer-Encoding; six manual framing variants fail before connecting"
     }
     check(fixture.closed)
-    println("{\"status\":\"pass\",\"serverOwnedClosed\":true,\"checkCount\":${checks.size},\"checks\":[" +
+    println("{\"status\":\"pass\",\"serverOwnedClosed\":true,\"requestFraming\":{\"rejectedHeaderVariants\":$framingVariants,\"wireContentLength\":5,\"wireTransferEncodingAbsent\":true,\"rejectedRequestsOpenedSockets\":false},\"checkCount\":${checks.size},\"checks\":[" +
         checks.joinToString(",") { "\"$it\"" } + "]}")
 }

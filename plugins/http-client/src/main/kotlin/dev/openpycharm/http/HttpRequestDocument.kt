@@ -246,7 +246,7 @@ internal class HttpRequestPlan internal constructor(private val text: String) {
         val directive = Regex("(?:#|//)\\s+@.*")
         val headerName = Regex("[!#$%&'*+.^_`|~0-9A-Za-z-]+")
         val methods = setOf("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS")
-        val managedHeaders = setOf("content-length", "host", "connection", "expect", "upgrade")
+        val managedHeaders = setOf("content-length", "transfer-encoding", "host", "connection", "expect", "upgrade")
     }
 }
 
