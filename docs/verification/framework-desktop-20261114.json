@@ -1,0 +1,70 @@
+{
+  "schema": 1,
+  "version": "0.1.0-dev.2",
+  "applicationSourceCommit": "80cea80c27623d76859d14b19f35b4ca5427c52b",
+  "installedFromDmg": false,
+  "profile": "Own default OpenPyCharm product profile",
+  "project": "/Users/wangshubo/develop/openpycharm/.state/framework-desktop/FastAPI 中文",
+  "pathContainsChineseAndSpace": true,
+  "nativeWizard": {
+    "visibleTypes": [
+      "Pure Python",
+      "Python",
+      "Django",
+      "Flask",
+      "FastAPI"
+    ],
+    "defaultDependencyInstallUnchecked": true,
+    "dependencyInstallExplicitlySelected": true,
+    "python": "3.14.0",
+    "environment": "native Project venv",
+    "gitInitUnchecked": true
+  },
+  "createdFiles": [
+    "requirements.txt",
+    "__pycache__",
+    "README.md",
+    ".venv",
+    "app.py",
+    ".idea"
+  ],
+  "nativeEnvironment": {
+    "includeSystemSitePackages": false,
+    "fastapi": "0.121.0",
+    "uvicorn": "0.38.0"
+  },
+  "nativeRun": {
+    "module": "uvicorn",
+    "app": "app:app",
+    "bind": "127.0.0.1:8000",
+    "requestPath": "/",
+    "status": 200,
+    "body": {
+      "framework": "fastapi",
+      "marker": "manual"
+    }
+  },
+  "unmatchedRouteObservation": {
+    "path": "/health",
+    "status": 404,
+    "note": "The generated template declares only /; the corrected acceptance request to / passed."
+  },
+  "nativeStop": {
+    "pid": 14332,
+    "gracefulShutdown": true,
+    "exitCode": 0
+  },
+  "postWorkflowAppTreeSha256": "00e1c9fe496b6369451ea66afeda3c09dae61b13ba015b6044a469340c1053da",
+  "appTreeUnchanged": true,
+  "strictSignaturePassed": true,
+  "log": {
+    "sessionSha256": "8a15c319eb605c0f774fc305ae8b4882664c5ca12823c8987e1d115eaa754ad8",
+    "errorCount": 0,
+    "warningCount": 10
+  },
+  "limitations": [
+    "Development candidate observation, not the final installed dev.2 release",
+    "The generated template still contained an internal marker in this checkpoint; production template cleanup is required before publishing",
+    "Actual Django/Flask creation, framework debugger and Windows desktop remain unverified here"
+  ]
+}
