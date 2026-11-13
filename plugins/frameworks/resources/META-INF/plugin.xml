@@ -1,0 +1,15 @@
+<idea-plugin>
+  <id>dev.openpycharm.frameworks</id>
+  <name>OpenPyCharm Python Frameworks</name>
+  <version>0.1.0-dev.1</version>
+  <vendor url="https://github.com/shubolab/openpycharm">OpenPyCharm</vendor>
+  <description>Native Django, Flask and FastAPI development-server Run/Debug configurations.</description>
+  <idea-version since-build="261" until-build="261.*"/>
+  <depends>com.intellij.modules.platform</depends>
+  <depends>PythonCore</depends>
+  <extensions defaultExtensionNs="com.intellij">
+    <configurationType implementation="dev.openpycharm.frameworks.DjangoConfigurationType"/>
+    <configurationType implementation="dev.openpycharm.frameworks.FlaskConfigurationType"/>
+    <configurationType implementation="dev.openpycharm.frameworks.FastApiConfigurationType"/>
+  </extensions>
+</idea-plugin>
