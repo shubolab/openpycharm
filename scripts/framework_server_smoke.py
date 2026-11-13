@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Exercise compiled framework defaults against real local framework servers.
 
-This validates the command model and selected interpreter, environment, working
-directory and owned-process cleanup. It does not simulate native Run/Debug UI.
+This validates the command model, selected interpreter, working directory and
+owned-process cleanup. The checked-in fixtures also verify an environment
+marker; clean generated examples return their normal greeting unchanged.
+It does not simulate native Run/Debug UI.
 """
 from __future__ import annotations
 
@@ -37,12 +39,20 @@ def server_arguments(command: dict, port: int) -> list[str]:
     return args
 
 
+def expected_response(framework: str, fixture_marker: str | None = None) -> dict:
+    if fixture_marker is not None:
+        return {"framework": framework, "marker": fixture_marker}
+    names = {"django": "Django", "flask": "Flask", "fastapi": "FastAPI"}
+    return {"framework": framework, "message": f"Hello from {names[framework]}!"}
+
+
 def run_servers(sdk: Path, python: Path, output: Path, projects: Path | None = None) -> dict:
     # Preserve a virtualenv interpreter symlink: resolving it would select the
     # base interpreter and change the environment being tested.
     python = python.absolute()
     if not python.is_file():
         raise ValueError("Select an existing Python/venv executable")
+    fixture_controls = projects is None
     projects = (projects if projects is not None else ROOT / "fixtures/frameworks").resolve()
     if not all((projects / name).is_dir() for name in ("django", "flask", "fastapi")):
         raise ValueError("Select a project root containing django, flask and fastapi directories")
@@ -55,6 +65,8 @@ def run_servers(sdk: Path, python: Path, output: Path, projects: Path | None = N
     plugin, build = build_plugin(sdk)
     model = run_command_tests(sdk, plugin)
     report = {"schema": 1, "status": "pass", "interpreter": interpreter, "projects": str(projects), "pluginBuild": build,
+              "responseContract": "fixture-environment-marker" if fixture_controls else "generated-hello-example",
+              "environmentMarkerControl": fixture_controls,
               "commandModel": model, "servers": [],
               "limitations": ["Real framework command execution, not native IDE Run/Debug acceptance",
                               "Reloaders are disabled; browser debugger and remote SDKs are outside this check"]}
@@ -62,11 +74,14 @@ def run_servers(sdk: Path, python: Path, output: Path, projects: Path | None = N
     for entry in model["commands"]:
         name = entry["framework"]
         port = local_port()
-        marker = f"{name}-" + uuid.uuid4().hex
+        marker = f"{name}-" + uuid.uuid4().hex if fixture_controls else None
         cwd = projects / name
         arguments = server_arguments(entry, port)
         command = [str(python), *(["-m", entry["scriptName"]] if entry["moduleMode"] else [str(cwd / entry["scriptName"])]), *arguments]
-        result = {"framework": name, "command": command, "cwd": str(cwd), "marker": marker, "port": port}
+        result = {"framework": name, "command": command, "cwd": str(cwd), "port": port,
+                  "expectedResponse": expected_response(name, marker)}
+        if fixture_controls:
+            result["marker"] = marker
         process, job, resumed = None, None, False
         with (output / f"{name}.log").open("wb") as log:
             try:
@@ -74,7 +89,9 @@ def run_servers(sdk: Path, python: Path, output: Path, projects: Path | None = N
                 job = WindowsJob() if windows else None
                 options = ({"creationflags": WINDOWS_CREATE_SUSPENDED | WINDOWS_CREATE_NEW_PROCESS_GROUP}
                            if windows else {"start_new_session": True})
-                environment = dict(os.environ, OPENPYCHARM_FRAMEWORK_PROBE=marker, PYTHONUNBUFFERED="1")
+                environment = dict(os.environ, PYTHONUNBUFFERED="1")
+                if fixture_controls:
+                    environment["OPENPYCHARM_FRAMEWORK_PROBE"] = marker
                 process = subprocess.Popen(command, cwd=cwd, env=environment, stdin=subprocess.DEVNULL,
                                            stdout=log, stderr=subprocess.STDOUT, **options)
                 result["ownedPid"] = process.pid
@@ -88,7 +105,7 @@ def run_servers(sdk: Path, python: Path, output: Path, projects: Path | None = N
                     try:
                         with opener.open(f"http://127.0.0.1:{port}/", timeout=1) as response:
                             body = json.load(response)
-                            if response.status != 200 or body != {"framework": name, "marker": marker}:
+                            if response.status != 200 or body != result["expectedResponse"]:
                                 raise ValueError(f"Unexpected {name} HTTP response: {body}")
                             result.update(status="pass", httpStatus=response.status, response=body)
                             break
@@ -120,7 +137,7 @@ def main():
     parser.add_argument("--sdk", type=Path, required=True)
     parser.add_argument("--python", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--projects", type=Path, help="Generated project root; defaults to the checked-in fixtures")
+    parser.add_argument("--projects", type=Path, help="Clean generated Hello project root; omission uses the instrumented checked-in test fixtures")
     args = parser.parse_args()
     result = run_servers(args.sdk, args.python, args.output, args.projects)
     print(json.dumps({"status": result["status"], "servers": [{"framework": item["framework"], "status": item["status"]} for item in result["servers"]]}))

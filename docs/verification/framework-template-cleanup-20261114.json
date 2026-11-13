@@ -1,0 +1,173 @@
+{
+  "schema": 1,
+  "status": "pass",
+  "recordedAt": "2026-11-13T20:21:59.434502+00:00",
+  "scope": "Clean production template generation and real server behavior; no native IDE/UI launch",
+  "sourceBaseCommit": "b4e088b74b599a5051db9a9fdec8a86f79c02264",
+  "sourceSha256": {
+    "plugins/frameworks/src/dev/openpycharm/frameworks/FrameworkProjectFiles.java": "90ddd6217d25262b2f21d2b809739779cec5e93c7a310c9a07da904cb21e7bd2",
+    "tests/frameworks/FrameworkProjectFilesTest.java": "d87646b0c8e7b7908f47d83d977a000b76c56769c193cc451c7216f3482b8acc",
+    "scripts/framework_server_smoke.py": "43ed9fe3ad664c4725f8857671666a2291aaa01d4fd03c8664ae489ac94a5f67",
+    "plugins/frameworks/README.md": "e5cdf7c439e11360b2069e02287e59858deb1406824636779fd61395136c3db6",
+    "fixtures/frameworks/README.md": "32269148a7716e8a358dbd1c240c83c38365769f52c44f209fbd760abe8e2932"
+  },
+  "platform": {
+    "system": "Darwin",
+    "architecture": "arm64",
+    "macOS": "27.2"
+  },
+  "productionJarSha256": "c0fecd5038c2471eebd915e4db082f88c42852192343aad368bf13fc8d13013d",
+  "buildReceipt": {
+    "path": ".tools/framework-clean-template-build.json",
+    "sha256": "9edeb050c02f6d99f1efa6c28eedb5a58f0afdec0ba7e1cd4fd98b0516d2f818",
+    "archiveVerification": {
+      "status": "pass",
+      "reader": "HashMapZipFile",
+      "verifiedEntries": 23,
+      "closed": true,
+      "sha256": "c0fecd5038c2471eebd915e4db082f88c42852192343aad368bf13fc8d13013d"
+    }
+  },
+  "checks": {
+    "pythonUnittest": {
+      "status": "pass",
+      "count": 83
+    },
+    "templateWriter": {
+      "status": "pass",
+      "scope": "template plans and transactional filesystem writer",
+      "checks": 257,
+      "symlinksTested": true
+    },
+    "requestIsolation": {
+      "status": "pass",
+      "scope": "per-module dependency opt-in request isolation",
+      "checks": 16
+    }
+  },
+  "generatedSourceFilesSha256": {
+    "django/README.md": "4ed3b66f1469b4f18a191964dc887fe9e679aee48988eb7d42568a3aa4c9dc2e",
+    "django/manage.py": "f2f599c3197d812fe0fe4ebf212ae73a4960af6aa0434a844fdf10511f762db7",
+    "django/project_config/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "django/project_config/settings.py": "bef5f59fa5c52e2d18b81f2ef83b89a1fbd74b7126079017e91f86d471944cd4",
+    "django/project_config/urls.py": "0cbe7118c634755dee0ae682fd186208fe84a77901e1fb33177ad02a12bad253",
+    "django/requirements.txt": "399419ca0dc48d150fb2f06e8c7acd67e0f3864da366ade3d5604c81a621652e",
+    "fastapi/README.md": "160db8d4c4de84fe0eeb2811f707c40c9b945a35de693b1768258ccff7a3dac9",
+    "fastapi/app.py": "1e99c7e3d8c86ca511e85167ae22a51607573b8663c2379c6beba034fc8a4cea",
+    "fastapi/requirements.txt": "a5ee2ca15213db4da4f16c58eef6ff1f332f10ae9bb04b9fbd652df5815b9539",
+    "flask/README.md": "4d9cf6e20c86c13a6adda01a24416c316e8b02febce46fbbeda6c5c88a92a302",
+    "flask/app.py": "dc58c10c4746be64071cb2f111cd49cf4212b5a5a7cd2b6102cd8313dd7169c9",
+    "flask/requirements.txt": "6979faed9b4726634bb0ff2b36f3e5a080e4d89a162dc1f264fce99bae332a8a"
+  },
+  "generatedServers": {
+    "path": ".tools/framework-clean-template-servers/framework-servers.json",
+    "sha256": "f103c4e753f6369bfa90776af3a6969deb6b1635c94acac1b841d633f37857c5",
+    "responseContract": "generated-hello-example",
+    "environmentMarkerControl": false,
+    "servers": [
+      {
+        "framework": "django",
+        "status": "pass",
+        "httpStatus": 200,
+        "response": {
+          "framework": "django",
+          "message": "Hello from Django!"
+        },
+        "cleanup": {
+          "mode": "owned-posix-session",
+          "pid": 15124,
+          "exitCode": -15
+        }
+      },
+      {
+        "framework": "flask",
+        "status": "pass",
+        "httpStatus": 200,
+        "response": {
+          "framework": "flask",
+          "message": "Hello from Flask!"
+        },
+        "cleanup": {
+          "mode": "owned-posix-session",
+          "pid": 15125,
+          "exitCode": -15
+        }
+      },
+      {
+        "framework": "fastapi",
+        "status": "pass",
+        "httpStatus": 200,
+        "response": {
+          "framework": "fastapi",
+          "message": "Hello from FastAPI!"
+        },
+        "cleanup": {
+          "mode": "owned-posix-session",
+          "pid": 15126,
+          "exitCode": -15
+        }
+      }
+    ]
+  },
+  "fixtureControls": {
+    "path": ".tools/framework-fixture-controls-cleanup/framework-servers.json",
+    "sha256": "f11e71e18ada16d6388793578cd871f9c0f81e925bc21521902d7e1afc9b6eb5",
+    "responseContract": "fixture-environment-marker",
+    "environmentMarkerControl": true,
+    "servers": [
+      {
+        "framework": "django",
+        "status": "pass",
+        "httpStatus": 200,
+        "response": {
+          "framework": "django",
+          "marker": "django-561feaf0e592493a8e1d1f234c0cda22"
+        },
+        "cleanup": {
+          "mode": "owned-posix-session",
+          "pid": 15177,
+          "exitCode": -15
+        }
+      },
+      {
+        "framework": "flask",
+        "status": "pass",
+        "httpStatus": 200,
+        "response": {
+          "framework": "flask",
+          "marker": "flask-2a3be25ac5ee4e1a8da2d34c38253f4b"
+        },
+        "cleanup": {
+          "mode": "owned-posix-session",
+          "pid": 15178,
+          "exitCode": -15
+        }
+      },
+      {
+        "framework": "fastapi",
+        "status": "pass",
+        "httpStatus": 200,
+        "response": {
+          "framework": "fastapi",
+          "marker": "fastapi-498dbcb369bb49ee883d22c060d7aa71"
+        },
+        "cleanup": {
+          "mode": "owned-posix-session",
+          "pid": 15179,
+          "exitCode": -15
+        }
+      }
+    ]
+  },
+  "previousDesktopEvidence": {
+    "reportedBy": "root task",
+    "sourceCommit": "80cea80c27623d76859d14b19f35b4ca5427c52b",
+    "workflow": "FastAPI Create with native Python3.14 venv and dependency opt-in, then native Run GET / 200",
+    "template": "Old instrumented response; does not verify the new Hello template"
+  },
+  "limitations": [
+    "No native IDE, CUA, new installer or release was launched by this cleanup verification",
+    "New template native UI/debug/installer checks require a rebuilt candidate; historical source80 desktop evidence remains separate",
+    "Existing process/container and Windows-specific acceptance boundaries are unchanged"
+  ]
+}

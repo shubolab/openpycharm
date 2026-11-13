@@ -52,15 +52,12 @@ public final class FrameworkProjectFiles {
             MIDDLEWARE = []
             """);
         files.put("project_config/urls.py", """
-            import os
-
             from django.http import JsonResponse
             from django.urls import path
 
 
             def index(request):
-                marker = os.environ.get("OPENPYCHARM_FRAMEWORK_PROBE", "manual")
-                return JsonResponse({"framework": "django", "marker": marker})
+                return JsonResponse({"framework": "django", "message": "Hello from Django!"})
 
 
             urlpatterns = [path("", index)]
@@ -69,8 +66,6 @@ public final class FrameworkProjectFiles {
       case FLASK -> {
         files.put("requirements.txt", "Flask==3.1.2\n");
         files.put("app.py", """
-            import os
-
             from flask import Flask
 
             app = Flask(__name__)
@@ -78,15 +73,12 @@ public final class FrameworkProjectFiles {
 
             @app.get("/")
             def index():
-                marker = os.environ.get("OPENPYCHARM_FRAMEWORK_PROBE", "manual")
-                return {"framework": "flask", "marker": marker}
+                return {"framework": "flask", "message": "Hello from Flask!"}
             """);
       }
       case FASTAPI -> {
         files.put("requirements.txt", "fastapi==0.121.0\nuvicorn==0.38.0\n");
         files.put("app.py", """
-            import os
-
             from fastapi import FastAPI
 
             app = FastAPI()
@@ -94,8 +86,7 @@ public final class FrameworkProjectFiles {
 
             @app.get("/")
             def index():
-                marker = os.environ.get("OPENPYCHARM_FRAMEWORK_PROBE", "manual")
-                return {"framework": "fastapi", "marker": marker}
+                return {"framework": "fastapi", "message": "Hello from FastAPI!"}
             """);
       }
     }
@@ -103,8 +94,8 @@ public final class FrameworkProjectFiles {
         + "Use the project interpreter selected in OpenPyCharm. Install the pinned dependencies with "
         + "`python -m pip install -r requirements.txt`, then use the " + kind.displayName()
         + " Run or Debug configuration.\n\n"
-        + "GET `/` returns the framework name and the `OPENPYCHARM_FRAMEWORK_PROBE` environment "
-        + "variable (default: `manual`). The development server binds to localhost.\n\n"
+        + "GET `/` returns the framework name and a Hello message. "
+        + "The development server binds to localhost.\n\n"
         + "This is a small local development starter, not a production deployment configuration.\n");
     return Collections.unmodifiableMap(files);
   }

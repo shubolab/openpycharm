@@ -35,8 +35,10 @@ public final class FrameworkProjectFilesTest {
         catch (UnsupportedOperationException expected) { checks++; }
         require(plan.containsKey("requirements.txt") && plan.containsKey("README.md"), "Dependencies and instructions");
         String app = plan.get(kind == FrameworkKind.DJANGO ? "project_config/urls.py" : "app.py");
-        require(app.contains("OPENPYCHARM_FRAMEWORK_PROBE") && app.contains("\"marker\"")
-            && app.contains("\"" + kind.name().toLowerCase(java.util.Locale.ROOT) + "\""), "Real endpoint and environment marker");
+        require(app.contains("Hello from " + kind.displayName() + "!") && app.contains("\"message\"")
+            && app.contains("\"" + kind.name().toLowerCase(java.util.Locale.ROOT) + "\""), "Normal framework Hello endpoint");
+        require(plan.values().stream().noneMatch(text -> text.contains("OPENPYCHARM_FRAMEWORK_PROBE") || text.contains("\"marker\"")
+            || text.toLowerCase(java.util.Locale.ROOT).contains("probe")), "Production examples contain no test instrumentation");
         Path project = temporary.resolve(kind.name());
         Files.createDirectories(project.resolve(".venv"));
         Files.createDirectories(project.resolve(".idea"));

@@ -12,6 +12,8 @@
 
 原生 **New Project** 的 Python 分类也注册了三个框架生成器，复用 PythonCore 的目录与解释器/venv 选择界面。生成最小项目、固定版本的 `requirements.txt` 和绑定所选模块 SDK 的运行配置。依赖安装复选框每次打开向导均默认关闭；勾选后才使用所选解释器执行 `-m pip install -r requirements.txt`。点击创建时按模块保存安装选择，避免其他向导改变正在创建项目的选择。文件生成、依赖安装、进程等待和 VFS 刷新都在后台完成，只有运行配置模型提交回到 EDT。文件冲突会报告错误并保留原文件；取消文件写入会回滚本次创建的文件。依赖安装失败或取消后保留已经生成的项目和所选环境，便于检查和手动继续。
 
+生成的首页返回框架名称和普通问候，例如 `{"framework":"fastapi","message":"Hello from FastAPI!"}`，可直接作为项目起点。
+
 默认关闭自动重载，方便本机调试和明确的进程生命周期。Flask 浏览器交互调试器也默认关闭；调试使用 IDE 的 Python 调试器。生产部署、远程解释器、自动重载子进程、多进程调试、框架模板/ORM/路由智能分析，以及完整向导桌面操作仍需单独实现或验收。初期模板只支持普通本地 Python/venv 项目，不支持 uv/Hatch/Poetry 的模块布局。
 
 本插件没有引用商业框架实现，也没有启用付费组件或恢复已移除的锁定推广类。示例见 [`fixtures/frameworks`](../../fixtures/frameworks/README.md)，API 与证据边界见 [`framework-api.md`](../../docs/verification/framework-api.md)。

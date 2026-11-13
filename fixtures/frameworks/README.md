@@ -2,6 +2,8 @@
 
 三个小项目都提供 `GET /`，返回框架名称和 `OPENPYCHARM_FRAMEWORK_PROBE` 环境变量的值。它们使用真实 Django、Flask、FastAPI/Uvicorn 包，不是 HTTP 模拟服务器。
 
+此目录是带环境标记的独立测试用例。原生 New Project 生成的项目使用普通 Hello 响应，不含这些测试字段。检查生成项目时给 `framework_server_smoke.py` 传入 `--projects`；省略该参数才会启用本目录的环境标记控制。
+
 在一个明确选择的测试环境中安装依赖，例如在本仓库根目录执行：
 
 ```sh

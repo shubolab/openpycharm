@@ -136,3 +136,11 @@ python3 scripts/framework_server_smoke.py \
 原生进程 PID 8506 正常退出（code 0），日志 ERROR/SEVERE 为 0；一个已知上游 ConfigurationScript WARN 保留。完整应用文件树在测试前后摘要相同，`codesign --verify --deep --strict` 和来源/JAR 校验在测试后仍通过。精简证据见 [framework-integration-20261114.json](framework-integration-20261114.json)。77 项 Python 控制、9 项基础示例测试、254 项模板检查和 16 项请求隔离检查通过；Windows SDK 的 classpath 编译/检查使用 macOS 宿主 JBR，不能当作 Windows 原生运行证据。
 
 这些证据支持原生产品加载与生成器 API 集成；前面的独立加载历史记录继续单列。实际向导 Create/Cancel、框架 Run/Debug 桌面操作、Windows native CI、正式安装包及发布 GIF 仍由后续主线候选验收，瞬时未观察孤儿进程的容器边界也仍开放。
+
+## 模板输出清理（2026-11-14）
+
+根任务随后报告在来源 `80cea80c27623d76859d14b19f35b4ca5427c52b` 的真实桌面完成 FastAPI Create、Python 3.14 venv 创建、选择安装依赖及 Run `/` 返回 200，并发现旧生成文件将内部环境标记显示给用户。该桌面记录仍对应旧模板；上面的历史记录和响应内容没有重写。
+
+新模板首页只返回框架名称与普通问候，例如 `{"framework":"fastapi","message":"Hello from FastAPI!"}`。生成的 Python 文件与 README 不含探针变量或内部响应字段。测试脚本对明确传入 `--projects` 的生成项目直接校验这个正常响应；只有省略该参数、使用独立测试用例时才启用环境标记控制，不修改用户生成的项目来添加测试字段。
+
+本修复使用固定 SDK 编译后的生产模板类直接写出三个新项目，三个真实本机服务器均返回预期 Hello JSON；原有三个环境标记测试用例也分别通过。257 项模板写入/输出检查、16 项请求隔离检查和 83 项 Python 控制通过，六个测试服务器均由自己的会话清理。精简记录见 [framework-template-cleanup-20261114.json](framework-template-cleanup-20261114.json)。本修复没有启动 IDE 或操作桌面；新模板的原生 UI、调试和安装包验收仍需要重建候选后执行，不能沿用旧模板的桌面证据。
