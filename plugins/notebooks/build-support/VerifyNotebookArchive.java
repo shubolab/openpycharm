@@ -33,7 +33,8 @@ public final class VerifyNotebookArchive {
     }
     for (String required : new String[]{"META-INF/plugin.xml", "META-INF/LICENSE", "META-INF/NOTICE",
         "dev/openpycharm/notebooks/NotebookFileEditor.class",
-        "dev/openpycharm/notebooks/NotebookEditorProvider.class", "kernel_bridge.py", "kernel-requirements.txt"}) {
+        "dev/openpycharm/notebooks/NotebookEditorProvider.class", "kernel_bridge.py", "kernel-requirements.txt",
+        "META-INF/notebook-runtime-dependencies.lock.json"}) {
       if (!names.contains(required)) throw new IllegalStateException("Missing required notebook resource " + required);
     }
     String digest = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(path)));

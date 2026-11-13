@@ -159,6 +159,7 @@ def build_plugin(sdk: Path, version: str | None = None, host_sdk: Path | None = 
             payloads["META-INF/LICENSE"] = (ROOT / "LICENSE").read_bytes()
             payloads["META-INF/NOTICE"] = (SOURCE / "NOTICE").read_bytes()
             payloads["kernel-requirements.txt"] = (SOURCE / "kernel-requirements.txt").read_bytes()
+            payloads["META-INF/notebook-runtime-dependencies.lock.json"] = (SOURCE / "runtime-dependencies.lock.json").read_bytes()
             if "dev/openpycharm/notebooks/NotebookFileEditor.class" not in payloads:
                 raise ValueError("Notebook configuration class is missing")
             candidate = temporary / "notebooks.jar"

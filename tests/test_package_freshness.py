@@ -131,6 +131,18 @@ class ProductAssemblyFreshnessTests(unittest.TestCase):
             self.assemble()
         self.assertFalse(self.output.exists())
 
+    def test_degenerate_payload_path_is_rejected_before_product_promotion(self):
+        self.http[1]["files"] = {"lib/openpycharm-http.jar": self.http[1]["jarSha256"], ".": "0" * 64}
+        with self.assertRaisesRegex(ValueError, "payload paths/digests"):
+            self.assemble()
+        self.assertFalse(self.output.exists())
+
+    def test_payload_source_with_parent_segments_cannot_escape_owned_path_checks(self):
+        self.http[1]["pluginDirectory"] = str(self.http[0] / ".." / "plugin")
+        with self.assertRaisesRegex(ValueError, "source must stay"):
+            self.assemble()
+        self.assertFalse(self.output.exists())
+
     def test_edit_after_plugin_compilation_rejects_product_before_promotion(self):
         with self.assertRaisesRegex(ValueError, "stale.*changed.*plugins/frameworks/src/Framework.java"):
             self.assemble(mutate_after_compile=True)
