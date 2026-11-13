@@ -8,12 +8,46 @@ import platform
 import plistlib
 import re
 import shutil
+import stat
 import subprocess
 import tempfile
 
 from product import IDENTITY, ROOT, brand_plist, brand_product_info, brand_resources, seal_python_helper_directories, sha, write_paths
 from bootstrap import PIN_PATH, validate_cached
-from provenance import source_inputs, verify_source_inputs
+from provenance import source_inputs, verify_source_inputs, verify_product_plugins
+
+
+def copy_plugin_payloads(source, destination, jar_name, build):
+    """Copy only receipt-bound regular files, including replaceable JDBC/source JARs."""
+    files = build.get("files", {"lib/" + jar_name: build["jarSha256"]})
+    if not isinstance(files, dict) or not 1 <= len(files) <= 32 or files.get("lib/" + jar_name) != build["jarSha256"]:
+        raise ValueError("Plugin payload receipt must include its primary JAR")
+    source = Path(source).absolute()
+    if not source.is_relative_to(ROOT):
+        raise ValueError("Plugin payload source must stay in this checkout")
+    for name, digest in files.items():
+        if not isinstance(name, str):
+            raise ValueError("Plugin payload path must be a string")
+        relative = Path(name)
+        if (not isinstance(name, str) or not name or relative.is_absolute() or relative.as_posix() != name
+                or any(c in name for c in "\\:\0") or any(p in {".", ".."} for p in relative.parts)
+                or relative.parts[0] not in {"lib", "legal"} or not isinstance(digest, str)
+                or re.fullmatch(r"[a-f0-9]{64}", digest) is None):
+            raise ValueError("Plugin payload paths/digests must be bounded relative lib/legal files")
+        original = source / relative
+        for parent in [original, *original.parents]:
+            if parent == ROOT:
+                break
+            if parent.is_symlink():
+                raise ValueError("Plugin payload source ancestors cannot be symlinks")
+        if not original.is_file() or not stat.S_ISREG(original.stat().st_mode) or original.stat().st_size > 128 * 1024**2 or sha(original) != digest:
+            raise ValueError("Plugin payload differs from its authenticated build")
+        target = destination / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(original, target)
+        if sha(target) != digest:
+            raise ValueError("Packaged plugin payload digest differs from its authenticated build")
+    return files
 
 
 def assemble(sdk, target, version, output):
@@ -43,6 +77,8 @@ def assemble(sdk, target, version, output):
     http = build_http_plugin(sdk, ROOT / f"build/http-client-{target}", version, [ROOT / ".tools/kotlin"])
     from build_framework_plugin import build_plugin as build_framework_plugin
     framework_directory, frameworks = build_framework_plugin(sdk, version=version)
+    from build_database_plugin import build_plugin as build_database_plugin
+    database_directory, database = build_database_plugin(sdk, version=version)
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="assemble-", dir=output.parent) as staging_name:
         staging = Path(staging_name) / output.name
@@ -64,16 +100,14 @@ def assemble(sdk, target, version, output):
         for plugin_id, name, directory_name, source_directory, jar_name, build in (
             ("dev.openpycharm.http", "OpenPyCharm HTTP Client", "openpycharm-http", Path(http["pluginDirectory"]), "openpycharm-http.jar", http),
             ("dev.openpycharm.frameworks", "OpenPyCharm Python Frameworks", "openpycharm-frameworks", framework_directory, "frameworks.jar", frameworks),
+            ("dev.openpycharm.database", "OpenPyCharm Database", "openpycharm-database", database_directory, "database.jar", database),
         ):
             directory = contents / "third-party-plugins" / directory_name
             jar = directory / "lib" / jar_name
-            jar.parent.mkdir(parents=True)
-            shutil.copyfile(source_directory / "lib" / jar_name, jar)
-            if sha(jar) != build["jarSha256"]:
-                raise ValueError(f"Packaged {name} digest differs from its authenticated build")
+            files = copy_plugin_payloads(source_directory, directory, jar_name, build)
             plugins.append({"id": plugin_id, "name": name, "version": version,
                             "path": directory.relative_to(contents).as_posix(), "jar": jar.relative_to(contents).as_posix(),
-                            "jarSha256": build["jarSha256"], "build": build})
+                            "jarSha256": build["jarSha256"], "files": files, "build": build})
         if macos:
             from icons import mac_icon
             mac_icon(contents)
@@ -108,6 +142,7 @@ def assemble(sdk, target, version, output):
             (contents / "openpycharm-build.json").write_text(json.dumps(report, indent=2) + "\n")
             subprocess.run(["codesign", "--force", "--deep", "--sign", "-", str(staging)], check=True)
             subprocess.run(["codesign", "--verify", "--deep", "--strict", str(staging)], check=True)
+        verify_product_plugins(report, contents)
         verify_source_inputs(report)
         staging.rename(output)
     print(json.dumps({"output": str(output), "version": version, "target": target}))

@@ -1,7 +1,7 @@
 {
   "name": "OpenPyCharm",
   "id": "dev.openpycharm.ide",
-  "version": "0.1.0-dev.2",
+  "version": "0.1.0-dev.3",
   "vendor": "OpenPyCharm",
   "selector": "OpenPyCharm2026.1",
   "script": "openpycharm",

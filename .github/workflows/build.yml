@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Installer version (for example 0.1.0-dev.2)'
+        description: 'Installer version (for example 0.1.0-dev.3)'
         required: true
-        default: '0.1.0-dev.2'
+        default: '0.1.0-dev.3'
         type: string
 
 permissions:
@@ -37,7 +37,7 @@ jobs:
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 60
     env:
-      RELEASE_VERSION: ${{ inputs.version || '0.1.0-dev.2' }}
+      RELEASE_VERSION: ${{ inputs.version || '0.1.0-dev.3' }}
       TARGET: ${{ matrix.target }}
       SDK: ${{ matrix.sdk }}
       PRODUCT: ${{ matrix.product }}
@@ -109,6 +109,12 @@ jobs:
       - name: Compile and check native framework commands, templates and request isolation
         shell: bash
         run: python scripts/build_framework_plugin.py --sdk "$SDK" --version "$RELEASE_VERSION" --test > "build/framework-${TARGET}.json"
+      - name: Provision pinned JDBC drivers and matching LGPL source
+        shell: bash
+        run: python scripts/provision_database_drivers.py
+      - name: Compile native Database and check owned disposable SQLite integration
+        shell: bash
+        run: python scripts/build_database_plugin.py --sdk "$SDK" --version "$RELEASE_VERSION" --test > "build/database-${TARGET}.json"
       - name: Assemble the standalone product
         shell: bash
         run: python scripts/package.py --target "$TARGET" --sdk "$SDK" --version "$RELEASE_VERSION" --output "$PRODUCT"
