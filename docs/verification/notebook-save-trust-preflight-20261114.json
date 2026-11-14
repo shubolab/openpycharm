@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "status": "blocked-by-ordinary-project-trust",
+  "sourceCommit": "59fd8ee08f7bf821fe57a39389faa13ebffa1db1",
+  "notebookJarSha256": "882248920fe940df597c53dab1c22156c3977bb66b7a651c0df7082d5d1cea28",
+  "ownedPid": 94957,
+  "cleanup": {
+    "mode": "owned-posix-session",
+    "pid": 94957,
+    "exitCode": 143
+  },
+  "assessment": {
+    "status": "fail",
+    "error": "No native report before timeout/process exit; preserve launch log and ordinary project-trust state"
+  },
+  "threadDumpContainsTrustedProjectStartupDialog": true,
+  "productionSaveEngineReached": false,
+  "manualSaveAndRichAcceptance": "docs/verification/notebook-cell-native-regression-20261114.json",
+  "resolutionInProgress": "Have the IDE create a fresh owned fixture project through its normal new-project lifecycle; keep trust protections active",
+  "evidence": {
+    ".tools/native-final-saveall-59fd-1/result.json": {
+      "bytes": 110815,
+      "sha256": "de5a16e016ce27d224e5b5e124fde8de00ca67f75354c79da07aeebedf141d59"
+    },
+    ".tools/native-final-saveall-59fd-1/external-timeout-threads.txt": {
+      "bytes": 154208,
+      "sha256": "7c6e340ba27bb0a905cd18856e9b73c50fd682c0d410dff8eea8109112c747c2"
+    }
+  },
+  "nativeCI": {
+    "runId": 43562777913,
+    "sourceCommit": "5126b7a853ce392d8ecf287383b3e50f9db3e2c3",
+    "macJob": 132349926804,
+    "windowsJob": 132349926558,
+    "macActualTrustModalInRetainedThreadDump": true,
+    "macOwnedCleanup": {
+      "pid": 12225,
+      "exitCode": 143
+    },
+    "windowsFailure": "New cp1252/default-I/O test expected LF bytes while Windows text files have CRLF; UTF-8 decoding itself succeeded",
+    "windowsNarrowFixCommit": "de10bbd",
+    "retainedEvidence": {
+      ".tools/ci/dev3-preflight/macos-43562777913.log": {
+        "bytes": 113280,
+        "sha256": "9c4a74620569a4f7de390e206185e44e1c7adf0c937397aafb6c26c74d74733f"
+      },
+      ".tools/ci/dev3-preflight/windows-43562777913.log": {
+        "bytes": 67133,
+        "sha256": "298d530f19d58a384c6add38106186541e77436aa964011a565a41557ba20428"
+      },
+      ".tools/ci/dev3-preflight/macos-43562777913-evidence.zip": {
+        "bytes": 184147,
+        "sha256": "18212fa6adaa4349edee124d06e212225986549fea3453204744336d4b2d2d2f"
+      }
+    }
+  }
+}
