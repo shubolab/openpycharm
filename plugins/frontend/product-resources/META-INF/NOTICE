@@ -1,0 +1,23 @@
+OpenPyCharm JavaScript and TypeScript
+
+This independent native IntelliJ Platform LSP integration is OpenPyCharm code,
+licensed under the repository LICENSE. It does not contain JetBrains proprietary
+JavaScript/TypeScript implementation code or require a JetBrains IDE account.
+
+The plugin uses the public LSP API of the pinned open-source IntelliJ Platform.
+Node.js 24.22.3, typescript-language-server 6.1.0 and TypeScript 6.0.3 are supplied
+as an external pinned runtime under runtime/{target}, authenticated before use.
+No dependency installation or automatic runtime download is performed.
+
+Original tools.lock.json is retained as META-INF/frontend-tools.lock.json. Its
+historical M0 product/packaging fields describe the original research lock, not
+this product's default enablement or package layout. The pinned payloads and
+licenses remain unchanged. Node.js's LICENSE contains its third-party notices;
+TypeScript and typescript-language-server retain their Apache-2.0 licenses.
+The runtime notices/ directory retains the original legal texts and package
+metadata for all 21 packages embedded in the language-server CLI. The CLI source
+map, package manifests, source URLs, versions and hashes are retained as pinned.
+
+Normal project trust controls process startup. Analysis uses an isolated child
+environment and project-scoped IDE system state; external Git/npm/service
+authentication and the user's global Node configuration are not modified.

@@ -1,0 +1,16 @@
+<idea-plugin>
+  <id>dev.openpycharm.frontend</id>
+  <name>OpenPyCharm JavaScript and TypeScript</name>
+  <version>0.1.0-dev.4</version>
+  <vendor>OpenPyCharm</vendor>
+  <description>Independent native JavaScript and TypeScript language service with a pinned local runtime. Enabled for trusted local project files; configurable per project.</description>
+  <idea-version since-build="261" until-build="261.*"/>
+  <depends>com.intellij.modules.platform</depends>
+  <depends>com.intellij.modules.lsp</depends>
+  <extensions defaultExtensionNs="com.intellij.platform.lsp">
+    <integrationProvider implementation="dev.openpycharm.frontend.FrontendProductLspProvider"/>
+  </extensions>
+  <extensions defaultExtensionNs="com.intellij">
+    <projectConfigurable id="dev.openpycharm.frontend.settings" parentId="language" displayName="JavaScript and TypeScript" instance="dev.openpycharm.frontend.FrontendProjectConfigurable"/>
+  </extensions>
+</idea-plugin>
