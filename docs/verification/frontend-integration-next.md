@@ -1,6 +1,6 @@
 # Next-only frontend integration plan
 
-Base: `913e59b` (published dev.3 source). The accepted M0/native frontend slice is integrated on `codex_frontend_integration_next`. All145 existing production inputs, the original four plugins, product version and both root READMEs remain byte-identical. Sixteen frontend inputs are recorded separately; the normal strict source inventory now covers all161, without exclusions. The ordinary product assembler still packages exactly the original four plugins.
+Base: `913e59b` (reviewed dev.3 release documentation; installer production source `9a243e6`). The accepted M0/native frontend slice is integrated on `codex_frontend_integration_next`. All145 existing production inputs, the original four plugins, product version and both root READMEs remain byte-identical. Sixteen frontend inputs are recorded separately; the normal strict source inventory now covers all161, without exclusions. The ordinary product assembler still packages exactly the original four plugins.
 
 The new entry point creates a **separate default-off plugin ZIP/overlay**, not an IDE installer:
 
@@ -24,3 +24,7 @@ Root's next native window:
 The candidate deliberately retains compiled owned fixture/cache paths; it is not yet a general relocatable frontend distribution. Only three classes differ from the accepted `c127…` JAR because those absolute path constants changed; all other class and resource bytes match. Keep actual IDE service/document UI and Windows acceptance separate from compile/headless controls. Do not add this candidate to dev.3 or change the published demo. Root owns the next version, native evidence, installers and release decision.
 
 中文：这是913基线上的 next-only 源码和独立 Frontend ZIP 候选，不改 dev.3 版本、根 README、四插件默认装配或145项既有生产输入。新增16项单列，全161项继续严格绑定。默认关闭，不自动下载、安装或执行 Node；本轮未启动 IDE。下一轮由主流程在普通 trust 和隔离 profile 内显式准备缓存、启动验证服务/文档界面及生命周期；Windows 和意外重归属未验证，不能据此宣布完整前端或1:1完成。
+
+A later actual native M0 window loaded exact `c127087d…` into installed dev.3; see
+[desktop evidence](frontend-native-desktop-20261114.json). It confirms that bounded
+fixture candidate, not the retargeted `2ae4…` overlay or a general product frontend.

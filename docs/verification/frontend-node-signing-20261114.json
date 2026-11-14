@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "scope": "Real OSS bundle signature probe only; not an assembled or executed product",
+  "base": "Authenticated PC261 SDK clone",
+  "nodeOriginalSha256": "ba7073582822078d8c90bca3facacc46690bc5366fab4b815aeef9148cd6e854",
+  "nodeAfterForceDeepSha256": "ba7073582822078d8c90bca3facacc46690bc5366fab4b815aeef9148cd6e854",
+  "originalNodeBytesPreservedByForceDeep": true,
+  "sign": {
+    "returncode": 0,
+    "log": "deep-force-sign.log"
+  },
+  "verify": {
+    "returncode": 0,
+    "log": "deep-strict-verification.log"
+  },
+  "nodeExecuted": false,
+  "applicationExecuted": false,
+  "observedAt": "2026-11-14",
+  "testedNestedNodePath": "Contents/third-party-plugins/openpycharm-frontend/runtime/macos-arm64/node/bin/node",
+  "nodeVendorSignatureVerified": true,
+  "nodeVendor": "Node.js Foundation (HX7739G8FX)",
+  "interpretation": "At the actual planned custom plugin/runtime path, existing force/deep parent signing preserved the exact original pinned Node bytes and vendor signature. No blanket pin exception or signing change is justified by this probe.",
+  "limitations": [
+    "The complete five-plugin product must repeat post-sign payload and actual startup checks",
+    "This probe did not execute Node or the application"
+  ],
+  "evidence": {
+    "node-signature-verify.log": {
+      "size": 331,
+      "sha256": "69c212c305fbb83161f1cd7cec9823917c7b6d80a820efeab6961c5a20b85958"
+    },
+    "signature-probe.json": {
+      "size": 599,
+      "sha256": "ae934e1f71479b822650b1f5182c24827cae4f360d701913dc7ec5cd6a863b8e"
+    },
+    "deep-strict-verification.log": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "deep-force-sign.log": {
+      "size": 122,
+      "sha256": "105a2b3c3386995973d6ff4410a739160db6c80c9f6172615178801305139c3a"
+    },
+    "node-signature-identity.log": {
+      "size": 683,
+      "sha256": "3ed4e4aafc645df49b7936017f412b65f0dbfdefd7cf7722049d4799a2321c66"
+    }
+  }
+}

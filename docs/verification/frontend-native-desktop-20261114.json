@@ -1,0 +1,291 @@
+{
+  "schema": 1,
+  "observedAt": "2026-11-14",
+  "status": "bounded-native-ui-pass",
+  "releaseReady": false,
+  "sourceCommit": "7831730cc86ee64c2526dc2aa7ac03163e5892c0",
+  "frontendJarSha256": "c127087d3fba1bd92a3154bc5c3ab4bf08df149eb10253702cbc31d86995ac1a",
+  "externalPluginVersion": "0.1.0-dev.4-m0",
+  "baseInstalledVersion": "0.1.0-dev.3",
+  "baseProductionCommit": "9a243e605c43d86788b0e1b4607ec3bdf11b13d1",
+  "baseProductTreeSha256": "7485d3022a1a8fd113cb8a5c485473dd6cd69f16f4d346a6b250cbd0505a2205",
+  "system": "macOS 27.2 arm64",
+  "node": "24.22.3",
+  "typescriptLanguageServer": "6.1.0",
+  "typescript": "6.0.3",
+  "execution": "Real installed dev.3 + exact external c127 M0 plugin in isolated profile, ordinary project trust; not a product frontend installer",
+  "normalTrust": {
+    "defaultOffTrustProjectClicked": true,
+    "enabledTrustProjectClicked": true,
+    "parentTrustCheckboxClicked": false,
+    "globalTrustBypass": false,
+    "normalQuitPersistedOnlyExactFixture": true,
+    "note": "The first default-off setup process was terminated by SIGTERM; its UI trust/log settings were not presumed persistent. Enabled phase repeated ordinary trust. Final phase used Save, Close Project/reopen and normal Quit/Exit."
+  },
+  "nativeUiChecks": {
+    "defaultOffCustomPluginLoadedWithoutOwnedNode": true,
+    "actualNativeLanguageServicesWidgetRunning": true,
+    "actualNativeClientInitializedWithSelectedTypescript603": true,
+    "typescriptMemberAccepted": "quote.total",
+    "typescriptSemanticError": "Type 'string' is not assignable to type 'number'. :5",
+    "typescriptEditedRecovery": "const broken: number = 42; (remaining unused-symbol hints retained)",
+    "typescriptPhysicalDefinition": "Cmd+B from main.ts makeQuote -> quote.ts 2:17",
+    "javascriptSameLineChineseEmojiMemberAccepted": "const label = \"中文😀\"; receipt.id",
+    "javascriptUnsavedDocument": {
+      "diskContainedNewPropertyBeforeAcceptance": false,
+      "nativeEditorContainedNewProperty": true,
+      "accepted": "scratch.nativeUnsaved_8f36"
+    },
+    "projectCloseReturnedWelcome": true,
+    "ownedProcessCleanup": {
+      "nativeProjectClosedInUi": true,
+      "ownedPidsBeforeClose": [
+        59321,
+        59322,
+        59323
+      ],
+      "allObservedOwnedPidsGone": true,
+      "cleanupObservationPolls": 1,
+      "noForceKillUsedForTheseNodes": true
+    },
+    "projectReopenNewOwnedPids": [
+      71939,
+      71940,
+      71941
+    ],
+    "projectReopenCompletionAccepted": "scratch.nativeUnsaved_8f36",
+    "normalQuitAndSixObservedNodePidsGone": true
+  },
+  "inputAndObservationLimits": [
+    "Initial paste did not invoke the typed-character auto-popup; physical dot then Return did. Ctrl+Space/Find Action attempts are not counted as passing completion actions.",
+    "Native completion popup was not exposed in the app AX/main-window screenshot; actual accepted source text is the recorded completion evidence.",
+    "M0 still has compiled owned fixture/cache boundaries; this does not prove general relocatable product activation.",
+    "Precise native protocol trace, pending-request cancellation/forced backpressure in the IDE, unexpected reparenting and Windows remain separate gates."
+  ],
+  "postWorkflow": {
+    "baseInstalledProductTreeSha256": "7485d3022a1a8fd113cb8a5c485473dd6cd69f16f4d346a6b250cbd0505a2205",
+    "baseAppStrictSignaturePassed": true,
+    "externalPluginDoesNotModifyBaseApplication": true,
+    "ownedIdePidExited": 57351,
+    "ownedNodePidsExited": [
+      59321,
+      59322,
+      59323,
+      71939,
+      71940,
+      71941
+    ],
+    "normalUiExitConfirmed": true,
+    "errorSevereCount": 0,
+    "warningCount": 12,
+    "sessionLogSha256": "9e4937a4c42d3d00e76f2be1a8e311c9955c24a5b87de4ddd2040d1d16201011"
+  },
+  "warningRecords": [
+    "2026-11-14 17:15:36,187 [    369]   WARN - #c.i.p.instanceContainer - InstanceNotOverridableException: Override failed for com.intellij.openapi.project.impl.ProjectStoreFactory: com.intellij.configurationScript.providers.ConfigurationScriptProjectStoreFactory attempts to override com.intellij.configurationStore.PlatformLangProjectStoreFactory, but the existing implementation is not overriddable (not declared as 'open=true')",
+    "2026-11-14 17:16:50,149 [  74331]   WARN - #c.i.p.c.s.s.i.p.UtilsKt - Path /usr/local/Cellar/python is inaccessible",
+    "2026-11-14 17:16:50,152 [  74334]   WARN - #c.i.p.c.s.s.i.p.UtilsKt - Path /Library/Frameworks/Python.framework/Versions is inaccessible",
+    "2026-11-14 17:16:50,154 [  74336]   WARN - #c.i.p.c.s.s.i.p.UtilsKt - Path /System/Library/Frameworks/Python.framework/Versions is inaccessible",
+    "2026-11-14 17:26:50,164 [ 674346]   WARN - #c.i.p.c.s.s.i.p.UtilsKt - Suppressed a frequent exception logged for the 2nd time: /usr/local/Cellar/python",
+    "2026-11-14 17:26:50,165 [ 674347]   WARN - #c.i.p.c.s.s.i.p.UtilsKt - Suppressed a frequent exception logged for the 2nd time: /Library/Frameworks/Python.framework/Versions",
+    "2026-11-14 17:26:50,166 [ 674348]   WARN - #c.i.p.c.s.s.i.p.UtilsKt - Suppressed a frequent exception logged for the 2nd time: /System/Library/Frameworks/Python.framework/Versions",
+    "2026-11-14 17:36:21,066 [1245248]   WARN - #c.i.o.a.e.ActionUtil - Can not find action by id CompileDirty",
+    "2026-11-14 17:51:57,457 [2181639]   WARN - #c.i.o.a.e.ActionUtil - Can not find action by id CompileDirty",
+    "2026-11-14 17:56:52,746 [2476928]   WARN - #c.i.p.c.s.s.i.p.UtilsKt - Suppressed a frequent exception logged for the 5th time: /usr/local/Cellar/python",
+    "2026-11-14 17:56:52,746 [2476928]   WARN - #c.i.p.c.s.s.i.p.UtilsKt - Suppressed a frequent exception logged for the 5th time: /Library/Frameworks/Python.framework/Versions",
+    "2026-11-14 17:56:52,746 [2476928]   WARN - #c.i.p.c.s.s.i.p.UtilsKt - Suppressed a frequent exception logged for the 5th time: /System/Library/Frameworks/Python.framework/Versions"
+  ],
+  "runtimeAuthenticatedAfterNativeUse": {
+    "target": "macos-arm64",
+    "lockSha256": "5a7b20ce2ce915a4012b4ea5dfa35b77c709bdbb19de00be87700404a6f6fff2",
+    "files": 191,
+    "runtimeRoot": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frontend-native/.tools/frontend-m0-tools/runtime/macos-arm64/5a7b20ce2ce915a4012b4ea5dfa35b77c709bdbb19de00be87700404a6f6fff2",
+    "authenticatedAfterNativeExecution": true,
+    "installationScriptsExecuted": false
+  },
+  "rootIntegratedSource": "0a58c45c2b26582d80d7a04af86847444adacf0c",
+  "rootControls": {
+    "tests": 150,
+    "passed": 150,
+    "skipped": 0,
+    "logSha256": "19bfb27e19499c565d75781952f9898e367fb4c4a884ec3098fb0e9ec509d489"
+  },
+  "evidence": {
+    "frontend-native-c127-off-1/default-off-final-idea.log": {
+      "size": 66836,
+      "sha256": "49d85f4636ee6c5d77b0ee3bb33a0dbb853d5b8f73b9cc50902dd79b6c1a552e"
+    },
+    "frontend-native-c127-off-1/default-off-idea.log": {
+      "size": 62525,
+      "sha256": "d424b1b16fc77067611b18357502603daaf115f7574b489445cf1fabcedd9320"
+    },
+    "frontend-native-c127-off-1/default-off-main-ts.ax.txt": {
+      "size": 7028,
+      "sha256": "85fabac63d737db7dee4db37d4b92e87c2cf3627853ce1724a5abc5959ee83f4"
+    },
+    "frontend-native-c127-off-1/default-off-main-ts.png": {
+      "size": 269493,
+      "sha256": "f789451928c24cba88c23d97122a9931b0b8d49cc6d8378cf7534eb693392e52"
+    },
+    "frontend-native-c127-off-1/default-off-result.json": {
+      "size": 1513,
+      "sha256": "0f2d27608ec005be6b91099a115ba967c261c352581f5516e1f2a071a0304a34"
+    },
+    "frontend-native-c127-off-1/native-debug-log-setting.ax.txt": {
+      "size": 7756,
+      "sha256": "7e1698f9d9486e8c9bf7cb350615ead9d7f224da4f3140d8985349f77e6437bf"
+    },
+    "frontend-native-c127-off-1/preparation.json": {
+      "size": 1291,
+      "sha256": "1964677af442f9467dae087d4b69d05da69bc5a3fab18d1a0862b9ea327de9b5"
+    },
+    "frontend-native-c127-off-1/trust-dialog.ax.txt": {
+      "size": 1181,
+      "sha256": "6e05687928eff65f8c3370e32f7e6db689c5ac040c71e3b3addb52c56375a81b"
+    },
+    "frontend-native-c127-on-1/active-session.log": {
+      "size": 60710,
+      "sha256": "92310ce5c5699d4b347c48cd6361ec017b33bf5bcdbad2929606c708a70b90e6"
+    },
+    "frontend-native-c127-on-1/completed-native-session.log": {
+      "size": 91771,
+      "sha256": "9e4937a4c42d3d00e76f2be1a8e311c9955c24a5b87de4ddd2040d1d16201011"
+    },
+    "frontend-native-c127-on-1/javascript-completion-accepted.ax.txt": {
+      "size": 7434,
+      "sha256": "e68dc2c296dba840e7de9b16f23f6637b328929ab82951c6e859db3c16054647"
+    },
+    "frontend-native-c127-on-1/javascript-completion-accepted.png": {
+      "size": 338164,
+      "sha256": "b820168910216efa9949b582ab620a008705bcdd9e69e04d630e7ee7c92739f4"
+    },
+    "frontend-native-c127-on-1/javascript-unsaved-completion.ax.txt": {
+      "size": 7552,
+      "sha256": "0f0f21f920d8b3f0810dc58a71713e375a34869d38f2bf1e761fd363887fa95b"
+    },
+    "frontend-native-c127-on-1/javascript-unsaved-completion.png": {
+      "size": 350292,
+      "sha256": "f351dcdb32da381648f11135a794386e7b37d7e3affaf9d709b35ce2f0824c1b"
+    },
+    "frontend-native-c127-on-1/javascript-unsaved-disk-before.txt": {
+      "size": 29,
+      "sha256": "69fb297e17b29da1998b9d548f29c0eec4eeb2a76ad5f4c91658b39b425f4f39"
+    },
+    "frontend-native-c127-on-1/javascript-unsaved-editor-before.ax.txt": {
+      "size": 7486,
+      "sha256": "430f83d3b6698a5bbd5550dc9a4c0fdb0b0af9b66506455fadae51af70974315"
+    },
+    "frontend-native-c127-on-1/launch.json": {
+      "size": 1155,
+      "sha256": "03269fe6edf62586ecf09bb5999fe014d2d0d37b68e17f9e6b2df8ce9ddd046f"
+    },
+    "frontend-native-c127-on-1/native-editing-complete.ax.txt": {
+      "size": 7522,
+      "sha256": "767f4bdd665e41b3c416ef87f67ee34315eb1fed44af30a7a38ba8923b80ab59"
+    },
+    "frontend-native-c127-on-1/post-external-plugin-signature.txt": {
+      "size": 324,
+      "sha256": "588522a271b6562051b312a8c251d350b571db1e685d82d9b676f84755b59a23"
+    },
+    "frontend-native-c127-on-1/post-native-tool-auth.json": {
+      "size": 415,
+      "sha256": "437470b994433bbb5a25d06afa748875a4c25d7387a548baa1106b5673d697a8"
+    },
+    "frontend-native-c127-on-1/post-workflow.json": {
+      "size": 498,
+      "sha256": "6ccfe750eda3213b2166d97dbeacfdfc296ee7194c3adf31e6d515c74b9232cf"
+    },
+    "frontend-native-c127-on-1/processes-after-project-reopen.json": {
+      "size": 2111,
+      "sha256": "41c1065f0128859c7f811a47f96c35fd8fb9acbb00479ae323c850e575811d17"
+    },
+    "frontend-native-c127-on-1/processes-before-project-close.json": {
+      "size": 2111,
+      "sha256": "30661394a571991a4a41074b447d93c855bbae50b30ca414a7d6a8680f01c885"
+    },
+    "frontend-native-c127-on-1/project-close-processes.json": {
+      "size": 211,
+      "sha256": "89d55d60c30fb206b2d768bdeb9bd2f5ab48d43220b68d272b6dad151e2bb461"
+    },
+    "frontend-native-c127-on-1/project-closed.ax.txt": {
+      "size": 3076,
+      "sha256": "5e5e207c30582f43516c242cea8acc6eb253d5677d9355c369c5d8fbe934fc6a"
+    },
+    "frontend-native-c127-on-1/project-closed.png": {
+      "size": 143901,
+      "sha256": "f72a85fa468efc2c65b29334a30c5d7697ae4b87d3b54cb5135c6d95b5476fb8"
+    },
+    "frontend-native-c127-on-1/project-reopened-completion.ax.txt": {
+      "size": 8442,
+      "sha256": "7cdb0b4f3b4765b7938e57dc02754fd39023ee69bea1871eb7caa0f0240799a1"
+    },
+    "frontend-native-c127-on-1/project-reopened-completion.png": {
+      "size": 321577,
+      "sha256": "e4701e843899bca8b400358c42975bfe657106bb1dd8f168e2ba881502cd8224"
+    },
+    "frontend-native-c127-on-1/root-frontend-integration-units.log": {
+      "size": 18422,
+      "sha256": "19bfb27e19499c565d75781952f9898e367fb4c4a884ec3098fb0e9ec509d489"
+    },
+    "frontend-native-c127-on-1/stderr.log": {
+      "size": 13107,
+      "sha256": "cc433aebd803c84ca0fcaa84f2217bd93cf371b61d507c9b51ea5fa48712a798"
+    },
+    "frontend-native-c127-on-1/stdout.log": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "frontend-native-c127-on-1/trust-dialog.ax.txt": {
+      "size": 1181,
+      "sha256": "6e05687928eff65f8c3370e32f7e6db689c5ac040c71e3b3addb52c56375a81b"
+    },
+    "frontend-native-c127-on-1/typescript-completion-accepted.png": {
+      "size": 291133,
+      "sha256": "3ccb219493c3868d6830a5445dd4bd033461be47cc102accc410eb63365047aa"
+    },
+    "frontend-native-c127-on-1/typescript-completion-first-attempt.ax.txt": {
+      "size": 7125,
+      "sha256": "e16be571b7563bae9654e3c0aa1f0164b247932bb064623d77b492709788cade"
+    },
+    "frontend-native-c127-on-1/typescript-definition.ax.txt": {
+      "size": 7072,
+      "sha256": "4c9e2aad786ce3f51fe5260f61705eb25ab285cf5bb7dc6ba483ee1c2c061939"
+    },
+    "frontend-native-c127-on-1/typescript-definition.png": {
+      "size": 311825,
+      "sha256": "81df49d2e014801402597fba13b5c2f490ecd92816681b9d5551e1a5dd00749e"
+    },
+    "frontend-native-c127-on-1/typescript-diagnostics-error.ax.txt": {
+      "size": 8135,
+      "sha256": "ba493733f8f148bc66f7122214a096c6b118e97ac9b9cc108b992da63b30a608"
+    },
+    "frontend-native-c127-on-1/typescript-diagnostics-error.png": {
+      "size": 354842,
+      "sha256": "fbe2306c967ce0785e39dd359961f04ba5262733714150232b51d9bdecaf86fc"
+    },
+    "frontend-native-c127-on-1/typescript-diagnostics-recovered.ax.txt": {
+      "size": 8271,
+      "sha256": "7842c4d4d6bf0ba2ee833e0f00ae7231a4cc6f7a6d06cc6ed1ec8fcbcf8fbf70"
+    },
+    "frontend-native-c127-on-1/typescript-diagnostics-recovered.png": {
+      "size": 346805,
+      "sha256": "fb825ee2ff2d413590b60ddfeb792140e05c73e377b3952bdea3c8fc67888c8f"
+    },
+    "frontend-native-c127-on-1/typescript-first-editor.ax.txt": {
+      "size": 6397,
+      "sha256": "cfdbcb4a14c36ff48056f75cc77471f6def6a468327cd1afeb9d343b3f908ae1"
+    },
+    "frontend-native-c127-on-1/typescript-first-editor.png": {
+      "size": 295218,
+      "sha256": "18da443176850a1defc3d160351f46471ea1acf3ddc6a588c10b23e55588b98b"
+    },
+    "frontend-native-c127-on-1/typescript-native-running.ax.txt": {
+      "size": 6395,
+      "sha256": "5124c5b5720180566e5ff8840e3fca312269514c222622fc465cc9cc7c85d903"
+    },
+    "frontend-native-c127-on-1/typescript-typed-trigger-attempt.ax.txt": {
+      "size": 6408,
+      "sha256": "f6e5b37c6640b73856ee9953c77f9c90864d440fc431f7d7eef6dc601fd6e165"
+    }
+  },
+  "fullPycharmParity": false
+}
