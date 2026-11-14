@@ -1,0 +1,447 @@
+{
+  "schema": 1,
+  "status": "headless-native-process-controls-pass-ide-pending",
+  "sourceCommit": "73067cb7341c19835f5ce31c3d3967444416a9b4",
+  "baseM0": "e83dea015de23a9aba4f9d0272709c68d86ba935",
+  "branch": "codex_frontend_native",
+  "scope": "Default-off public native LSP provider/process lifecycle candidate; not product packaging or native IDE acceptance",
+  "jarSha256": "139d96aa3e894cd7b8707b810a89e21bf15296c89f1d8cc3ceffd6fcf82562f8",
+  "pluginDirectory": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frontend-native/.tools/frontend-plugin/f384873210cf5c7002967a99fb2749e40deb6321a5367a4a4df903faff70360d/plugin",
+  "classes": [
+    "dev/openpycharm/frontend/FrontendBoundedOutput$Write.class",
+    "dev/openpycharm/frontend/FrontendBoundedOutput.class",
+    "dev/openpycharm/frontend/FrontendBuildScope.class",
+    "dev/openpycharm/frontend/FrontendFixtureScope$Configuration.class",
+    "dev/openpycharm/frontend/FrontendFixtureScope.class",
+    "dev/openpycharm/frontend/FrontendLspProvider$Descriptor.class",
+    "dev/openpycharm/frontend/FrontendLspProvider.class",
+    "dev/openpycharm/frontend/FrontendNativeProcess$1.class",
+    "dev/openpycharm/frontend/FrontendNativeProcess$2.class",
+    "dev/openpycharm/frontend/FrontendNativeProcess.class",
+    "dev/openpycharm/frontend/FrontendProcessLifetime$Identity.class",
+    "dev/openpycharm/frontend/FrontendProcessLifetime.class",
+    "dev/openpycharm/frontend/FrontendRuntime$Verified.class",
+    "dev/openpycharm/frontend/FrontendRuntime.class"
+  ],
+  "payloadSha256": {
+    "META-INF/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "META-INF/NOTICE": "1400833d6bebb1c89ff72bb6840738433de5bae5d6f2f0e33cf9b105937f8f96",
+    "META-INF/frontend-runtime-macos-arm64.json": "26074562ce96add19475d2c1dab6a5e4da4822a0e1256c098943dd71fe6fdf36",
+    "META-INF/frontend-runtime-windows-x64.json": "3ef03773890f6609667880f67e25d306c86f71a783cc01552924e03745cc3dce",
+    "META-INF/frontend-tools.lock.json": "5a7b20ce2ce915a4012b4ea5dfa35b77c709bdbb19de00be87700404a6f6fff2",
+    "META-INF/plugin.xml": "d7fde47709f597f3c730955cb92225fb1e1c3b09b65908df575d673c2c3d7106",
+    "dev/openpycharm/frontend/FrontendBoundedOutput$Write.class": "d6c6d3d84d54e8b781b7116de60cdea4e1687683351c88f695f0256e7902cb0b",
+    "dev/openpycharm/frontend/FrontendBoundedOutput.class": "7e7ec4b75dd6483374ef5d35ab0bb2e135daaec388795fcda8b7d5efb73fed12",
+    "dev/openpycharm/frontend/FrontendBuildScope.class": "465db8acddec3ac450a383e26e4baaeee5342c9964ca07eb19a0806294fe0bd2",
+    "dev/openpycharm/frontend/FrontendFixtureScope$Configuration.class": "876476043beca25f79f439d40696f2e13bb0615e99e35fa2ead97274cea98f3f",
+    "dev/openpycharm/frontend/FrontendFixtureScope.class": "f796ac286619d77cdf16be72270dcf07ae709a6dac89e85c8f3ec332f6683418",
+    "dev/openpycharm/frontend/FrontendLspProvider$Descriptor.class": "25db491d01fb175067cb74e552dd60b191135f7c091f6414dc058eaeb91450f2",
+    "dev/openpycharm/frontend/FrontendLspProvider.class": "b1a527a654ba2a1bfdbc6bdb9cd81dd52318c6b13528c244747597bb39cdd134",
+    "dev/openpycharm/frontend/FrontendNativeProcess$1.class": "2be8df3e72ed2e43616914d96c78b1fb03231ccee10f68d8f2275596afe522eb",
+    "dev/openpycharm/frontend/FrontendNativeProcess$2.class": "f078bc9de6bb6b15b3244e348ba283adce5d9a21cab88bac0d6b9b874f84256a",
+    "dev/openpycharm/frontend/FrontendNativeProcess.class": "dab9c9d2a0493675a51447c7adcca0dc085f0159e01fe57bdc22c58098e20173",
+    "dev/openpycharm/frontend/FrontendProcessLifetime$Identity.class": "66812d567ebd12326c7f56cfb70873656439346d4e244c0f2929e99ed18bb908",
+    "dev/openpycharm/frontend/FrontendProcessLifetime.class": "1491c6d6e7d29c7960b7bd464b341c2b96ad0351bf706bd48124719f5370fb0c",
+    "dev/openpycharm/frontend/FrontendRuntime$Verified.class": "75a0924f571e3f3cab604f7f8e0bd1d693ca96d7db156bef6a479fc27d973a13",
+    "dev/openpycharm/frontend/FrontendRuntime.class": "0de2d18d9bf23b096c9808312cf5a46a4f52ffc6a676f26942aeefe4aaa26ba8"
+  },
+  "sourcePins": {
+    "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "plugins/frontend/NOTICE": "1400833d6bebb1c89ff72bb6840738433de5bae5d6f2f0e33cf9b105937f8f96",
+    "plugins/frontend/README.md": "a51627d15295b1f5d2c49a79772acf9d73987468734a5c3bae089780babee048",
+    "plugins/frontend/build-support/VerifyFrontendArchive.java": "7d3fdd30572492389f82b352308d4c25afeb483430e72d5ebe80d88543627ccb",
+    "plugins/frontend/resources/META-INF/plugin.xml": "b4c4495c8672be6ab3a37c9510bf5495a0e150b80f9363804ef68d675b685481",
+    "plugins/frontend/src/dev/openpycharm/frontend/FrontendBoundedOutput.java": "6848758d76d277cbeee3ed3f62a585000bff3656c09e48965660131902511e4b",
+    "plugins/frontend/src/dev/openpycharm/frontend/FrontendFixtureScope.java": "cda001beb031f2614173b07946540b8baa53d1bf7b5ec49d71704a85c50b6b94",
+    "plugins/frontend/src/dev/openpycharm/frontend/FrontendLspProvider.java": "f420a48948bc38c9ff52a9c51d9055ec0318d481932255995d97dbe6d4505fd4",
+    "plugins/frontend/src/dev/openpycharm/frontend/FrontendNativeProcess.java": "77889aaed346cb937aa8858ee7afeda88c19a50c5c71ed8886f951e0c622b294",
+    "plugins/frontend/src/dev/openpycharm/frontend/FrontendProcessLifetime.java": "5963b4107e28f1072c538017e330a7d418857651cba7219cb65e2e55633a7368",
+    "plugins/frontend/src/dev/openpycharm/frontend/FrontendRuntime.java": "c88693910f326b226cd2aab6d598a0c062bb1bebca82fbffa9e7d7d9d75b1611",
+    "plugins/frontend/tools.lock.json": "5a7b20ce2ce915a4012b4ea5dfa35b77c709bdbb19de00be87700404a6f6fff2",
+    "product/platform.lock.json": "2fe9e477d7e3164e362e33f3b95a2464b16a0699e1bade6cc112b166aed697bd",
+    "scripts/bootstrap.py": "a9f405e1fd83ed5a63e0a676efcecbb11a0a1e1975f876e33622756b5b502fff",
+    "scripts/build_framework_plugin.py": "fc91e08c6f717e643093ba25ff5c272f288d2a10c35de95c157551a52dbb8970",
+    "scripts/build_frontend_plugin.py": "2f834cbe4dae1e9da3fbc576c0390f45ce7e740e3326fc1cdda4af62060b94c9",
+    "scripts/platform_layout.py": "500447561715fc996c842c614aa817a2251e7dfbc22305054f7ab40fc31c7037",
+    "scripts/provision_frontend_tools.py": "9f0e303d7126a974cc528d9ccb8061a7544949cf66a9958a081c2f73157a51ca",
+    "tests/frontend/FrontendBoundedOutputTest.java": "f9a434d533474e90d42d47ca884d0ff8ca15d8ebf7c8f834777d81e2b676be14",
+    "tests/frontend/FrontendLifetimeTest.java": "c34cbea38428e44bfdc92cf50c8fd864625ddefac4b38ba98099470d40177121",
+    "tests/frontend/FrontendNativeProcessCheck.java": "761fbc48e0bbf277c89fa25b3d71f0ab1109217038a9583529c412377cee0126",
+    "tests/frontend/FrontendScopeTest.java": "30633230d35ab5bc6a2cd62034d6d1a9f7282abe85027953440910ad24add30a",
+    "tests/frontend/FrontendWorkerCheck.java": "4b162e6e594e04026d0f319ea5e9af354147ce4720629cb15339ffa6b3ed3d1a"
+  },
+  "sdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+  "archiveVerification": {
+    "status": "pass",
+    "reader": "HashMapZipFile",
+    "verifiedEntries": 20,
+    "closed": true,
+    "sha256": "139d96aa3e894cd7b8707b810a89e21bf15296c89f1d8cc3ceffd6fcf82562f8"
+  },
+  "compilation": {
+    "sdkClasspathJars": 337,
+    "release": 21,
+    "stdout": "",
+    "stderr": "注: /Users/wangshubo/develop/openpycharm/.tools/worktrees/frontend-native/plugins/frontend/src/dev/openpycharm/frontend/FrontendNativeProcess.java使用或覆盖了已过时的 API。\n注: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。\n"
+  },
+  "staticApiRegistrationAudit": {
+    "schema": 1,
+    "status": "static-registration-closure-pass",
+    "sdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+    "actualBootJars": {
+      "intellij.platform.lsp.jar": "31f9997c16f42c5491d96dc482da9507851844cc906bd79662440df6af2d8705",
+      "intellij.platform.lsp.impl.jar": "13db5f9fd6e5568fb026c6a0e292730d325f176bef3d419127343e92142eda3d",
+      "eclipse.lsp4j.jar": "a36c160d23f6beb0b67edd5a45ea7a81c9fac3c1ba11808db74f5edcf831910a",
+      "eclipse.lsp4j.jsonrpc.jar": "22d43ebeba54c19420f8deae04eb4ac4a6946e8cdc68ba3ff56ecf8fd6d92b78"
+    },
+    "moduleAlias": {
+      "value": "com.intellij.modules.lsp"
+    },
+    "extensionPoint": {
+      "qualifiedName": "com.intellij.platform.lsp.integrationProvider",
+      "interface": "com.intellij.platform.lsp.api.LspIntegrationProvider",
+      "dynamic": "true"
+    },
+    "projectService": {
+      "serviceInterface": "com.intellij.platform.lsp.api.LspClientManager",
+      "serviceImplementation": "com.intellij.platform.lsp.impl.LspClientManagerImpl"
+    },
+    "candidateDependencies": [
+      "com.intellij.modules.lsp",
+      "com.intellij.modules.platform"
+    ],
+    "candidateImplementation": "dev.openpycharm.frontend.FrontendLspProvider",
+    "candidateJarSha256": "139d96aa3e894cd7b8707b810a89e21bf15296c89f1d8cc3ceffd6fcf82562f8",
+    "sourceInputsStillCurrent": true,
+    "nativeIdeStarted": false,
+    "nativeModuleEpServiceActivationObserved": false,
+    "limitations": [
+      "Static actual-SDK registration and classpath closure do not prove plugin classloader, service startup, native document/UI behavior, or Windows runtime"
+    ]
+  },
+  "checks": {
+    "status": "pass",
+    "pureScopeChecks": 42,
+    "actualProviderDefaultOffBeforeServices": true,
+    "nativeIdeStarted": false,
+    "boundedOutput": {
+      "status": "pass",
+      "fifoUtf8Preserved": true,
+      "requestInterruptDoesNotTruncateSharedWrites": true,
+      "deadlineTerminal": true,
+      "edtCloseIsAsync": true,
+      "edtWriteRejected": true,
+      "nativeIdeStarted": false
+    },
+    "lifetimeIdentity": {
+      "status": "pass",
+      "missingRootIdentityFailsClosed": true,
+      "reusedPidNotSignalled": true,
+      "rejectedSchedulingDisposesIndependently": true,
+      "unverifiableChildNotClaimedClean": true,
+      "nativeIdeStarted": false
+    },
+    "nativeProcessControl": {
+      "actualPublicSdkProcessHandler": true,
+      "serverInfoProvided": false,
+      "actualTypeScriptVersion": {
+        "version": "6.0.3",
+        "source": "user-setting"
+      },
+      "unsavedTsCompletion": true,
+      "utf8FramingWithEmoji": true,
+      "realCancelledRequests": 4,
+      "sharedDidChangeAfterCancellation": true,
+      "unsavedJsCompletion": true,
+      "blockedWriteMillis": 2006,
+      "ownedStoppedPipeDeadline": true,
+      "actualSdkDisposableTree": true,
+      "edtDisposeMillis": 12,
+      "cleanup": {
+        "writerAlive": false,
+        "identityIncomplete": false,
+        "observedOwnedPids": [
+          93039,
+          93040,
+          93041
+        ],
+        "remainingOwnedPids": [],
+        "cleanupMillis": 1030,
+        "processLimitExceeded": false,
+        "streamClosersAlive": false,
+        "ownershipScope": "Spawned root Process and observed descendants verified by PID/start time; no native job/session is installed",
+        "unexpectedParentCrashReparentingVerified": false,
+        "ownedPid": 93039,
+        "cleanupComplete": true
+      },
+      "pinnedToolPayloadUnchanged": true,
+      "replacementProcessCleanup": {
+        "writerAlive": false,
+        "identityIncomplete": false,
+        "observedOwnedPids": [
+          93043
+        ],
+        "remainingOwnedPids": [],
+        "cleanupMillis": 104,
+        "processLimitExceeded": false,
+        "streamClosersAlive": false,
+        "ownershipScope": "Spawned root Process and observed descendants verified by PID/start time; no native job/session is installed",
+        "unexpectedParentCrashReparentingVerified": false,
+        "ownedPid": 93043,
+        "cleanupComplete": true
+      },
+      "status": "pass",
+      "nativeIdeStarted": false,
+      "nativeLspManagerExercised": false,
+      "finalCleanup": {
+        "writerAlive": false,
+        "identityIncomplete": false,
+        "observedOwnedPids": [
+          93039,
+          93040,
+          93041
+        ],
+        "remainingOwnedPids": [],
+        "cleanupMillis": 1030,
+        "processLimitExceeded": false,
+        "streamClosersAlive": false,
+        "ownershipScope": "Spawned root Process and observed descendants verified by PID/start time; no native job/session is installed",
+        "unexpectedParentCrashReparentingVerified": false,
+        "ownedPid": 93039,
+        "cleanupComplete": true
+      },
+      "externalWatchdogCleanup": {
+        "mode": "owned-posix-session",
+        "pid": 93038,
+        "exitCode": 0
+      },
+      "stderr": ""
+    },
+    "workerAuthentication": {
+      "status": "pass",
+      "actualPinnedCacheAuthenticated": true,
+      "changedReceiptActivationRejected": true,
+      "credentialIsolation": true,
+      "nativeIdeStarted": false,
+      "languageServerStarted": false
+    },
+    "targetPlatform": "macos",
+    "executionPlatform": "macos",
+    "nativeTargetRuntime": true,
+    "jarSha256": "139d96aa3e894cd7b8707b810a89e21bf15296c89f1d8cc3ceffd6fcf82562f8"
+  },
+  "unitTests": {
+    "repository": {
+      "count": 104,
+      "passed": 104,
+      "skipped": 0,
+      "logSha256": "beccd6310eb9e32b474484ab2f06c3929e9a1157b202d4c542693e9faf5e0e6b"
+    },
+    "frontend": {
+      "count": 20,
+      "passed": 20,
+      "skipped": 0,
+      "logSha256": "8f6e9cd46bbdba7959a640bf59a4c7b9f5a96e7e9a5670b6832cd4ccd9bfaa78"
+    }
+  },
+  "preservedFrozenM0Files": {
+    "scripts/frontend_protocol_probe.py": {
+      "sha256": "c47372874be6a10493cb8b12ef8f87cb393c38e6d2c05470ef972a14d869bb4f",
+      "identicalToFrozenM0": true
+    },
+    "scripts/provision_frontend_tools.py": {
+      "sha256": "9f0e303d7126a974cc528d9ccb8061a7544949cf66a9958a081c2f73157a51ca",
+      "identicalToFrozenM0": true
+    },
+    "tests/frontend/protocol_backpressure_probe.py": {
+      "sha256": "8a8cfaab6945ff193e37479d9dbd745063e3c983cc78863ad7f51a270a884173",
+      "identicalToFrozenM0": true
+    },
+    "plugins/frontend/tools.lock.json": {
+      "sha256": "5a7b20ce2ce915a4012b4ea5dfa35b77c709bdbb19de00be87700404a6f6fff2",
+      "identicalToFrozenM0": true
+    }
+  },
+  "preservedOriginalProtocol": {
+    "schema": 1,
+    "owner": "OpenPyCharm frontend M0",
+    "fixtureRoot": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frontend-native/.tools/frontend-m0-fixtures/fixture-9eac6da098e64dcd9e921cc18accd493",
+    "nonce": "9eac6da098e64dcd9e921cc18accd493",
+    "scope": "Real Node/TypeScript Language Server protocol, no IDE/native editor/UI acceptance",
+    "nativeIdeStarted": false,
+    "toolsReceiptSha256": "726d0b63a4b50422d28686eb9d13fa3f5afc72e7adb4063b7e8214144054347e",
+    "lockSha256": "5a7b20ce2ce915a4012b4ea5dfa35b77c709bdbb19de00be87700404a6f6fff2",
+    "target": "macos-arm64",
+    "checks": {
+      "realInitializeIncrementalUtf16": true,
+      "unsavedTypeScriptDiagnostics": true,
+      "unsavedTypeScriptCompletion": true,
+      "utf16CrossFileDefinition": true,
+      "utf16IncrementalUnsavedChange": true,
+      "unsavedDiagnosticRecovery": true,
+      "unsavedJavaScriptCompletionDefinition": true,
+      "fixtureSourceFilesUnchanged": true,
+      "pinnedToolsAndSourcesUnchangedAfterExit": true
+    },
+    "ownedPid": 92745,
+    "nodeVersion": "v24.22.3",
+    "typescriptLanguageServerVersion": "6.1.0",
+    "initializeServerInfo": null,
+    "definitionPosition": {
+      "line": 1,
+      "character": 39
+    },
+    "typescriptVersionNotifications": [
+      {
+        "version": "6.0.3",
+        "source": "user-setting"
+      }
+    ],
+    "diagnosticCodes": {
+      "initial": [
+        2322,
+        6133,
+        6133
+      ],
+      "utf16Change": [
+        2345,
+        2322,
+        6133,
+        6133
+      ],
+      "repaired": [
+        6133,
+        6133
+      ]
+    },
+    "status": "pass",
+    "cleanup": {
+      "ownedPid": 92745,
+      "observedOwnedGroupPids": [
+        92745,
+        92748,
+        92749
+      ],
+      "remainingOwnedGroupPids": [],
+      "groupObservationScope": "Live owned POSIX process-group members; transient zombies are not running processes",
+      "forcedOwnedSignals": [],
+      "windowsJobAssigned": false,
+      "gracefulProtocolExit": true,
+      "processReturnCode": 0,
+      "cleanupComplete": true,
+      "cleanupSeconds": 0.112,
+      "cleanupBudgetSeconds": 8,
+      "streamCleanup": {
+        "stdout": {
+          "attempted": true,
+          "closed": true
+        },
+        "stdin": {
+          "attempted": true,
+          "closed": true
+        },
+        "stderr": {
+          "attempted": true,
+          "closed": true
+        }
+      },
+      "cleanupErrors": {},
+      "cleanupThreadsAlive": {
+        "writer": false,
+        "reader": false,
+        "stderrCloser": false
+      }
+    }
+  },
+  "preservedOriginalFullPipeClose": {
+    "schema": 1,
+    "test": "real owned SIGSTOP plus full stdin close",
+    "nativeIdeStarted": false,
+    "ownedPid": 92622,
+    "fixture": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frontend-native/.tools/frontend-m0-fixtures/fixture-46d92772d03645b6b582d4ccc2974e97",
+    "nonce": "46d92772d03645b6b582d4ccc2974e97",
+    "watchdogForcedKill": false,
+    "pipeBytesWrittenBeforeEagain": 65536,
+    "closeSeconds": 2.594,
+    "closeStillBlocked": false,
+    "closeOutcome": {
+      "cleanup": {
+        "ownedPid": 92622,
+        "observedOwnedGroupPids": [
+          92622,
+          92623,
+          92624
+        ],
+        "remainingOwnedGroupPids": [],
+        "groupObservationScope": "Live owned POSIX process-group members; transient zombies are not running processes",
+        "forcedOwnedSignals": [
+          "SIGTERM",
+          "SIGKILL"
+        ],
+        "windowsJobAssigned": false,
+        "gracefulProtocolExit": false,
+        "processReturnCode": -9,
+        "cleanupComplete": true,
+        "cleanupSeconds": 2.594,
+        "cleanupBudgetSeconds": 8,
+        "streamCleanup": {
+          "stdout": {
+            "attempted": true,
+            "closed": true
+          },
+          "stdin": {
+            "attempted": true,
+            "closed": true,
+            "error": "BrokenPipeError: [Errno 32] Broken pipe"
+          },
+          "stderr": {
+            "attempted": true,
+            "closed": true
+          }
+        },
+        "cleanupErrors": {
+          "protocolShutdown": "TimeoutError: Real LSP write deadline exceeded"
+        },
+        "cleanupThreadsAlive": {
+          "writer": false,
+          "reader": false,
+          "stderrCloser": false
+        }
+      }
+    },
+    "remainingOwnedGroupPids": [],
+    "status": "pass"
+  },
+  "offlineTools": {
+    "receipt": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frontend-native/.tools/frontend-m0-tools/runtime/macos-arm64/5a7b20ce2ce915a4012b4ea5dfa35b77c709bdbb19de00be87700404a6f6fff2/frontend-tools.json",
+    "receiptSha256": "726d0b63a4b50422d28686eb9d13fa3f5afc72e7adb4063b7e8214144054347e",
+    "lockSha256": "5a7b20ce2ce915a4012b4ea5dfa35b77c709bdbb19de00be87700404a6f6fff2",
+    "archivesSource": "Read-only existing frontend M0 archive cache copied into this worktree and authenticated before offline extraction",
+    "networkAcquisitionPerformed": false,
+    "installationScriptsExecuted": false,
+    "bundledPackageNotices": 21
+  },
+  "apiAuditScriptSha256": "3b527b60af1d138a896821b63a690a94b2bcd6c4470c16d2ebf709044d9d609d",
+  "preparedNativeActivation": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frontend-native/.tools/frontend-native-activation.json",
+  "observed": [
+    "Actual public SDK process handler with CRLF-preserving stdio and pinned Node/TLS/TS returned TS/JS unsaved completions after emoji",
+    "Four actual LSP4J request futures were cancelled; a subsequent shared didChange and new-property completion still succeeded",
+    "Exact owned Node SIGSTOP/full pipe rejected the write in2006ms and independent identity-checked cleanup completed in1030ms; native SDK disposable parent returned from EDT dispose in12ms",
+    "Default-off actual provider returns before service lookup; static actual-SDK boot/module/EP/project-service and candidate dependency/implementation closure passed",
+    "Original frozen M0 protocol lifecycle code and full third-party lock are byte-identical; original full-pipe cleanup still passed without watchdog forced kill"
+  ],
+  "inferred": [
+    "Public startServerProcess hook can carry the independent bounded native process adapter in a trusted project; actual IDE service activation still requires its own gate"
+  ],
+  "unknown": [
+    "Actual plugin classloader/module/EP/service activation in the IDE",
+    "Native LspClientManager document ordering, diagnostics/navigation/refactoring UI, project close and restart races",
+    "Windows native runtime/job/tree/installer behavior",
+    "Descendant discovery if a parent crashes and children reparent between process observations; native hook does not install dedicated session/Job",
+    "Full JS/TS PSI, HTML/CSS/embedded languages/templates/frameworks/DAP/browser debugging"
+  ],
+  "nativeIdeStarted": false,
+  "nativeLspManagerExercised": false,
+  "productionPackaged": false,
+  "rootCandidateOrReleaseModified": false
+}
