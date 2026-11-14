@@ -51,6 +51,8 @@ class NotebookNativeSaveProbeTests(unittest.TestCase):
             self.assertFalse(result['nativeApplicationLaunched'])
             self.assertFalse(result['kernelCodeExecuted'])
             self.assertFalse(result['projectTrustBypassed'])
+            self.assertEqual(result['projectCreationMode'], 'normal-ide-new-owned-project')
+            self.assertEqual(list(Path(result['project']).iterdir()), [Path(result['fixture'])])
             self.assertIn('not runtime Python execution evidence', ' '.join(result['limitations']))
 
     def test_timeout_and_cleanup_failure_retain_owned_pid_report_and_dump(self):
@@ -61,7 +63,7 @@ class NotebookNativeSaveProbeTests(unittest.TestCase):
             process = SimpleNamespace(pid=123456, poll=lambda: 0, returncode=1)
             prepared = {'workspace': str(workspace), 'profile': str(workspace / 'profile'), 'properties': str(workspace / 'owned.properties'),
                         'project': str(workspace / 'project'), 'fixture': str(workspace / 'project/owned.ipynb'),
-                        'pluginDirectory': str(workspace / 'probe'), 'productionJarSha256': 'owned-jar'}
+                        'pluginDirectory': str(workspace / 'probe'), 'productionJarSha256': 'owned-jar', 'initialFixtureSha256': 'a' * 64}
             with patch.object(probe, 'app_layout', return_value=layout), patch.object(probe.subprocess, 'Popen', return_value=process), \
                  patch.object(probe.subprocess, 'run', return_value=SimpleNamespace(stdout='owned timeout stack', stderr='')), \
                  patch.object(probe, 'stop_owned', side_effect=TimeoutError('owned cleanup timeout')) as stop:
@@ -72,6 +74,42 @@ class NotebookNativeSaveProbeTests(unittest.TestCase):
             self.assertEqual(saved['cleanup']['ownedPid'], process.pid)
             self.assertEqual((workspace / 'external-timeout-threads.txt').read_text(encoding='utf-8'), 'owned timeout stack')
             self.assertEqual(saved['ownedPid'], process.pid)
+
+    def test_owned_creation_launch_has_no_cli_project_and_rejects_incomplete_lifecycle(self):
+        with tempfile.TemporaryDirectory() as directory:
+            workspace = Path(directory); contents = workspace / 'app'; (contents / 'bin').mkdir(parents=True)
+            (contents / 'bin/pycharm.vmoptions').write_text('-Xmx1g\n', encoding='utf-8')
+            layout = SimpleNamespace(contents=contents, platform='macos', jcmd=contents / 'jcmd')
+            prepared = {'workspace': str(workspace), 'profile': str(workspace / 'profile'), 'properties': str(workspace / 'owned.properties'),
+                        'project': str(workspace / 'project'), 'fixture': str(workspace / 'project/native-save.ipynb'),
+                        'pluginDirectory': str(workspace / 'probe'), 'productionJarSha256': 'owned-jar', 'initialFixtureSha256': 'a' * 64}
+            required = ['nativeUndoRestored', 'pendingCellAndTextMerge', 'nativeSavePersisted', 'postSaveExternalDirtyMerge',
+                        'metadataAndExistingOutputsPreserved', 'closeReopenSourcePreserved', 'platformSaveAllPersisted',
+                        'successfulReloadStatusRestored', 'successfulReloadStateClean', 'postSaveAllCanEdit']
+            native = {**dict.fromkeys(required, True), 'status': 'pass', 'heartbeatTicksAfterSave': 3, 'invocationId': 'owned',
+                      'plugin': {'jarSha256': 'owned-jar'}, 'normalIdeNewProjectCreation': True, 'normalIdeProjectOpen': True,
+                      'expectedInitialFixtureHash': 'a' * 64, 'projectTrustBypassed': False, 'projectTrusted': True,
+                      'globalTrustChecksDisabled': False, 'manualTrustClicked': False, 'projectCreationMode': 'normal-ide-new-owned-project',
+                      'trustedProjectRoot': prepared['project'],
+                      'parentTrustedBefore': False, 'parentTrustedAfter': False}
+            process = SimpleNamespace(pid=123456, poll=lambda: 0, returncode=0)
+            with patch.object(probe, 'app_layout', return_value=layout), patch.object(probe.uuid, 'uuid4', return_value=SimpleNamespace(hex='owned')), \
+                 patch.object(probe.subprocess, 'Popen', return_value=process) as launch, patch.object(probe, 'stop_owned', return_value={'status': 'pass'}):
+                for change in ({}, {'normalIdeNewProjectCreation': False}, {'normalIdeProjectOpen': False},
+                               {'expectedInitialFixtureHash': 'b' * 64}, {'projectTrustBypassed': True}, {'parentTrustedAfter': True}):
+                    (workspace / 'native-report.json').write_text(json.dumps({**native, **change}), encoding='utf-8')
+                    result = probe.run(contents, prepared, 30)
+                    self.assertEqual(result['assessment']['status'], 'fail' if change else 'pass')
+                native.update(status='fail', stage='normal-owned-project-bootstrap', failure='Owned constructor failed')
+                (workspace / 'native-report.json').write_text(json.dumps(native), encoding='utf-8')
+                result = probe.run(contents, prepared, 30)
+                self.assertEqual(result['assessment']['status'], 'fail')
+                self.assertEqual(result['native']['failure'], 'Owned constructor failed')
+                self.assertEqual(launch.call_args.args[0], [str(contents / 'MacOS/pycharm')])
+            options = (workspace / 'probe.vmoptions').read_text(encoding='utf-8')
+            self.assertIn('-Dopenpycharm.notebook.save.mode=normal-ide-new-owned-project', options)
+            self.assertIn('-Dopenpycharm.notebook.save.initial.sha256=' + 'a' * 64, options)
+            self.assertNotIn('idea.trust.all.projects', options)
 
 
 if __name__ == '__main__':

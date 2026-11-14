@@ -75,9 +75,12 @@ public final class NotebookSaveProbe implements StartupActivity.DumbAware {
     result.put("capturedAt", Instant.now().toString()); result.put("ownedPid", ProcessHandle.current().pid());
     try {
       require(fixture.toRealPath().startsWith(boundary.toRealPath()), "Fixture path escaped the owned boundary");
+      result.putAll(NotebookSaveOwnedProject.evidence(project));
+      require(Boolean.TRUE.equals(result.get("normalIdeNewProjectCreation")), "Owned project was not created through the normal IDE new-project lifecycle");
       result.put("projectTrusted", TrustedProjects.isTrusted(project));
       result.put("applicationHome", PathManager.getHomePath()); result.put("plugin", observePlugin());
       String initial = Files.readString(fixture); String initialHash = hash(Files.readAllBytes(fixture));
+      require(initialHash.equals(result.get("expectedInitialFixtureHash")), "Initial fixture changed before the native save gate");
       String initialSource = NotebookModel.parse(initial).source(0);
       JsonObject expectedInitial = JsonParser.parseString(initial).getAsJsonObject();
       JsonObject external = JsonParser.parseString(initial).getAsJsonObject(); external.getAsJsonObject("metadata").addProperty("externalTextEdit", "kept");

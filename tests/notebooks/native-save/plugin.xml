@@ -9,4 +9,7 @@
   <extensions defaultExtensionNs="com.intellij">
     <postStartupActivity implementation="dev.openpycharm.notebooks.saveprobe.NotebookSaveProbe"/>
   </extensions>
+  <applicationListeners>
+    <listener class="dev.openpycharm.notebooks.saveprobe.NotebookSaveOwnedProject" topic="com.intellij.ide.AppLifecycleListener"/>
+  </applicationListeners>
 </idea-plugin>

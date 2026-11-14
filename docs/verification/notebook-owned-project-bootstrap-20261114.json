@@ -1,0 +1,158 @@
+{
+  "schema": 1,
+  "scope": "Test-only owned Notebook save gate bootstrap; production trust protection and Database gate unchanged",
+  "baseCommit": "5126b7a853ce392d8ecf287383b3e50f9db3e2c3",
+  "pinnedOwningSources": {
+    "pin": "456919a9624bae72ac12efafc35d2b916cb0c5c5",
+    "sources": [
+      {
+        "path": "platform/platform-impl/src/com/intellij/openapi/project/impl/ProjectManagerImpl.kt",
+        "url": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/platform-impl/src/com/intellij/openapi/project/impl/ProjectManagerImpl.kt",
+        "gitBlob": "185e78f75ba221a67e8eb94f476146e8c4d9d167",
+        "sha256": "5f6f3bc5fef136a6f01358c88306549c24a5bfac8f0ba511ca8a6d0ec9c452b1"
+      },
+      {
+        "path": "platform/ide-core-impl/src/com/intellij/ide/impl/OpenProjectTask.kt",
+        "url": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/ide-core-impl/src/com/intellij/ide/impl/OpenProjectTask.kt",
+        "gitBlob": "2b46a14e5bc5b2081f38c324b0a1185867d3c1aa",
+        "sha256": "2df98bdff3c772cda16a38f7ec678e6df066c3a150506095f67959b1e82f19e8"
+      },
+      {
+        "path": "platform/ide-core-impl/src/com/intellij/openapi/project/ex/ProjectManagerEx.kt",
+        "url": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/ide-core-impl/src/com/intellij/openapi/project/ex/ProjectManagerEx.kt",
+        "gitBlob": "d15a46921ec35abfc45f099b1ae13b6ae859f918",
+        "sha256": "8c8c80defeec15c62e02d6a2ff85f12b402e3fa77b13ad0e76194f8326919e9b"
+      },
+      {
+        "path": "platform/platform-impl/src/com/intellij/ide/trustedProjects/TrustedProjects.kt",
+        "url": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/platform-impl/src/com/intellij/ide/trustedProjects/TrustedProjects.kt",
+        "gitBlob": "5d11f73af468976a484a1ad8451cb8e11b771c4b",
+        "sha256": "bc8a9c8a1e545e9f445241a819c9ed1a661ef9c87d183b1409e7c444a802943f"
+      },
+      {
+        "path": "platform/platform-impl/src/com/intellij/ide/trustedProjects/TrustedProjectsDialog.kt",
+        "url": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/platform-impl/src/com/intellij/ide/trustedProjects/TrustedProjectsDialog.kt",
+        "gitBlob": "abdf3d05987e014d040d682f78875e4d0cb38a51",
+        "sha256": "dca4e4a53980e6e5dfa235b5c8889abfde95afa072312b0aca3e3ff7890316b4"
+      },
+      {
+        "path": "platform/platform-impl/src/com/intellij/ide/impl/TrustedPaths.kt",
+        "url": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/platform-impl/src/com/intellij/ide/impl/TrustedPaths.kt",
+        "gitBlob": "ecb0ff825448d5094080ef86fa3e373b8ffcaadf",
+        "sha256": "2ec559e9a9cb2163289b409d5c2d6cc11df2e84640cddefde62e6a6b09d44c8a"
+      },
+      {
+        "path": "platform/platform-impl/src/com/intellij/ide/trustedProjects/TrustedProjectsStateStorage.kt",
+        "url": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/platform-impl/src/com/intellij/ide/trustedProjects/TrustedProjectsStateStorage.kt",
+        "gitBlob": "3fb906f1e03d473401fbdab0d6c3796aff0f3449",
+        "sha256": "f3fbee845ff2b9987dc79d62ec9dc5e162000c3bdcc8a5a1a20cf5c5b41ad990"
+      }
+    ]
+  },
+  "owningContract": [
+    {
+      "source": "ProjectManagerImpl.kt",
+      "lines": "622-643",
+      "fact": "openProject performs trust confirmation before project initialization and post-startup activities; asNewProject on an open task does not move this check."
+    },
+    {
+      "source": "ProjectManagerImpl.kt",
+      "lines": "843-869",
+      "fact": "The normal newProject wrapper calls newProjectAsync, which grants trust to the new project path and project model as part of creation."
+    },
+    {
+      "source": "ProjectManagerEx.kt",
+      "lines": "60-69",
+      "fact": "Public blocking newProject/openProject wrappers support test/new-project wizard cases; no Java-created coroutine bridge is required."
+    },
+    {
+      "source": "OpenProjectTask.kt",
+      "lines": "18-19,97-105",
+      "fact": "withProject supplies an already-created project model for normal opening."
+    },
+    {
+      "source": "TrustedPaths.kt / TrustedProjectsStateStorage.kt",
+      "lines": "54-59 / 16-22",
+      "fact": "Project roots are stored explicitly and descendants inherit ancestor trust; granting a project root does not grant its parent."
+    }
+  ],
+  "candidate": {
+    "creationMode": "normal-ide-new-owned-project",
+    "entryPoint": "AppLifecycleListener.appStarted/welcomeScreenDisplayed -> owned worker -> public newProject -> public openProject(withProject(created)) -> unchanged postStartup save sequence",
+    "cliProjectArgument": false,
+    "directTrustGrantApiCalledByProbe": false,
+    "globalTrustFlag": false,
+    "manualTrustClaimed": false,
+    "guards": [
+      "exact canonical workspace/project/profile/application/report paths without symlinks",
+      "project contains only the generated native-save.ipynb",
+      "initial SHA256 and 256KiB input bound",
+      "actual four PathManager profile paths remain isolated",
+      "no open or already-trusted projects/parent",
+      "normal new-project trust and unchanged parent state observed after API returns"
+    ],
+    "failurePath": "catch writes a native fail report with invocation/JAR binding; a 75-second bootstrap watchdog records blocked construction/opening; postStartup cannot turn a failed bootstrap into a pass",
+    "preparedRecord": ".tools/prepared-owned-new-project-2/prepared.json"
+  },
+  "compileOnly": {
+    "nativeApplicationLaunched": false,
+    "projectTrustGranted": false,
+    "probeJarSha256": "2fb7f7778d4a9f3b1484ad80850f4681180c76f9939204ddb100f4e54a178a1c",
+    "productionJarSha256": "8e1ac51c431a51d8ab1434953fc82e8c7587397deefe51a9d919c5d3bb9c2b9c",
+    "identity": {
+      "sources": {
+        "NotebookSaveOwnedProject.java": "9151791e337aed266cd520e690e2f1c0c0b940c7db2466cc1ae30ef9988b6fe9",
+        "NotebookSaveOwnedProjectTest.java": "832e3a6579213f507dd158b43b25bf9ffaa5891eb5402a7da6ac311e16c42f46",
+        "NotebookSavePayloadTest.java": "c720e6630b3b9f02bce7c982db40b416e1bb141ed90c0ab8e305224c0d54349c",
+        "NotebookSaveProbe.java": "a6c0631710163dc22c8c0dd97e9783c0012ff76a55b5b1ae877c149905611070",
+        "plugin.xml": "9f0eb90e70044211671dd2dd06d130a08ff38cb97a030c280dd4160c820fbf02"
+      },
+      "productionJarSha256": "8e1ac51c431a51d8ab1434953fc82e8c7587397deefe51a9d919c5d3bb9c2b9c",
+      "sdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+      "builderSha256": "fbbc02f9e301ed6d1d1fa9de294cb7dcf9dddf8883e38a2c1fa2af727bcf1a38"
+    },
+    "entries": {
+      "META-INF/plugin.xml": "9f0eb90e70044211671dd2dd06d130a08ff38cb97a030c280dd4160c820fbf02",
+      "dev/openpycharm/notebooks/saveprobe/NotebookSaveOwnedProject$Created.class": "e399d45ef4c3a06b95da885ddae5f517b649f4376a7f3cd09fb50011b4ab8de0",
+      "dev/openpycharm/notebooks/saveprobe/NotebookSaveOwnedProject$Owned.class": "ea79343aeb076f347e84f3835d0c8ccecd1df35a404e889cca2536e47d804f0b",
+      "dev/openpycharm/notebooks/saveprobe/NotebookSaveOwnedProject.class": "aa593a51ecfd91d25dde75999806a32785248270d45103a3017914522a373c75",
+      "dev/openpycharm/notebooks/saveprobe/NotebookSaveProbe$NativeState.class": "bbc0e8eca8af4885f0ba67477ff3278092bb49f9fd9663241322d1236e8863ea",
+      "dev/openpycharm/notebooks/saveprobe/NotebookSaveProbe.class": "4a7de3a32da58d2b16cb12c19eaef0b18990ca5c29e8e604772f6458e6a3512c"
+    },
+    "compilation": {
+      "stdout": "",
+      "stderr": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/native-owned-project/tests/notebooks/native-save/NotebookSaveProbe.java:243: 警告: [removal] DataContext 中的 getData(@org.jetbrains.annotations.NotNull String) 已过时, 且标记为待删除\n    DataContext context = dataId -> CommonDataKeys.PROJECT.is(dataId) ? project : null;\n                          ^\n/Users/wangshubo/develop/openpycharm/.tools/worktrees/native-owned-project/tests/notebooks/native-save/NotebookSaveProbe.java:244: 警告: [removal] AnActionEvent 中的 createFromAnAction(@org.jetbrains.annotations.NotNull AnAction,@org.jetbrains.annotations.Nullable InputEvent,@org.jetbrains.annotations.NotNull String,@org.jetbrains.annotations.NotNull DataContext) 已过时, 且标记为待删除\n    action.actionPerformed(AnActionEvent.createFromAnAction(action, null, ActionPlaces.UNKNOWN, context));\n                                        ^\n注: /Users/wangshubo/develop/openpycharm/.tools/worktrees/native-owned-project/tests/notebooks/native-save/NotebookSaveProbe.java使用或覆盖了已过时的 API。\n注: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。\n2 个警告\n"
+    },
+    "payloadAssertionTests": {
+      "status": "pass",
+      "validSavePayloads": 2,
+      "immutableCorruptionsRejected": 16,
+      "actualIdeSaveEngineExercised": false
+    },
+    "ownedProjectBoundaryTests": {
+      "status": "pass",
+      "checks": 11,
+      "symlinkControlsSupported": true,
+      "nativeApplicationLaunched": false,
+      "projectTrustGranted": false
+    },
+    "unitTests": {
+      "run": 125,
+      "skipped": 6,
+      "status": "pass"
+    },
+    "focusedLauncherTests": {
+      "run": 5,
+      "status": "pass",
+      "pythonUtf8Mode": false
+    },
+    "pythonFixtureTests": {
+      "run": 9,
+      "status": "pass"
+    }
+  },
+  "unknown": [
+    "Actual native normal-new-project/open/post-startup save integration awaits root exclusive IDE run.",
+    "Windows runtime and symlink capability are not established by the macOS compile/boundary checks."
+  ]
+}

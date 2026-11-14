@@ -41,28 +41,33 @@ def build_probe(sdk: Path, production_jar: Path) -> tuple[Path, dict]:
     with builder.cache_lock(work / "build.lock"):
         with tempfile.TemporaryDirectory(prefix="compile-", dir=work) as directory:
             temporary = Path(directory); classes = temporary / "classes"
-            compilation = builder.compile_java(layout, [SOURCE / "NotebookSaveProbe.java", SOURCE / "NotebookSavePayloadTest.java"], classes, temporary / "javac.args", [production_jar], runtime)
+            compilation = builder.compile_java(layout, sorted(SOURCE.glob("*.java")), classes, temporary / "javac.args", [production_jar], runtime)
             cp = os.pathsep.join(map(str, [classes, production_jar, *builder.classpath(layout)]))
             payload_checks = json.loads(builder.run_java(runtime, ["-Djava.awt.headless=true", "-classpath", cp,
                 "dev.openpycharm.notebooks.saveprobe.NotebookSavePayloadTest"], temporary).stdout)
             if payload_checks.get("status") != "pass":
                 raise ValueError("Actual native-gate payload assertion controls failed")
+            owned_checks = json.loads(builder.run_java(runtime, ["-Djava.awt.headless=true", "-classpath", cp,
+                "dev.openpycharm.notebooks.saveprobe.NotebookSaveOwnedProjectTest", str(temporary)], temporary).stdout)
+            if owned_checks.get("status") != "pass":
+                raise ValueError("Owned new-project boundary controls failed")
             payloads = {path.relative_to(classes).as_posix(): path.read_bytes() for path in classes.rglob("*.class")
-                        if not path.name.startswith("NotebookSavePayloadTest")}
+                        if not path.name.split("$", 1)[0].removesuffix(".class").endswith("Test")}
             payloads["META-INF/plugin.xml"] = (SOURCE / "plugin.xml").read_bytes()
             plugin.parent.mkdir(parents=True, exist_ok=True)
             with zipfile.ZipFile(plugin, "w", zipfile.ZIP_DEFLATED) as archive:
                 for name, data in sorted(payloads.items()):
                     info = zipfile.ZipInfo(name, (1980, 1, 1, 0, 0, 0)); info.compress_type = zipfile.ZIP_DEFLATED; archive.writestr(info, data)
     report = {"identity": identity, "pluginSha256": sha256(plugin), "compilation": compilation,
-              "classes": sorted(name for name in payloads if name.endswith(".class")), "payloadAssertionTests": payload_checks}
+              "classes": sorted(name for name in payloads if name.endswith(".class")), "payloadAssertionTests": payload_checks,
+              "ownedProjectBoundaryTests": owned_checks}
     (work / "build.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     return plugin.parent.parent, report
 
 
 def prepare(sdk: Path, workspace: Path, app: Path | None = None) -> dict:
     workspace = workspace.absolute()
-    if not workspace.resolve().is_relative_to((ROOT / ".tools").resolve()) or workspace.exists():
+    if not workspace.resolve().is_relative_to((ROOT / ".tools").resolve()) or workspace.exists() or workspace.is_symlink():
         raise ValueError("Choose a new owned workspace below this checkout's .tools")
     layout = builder.sdk_layout(sdk)
     if workspace.resolve().is_relative_to(layout.sdk_root.resolve()):
@@ -84,9 +89,6 @@ def prepare(sdk: Path, workspace: Path, app: Path | None = None) -> dict:
     plugin, compiled = build_probe(sdk, production_jar)
     workspace.mkdir(parents=True)
     project = workspace / "project"; project.mkdir()
-    idea = project / ".idea"; idea.mkdir()
-    (idea / "modules.xml").write_text('<project version="4"><component name="ProjectModuleManager"><modules><module fileurl="file://$PROJECT_DIR$/save-probe.iml" filepath="$PROJECT_DIR$/save-probe.iml"/></modules></component></project>\n', encoding="utf-8")
-    (project / "save-probe.iml").write_text('<module type="PYTHON_MODULE" version="4"><component name="NewModuleRootManager"><content url="file://$MODULE_DIR$"/><orderEntry type="inheritedJdk"/><orderEntry type="sourceFolder" forTests="false"/></component></module>\n', encoding="utf-8")
     fixture = project / "native-save.ipynb"
     data = {"nbformat": 4, "nbformat_minor": 5, "metadata": {"large": 9007199254740993, "foreign": {"keep": [1, "中文", True]}},
             "cells": [{"id": "save-probe", "cell_type": "code", "metadata": {"trusted": False, "foreignCell": "keep"},
@@ -99,6 +101,7 @@ def prepare(sdk: Path, workspace: Path, app: Path | None = None) -> dict:
               "properties": str(properties), "pluginDirectory": str(plugin), "probeBuild": compiled,
               "productionJarSha256": sha256(production_jar), "productManifest": manifest,
               "projectTrustBypassed": False, "kernelCodeExecuted": False,
+              "projectCreationMode": "normal-ide-new-owned-project", "manualTrustClicked": False,
               "limitations": ["Preparation/compilation is not native save acceptance; --run is required in an owned actual product",
                               "The fixture's existing outputs are test data, not runtime Python execution evidence"]}
     (workspace / "prepared.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -113,7 +116,10 @@ def run(app: Path, prepared: dict, timeout: int) -> dict:
     flags = {"plugin.path": prepared["pluginDirectory"], "openpycharm.notebook.save.report": str(report),
              "openpycharm.notebook.save.root": str(workspace), "openpycharm.notebook.save.project": prepared["project"],
              "openpycharm.notebook.save.file": prepared["fixture"], "openpycharm.notebook.save.invocation": invocation,
-             "openpycharm.notebook.save.expected.jar": prepared["productionJarSha256"]}
+             "openpycharm.notebook.save.expected.jar": prepared["productionJarSha256"],
+             "openpycharm.notebook.save.mode": "normal-ide-new-owned-project",
+             "openpycharm.notebook.save.initial.sha256": prepared["initialFixtureSha256"],
+             "openpycharm.notebook.save.profile": str(profile), "openpycharm.notebook.save.application": str(layout.contents)}
     options.write_text(original.read_text(encoding="utf-8") + "\n" + "\n".join(f"-D{key}={value}" for key, value in flags.items()) + "\n", encoding="utf-8")
     environment = dict(os.environ, OPENPYCHARM_PROPERTIES=prepared["properties"], OPENPYCHARM_VM_OPTIONS=str(options))
     executable = layout.contents / ("MacOS/pycharm" if layout.platform == "macos" else "bin/pycharm64.exe")
@@ -123,7 +129,7 @@ def run(app: Path, prepared: dict, timeout: int) -> dict:
         try:
             windows = layout.platform == "windows"; job = WindowsJob() if windows else None
             kwargs = {"creationflags": WINDOWS_CREATE_SUSPENDED | WINDOWS_CREATE_NEW_PROCESS_GROUP} if windows else {"start_new_session": True}
-            process = subprocess.Popen([str(executable), prepared["project"]], env=environment, stdin=subprocess.DEVNULL, stdout=log, stderr=subprocess.STDOUT, **kwargs)
+            process = subprocess.Popen([str(executable)], env=environment, stdin=subprocess.DEVNULL, stdout=log, stderr=subprocess.STDOUT, **kwargs)
             result["ownedPid"] = process.pid; result["nativeApplicationLaunched"] = True
             if job is not None:
                 job.assign_and_resume(process); resumed = True
@@ -140,6 +146,14 @@ def run(app: Path, prepared: dict, timeout: int) -> dict:
             native = json.loads(report.read_text(encoding="utf-8")); result["native"] = native
             if native.get("invocationId") != invocation or native.get("plugin", {}).get("jarSha256") != prepared["productionJarSha256"]:
                 raise ValueError("Native report does not bind this invocation and actual product notebook JAR")
+            if (native.get("normalIdeNewProjectCreation") is not True or native.get("normalIdeProjectOpen") is not True
+                    or native.get("expectedInitialFixtureHash") != prepared["initialFixtureSha256"]
+                    or native.get("projectTrustBypassed") is not False or native.get("projectTrusted") is not True
+                    or native.get("globalTrustChecksDisabled") is not False or native.get("manualTrustClicked") is not False
+                    or native.get("projectCreationMode") != "normal-ide-new-owned-project"
+                    or native.get("trustedProjectRoot") != prepared["project"]
+                    or native.get("parentTrustedBefore") is not False or native.get("parentTrustedAfter") is not False):
+                raise ValueError("Native owned new-project lifecycle/trust evidence did not pass")
             required = ["nativeUndoRestored", "pendingCellAndTextMerge", "nativeSavePersisted", "postSaveExternalDirtyMerge", "metadataAndExistingOutputsPreserved", "closeReopenSourcePreserved", "platformSaveAllPersisted",
                         "successfulReloadStatusRestored", "successfulReloadStateClean", "postSaveAllCanEdit"]
             if native.get("status") != "pass" or not all(native.get(key) is True for key in required) or native.get("heartbeatTicksAfterSave", 0) < 2:
