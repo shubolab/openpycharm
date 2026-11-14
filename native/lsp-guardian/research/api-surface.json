@@ -1,0 +1,13 @@
+{
+  "sdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+  "bootPresence": {
+    "util.jar": true,
+    "util-8.jar": true,
+    "intellij.libraries.pty4j.jar": true,
+    "intellij.libraries.winp.jar": true
+  },
+  "nativeIdeStarted": false,
+  "nodeExecuted": false,
+  "nativeWindowsApiInvoked": false,
+  "reflectionClassInitializationRequested": false
+}

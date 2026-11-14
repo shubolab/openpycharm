@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "prototypeOnly": true,
+  "host": "macOS-27.2-arm64-arm-64bit-Mach-O",
+  "hostIntegrationExecuted": true,
+  "windowsRuntimeExecuted": false,
+  "ideLaunched": false,
+  "nodeLaunched": false,
+  "externalNetwork": false,
+  "toolchain": {
+    "version": "go version go1.26.10 darwin/arm64",
+    "goSha256": "5742f0004c49c005313d88cd06df964b09cad6bcf2eac4506bdb90abc923b1f4",
+    "licenseSha256": "911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad",
+    "archiveSha256": "0b5183492292ada170f9b561a834863808dd02edba599e4ad0e89899330020b3",
+    "archiveMembersMatched": 15045
+  },
+  "xSys": {
+    "version": "v0.38.0",
+    "sum": "h1:3yZWxaJjBmCWXqhN1qh02AkOnCQ1poK6oF+a7xWL6Gc=",
+    "licenseSha256": "911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad"
+  },
+  "sources": {
+    "README.md": "8b631f1ea7efef2bf888e55fe5606a8dfee0938c374ff3a49f7af517df225329",
+    "abi_windows_amd64_test.go": "84704bb1e9fc84002243e55d066308a63221144ce7319b9aa056e4492ab18aee",
+    "cmd/tiny-child/identity_unix.go": "3beceee3978cfa8e7a6d1a96adf6db7972519e50c10a3f241989a4baffc41f96",
+    "cmd/tiny-child/identity_windows.go": "619b8f5a929fb093217e36007cbe886fe1d5548af5384abafa06d87992b2d1b5",
+    "cmd/tiny-child/main.go": "7f55fe586edbfc89276e0d53f10a11637234e7162ba1c039a08ec1aee26b9273",
+    "go.mod": "6a79dfd56aae4d69d3db4e98fe5422ddb01dfd12bf748b26c8f0b6a014b17f2d",
+    "go.sum": "28b936a5baa45bf6328134f4ae47a6e60a8a8a0ed4cd02549b2460a447764e8b",
+    "integration_test.py": "0eb57cf4022e8f3f92cb350adf44bfcd83a58703c88736299e704e38ee05bb0b",
+    "licenses/Go-BSD-3-Clause.txt": "911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad",
+    "licenses/x-sys-BSD-3-Clause.txt": "911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad",
+    "main.go": "f95ce0cd0ab77143f731dbff4877649249f90dcc454a961f5c8b2f6a3f744192",
+    "main_test.go": "753147f72fc415dc3d5b3a7c0b7a260bc62fb1a582084c1b88fb176fd39eb130",
+    "owner_unix.go": "5e11ffc9c27aa7ae05db63e805195c84171aeceb4d1b774b4909310246fc3d4a",
+    "owner_windows.go": "f1040bd2344431da0bbe14cc76e9cfa841491174ba98494e91ed983c651db982",
+    "research/ApiSurface.java": "2febf5ae71a427531c13411e9886f4d98af47b5a26fe77c9d741b81d6acce04a",
+    "research/api-surface.json": "7919d2badb49156a75c342905e0d963ece8bc00a1ba52cbeac54d273cdc823aa",
+    "research/api-surface.txt": "9259a29ce24f696384c520f2f06b1aa4e50bcbafb9ec298f85d62ba109fdcc87",
+    "verify.py": "ecf7c1c38d772925ab37f9a1c2f193a6983e3cae5c898b9770946b48bef28b44",
+    "verify_test.py": "91f853eac2b4ddcc7970d7950cfd2492540e49bd5179ded2dfcb5876f518d124"
+  },
+  "binaries": {
+    "guardian": "5eaab0843aa1ea68e729d2d306e52c349d45e1f44cc6f17991b9708878456d31",
+    "tiny-child": "1de494c9b9e3ed46c2928094772a84e6dad74219b122752aef85c3af27a2c24b",
+    "guardian-windows-amd64.exe": "825f68c7ef704b0be4de3b163311734ef334be547f4464d4d25e303df7323b2d",
+    "tiny-child-windows-amd64.exe": "fddedd322d471612a66a9db494a274edb39109887a28c0c6dd8022ab949e78ea",
+    "guardian-windows-tests.exe": "12418518dadae4760b767ef40bbd03d0226118435e991d6167b9bac6b3fb7aed"
+  },
+  "commands": [
+    {
+      "name": "verifier-controls",
+      "argv": [
+        "/Users/wangshubo/.local/share/mise/installs/python/3.14.3/bin/python3",
+        "/Users/wangshubo/develop/openpycharm/.tools/worktrees/lsp-guardian/native/lsp-guardian/verify_test.py"
+      ],
+      "exit": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "0c360af100df75f00bcbded46c7627e89ef1a457ec6381c7e83ef7e43aaa74d9"
+    },
+    {
+      "name": "go-version",
+      "argv": [
+        "/Users/wangshubo/develop/openidea-go/.tools/go-tools-cache/sdks/go1.26.10/darwin-arm64/go/bin/go",
+        "version"
+      ],
+      "exit": 0,
+      "stdoutSha256": "077dec62e8d33611342a1349cacb348362593f6028f03f3d345b05b156bd9662",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "module-verify",
+      "argv": [
+        "/Users/wangshubo/develop/openidea-go/.tools/go-tools-cache/sdks/go1.26.10/darwin-arm64/go/bin/go",
+        "mod",
+        "verify"
+      ],
+      "exit": 0,
+      "stdoutSha256": "b4537ed75f533f993f371954de47e42a793b8e5b0587577de7e27fb3e50696bd",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "go-unit",
+      "argv": [
+        "/Users/wangshubo/develop/openidea-go/.tools/go-tools-cache/sdks/go1.26.10/darwin-arm64/go/bin/go",
+        "test",
+        "-count=1",
+        "./..."
+      ],
+      "exit": 0,
+      "stdoutSha256": "d0a5a09e437ab27538def69b28fec0c95652f597e0f046b9f0fcd0e1c5161852",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "go-vet",
+      "argv": [
+        "/Users/wangshubo/develop/openidea-go/.tools/go-tools-cache/sdks/go1.26.10/darwin-arm64/go/bin/go",
+        "vet",
+        "./..."
+      ],
+      "exit": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "go-race",
+      "argv": [
+        "/Users/wangshubo/develop/openidea-go/.tools/go-tools-cache/sdks/go1.26.10/darwin-arm64/go/bin/go",
+        "test",
+        "-race",
+        "-count=1",
+        "./..."
+      ],
+      "exit": 0,
+      "stdoutSha256": "17d815568638d912b0aed534eda85bd86000f153e63bbf51be5d676853cd83a2",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "guardian-host",
+      "argv": [
+        "/Users/wangshubo/develop/openidea-go/.tools/go-tools-cache/sdks/go1.26.10/darwin-arm64/go/bin/go",
+        "build",
+        "-trimpath",
+        "-buildvcs=false",
+        "-o",
+        "/Users/wangshubo/develop/openpycharm/.tools/worktrees/lsp-guardian/.tools/guardian-results/exact-snapshot-20261114-final/guardian",
+        "."
+      ],
+      "exit": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "child-host",
+      "argv": [
+        "/Users/wangshubo/develop/openidea-go/.tools/go-tools-cache/sdks/go1.26.10/darwin-arm64/go/bin/go",
+        "build",
+        "-trimpath",
+        "-buildvcs=false",
+        "-o",
+        "/Users/wangshubo/develop/openpycharm/.tools/worktrees/lsp-guardian/.tools/guardian-results/exact-snapshot-20261114-final/tiny-child",
+        "./cmd/tiny-child"
+      ],
+      "exit": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "owned-integration",
+      "argv": [
+        "/Users/wangshubo/.local/share/mise/installs/python/3.14.3/bin/python3",
+        "-W",
+        "error::ResourceWarning",
+        "/Users/wangshubo/develop/openpycharm/.tools/worktrees/lsp-guardian/native/lsp-guardian/integration_test.py"
+      ],
+      "exit": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "42e373647e7bd0206758d357596e86f712797b3c2e4b5a0fe88b3a692eb9a2f2"
+    },
+    {
+      "name": "windows-guardian-cross",
+      "argv": [
+        "/Users/wangshubo/develop/openidea-go/.tools/go-tools-cache/sdks/go1.26.10/darwin-arm64/go/bin/go",
+        "build",
+        "-trimpath",
+        "-buildvcs=false",
+        "-o",
+        "/Users/wangshubo/develop/openpycharm/.tools/worktrees/lsp-guardian/.tools/guardian-results/exact-snapshot-20261114-final/guardian-windows-amd64.exe",
+        "."
+      ],
+      "exit": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "windows-child-cross",
+      "argv": [
+        "/Users/wangshubo/develop/openidea-go/.tools/go-tools-cache/sdks/go1.26.10/darwin-arm64/go/bin/go",
+        "build",
+        "-trimpath",
+        "-buildvcs=false",
+        "-o",
+        "/Users/wangshubo/develop/openpycharm/.tools/worktrees/lsp-guardian/.tools/guardian-results/exact-snapshot-20261114-final/tiny-child-windows-amd64.exe",
+        "./cmd/tiny-child"
+      ],
+      "exit": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "windows-tests-cross",
+      "argv": [
+        "/Users/wangshubo/develop/openidea-go/.tools/go-tools-cache/sdks/go1.26.10/darwin-arm64/go/bin/go",
+        "test",
+        "-c",
+        "-o",
+        "/Users/wangshubo/develop/openpycharm/.tools/worktrees/lsp-guardian/.tools/guardian-results/exact-snapshot-20261114-final/guardian-windows-tests.exe",
+        "."
+      ],
+      "exit": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "status": "standalone-prototype-pass",
+  "productIntegrated": false,
+  "published": false,
+  "observedIntegrationCases": [
+    "test_abrupt_guardian_death_cleans_private_group",
+    "test_bytes_arguments_environment_directory_status",
+    "test_closed_lease_before_acknowledgement_never_starts_target",
+    "test_ide_proxy_kernel_death_closes_lease",
+    "test_natural_launcher_exit_cannot_leave_children_or_pipes",
+    "test_normal_lease_close_cleans_root_child_grandchild",
+    "test_rejected_acknowledgement_never_starts_target",
+    "test_stdin_backpressure_does_not_block_lease_death",
+    "test_stdout_backpressure_does_not_block_lease_death",
+    "test_unexpected_lease_byte_cancels"
+  ],
+  "observed": [
+    "Exact unmodified Go1.26.10 macOS arm64 distribution authenticated: 15045 archive files",
+    "Verifier archive positive/negative controls passed",
+    "Go unit, vet and race controls passed",
+    "Ten owned macOS subprocess integration cases passed; unrelated sentinel survived each case",
+    "Windows amd64 guardian, child and ABI tests cross-compiled without execution"
+  ],
+  "unknown": [
+    "Windows runtime Job behavior and physical platform acceptance",
+    "Linux runtime",
+    "Actual IDE lease adapter and frontend integration",
+    "POSIX descendants deliberately escaping the private process group/session",
+    "Cleanup after the private POSIX anchor itself is killed"
+  ],
+  "inferred": [
+    "The independent socket lease can avoid protocol-pipe backpressure hiding parent death; this remains a standalone fixture result until the IDE adapter is implemented"
+  ],
+  "logs": {
+    "child-host.stdout": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "go-race.stdout": {
+      "size": 152,
+      "sha256": "17d815568638d912b0aed534eda85bd86000f153e63bbf51be5d676853cd83a2"
+    },
+    "go-unit.stdout": {
+      "size": 152,
+      "sha256": "d0a5a09e437ab27538def69b28fec0c95652f597e0f046b9f0fcd0e1c5161852"
+    },
+    "go-version.stdout": {
+      "size": 34,
+      "sha256": "077dec62e8d33611342a1349cacb348362593f6028f03f3d345b05b156bd9662"
+    },
+    "go-vet.stdout": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "guardian-host.stdout": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "module-verify.stdout": {
+      "size": 21,
+      "sha256": "b4537ed75f533f993f371954de47e42a793b8e5b0587577de7e27fb3e50696bd"
+    },
+    "owned-integration.stdout": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "verifier-controls.stdout": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "windows-child-cross.stdout": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "windows-guardian-cross.stdout": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "windows-tests-cross.stdout": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "child-host.stderr": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "go-race.stderr": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "go-unit.stderr": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "go-version.stderr": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "go-vet.stderr": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "guardian-host.stderr": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "module-verify.stderr": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "owned-integration.stderr": {
+      "size": 1477,
+      "sha256": "42e373647e7bd0206758d357596e86f712797b3c2e4b5a0fe88b3a692eb9a2f2"
+    },
+    "verifier-controls.stderr": {
+      "size": 266,
+      "sha256": "0c360af100df75f00bcbded46c7627e89ef1a457ec6381c7e83ef7e43aaa74d9"
+    },
+    "windows-child-cross.stderr": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "windows-guardian-cross.stderr": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "windows-tests-cross.stderr": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}

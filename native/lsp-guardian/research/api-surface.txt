@@ -1,0 +1,45 @@
+CLASS com.intellij.execution.process.OSProcessHandler public
+CTOR public com.intellij.execution.process.OSProcessHandler(java.lang.Process,java.lang.String,java.nio.charset.Charset)
+CTOR public com.intellij.execution.process.OSProcessHandler(java.lang.Process,java.lang.String)
+CTOR public com.intellij.execution.process.OSProcessHandler(com.intellij.execution.configurations.GeneralCommandLine) throws com.intellij.execution.ExecutionException
+CTOR public com.intellij.execution.process.OSProcessHandler(java.lang.Process,java.lang.String,java.nio.charset.Charset,java.util.Set<? extends java.io.File>)
+METHOD public void com.intellij.execution.process.BaseOSProcessHandler.startNotify()
+CLASS com.intellij.execution.process.ProcessTreeKiller public abstract interface
+METHOD public abstract boolean com.intellij.execution.process.ProcessTreeKiller.killProcessTree()
+CLASS com.intellij.execution.process.ProcessWrapper public
+CLASS com.intellij.execution.process.UnixProcessManager public final
+CLASS com.intellij.execution.process.WinProcessManager public final
+CLASS com.intellij.execution.configurations.GeneralCommandLine public
+CTOR public com.intellij.execution.configurations.GeneralCommandLine(java.util.List<java.lang.String>)
+CTOR public com.intellij.execution.configurations.GeneralCommandLine(java.lang.String...)
+CTOR public com.intellij.execution.configurations.GeneralCommandLine()
+METHOD public java.lang.Process com.intellij.execution.configurations.GeneralCommandLine.createProcess() throws com.intellij.execution.ExecutionException
+CLASS com.sun.jna.platform.win32.Kernel32 public abstract interface
+METHOD public abstract int com.sun.jna.platform.win32.Kernel32.WaitForSingleObject(com.sun.jna.platform.win32.WinNT$HANDLE,int)
+METHOD public abstract boolean com.sun.jna.platform.win32.Kernel32.SetHandleInformation(com.sun.jna.platform.win32.WinNT$HANDLE,int,int)
+METHOD public abstract com.sun.jna.platform.win32.WinNT$HRESULT com.sun.jna.platform.win32.Kernel32.RegisterApplicationRestart(char[],int)
+METHOD public abstract com.sun.jna.platform.win32.WinNT$HRESULT com.sun.jna.platform.win32.Kernel32.UnregisterApplicationRestart()
+METHOD public abstract com.sun.jna.platform.win32.WinNT$HRESULT com.sun.jna.platform.win32.Kernel32.GetApplicationRestartSettings(com.sun.jna.platform.win32.WinNT$HANDLE,char[],com.sun.jna.ptr.IntByReference,com.sun.jna.ptr.IntByReference)
+METHOD public abstract boolean com.sun.jna.platform.win32.Kernel32.ReadFile(com.sun.jna.platform.win32.WinNT$HANDLE,byte[],int,com.sun.jna.ptr.IntByReference,com.sun.jna.platform.win32.WinBase$OVERLAPPED)
+METHOD public abstract boolean com.sun.jna.platform.win32.Kernel32.DuplicateHandle(com.sun.jna.platform.win32.WinNT$HANDLE,com.sun.jna.platform.win32.WinNT$HANDLE,com.sun.jna.platform.win32.WinNT$HANDLE,com.sun.jna.platform.win32.WinNT$HANDLEByReference,int,boolean,int)
+METHOD public abstract boolean com.sun.jna.platform.win32.Kernel32.CloseHandle(com.sun.jna.platform.win32.WinNT$HANDLE)
+METHOD public abstract boolean com.sun.jna.platform.win32.Kernel32.WriteFile(com.sun.jna.platform.win32.WinNT$HANDLE,byte[],int,com.sun.jna.ptr.IntByReference,com.sun.jna.platform.win32.WinBase$OVERLAPPED)
+METHOD public abstract boolean com.sun.jna.platform.win32.Kernel32.CreateProcess(java.lang.String,java.lang.String,com.sun.jna.platform.win32.WinBase$SECURITY_ATTRIBUTES,com.sun.jna.platform.win32.WinBase$SECURITY_ATTRIBUTES,boolean,com.sun.jna.platform.win32.WinDef$DWORD,com.sun.jna.Pointer,java.lang.String,com.sun.jna.platform.win32.WinBase$STARTUPINFO,com.sun.jna.platform.win32.WinBase$PROCESS_INFORMATION)
+METHOD public abstract boolean com.sun.jna.platform.win32.Kernel32.CreateProcessW(java.lang.String,char[],com.sun.jna.platform.win32.WinBase$SECURITY_ATTRIBUTES,com.sun.jna.platform.win32.WinBase$SECURITY_ATTRIBUTES,boolean,com.sun.jna.platform.win32.WinDef$DWORD,com.sun.jna.Pointer,java.lang.String,com.sun.jna.platform.win32.WinBase$STARTUPINFO,com.sun.jna.platform.win32.WinBase$PROCESS_INFORMATION)
+METHOD public abstract boolean com.sun.jna.platform.win32.Kernel32.CreatePipe(com.sun.jna.platform.win32.WinNT$HANDLEByReference,com.sun.jna.platform.win32.WinNT$HANDLEByReference,com.sun.jna.platform.win32.WinBase$SECURITY_ATTRIBUTES,int)
+METHOD public abstract boolean com.sun.jna.platform.win32.Kernel32.GetProcessTimes(com.sun.jna.platform.win32.WinNT$HANDLE,com.sun.jna.platform.win32.WinBase$FILETIME,com.sun.jna.platform.win32.WinBase$FILETIME,com.sun.jna.platform.win32.WinBase$FILETIME,com.sun.jna.platform.win32.WinBase$FILETIME)
+MISSING com.sun.jna.platform.win32.WinBase$STARTUPINFOEX java.lang.ClassNotFoundException com.sun.jna.platform.win32.WinBase$STARTUPINFOEX
+MISSING com.sun.jna.platform.win32.WinNT$JOBOBJECT_EXTENDED_LIMIT_INFORMATION java.lang.ClassNotFoundException com.sun.jna.platform.win32.WinNT$JOBOBJECT_EXTENDED_LIMIT_INFORMATION
+CLASS com.pty4j.PtyProcessBuilder public
+METHOD public com.pty4j.PtyProcessBuilder com.pty4j.PtyProcessBuilder.setEnvironment(java.util.Map<java.lang.String, java.lang.String>)
+METHOD public com.pty4j.PtyProcessBuilder com.pty4j.PtyProcessBuilder.setDirectory(java.lang.String)
+METHOD public com.pty4j.PtyProcessBuilder com.pty4j.PtyProcessBuilder.setConsole(boolean)
+METHOD public com.pty4j.PtyProcess com.pty4j.PtyProcessBuilder.start() throws java.io.IOException
+CLASS com.pty4j.unix.PtyHelpers$OSFacade public abstract static interface
+METHOD public abstract int com.pty4j.unix.PtyHelpers$OSFacade.killpg(int,int)
+METHOD public abstract int com.pty4j.unix.PtyHelpers$OSFacade.setsid()
+METHOD public abstract int com.pty4j.unix.PtyHelpers$OSFacade.setpgid(int,int)
+CLASS com.pty4j.windows.conpty.WinEx abstract interface
+CLASS com.pty4j.windows.conpty.WinEx$STARTUPINFOEX public static
+CLASS com.intellij.jna.JnaLoader public final
+METHOD public static synchronized boolean com.intellij.jna.JnaLoader.isLoaded()
