@@ -1,0 +1,151 @@
+name: Check standalone guardian on native Windows
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: guardian-prototype-windows-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  windows-prototype:
+    runs-on: windows-2022
+    timeout-minutes: 15
+    steps:
+      - name: Keep the disposable source checkout byte-exact
+        shell: pwsh
+        run: git config --global core.autocrlf false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # Standalone source only; no IDE adapter or product integration.
+          ref: 5fa6e24ebab3fefffc28bd13c2e49c784c914ee2
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - name: Download and authenticate the fixed official Go SDK, then prepare x/sys
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path, PurePosixPath
+          import hashlib, importlib.util, json, os, platform, shutil, stat, subprocess, urllib.request, zipfile
+
+          SOURCE_COMMIT = '5fa6e24ebab3fefffc28bd13c2e49c784c914ee2'
+          GO_FILE = 'go1.26.10.windows-amd64.zip'
+          GO_SIZE = 75004774
+          GO_SHA = '7ecd2d7260e82c59bcbd7f1077a07cee2dea607295b858df67195a1e4e09629b'
+          # Official metadata: https://go.dev/dl/?mode=json&include=all
+          GO_URL = 'https://go.dev/dl/' + GO_FILE
+          MODULE = 'golang.org/x/sys'
+          MODULE_VERSION = 'v0.38.0'
+          MODULE_SUM = 'h1:3yZWxaJjBmCWXqhN1qh02AkOnCQ1poK6oF+a7xWL6Gc='
+          MODULE_MOD_SUM = 'h1:OgkHotnGiDImocRcuBABYBEXf8A9a87e/uXjp9XT3ks='
+          root = Path.cwd()
+          if platform.system() != 'Windows' or platform.machine().lower() not in {'amd64', 'x86_64'}:
+              raise SystemExit('This gate requires native Windows amd64')
+          if subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip() != SOURCE_COMMIT:
+              raise SystemExit('Standalone prototype source differs from its fixed snapshot')
+          if shutil.disk_usage(root).free < 23 * 1024**3:
+              raise SystemExit('Need 20 GiB reserve plus 3 GiB for this prototype build')
+          tools = root / 'build/guardian-tools'
+          tools.mkdir(parents=True, exist_ok=False)
+          archive = tools / GO_FILE
+          with urllib.request.urlopen(GO_URL, timeout=60) as response, archive.open('xb') as output:
+              shutil.copyfileobj(response, output, 1024 * 1024)
+          with archive.open('rb') as stream:
+              digest = hashlib.file_digest(stream, 'sha256').hexdigest()
+          if archive.stat().st_size != GO_SIZE or digest != GO_SHA:
+              raise SystemExit('Official Go archive size/SHA-256 differs from its pin')
+          with zipfile.ZipFile(archive) as package:
+              names = package.namelist()
+              if len(names) != len(set(names)) or len(names) != len({name.casefold() for name in names}):
+                  raise SystemExit('Duplicate Go archive path')
+              if sum(item.file_size for item in package.infolist()) > 1024**3:
+                  raise SystemExit('Go archive exceeds its extracted size bound')
+              for item in package.infolist():
+                  path = PurePosixPath(item.filename)
+                  mode = item.external_attr >> 16
+                  if (path.is_absolute() or '\\' in item.filename or path.parts[0] != 'go'
+                          or any(part in {'', '.', '..'} for part in item.filename.rstrip('/').split('/'))
+                          or stat.S_ISLNK(mode) or stat.S_IFMT(mode) not in {0, stat.S_IFREG, stat.S_IFDIR}):
+                      raise SystemExit('Unsafe Go archive member')
+              package.extractall(tools)
+          source = root / 'native/lsp-guardian'
+          spec = importlib.util.spec_from_file_location('guardian_verify', source / 'verify.py')
+          verifier = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(verifier)
+          go_root = tools / 'go'
+          # Authenticate the exact SDK file closure before executing go.exe.
+          members = verifier.authenticate_go(go_root, archive, GO_SHA)
+          go = go_root / 'bin/go.exe'
+          module_cache = root / 'build/guardian-seed-modules'
+          env = dict(os.environ, GOROOT=str(go_root), GOMODCACHE=str(module_cache),
+                     GOCACHE=str(root / 'build/guardian-seed-build'), GOTOOLCHAIN='local',
+                     GOTELEMETRY='off', GOENV='off', GOWORK='off', GOFLAGS='-mod=readonly',
+                     GOPROXY='https://proxy.golang.org', GOSUMDB='sum.golang.org', CGO_ENABLED='0')
+          env.pop('GOOS', None)
+          env.pop('GOARCH', None)
+          version = subprocess.check_output([str(go), 'version'], env=env, text=True, timeout=15).strip()
+          if version != 'go version go1.26.10 windows/amd64':
+              raise SystemExit('Authenticated SDK reported a different host/version')
+          # This explicit preparation is networked. The next verifier uses only its private offline copy.
+          completed = subprocess.run([str(go), 'mod', 'download', '-json', MODULE + '@' + MODULE_VERSION],
+                                     cwd=source, env=env, capture_output=True, text=True, timeout=120, check=True)
+          module = json.loads(completed.stdout)
+          if (module.get('Path'), module.get('Version'), module.get('Sum'), module.get('GoModSum')) != (
+                  MODULE, MODULE_VERSION, MODULE_SUM, MODULE_MOD_SUM):
+              raise SystemExit('Downloaded module differs from the fixed go.sum identities')
+          subprocess.run(['git', 'diff', '--exit-code', '--', 'native/lsp-guardian'], check=True)
+          receipt = {'schema': 1, 'prototypeOnly': True, 'sourceCommit': SOURCE_COMMIT,
+                     'officialMetadata': 'https://go.dev/dl/?mode=json&include=all',
+                     'go': {'url': GO_URL, 'size': GO_SIZE, 'sha256': GO_SHA,
+                            'archiveMembersMatchedBeforeExecution': members, 'version': version},
+                     'xSys': {'version': MODULE_VERSION, 'sum': MODULE_SUM, 'goModSum': MODULE_MOD_SUM},
+                     'explicitNetworkPreparation': True, 'ideLaunched': False, 'nodeLaunched': False,
+                     'windowsRaceExecuted': False}
+          (root / 'build/guardian-provision.json').write_text(json.dumps(receipt, indent=2) + '\n', encoding='utf-8')
+          PY
+      - name: Run native unit, vet and owned lifecycle controls with offline tools
+        shell: bash
+        run: |
+          python native/lsp-guardian/verify.py \
+            --go-root "$GITHUB_WORKSPACE/build/guardian-tools/go" \
+            --go-archive "$GITHUB_WORKSPACE/build/guardian-tools/go1.26.10.windows-amd64.zip" \
+            --go-archive-sha256 7ecd2d7260e82c59bcbd7f1077a07cee2dea607295b858df67195a1e4e09629b \
+            --module-cache "$GITHUB_WORKSPACE/build/guardian-seed-modules" \
+            --output "$GITHUB_WORKSPACE/.tools/guardian-native-windows"
+      - name: Check the bounded prototype receipt
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          report = json.loads(Path('.tools/guardian-native-windows/receipt.json').read_text(encoding='utf-8'))
+          if (report.get('prototypeOnly') is not True or report.get('windowsRuntimeExecuted') is not True
+                  or report.get('hostIntegrationExecuted') is not True or report.get('ideLaunched') is not False
+                  or report.get('nodeLaunched') is not False or report.get('externalNetwork') is not False):
+              raise SystemExit('Prototype receipt does not establish offline native Windows execution')
+          names = {item['name'] for item in report['commands'] if item['exit'] == 0}
+          if not {'verifier-controls', 'go-unit', 'go-vet', 'owned-integration'}.issubset(names) or 'go-race' in names:
+              raise SystemExit('Required Windows prototype controls missing or race scope inconsistent')
+          print('Standalone native Windows prototype passed. IDE integration, product ownership and Windows race remain separate.')
+          PY
+      - name: Retain compact standalone prototype evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: guardian-native-windows-${{ github.run_id }}
+          path: |
+            build/guardian-provision.json
+            build/guardian-tools/go/LICENSE
+            .tools/guardian-native-windows/receipt.json
+            .tools/guardian-native-windows/*.stdout
+            .tools/guardian-native-windows/*.stderr
+            native/lsp-guardian/licenses/
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 14
