@@ -71,6 +71,7 @@ public final class NotebookSaveProbe implements StartupActivity.DumbAware {
       result.put("applicationHome", PathManager.getHomePath()); result.put("plugin", observePlugin());
       String initial = Files.readString(fixture); String initialHash = hash(Files.readAllBytes(fixture));
       String initialSource = NotebookModel.parse(initial).source(0);
+      JsonObject expectedInitial = JsonParser.parseString(initial).getAsJsonObject();
       JsonObject external = JsonParser.parseString(initial).getAsJsonObject(); external.getAsJsonObject("metadata").addProperty("externalTextEdit", "kept");
       String externalText = new Gson().toJson(external) + "\n";
       virtual = LocalFileSystem.getInstance().refreshAndFindFileByPath(fixture.toString());
@@ -121,7 +122,7 @@ public final class NotebookSaveProbe implements StartupActivity.DumbAware {
       result.put("nativeSavePersisted", true); result.put("heartbeatTicksAfterSave", heartbeat.get() - before);
       require(heartbeat.get() - before >= 2, "EDT heartbeat did not continue through save");
       NotebookModel saved = NotebookModel.parse(Files.readString(fixture));
-      assertPayload(saved);
+      assertPayload(saved, expectedInitial, false);
       stage.set("post-save-external-dirty-merge");
       JsonObject after = JsonParser.parseString(Files.readString(fixture)).getAsJsonObject(); after.getAsJsonObject("metadata").addProperty("externalAfterSave", "kept");
       String afterText = new Gson().toJson(after) + "\n";
@@ -137,7 +138,7 @@ public final class NotebookSaveProbe implements StartupActivity.DumbAware {
       });
       await(() -> savedTarget() && fileHas("externalAfterSave") && !editorModified.get(), 35, "Second native save lost post-save text metadata or source, or remained dirty");
       result.put("postSaveExternalDirtyMerge", true);
-      assertPayload(NotebookModel.parse(Files.readString(fixture)));
+      assertPayload(NotebookModel.parse(Files.readString(fixture)), expectedInitial, true);
       String savedHash = hash(Files.readAllBytes(fixture)); require(!savedHash.equals(initialHash), "Saved file bytes did not change");
       result.put("savedBytesSha256", savedHash); result.put("savedBytes", Files.size(fixture));
       result.put("metadataAndExistingOutputsPreserved", true);
@@ -181,12 +182,35 @@ public final class NotebookSaveProbe implements StartupActivity.DumbAware {
   }
   private boolean fileHas(String key) { try { return Files.readString(fixture).contains(key); } catch (Exception ignored) { return false; } }
   private static boolean sourceIs(String text, String expected) { try { return NotebookModel.parse(text).source(0).equals(expected); } catch (Exception ignored) { return false; } }
-  private static void assertPayload(NotebookModel model) {
-    JsonObject tree = JsonParser.parseString(model.json()).getAsJsonObject();
+  private static void assertPayload(NotebookModel model, JsonObject initial, boolean afterSecondSave) {
+    JsonObject actual = JsonParser.parseString(model.json()).getAsJsonObject();
     require(model.source(0).equals(TARGET), "Saved Unicode/source value changed");
-    require(tree.getAsJsonObject("metadata").get("large").getAsString().equals("9007199254740993"), "Unknown large metadata changed");
-    require(tree.getAsJsonObject("metadata").get("externalTextEdit").getAsString().equals("kept"), "Text edit metadata was lost");
-    require(model.cell(0).get("execution_count").getAsInt() == 7 && model.outputs(0).get(0).getAsJsonObject().getAsJsonObject("data").has("application/x-save-probe"), "Existing fixture outputs/counts changed");
+    JsonObject expected = initial.deepCopy();
+    // Source string/array layout is not a persistence invariant; every other
+    // immutable root/cell/output/metadata field must exactly match the fixture.
+    expected.getAsJsonArray("cells").get(0).getAsJsonObject().add("source", actual.getAsJsonArray("cells").get(0).getAsJsonObject().get("source"));
+    expected.getAsJsonObject("metadata").addProperty("externalTextEdit", "kept");
+    if (afterSecondSave) expected.getAsJsonObject("metadata").addProperty("externalAfterSave", "kept");
+    require(immutableEquals(expected, actual), "Saved notebook changed immutable fixture fields/outputs or lost external metadata");
+  }
+  private static boolean immutableEquals(JsonElement expected, JsonElement actual) {
+    if (expected == null || actual == null) return expected == actual;
+    if (expected.isJsonObject() && actual.isJsonObject()) {
+      JsonObject left = expected.getAsJsonObject(), right = actual.getAsJsonObject();
+      if (!left.keySet().equals(right.keySet())) return false;
+      for (String key : left.keySet()) if (!immutableEquals(left.get(key), right.get(key))) return false;
+      return true;
+    }
+    if (expected.isJsonArray() && actual.isJsonArray()) {
+      JsonArray left = expected.getAsJsonArray(), right = actual.getAsJsonArray();
+      if (left.size() != right.size()) return false;
+      for (int index = 0; index < left.size(); index++) if (!immutableEquals(left.get(index), right.get(index))) return false;
+      return true;
+    }
+    // Literal JSON comparison never coerces large numbers to doubles. For
+    // unchanged fixture values, even the original numeric spelling is retained.
+    return expected.isJsonPrimitive() == actual.isJsonPrimitive()
+        && expected.isJsonNull() == actual.isJsonNull() && expected.toString().equals(actual.toString());
   }
   private Map<String, Object> observePlugin() throws Exception {
     var descriptor = PluginManagerCore.getPlugin(PluginId.getId("dev.openpycharm.notebooks")); require(descriptor != null && descriptor.isEnabled(), "Actual production notebook plugin missing");

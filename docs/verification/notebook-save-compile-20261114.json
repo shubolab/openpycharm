@@ -32,16 +32,17 @@
     "scripts/build_notebook_plugin.py": "7aedb310b3c69ccd17fe8efd5c050e0f240d2979c1dc50f049ad944df1df515b",
     "scripts/platform_layout.py": "500447561715fc996c842c614aa817a2251e7dfbc22305054f7ab40fc31c7037"
   },
-  "probeJarSha256": "7d75be0502f16ebd039ba18b9268bfae65c54c90d24d94645c8e77df4be2d02e",
-  "probeDirectory": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebook-savefix/.tools/notebook-save-native-probe/e72502aad98fbb6f76e18507de874fa4a2d8b6120a1e00ac2fa891fb9236a684/plugin",
+  "probeJarSha256": "87ad3036b8addaf64fe7dc45e81c653ec7146e0b5f0a27cf10584706bcb620c8",
+  "probeDirectory": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebook-savefix/.tools/notebook-save-native-probe/2bc09a53d6691d1cac7653c9caefb1ef94e1e25573500fbbc93554d125bbdb4f/plugin",
   "probeBuildIdentity": {
     "sources": {
-      "NotebookSaveProbe.java": "52996eb57efe596692b17e1c04bdca1ad5bf9e82d879b9c03a0cb212df852000",
+      "NotebookSavePayloadTest.java": "c720e6630b3b9f02bce7c982db40b416e1bb141ed90c0ab8e305224c0d54349c",
+      "NotebookSaveProbe.java": "be3b2c7cfeb47b02cfc8fd3365edef17913c8b7e3bc1cdb1daeb908e692358d9",
       "plugin.xml": "2e96883c5ecd574054643d7b1ea622904af6c0d1fb74415262110f5b11df9315"
     },
     "productionJarSha256": "6f33f1470d94461b2309e8e9e48ad1ed6a62678ed135cbbd5ddb0053bef22970",
     "sdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
-    "builderSha256": "c24f0f77721fe966ff2c1d76d8f7a8d4942fecfe1b228df864ffb702da2a1233"
+    "builderSha256": "de98b6300dded6dcef544ccd5a61e1e582a49e0982b0e9e8b79045bc5704a15c"
   },
   "pinnedPlatformCommit": "456919a9624bae72ac12efafc35d2b916cb0c5c5",
   "pinnedSourceSha256": {
@@ -114,7 +115,13 @@
       "count": 4,
       "passed": 4
     },
-    "nativeProbeCompilation": "pass"
+    "nativeProbeCompilation": "pass",
+    "probePayloadAssertionTests": {
+      "status": "pass",
+      "validSavePayloads": 2,
+      "immutableCorruptionsRejected": 16,
+      "actualIdeSaveEngineExercised": false
+    }
   },
   "nativeProbeExpectedControls": [
     "Actual NotebookFileEditor and selected product JAR digest",
@@ -131,5 +138,6 @@
     "Windows actual native edit/undo/save/reopen",
     "Shift+Enter execution; existing native shortcut failure retained separately"
   ],
-  "noReferenceOrRootCheckoutFilesModified": true
+  "noReferenceOrRootCheckoutFilesModified": true,
+  "reviewCorrection": "Native payload assertion now compares the entire immutable initial tree, allowing only the intended source and external metadata changes; 16 actual assertion corruption controls reject changed/missing/extra fields, including adjacent large integers."
 }
