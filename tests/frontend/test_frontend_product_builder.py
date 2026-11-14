@@ -215,6 +215,19 @@ class ProductRuntimeFixture(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "original compiler/source proof"):
             builder.validate_product(root, saved)
 
+    def test_cached_manifest_boolean_schema_or_float_size_is_not_an_integer_pin(self):
+        root, saved = self.product(); name = "runtime/macos-arm64/bundled-runtime.json"; path = root / name
+        original = path.read_text()
+        for field in ("schema", "size"):
+            manifest = json.loads(original)
+            if field == "schema": manifest["schema"] = True
+            else: manifest["files"]["node/bin/node"]["size"] = float(manifest["files"]["node/bin/node"]["size"])
+            path.write_text(json.dumps(manifest)); digest = builder.sha256(path)
+            saved["fileRecords"][name] = {**record(path.read_bytes()), "mode": stat.S_IMODE(path.stat().st_mode)}
+            saved["files"][name] = digest
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, "bundle authority"):
+                builder.validate_product(root, saved)
+
     def test_complete_multi_file_receipt_detects_jar_runtime_mode_and_extra_payload_drift(self):
         root, saved = self.product(); builder.validate_product(root, saved)
         jar = root / "lib/frontend.jar"; node = root / "runtime/macos-arm64/node/bin/node"

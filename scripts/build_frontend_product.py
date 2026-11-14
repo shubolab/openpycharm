@@ -253,7 +253,10 @@ def validate_product(plugin: Path, saved: dict) -> None:
     target = saved.get("target"); pin = load_pin(); expected = runtime_manifest(pin, target)
     prefix = "runtime/" + target + "/"
     manifest = {"schema": 1, "target": target, "owner": BUNDLE_OWNER, "lockSha256": sha256(PIN), **expected}
-    if read_json(plugin / prefix / "bundled-runtime.json") != manifest:
+    actual_manifest = read_json(plugin / prefix / "bundled-runtime.json")
+    # Python considers True == 1 and 12.0 == 12. The Java runtime deliberately
+    # rejects those different JSON types/literals in its exact pinned manifest.
+    if json.dumps(actual_manifest, sort_keys=True) != json.dumps(manifest, sort_keys=True):
         raise ValueError("Cached frontend bundle authority differs from the current pin")
     if set(records) != {"lib/frontend.jar", prefix + "bundled-runtime.json", *(prefix + name for name in expected["files"])}:
         raise ValueError("Cached frontend product payload set differs from the current pin")
