@@ -11,6 +11,7 @@
     <fileType name="OpenPyCharm SQL" language="OpenPyCharmSQL" implementationClass="dev.openpycharm.database.SqlLanguage$FileType" fieldName="INSTANCE" extensions="sql"/>
     <lang.parserDefinition language="OpenPyCharmSQL" implementationClass="dev.openpycharm.database.SqlParserDefinition"/>
     <lang.syntaxHighlighterFactory language="OpenPyCharmSQL" implementationClass="dev.openpycharm.database.SqlLanguage$HighlighterFactory"/>
+    <completion.contributor language="OpenPyCharmSQL" implementationClass="dev.openpycharm.database.SqlCompletionContributor"/>
   </extensions>
   <actions>
     <action id="OpenPyCharm.Database.RunSql" class="dev.openpycharm.database.RunSqlAction" text="Run SQL Statement" description="Run selected SQL or the statement at the caret with the connected data source">

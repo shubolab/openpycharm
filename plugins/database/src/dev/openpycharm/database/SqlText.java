@@ -89,6 +89,7 @@ public final class SqlText {
     }
     return "";
   }
+  public static boolean changesSchema(String sql){return Set.of("CREATE","ALTER","DROP","RENAME","ATTACH","DETACH").contains(leadingKeyword(sql,true));}
   public static String atCaret(String text,int caret) {
     List<Span> parts=statements(text);
     for(Span p:parts) if(caret>=p.start && caret<=p.end+1) return text.substring(p.start,p.end).trim();

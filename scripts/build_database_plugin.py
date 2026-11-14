@@ -151,7 +151,7 @@ def integration_tests(sdk: Path, plugin: Path, host_sdk: Path | None = None) -> 
     with tempfile.TemporaryDirectory(prefix="owned-sqlite-", dir=work) as temp:
         directory = Path(temp)
         jars = sorted((plugin / "lib").glob("*.jar"))
-        compile_java(layout, [ROOT / "tests/database/DatabaseIntegrationProbe.java", ROOT / "tests/database/DatabaseLayoutProbe.java"], directory / "classes", directory / "javac.args", jars, runtime)
+        compile_java(layout, [ROOT / "tests/database/DatabaseIntegrationProbe.java", ROOT / "tests/database/DatabaseLayoutProbe.java", ROOT / "tests/database/DatabaseCompletionProbe.java"], directory / "classes", directory / "javac.args", jars, runtime)
         cp = os.pathsep.join(map(str, [directory / "classes", *jars, *classpath(layout)]))
         result = json.loads(run_java(runtime, ["-Djava.awt.headless=true", "-classpath", cp, "dev.openpycharm.database.DatabaseIntegrationProbe", str(directory)], directory, timeout=45).stdout)
         if result.get("status") != "pass" or result.get("connectionsClosed") is not True:
@@ -161,6 +161,11 @@ def integration_tests(sdk: Path, plugin: Path, host_sdk: Path | None = None) -> 
             raise ValueError("Database toolbar geometry checks did not pass")
         layout_report["testSourceSha256"] = sha256(ROOT / "tests/database/DatabaseLayoutProbe.java")
         result["layoutTests"] = layout_report
+        completion = json.loads(run_java(runtime, ["-Djava.awt.headless=true", "-classpath", cp, "dev.openpycharm.database.DatabaseCompletionProbe", str(directory)], directory, timeout=45).stdout)
+        if completion.get("status") != "pass" or completion.get("realSqliteMetadata") is not True:
+            raise ValueError("SQLite metadata/completion checks did not pass")
+        completion["testSourceSha256"] = sha256(ROOT / "tests/database/DatabaseCompletionProbe.java")
+        result["completionTests"] = completion
         result.update(jarSha256=sha256(plugin / "lib/database.jar"), testSourceSha256=sha256(ROOT / "tests/database/DatabaseIntegrationProbe.java"), targetPlatform=layout.platform, executionPlatform=runtime.platform, nativeTargetRuntime=layout.platform == runtime.platform)
         (work / "latest.json").write_text(json.dumps(result, indent=2) + "\n")
         return result

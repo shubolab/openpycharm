@@ -10,6 +10,7 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.ui.EditorTextField;
+import com.intellij.ui.LanguageTextField;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.components.JBList;
 import com.intellij.ui.table.JBTable;
@@ -48,7 +49,7 @@ public final class DatabaseToolWindow implements ToolWindowFactory {
     private boolean connected,manual,disposed;
     public Panel(Project project) {
       super(new BorderLayout(0,6));this.project=project;service=DatabaseService.get(project);setBorder(JBUI.Borders.empty(6));
-      sql=new EditorTextField(EditorFactory.getInstance().createDocument("-- Run the statement at the caret, or select one statement.\nSELECT 1 AS ready;\n"),project,SqlLanguage.FileType.INSTANCE,false,false);
+      sql=new LanguageTextField(SqlLanguage.FileType.INSTANCE.getLanguage(),project,"-- Run the statement at the caret, or select one statement.\nSELECT 1 AS ready;\n",false);
       sql.setDisposedWith(this);sql.addSettingsProvider(e->{e.getSettings().setLineNumbersShown(true);e.getSettings().setUseSoftWraps(false);});
       sql.setPreferredSize(new Dimension(700,200));
       sql.setMinimumSize(new Dimension(100,70));
@@ -67,9 +68,9 @@ public final class DatabaseToolWindow implements ToolWindowFactory {
       add.addActionListener(e->profile(null));edit.addActionListener(e->profile(selected()));
       remove.addActionListener(e->{DatabaseProfile p=selected();if(p!=null&&Messages.showYesNoDialog(project,"Remove connection profile “"+p.name+"” and its saved password?","Remove data source",Messages.getQuestionIcon())==Messages.YES)
         task(()->{service.remove(p);return null;},v->{reload(null);status.setText("Connection profile removed.");});});
-      connect.addActionListener(e->{DatabaseProfile p=selected();if(p!=null)task(()->{try{service.connect(p);return service.session.tables();}catch(Exception ex){try{service.session.close();}catch(Exception close){ex.addSuppressed(close);}throw ex;}},v->{connected=true;manual=false;showTables(v);status.setText("Connected to "+p.name+" · Auto commit");});});
+      connect.addActionListener(e->{DatabaseProfile p=selected();if(p!=null)task(()->{try{return service.connect(p);}catch(Exception ex){try{service.session.close();}catch(Exception close){ex.addSuppressed(close);}throw ex;}},v->{connected=true;manual=false;showTables(v);status.setText("Connected to "+p.name+" · Auto commit");});});
       disconnect.addActionListener(e->task(()->{service.session.close();return null;},v->{connected=false;manual=false;tableModel.clear();status.setText("Disconnected. Any open transaction was rolled back.");}));
-      refresh.addActionListener(e->task(service.session::tables,this::showTables));
+      refresh.addActionListener(e->task(service.session::refreshMetadata,this::showTables));
       columns.addActionListener(e->{JdbcSession.Table t=tables.getSelectedValue();if(t!=null)task(()->service.session.columns(t),this::showResult);});
       select.addActionListener(e->{JdbcSession.Table t=tables.getSelectedValue();if(t!=null)task(()->service.session.selectSql(t),text->{ApplicationManager.getApplication().runWriteAction(()->sql.setText(text));status.setText("Review the generated SQL, then run it.");});});
       run.addActionListener(e->runConsole());
