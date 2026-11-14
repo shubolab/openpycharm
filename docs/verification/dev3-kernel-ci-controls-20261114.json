@@ -62,5 +62,27 @@
   "limitations": [
     "This headless JVM/kernel probe does not exercise NotebookFileEditor native save or establish release readiness",
     "Windows CI execution remains pending"
-  ]
+  ],
+  "windowsCI": {
+    "runId": 43543657085,
+    "jobId": 132289737977,
+    "sourceCommit": "ebadbb22d767658dbd9a17682c55a88230aa98b3",
+    "jobConclusion": "failure",
+    "repositoryTests": 112,
+    "passed": 108,
+    "skipped": 3,
+    "errors": 1,
+    "realKernelCasesPassed": [
+      "test_closed_parent_stdout_does_not_prevent_owned_cleanup",
+      "test_interrupt_busy_restart_and_owned_cleanup",
+      "test_output_limit_and_invalid_input_keep_protocol_usable",
+      "test_restart_while_busy_and_stdin_eof_shutdown",
+      "test_selected_interpreter_state_outputs_error_and_no_stdin"
+    ],
+    "posixSignalCase": "explicitly skipped on Windows",
+    "failure": "SQL fixture read_text() used cp1252 default and raised UnicodeDecodeError for Chinese; corrected to explicit UTF-8 with intact-Chinese assertion",
+    "nativeJvmSession": "not reached",
+    "localLogSha256": "afc067934f522640d0cf7f8bc77f8b2a8d322e4f2b6a9ea84076696eb03e4cfb",
+    "url": "https://github.com/shubolab/openpycharm/actions/runs/43543657085/job/132289737977"
+  }
 }

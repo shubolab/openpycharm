@@ -80,11 +80,12 @@ class DatabaseBuildControls(unittest.TestCase):
 
     def test_disposable_sql_fixture_is_replayable(self):
         import sqlite3
-        sql = (ROOT / "fixtures/database/inventory.sql").read_text()
+        sql = (ROOT / "fixtures/database/inventory.sql").read_text(encoding="utf-8")
         with sqlite3.connect(":memory:") as connection:
             connection.executescript(sql)
             self.assertEqual(connection.execute("SELECT COUNT(*) FROM products").fetchone()[0], 3)
             self.assertEqual(connection.execute("SELECT name FROM products WHERE sku='PY-001'").fetchone()[0], "Python workbook")
+            self.assertEqual(connection.execute("SELECT name FROM products WHERE sku='PY-002'").fetchone()[0], "数据分析练习册")
 
 
 if __name__ == "__main__":
