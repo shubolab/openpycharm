@@ -85,7 +85,7 @@ def descriptor(data: bytes, version: str) -> bytes:
     return data
 
 
-def build(sdk: Path, version: str = VERSION, host_sdk: Path | None = None) -> tuple[Path, dict]:
+def build(sdk: Path, version: str = VERSION, host_sdk: Path | None = None, *, force_rebuild: bool = False) -> tuple[Path, dict]:
     if re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+-[A-Za-z0-9.-]+", version) is None:
         raise ValueError("Frontend M0 needs an explicit prerelease version")
     layout = sdk_layout(sdk); runtime = execution_layout(layout, host_sdk); pin = load_pin()
@@ -100,7 +100,7 @@ def build(sdk: Path, version: str = VERSION, host_sdk: Path | None = None) -> tu
     jar = owned(work / "plugin/lib/frontend-m0.jar"); receipt = owned(work / "build.json")
     if (work / "build.lock").is_symlink(): raise ValueError("Frontend build lock cannot be a symlink")
     with cache_lock(work / "build.lock"):
-        if jar.is_file() and not jar.is_symlink() and receipt.is_file() and not receipt.is_symlink():
+        if not force_rebuild and jar.is_file() and not jar.is_symlink() and receipt.is_file() and not receipt.is_symlink():
             saved = json.loads(receipt.read_text())
             if saved.get("identity") == identity and saved.get("jarSha256") == sha256(jar) and saved.get("archiveVerification", {}).get("status") == "pass":
                 return jar.parent.parent, saved
@@ -221,10 +221,11 @@ def checks(sdk: Path, plugin: Path, host_sdk: Path | None = None, worker_fixture
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sdk", type=Path, required=True); parser.add_argument("--host-sdk", type=Path)
+    parser.add_argument("--force-rebuild", action="store_true", help="Recompile owned candidate even when a verified cache exists")
     parser.add_argument("--version", default=VERSION); parser.add_argument("--test", action="store_true")
     parser.add_argument("--worker-fixture", type=Path)
     parser.add_argument("--process-fixture", type=Path, help="Explicitly run pinned owned Node/TLS through public SDK process handler, not an IDE")
-    args = parser.parse_args(); plugin, report = build(args.sdk, args.version, args.host_sdk)
+    args = parser.parse_args(); plugin, report = build(args.sdk, args.version, args.host_sdk, force_rebuild=args.force_rebuild)
     result = {"plugin": str(plugin), "build": report}
     if args.test: result["checks"] = checks(args.sdk, plugin, args.host_sdk, args.worker_fixture, args.process_fixture)
     print(json.dumps(result, indent=2))
