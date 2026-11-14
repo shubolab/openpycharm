@@ -1,0 +1,220 @@
+{
+  "schema": 1,
+  "prototypeOnly": true,
+  "status": "bounded-macos-jvm-lease-pass",
+  "sources": {
+    "GuardianLease.java": "054d89c53a4ae6fe07b3e1f1921489e0948c34f0771c18ea5cf905b5c5c1ad35",
+    "GuardianLeaseCheck.java": "2e3431b61115198fccc573722489da8b47da8bc5258a1a61a3b13a37b53430a3",
+    "verify_jvm.py": "07fc25686fae9037ce8e800c4a51856b47cb9e5c4712b4ec3ee06764a31cbf71"
+  },
+  "jbr": {
+    "javaSha256": "5178776233c7fec16322ecd6a048084d441dc01efed2d3ff165ac88dbc674725",
+    "javacSha256": "891a93d98f196bf9d3b3a944795c41860219716b9b3f2bc6be08cd4a5d0e8fc0",
+    "sdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+    "javaVersion": "openjdk version \"25.0.3\" 2026-04-21\nOpenJDK Runtime Environment JBR-25.0.3+9-329.124-jcef (build 25.0.3+9-b329.124)\nOpenJDK 64-Bit Server VM JBR-25.0.3+9-329.124-jcef (build 25.0.3+9-b329.124, mixed mode, sharing)"
+  },
+  "goProofReceiptSha256": "c19e6dd2e044e6bf1c4279e5738a4028448bef12a6d07542eb21859f4e987e34",
+  "goBinaries": {
+    "guardian": "5eaab0843aa1ea68e729d2d306e52c349d45e1f44cc6f17991b9708878456d31",
+    "tiny-child": "1de494c9b9e3ed46c2928094772a84e6dad74219b122752aef85c3af27a2c24b"
+  },
+  "boundaryControls": 5,
+  "commands": [
+    {
+      "name": "compile",
+      "exit": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "worker-handshake-controls",
+      "exit": 0,
+      "stdoutSha256": "d57fc72a7d42ab1b6633ac223e0c9388b62050ef9a1181e4eeff099a2e6d2257",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "ownedJvmCases": [
+    {
+      "case": "normal-close",
+      "status": "pass",
+      "ownedTargetCount": 3,
+      "unrelatedOwnedSentinelSurvived": true,
+      "jvmKilled": false,
+      "stdoutNotDrainedUntilJvmExitAndOwnedCleanup": false,
+      "capturedStdoutBytes": 0,
+      "exit": 0,
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "jvm-abrupt-exit",
+      "status": "pass",
+      "ownedTargetCount": 3,
+      "unrelatedOwnedSentinelSurvived": true,
+      "jvmKilled": true,
+      "stdoutNotDrainedUntilJvmExitAndOwnedCleanup": false,
+      "capturedStdoutBytes": 0,
+      "exit": -9,
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "stdout-undrained",
+      "status": "pass",
+      "ownedTargetCount": 1,
+      "unrelatedOwnedSentinelSurvived": true,
+      "jvmKilled": false,
+      "stdoutNotDrainedUntilJvmExitAndOwnedCleanup": true,
+      "capturedStdoutBytes": 65536,
+      "exit": 0,
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "ideStarted": false,
+  "nodeStarted": false,
+  "network": "IPv4 loopback only",
+  "unknown": [
+    "Actual IntelliJ Disposable/ProcessHandler/LSP lifecycle adapter is not implemented.",
+    "Windows/Linux JVM bridge runtime, malicious peers with a stolen nonce, process-group escape and exhaustive scheduler races are unverified.",
+    "The stdout fixture was left undrained; kernel blocked-write duration was not measured.",
+    "close() must be called from a worker; asynchronous EDT disposal integration remains future work."
+  ],
+  "observedAtUtc": "2026-11-14T16:32:48.263114+00:00",
+  "branch": "codex_guardian_jvm_bridge",
+  "baseGoSnapshot": "5fa6e24ebab3fefffc28bd13c2e49c784c914ee2",
+  "baseGoSourceFilesMatchingPriorProof": [
+    "README.md",
+    "abi_windows_amd64_test.go",
+    "cmd/tiny-child/identity_unix.go",
+    "cmd/tiny-child/identity_windows.go",
+    "cmd/tiny-child/main.go",
+    "go.mod",
+    "go.sum",
+    "integration_test.py",
+    "licenses/Go-BSD-3-Clause.txt",
+    "licenses/x-sys-BSD-3-Clause.txt",
+    "main.go",
+    "main_test.go",
+    "owner_unix.go",
+    "owner_windows.go",
+    "research/ApiSurface.java",
+    "research/api-surface.json",
+    "research/api-surface.txt",
+    "verify.py",
+    "verify_test.py"
+  ],
+  "finalOnly": true,
+  "supersededHarness": "Initial harness drained stdout while cleanup was still pending; it is not counted. Final waits for JVM exit and owned target cleanup before any stdout read.",
+  "evidence": {
+    "compile.stderr": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "compile.stdout": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "jvm-abrupt-exit/child.json": {
+      "size": 39,
+      "sha256": "8df08c5def8f513237162aae7ec37272d6bca5f67b7b8b7e5f576a4dfc7a757a"
+    },
+    "jvm-abrupt-exit/grandchild.json": {
+      "size": 39,
+      "sha256": "09f28e08739af8a9c97db4996a5fba770f2951a663461f8cb933b5ae4e2fe71e"
+    },
+    "jvm-abrupt-exit/jvm-ready.json": {
+      "size": 36,
+      "sha256": "3a451391fee45b5a642d87efd4a40c79ce761e51bf89ae6eb5af3f54ab339401"
+    },
+    "jvm-abrupt-exit/ready.json": {
+      "size": 39,
+      "sha256": "531566c3d45e1ee4e0e08ff5a26a6ff7681f641fc81d3e830b4c3024496af505"
+    },
+    "jvm-abrupt-exit/root.json": {
+      "size": 39,
+      "sha256": "531566c3d45e1ee4e0e08ff5a26a6ff7681f641fc81d3e830b4c3024496af505"
+    },
+    "jvm-abrupt-exit/sentinel.json": {
+      "size": 39,
+      "sha256": "4055647696beb4e225efbc946c100190c00e4c4608f100a7867fcbb39f10318a"
+    },
+    "jvm-abrupt-exit/stderr.txt": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "jvm-abrupt-exit/stdout.bin": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "normal-close/child.json": {
+      "size": 39,
+      "sha256": "ac8f9038a6db28662d493ac6aa99fa7bb8b5408f5c3e5854266633ff5e8edf61"
+    },
+    "normal-close/close-lease": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "normal-close/grandchild.json": {
+      "size": 39,
+      "sha256": "5b21296ea332b3bd77f2cffc795569335f9991a2f81b391cad1b9ef8d4934a06"
+    },
+    "normal-close/jvm-ready.json": {
+      "size": 36,
+      "sha256": "461cb456999ca12fde9bae08e3c59993d96ccca9ca1a488ccd3c3299b58d9460"
+    },
+    "normal-close/ready.json": {
+      "size": 39,
+      "sha256": "545f532e3ebf3470e70410c88a21009ac362dc408e4cf7158ac70085d5575345"
+    },
+    "normal-close/root.json": {
+      "size": 39,
+      "sha256": "545f532e3ebf3470e70410c88a21009ac362dc408e4cf7158ac70085d5575345"
+    },
+    "normal-close/sentinel.json": {
+      "size": 39,
+      "sha256": "7c009296c484581a5af832faf16e29baf00065d105ba1949e497aac29a134056"
+    },
+    "normal-close/stderr.txt": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "normal-close/stdout.bin": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "receipt.json": {
+      "size": 3394,
+      "sha256": "f4495b533c1496cb9bde0b6f731ef756c93663deb8d2740c859529df461b0e94"
+    },
+    "stdout-undrained/close-lease": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout-undrained/jvm-ready.json": {
+      "size": 36,
+      "sha256": "043254a5903b25c81776c89c87a180c6a51e3ae770b41fb89a679725a512379b"
+    },
+    "stdout-undrained/root.json": {
+      "size": 39,
+      "sha256": "48268db6f2f4a5feada9a033fd001e09b8ad7c25a206de4b317f5519d98f5b4e"
+    },
+    "stdout-undrained/sentinel.json": {
+      "size": 39,
+      "sha256": "d699e708fc1fcb0546b709a2a2e2003297fd6c1d7fa46d134a1f9c1de761455f"
+    },
+    "stdout-undrained/stderr.txt": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout-undrained/stdout.bin": {
+      "size": 65536,
+      "sha256": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31"
+    },
+    "worker-handshake-controls.stderr": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "worker-handshake-controls.stdout": {
+      "size": 31,
+      "sha256": "d57fc72a7d42ab1b6633ac223e0c9388b62050ef9a1181e4eeff099a2e6d2257"
+    }
+  }
+}
