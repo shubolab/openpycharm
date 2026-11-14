@@ -1,0 +1,149 @@
+{
+  "schema": 1,
+  "date": "2026-11-14",
+  "run": {
+    "url": "https://github.com/shubolab/openpycharm/actions/runs/43608150941",
+    "event": "workflow_dispatch",
+    "status": "completed",
+    "conclusion": "success",
+    "headSha": "63921a4a931e19996b05ea4de4df12d27ff021bf",
+    "createdAt": "2026-11-14T15:04:10Z",
+    "updatedAt": "2026-11-14T15:18:35Z"
+  },
+  "inputs": {
+    "version": "0.1.0-dev.4",
+    "frontend": true
+  },
+  "observed": {
+    "jobs": [
+      {
+        "id": 132487309183,
+        "name": "macos-arm64",
+        "conclusion": "success",
+        "startedAt": "2026-11-14T15:04:50Z",
+        "completedAt": "2026-11-14T15:18:35Z",
+        "successfulGates": [
+          "Check Python, native architecture and disk reserve",
+          "Install pinned build dependencies and check source replay tools",
+          "Prepare a test-owned Python for real Notebook kernel controls",
+          "Run repository controls",
+          "Check the Python example",
+          "Authenticate the open-source platform",
+          "Verify the SDK's bundled Java compiler",
+          "Provision the pinned HTTP compiler into the owned cache",
+          "Compile and check HTTP protocol, lexer and archive against the native SDK",
+          "Compile and check native framework commands, templates and request isolation",
+          "Provision pinned JDBC drivers and matching LGPL source",
+          "Compile native Notebook and check model, merge and asynchronous persistence",
+          "Check actual native JVM Notebook sessions with the selected owned kernel",
+          "Compile native Database and check owned disposable SQLite integration",
+          "Build and authenticate the optional bundled Frontend candidate",
+          "Check actual JVM frontend settings, workers and full bundled runtime without launching Node",
+          "Assemble the standalone product",
+          "Check native product startup with an isolated profile",
+          "Check actual cold Markdown preview rendering on macOS",
+          "Check native Notebook edit, undo, save, merge and reopen",
+          "Check actual bundled HTTP registration with an isolated native API probe",
+          "Check packaged framework generation with real isolated venvs and dependency opt-in",
+          "Build and check the macOS DMG"
+        ]
+      },
+      {
+        "id": 132487309349,
+        "name": "windows-x64",
+        "conclusion": "success",
+        "startedAt": "2026-11-14T15:04:49Z",
+        "completedAt": "2026-11-14T15:17:26Z",
+        "successfulGates": [
+          "Add Git's GNU patch on Windows",
+          "Check Python, native architecture and disk reserve",
+          "Install pinned build dependencies and check source replay tools",
+          "Prepare a test-owned Python for real Notebook kernel controls",
+          "Run repository controls",
+          "Check the Python example",
+          "Authenticate the open-source platform",
+          "Verify the SDK's bundled Java compiler",
+          "Provision the pinned HTTP compiler into the owned cache",
+          "Compile and check HTTP protocol, lexer and archive against the native SDK",
+          "Compile and check native framework commands, templates and request isolation",
+          "Provision pinned JDBC drivers and matching LGPL source",
+          "Compile native Notebook and check model, merge and asynchronous persistence",
+          "Check actual native JVM Notebook sessions with the selected owned kernel",
+          "Compile native Database and check owned disposable SQLite integration",
+          "Build and authenticate the optional bundled Frontend candidate",
+          "Check actual JVM frontend settings, workers and full bundled runtime without launching Node",
+          "Assemble the standalone product",
+          "Check native product startup with an isolated profile",
+          "Check native Notebook edit, undo, save, merge and reopen",
+          "Check actual bundled HTTP registration with an isolated native API probe",
+          "Check packaged framework generation with real isolated venvs and dependency opt-in",
+          "Build and silently install/uninstall the Windows EXE"
+        ]
+      }
+    ],
+    "repositoryControls": {
+      "macos-arm64": {
+        "run": 177,
+        "passed": 175,
+        "skipped": 2
+      },
+      "windows-x64": {
+        "run": 177,
+        "passed": 171,
+        "skipped": 6
+      },
+      "initialSdkSkipsLaterExecuted": {
+        "countPerPlatform": 2,
+        "additionalFrontendSdkTests": 4,
+        "allAdditionalTestsPassed": true
+      },
+      "windowsRemainingPlatformSkips": [
+        "POSIX Node executable mode validation",
+        "POSIX SDK executable mode validation",
+        "POSIX SIGTERM kernel shutdown (Windows uses stdin EOF)",
+        "POSIX read-only native Python helper permission behavior"
+      ]
+    },
+    "artifacts": [
+      {
+        "id": 14119433953,
+        "name": "OpenPyCharm-windows-x64-63921a4a931e19996b05ea4de4df12d27ff021bf",
+        "size": 647582321,
+        "artifactZipDigest": "sha256:6c5e73822667a892bd9823456721aed55ad670d5b97ca2ef6a93973ce08f56cd",
+        "expiredAtObservation": false
+      },
+      {
+        "id": 14119163167,
+        "name": "OpenPyCharm-macos-arm64-63921a4a931e19996b05ea4de4df12d27ff021bf",
+        "size": 693250632,
+        "artifactZipDigest": "sha256:840ad6505d0736df48ca04911922c7bfb74c1936af300984010f0f6dfef5691a",
+        "expiredAtObservation": false
+      }
+    ],
+    "installerHashesFromSuccessfulBuildLog": {
+      "OpenPyCharm-0.1.0-dev.4-macos-arm64.dmg": "5b07b72026108082a56da34cad2be600f56b04d99850c8a7e25176cf49eaaa76",
+      "OpenPyCharm-0.1.0-dev.4-windows-x64-setup.exe": "fa1dcf5e36e1a1f5e41e3859c6ee158101f148b75f4e4126dcc90d54621e8aa2"
+    },
+    "compactLogReceipt": {
+      "logFile": ".tools/frontend-ci-43608150941.log",
+      "size": 466636,
+      "sha256": "38d37bf440b207ca46ccd084e9a609d8381b53e41477c45acefb62bf8dc7de90"
+    },
+    "extraDefaultRunCancelled": {
+      "runId": 43608148995,
+      "event": "push",
+      "sameSourceCommit": true,
+      "conclusion": "cancelled",
+      "reason": "Only the manual Frontend dev.4 run was needed; root explicitly authorized cancelling this duplicate default dev.3 run."
+    }
+  },
+  "inferred": [],
+  "unknown": [
+    "CI frontend core/payload controls intentionally did not start Node; actual bundled frontend LSP UI is independent desktop evidence.",
+    "Windows physical keyboard/mouse, full Python Run/Test/Debug desktop flow and unexpected-parent-crash process ownership remain separate acceptance.",
+    "A successful installer workflow does not publish a GitHub Release, update the installed-version demo GIF or establish full PyCharm parity.",
+    "Installer hashes are observed in the authenticated workflow log; this subtask did not download and independently hash the installer payloads."
+  ],
+  "localIdeStarted": false,
+  "referenceInstallationModified": false
+}
