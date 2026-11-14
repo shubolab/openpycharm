@@ -2,15 +2,15 @@
 
 The previous CLI launch opens an existing fixture project. In pinned platform
 `456919a9624bae72ac12efafc35d2b916cb0c5c5`, `ProjectManagerImpl` checks project
-trust before project initialization and post-startup activities (lines 622–643).
+trust before project initialization and post-startup activities (lines 666–688).
 A post-startup probe therefore cannot resolve the initial modal dialog.
 Passing `asNewProject()` to `openProject` alone still reaches that earlier check.
 
 The normal `newProject(Path, OpenProjectTask)` API is different. Its implementation
 grants trust to the new path and created project model before returning
-(`ProjectManagerImpl`, lines 843–869). The public blocking wrappers are intended
+(`ProjectManagerImpl`, lines 907–933). The public blocking wrappers are intended
 for tests and cases such as the New Project wizard (`ProjectManagerEx`, lines
-60–69). Source URLs, Git blob IDs and SHA-256 receipts are retained in the
+66–75). Source URLs, Git blob IDs and SHA-256 receipts are retained in the
 [source and compilation record](notebook-owned-project-bootstrap-20261114.json).
 
 The test launcher now starts without a CLI project argument. Its application

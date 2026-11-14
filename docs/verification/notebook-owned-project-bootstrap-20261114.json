@@ -52,22 +52,22 @@
   "owningContract": [
     {
       "source": "ProjectManagerImpl.kt",
-      "lines": "622-643",
+      "lines": "666-688",
       "fact": "openProject performs trust confirmation before project initialization and post-startup activities; asNewProject on an open task does not move this check."
     },
     {
       "source": "ProjectManagerImpl.kt",
-      "lines": "843-869",
+      "lines": "907-933",
       "fact": "The normal newProject wrapper calls newProjectAsync, which grants trust to the new project path and project model as part of creation."
     },
     {
       "source": "ProjectManagerEx.kt",
-      "lines": "60-69",
+      "lines": "66-75",
       "fact": "Public blocking newProject/openProject wrappers support test/new-project wizard cases; no Java-created coroutine bridge is required."
     },
     {
       "source": "OpenProjectTask.kt",
-      "lines": "18-19,97-105",
+      "lines": "18-19,108-111",
       "fact": "withProject supplies an already-created project model for normal opening."
     },
     {

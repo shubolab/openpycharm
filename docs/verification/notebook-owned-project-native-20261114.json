@@ -125,5 +125,18 @@
     "NoPythoncodeexecuted;existingoutputisfixturedata",
     "macOSarm64actualgate;WindowsnativeCIpending",
     "NativeAPI/buttonactionsnotphysicalkeyboard"
-  ]
+  ],
+  "independentReview": {
+    "status": "accepted-bounded",
+    "path": ".tools/worktrees/native-owned-project/.tools/independent-owned-review/review.json",
+    "sha256": "0166ab9009c128cf50e1dc94ed4157bd96f927cedc5c8455c54ecfc0258daef9"
+  },
+  "integratedRepositoryControls": {
+    "tests": 125,
+    "passed": true,
+    "skips": 0,
+    "pythonKernel": "3.14.0",
+    "path": ".tools/ci/dev3-preflight/root-units-owned-native-314.log",
+    "sha256": "50d364e9ddd8a6198ad4dccff3cce6adb91f7b175a767916897fdce1c2e15678"
+  }
 }
