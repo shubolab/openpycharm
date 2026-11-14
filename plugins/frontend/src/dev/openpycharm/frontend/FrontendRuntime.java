@@ -1,6 +1,7 @@
 package dev.openpycharm.frontend;
 
 import com.google.gson.JsonObject;
+import com.intellij.execution.configurations.GeneralCommandLine;
 import com.google.gson.JsonParser;
 import java.io.IOException;
 import java.io.InputStream;
@@ -88,6 +89,12 @@ final class FrontendRuntime {
     if (!Files.isExecutable(node)) throw new IOException("Pinned Node is not executable");
     return new Verified(node, runtime.resolve(relative(string(entries, "typescriptLanguageServer"))),
         runtime.resolve(relative(string(entries, "typescriptServer"))), fixture, state);
+  }
+
+  static GeneralCommandLine command(Verified verified) {
+    return new GeneralCommandLine(verified.node().toString(), verified.server().toString(), "--stdio", "--log-level", "2")
+        .withParentEnvironmentType(GeneralCommandLine.ParentEnvironmentType.NONE)
+        .withEnvironment(environment(verified)).withWorkDirectory(verified.fixture().toString()).withCharset(StandardCharsets.UTF_8);
   }
 
   static Map<String, String> environment(Verified runtime) {

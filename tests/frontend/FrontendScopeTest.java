@@ -3,6 +3,12 @@ package dev.openpycharm.frontend;
 public final class FrontendScopeTest {
   private static int checks;
   public static void main(String[] args) {
+    String activation = System.getProperty("openpycharm.frontend.m0.enabled");
+    try {
+      System.clearProperty("openpycharm.frontend.m0.enabled");
+      new FrontendLspProvider().fileOpened(null, null, descriptor -> { throw new AssertionError("Default-off provider registered a native descriptor"); });
+    } finally { if (activation != null) System.setProperty("openpycharm.frontend.m0.enabled", activation); }
+
     for (String base : new String[]{"/owned/测试 space", "C:/owned/测试 space"}) {
       String parent = base + "/.tools/frontend-m0-fixtures", cache = base + "/.tools/frontend-m0-tools";
       String nonce = "0123456789abcdef0123456789abcdef", root = parent + "/fixture-" + nonce;
@@ -22,7 +28,7 @@ public final class FrontendScopeTest {
     }
     require("javascript".equals(FrontendFixtureScope.languageId("a.js")), "JS language ID");
     require("typescriptreact".equals(FrontendFixtureScope.languageId("a.tsx")), "TSX language ID");
-    System.out.println("{\"status\":\"pass\",\"pureScopeChecks\":"+checks+",\"nativeIdeStarted\":false}");
+    System.out.println("{\"status\":\"pass\",\"pureScopeChecks\":"+checks+",\"actualProviderDefaultOffBeforeServices\":true,\"nativeIdeStarted\":false}");
   }
   private static void require(boolean condition, String message) { checks++; if (!condition) throw new AssertionError(message); }
 }

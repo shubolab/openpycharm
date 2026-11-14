@@ -2,12 +2,12 @@ package dev.openpycharm.frontend;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
+import com.intellij.execution.process.BaseProcessHandler;
 import com.intellij.ide.trustedProjects.TrustedProjects;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.platform.lsp.api.LspIntegrationProvider;
 import com.intellij.platform.lsp.api.ProjectWideLspClientDescriptor;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -43,10 +43,18 @@ public final class FrontendLspProvider implements LspIntegrationProvider {
     @Override public GeneralCommandLine createCommandLine() throws ExecutionException {
       try {
         FrontendRuntime.Verified verified = FrontendRuntime.authenticate(configuration);
-        return new GeneralCommandLine(verified.node().toString(), verified.server().toString(), "--stdio", "--log-level", "2")
-            .withParentEnvironmentType(GeneralCommandLine.ParentEnvironmentType.NONE)
-            .withEnvironment(FrontendRuntime.environment(verified)).withWorkDirectory(verified.fixture().toString()).withCharset(StandardCharsets.UTF_8);
+        return FrontendRuntime.command(verified);
       } catch (Exception error) { throw new ExecutionException("Frontend M0 worker authentication failed", error); }
+    }
+    @Override public BaseProcessHandler<?> startServerProcess() throws ExecutionException {
+      GeneralCommandLine command = createCommandLine(); // Worker-only full authentication remains mandatory.
+      if (getProject().isDisposed() || !TrustedProjects.isProjectTrusted(getProject()))
+        throw new ExecutionException("Trust this fixture project before starting frontend analysis");
+      FrontendNativeProcess handler = new FrontendNativeProcess(command);
+      try {
+        handler.register(getProject());
+        return handler;
+      } catch (RuntimeException closingProject) { handler.dispose(); throw new ExecutionException("Frontend project closed during startup", closingProject); }
     }
     @Override public InitializeParams createInitializeParams() {
       InitializeParams params = super.createInitializeParams();
@@ -57,13 +65,17 @@ public final class FrontendLspProvider implements LspIntegrationProvider {
     @Override public Object createInitializationOptions() {
       // Prepare metadata without I/O or assumptions about native initialization callback order.
       // The only process entry point remains authenticated worker createCommandLine above.
-      Path toolRoot = Path.of(configuration.receipt()).getParent();
-      return Map.of("hostInfo", "OpenPyCharm native frontend M0", "disableAutomaticTypingAcquisition", true,
-          "tsserver", Map.of("path", toolRoot.resolve("typescript/lib/tsserver.js").toString(),
-                            "logDirectory", Path.of(configuration.fixture()).resolve(".m0-runtime/log").toString()));
+      return initializationOptions(configuration);
     }
     @Override public Object getWorkspaceConfiguration(ConfigurationItem item) {
       return "formattingOptions".equals(item.getSection()) ? Map.of("tabSize", 2, "insertSpaces", true) : Map.of();
     }
   }
+  static Object initializationOptions(FrontendFixtureScope.Configuration configuration) {
+    Path toolRoot = Path.of(configuration.receipt()).getParent();
+    return Map.of("hostInfo", "OpenPyCharm native frontend M0", "disableAutomaticTypingAcquisition", true,
+        "tsserver", Map.of("path", toolRoot.resolve("typescript/lib/tsserver.js").toString(),
+                          "logDirectory", Path.of(configuration.fixture()).resolve(".m0-runtime/log").toString()));
+  }
+
 }

@@ -1,4 +1,4 @@
-# Native frontend M0 — isolated, default off
+# Native frontend candidate — isolated, default off
 
 This is an independent native TypeScript/JavaScript LSP provider for the pinned
 open-source PC-261.26222.68 SDK. It is **not included in production packaging**,
@@ -41,6 +41,40 @@ published runtime has a pinned per-file manifest, so editing both a payload and
 its cache receipt cannot authorize new bytes. Only this checkout's own `.tools`
 may receive caches or build outputs; source SDK/reference/user files are never
 modified.
+
+## Native lifecycle candidate
+
+The canonical provider now overrides the public `startServerProcess` hook with
+an actual SDK `OSProcessHandler`, preserving CRLF framing. Its stdin has one
+bounded FIFO owner and a two-second write deadline. Request-thread interruption
+does not truncate an accepted shared document notification. Writes/authentication/
+process starts reject the Swing EDT; dispose only schedules independent cleanup.
+Normal project disposal registers the exact handler, and completed handlers are
+removed from that disposable tree.
+
+Cleanup does not wait for the LSP writer lock. It signals only the spawned main
+process and observed descendants whose PID and start time still match; missing
+main identity fails closed. Reused/unverifiable child IDs are not signalled, and
+incomplete identities/over-limit trees cannot report successful cleanup. The
+native hook does not install a dedicated POSIX session or Windows Job: discovery
+of descendants that reparent during an unexpected parent crash remains unverified.
+Do not transfer the protocol CLI's stronger owned-session/job result to this hook.
+
+Explicit headless native-process control (starts owned Node/TLS, never an IDE):
+
+```sh
+python3 scripts/build_frontend_plugin.py --sdk /absolute/authenticated/PC-SDK --test \
+  --worker-fixture /absolute/generated/fixture --process-fixture /absolute/generated/fixture
+python3 scripts/frontend_native_api_audit.py --sdk /absolute/authenticated/PC-SDK \
+  --build-report .tools/your-build-report.json
+```
+
+The builder's ordinary `--test` remains process-free. `--process-fixture` is the
+explicit process test: it authenticates the complete existing cache, checks real
+TS/JS unsaved completion and cancellation followed by a shared document change,
+then on POSIX stops only its owned Node to force a real full-pipe timeout. An
+external test JVM session/job watchdog owns all test descendants on failure.
+These controls are not native `LspClientManager`, editor/PSI or UI acceptance.
 
 ## Deferred native gate
 
@@ -85,7 +119,7 @@ the actual IntelliJ archive reader. Pure Java tests cover default-off/non-fixtur
 boundaries; a worker helper authenticates the real cache and rejects changed
 activation receipts without starting Node or an IDE.
 
-Still open: native PC module/EP/service activation, real native stdio connection,
+Still open: native PC module/EP/service activation and the native client-manager stdio connection,
 completion/diagnostic/navigation UI, cancellation/project disposal in the native
 client, and actual Windows execution. HTML/CSS, templates, DAP/browser debugging,
 production packaging and full PyCharm parity are outside this M0.
@@ -93,3 +127,9 @@ production packaging and full PyCharm parity are outside this M0.
 中文：本模块默认关闭，仅允许显式生成的自有 fixture，保留正常项目可信条件。
 编译与独立 Node/TLS 协议通过不等于原生 UI、Windows 或安装包验收；本轮不启动 IDE，
 不接入生产包、不发布新版本、不修改现有发布演示。
+
+中文补充：原生候选保留同一公开 LSP EP 与正常 trust，仅显式 owned fixture 生效。
+新增原生 SDK 进程适配器和有界输入队列，解码/鉴权/进程与等待不进入 EDT；
+单请求中断不截断共享文档通知，释放独立于堵塞的写入。真实 headless SDK 控件链路通过
+不等于 IDE 模块/服务激活、编辑界面、Windows 或发布验收；意外父进程崩溃后的重归属
+后代发现仍未验证，不能把原协议工具的 session/job 结论移植为 native hook 结论。

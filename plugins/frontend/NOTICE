@@ -16,3 +16,9 @@ tools.lock.json. No npm lifecycle/build/install scripts are executed.
 Native compilation and standalone stdio protocol checks do not establish
 native PC module/service activation, editor/UI behavior, Windows execution,
 installed-product acceptance, or full PyCharm frontend parity.
+
+Native lifecycle candidate uses the existing public PC261 LSP/process APIs.
+The process reader preserves CRLF framing as required by the Apache-2.0 public
+LspClientDescriptor contract at the pinned open-source commit:
+https://github.com/JetBrains/intellij-community/blob/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/lsp/src/api/LspClientDescriptor.kt
+No proprietary JavaScript/TypeScript PSI or Ultimate implementation is included.

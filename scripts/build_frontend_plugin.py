@@ -22,6 +22,7 @@ from bootstrap import PIN_PATH, check_space, sha256
 from build_framework_plugin import sdk_layout, execution_layout, run_java
 from platform_layout import cache_lock, java_compiler_invocation
 from provision_frontend_tools import PIN, ROOT, DEFAULT_CACHE, load_pin, owned
+from runtime_smoke import WindowsJob, WINDOWS_CREATE_SUSPENDED, WINDOWS_CREATE_NEW_PROCESS_GROUP, stop_owned
 
 SOURCE = ROOT / "plugins/frontend"
 ID = "dev.openpycharm.frontend.m0"
@@ -143,7 +144,52 @@ def build(sdk: Path, version: str = VERSION, host_sdk: Path | None = None) -> tu
     return jar.parent.parent, saved
 
 
-def checks(sdk: Path, plugin: Path, host_sdk: Path | None = None, worker_fixture: Path | None = None) -> dict:
+def native_process_check(runtime, arguments: list[str], directory: Path) -> dict:
+    """Own the helper JVM and all test descendants; preserve cleanup even if it hangs."""
+    command, cwd = [str(runtime.java), *arguments], None
+    windows = os.name == "nt"
+    if windows:
+        from native_probe import _write_java_arguments
+        argument_file = directory / "frontend-native.args"
+        _write_java_arguments(argument_file, arguments)
+        command, cwd = [str(runtime.java), "@" + argument_file.name], directory
+    process = job = None; resumed = False; cleanup = None; failure = None; out = err = ""
+    try:
+        job = WindowsJob() if windows else None
+        options = {"creationflags": WINDOWS_CREATE_SUSPENDED | WINDOWS_CREATE_NEW_PROCESS_GROUP} if windows else {"start_new_session": True}
+        process = subprocess.Popen(command, cwd=cwd, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                   text=True, encoding="utf-8", errors="replace", **options)
+        if job is not None:
+            job.assign_and_resume(process); resumed = True
+        out, err = process.communicate(timeout=60)
+        if process.returncode: failure = "Native SDK process control returned failure"
+    except subprocess.TimeoutExpired as error:
+        failure = "Native SDK process control exceeded its 60-second deadline"
+        out = error.stdout.decode("utf-8", "replace") if isinstance(error.stdout, bytes) else (error.stdout or "")
+        err = error.stderr.decode("utf-8", "replace") if isinstance(error.stderr, bytes) else (error.stderr or "")
+    except Exception as error:
+        failure = type(error).__name__ + ": " + str(error)
+    finally:
+        try:
+            if process is not None:
+                if job is not None and not resumed and process.poll() is None: process.kill()
+                cleanup = stop_owned(process, job)
+            elif job is not None: job.stop()
+        except Exception as error:
+            cleanup = {"status": "fail", "ownedPid": None if process is None else process.pid, "error": str(error)}
+            failure = "Native SDK control helper cleanup failed"
+    if failure and process is not None:
+        try: out, err = process.communicate(timeout=3)
+        except Exception: pass
+    if failure:
+        evidence = {"failure": failure, "stdout": out, "stderr": err, "externalWatchdogCleanup": cleanup}
+        (directory.parent / "native-process-last-failure.json").write_text(json.dumps(evidence, indent=2) + "\n", encoding="utf-8")
+        raise ValueError(failure + "\n" + out + err)
+    result = json.loads(out); result["externalWatchdogCleanup"] = cleanup; result["stderr"] = err
+    return result
+
+
+def checks(sdk: Path, plugin: Path, host_sdk: Path | None = None, worker_fixture: Path | None = None, process_fixture: Path | None = None) -> dict:
     layout = sdk_layout(sdk); runtime = execution_layout(layout, host_sdk)
     directory = owned(ROOT / ".tools/frontend-checks"); directory.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="checks-", dir=directory) as name:
@@ -151,6 +197,17 @@ def checks(sdk: Path, plugin: Path, host_sdk: Path | None = None, worker_fixture
         compile_java(layout, runtime, sorted((ROOT / "tests/frontend").glob("*.java")), classes, temporary / "javac.args", [jar])
         cp = os.pathsep.join(map(str, [classes, jar, *sorted(layout.lib.glob("*.jar"))]))
         report = json.loads(run_java(runtime, ["-Djava.awt.headless=true", "-cp", cp, "dev.openpycharm.frontend.FrontendScopeTest"], temporary).stdout)
+        report["boundedOutput"] = json.loads(run_java(runtime, ["-Djava.awt.headless=true", "-cp", cp,
+            "dev.openpycharm.frontend.FrontendBoundedOutputTest"], temporary).stdout)
+        report["lifetimeIdentity"] = json.loads(run_java(runtime, ["-Djava.awt.headless=true", "-cp", cp,
+            "dev.openpycharm.frontend.FrontendLifetimeTest"], temporary).stdout)
+        if process_fixture is not None:
+            process_fixture = owned(process_fixture)
+            marker = json.loads((process_fixture / ".openpycharm-frontend-m0.json").read_text(encoding="utf-8"))
+            args = ["-Djava.awt.headless=true", "-Didea.home.path=" + str(runtime.contents), "-cp", cp,
+                    "dev.openpycharm.frontend.FrontendNativeProcessCheck", str(process_fixture), marker["nonce"],
+                    marker["toolsReceipt"], marker["toolsReceiptSha256"]]
+            report["nativeProcessControl"] = native_process_check(runtime, args, temporary)
         if worker_fixture is not None:
             marker = json.loads((worker_fixture / ".openpycharm-frontend-m0.json").read_text())
             args = ["-Djava.awt.headless=true", "-cp", cp, "dev.openpycharm.frontend.FrontendWorkerCheck", str(worker_fixture),
@@ -166,9 +223,10 @@ def main():
     parser.add_argument("--sdk", type=Path, required=True); parser.add_argument("--host-sdk", type=Path)
     parser.add_argument("--version", default=VERSION); parser.add_argument("--test", action="store_true")
     parser.add_argument("--worker-fixture", type=Path)
+    parser.add_argument("--process-fixture", type=Path, help="Explicitly run pinned owned Node/TLS through public SDK process handler, not an IDE")
     args = parser.parse_args(); plugin, report = build(args.sdk, args.version, args.host_sdk)
     result = {"plugin": str(plugin), "build": report}
-    if args.test: result["checks"] = checks(args.sdk, plugin, args.host_sdk, args.worker_fixture)
+    if args.test: result["checks"] = checks(args.sdk, plugin, args.host_sdk, args.worker_fixture, args.process_fixture)
     print(json.dumps(result, indent=2))
 
 
