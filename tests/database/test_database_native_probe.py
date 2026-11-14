@@ -131,7 +131,7 @@ class NativeCompletionEvidenceControls(unittest.TestCase):
             for name in ("prepared.json", "result.json", "probe.vmoptions"):
                 self.assertIn("中文", (workspace / name).read_bytes().decode("utf-8"))
             self.assertIn("# 中文配置", (workspace / "probe.vmoptions").read_bytes().decode("utf-8"))
-            self.assertEqual((workspace / "external-timeout-threads.txt").read_bytes().decode("utf-8"), "线程 中文\n诊断\n")
+            self.assertEqual((workspace / "external-timeout-threads.txt").read_bytes().decode("utf-8").splitlines(), ["线程 中文", "诊断"])
 
 
 if __name__ == "__main__":
