@@ -4,18 +4,18 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 
-/** One active worker, one latest input/result per cell, and an aggregate decoded-pixel budget. */
+/** One worker/latest input per cell; pre-decode pixels remain charged through the final viewer reference. */
 public final class NotebookPreviewScheduler implements AutoCloseable {
   private static final int MAX_CELLS = NotebookModel.MAX_CELLS;
   private final Executor worker, delivery;
+  private final NotebookRichOutput.PixelLedger ledger = new NotebookRichOutput.PixelLedger(NotebookRichOutput.NOTEBOOK_PIXEL_BUDGET);
   private final IdentityHashMap<Object, Cell> cells = new IdentityHashMap<>();
   private final ArrayDeque<Cell> pending = new ArrayDeque<>(), deliveries = new ArrayDeque<>();
   private boolean working, deliveryQueued, closed;
-  private long pixels;
   private static final class Cell {
     final Object key;
     long generation, preparedGeneration;
-    boolean queued, deliveryQueued;
+    boolean queued, deliveryQueued, clearViewer;
     NotebookRichOutput.Input input;
     NotebookRichOutput.Cancellation cancellation;
     NotebookRichOutput.Plan plan;
@@ -23,7 +23,7 @@ public final class NotebookPreviewScheduler implements AutoCloseable {
     Cell(Object key) { this.key = key; }
   }
   public NotebookPreviewScheduler(Executor worker, Executor delivery) { this.worker = worker; this.delivery = delivery; }
-  /** The consumer borrows a Plan for this callback; a viewer must retain its own reference. */
+  /** The consumer borrows a Plan and replaces its previous viewer reference even for an empty handoff Plan. */
   public synchronized void request(Object key, NotebookRichOutput.Input input, Consumer<NotebookRichOutput.Plan> consumer) {
     if (closed) return;
     Cell cell = cells.get(key);
@@ -34,26 +34,41 @@ public final class NotebookPreviewScheduler implements AutoCloseable {
     if (cell.cancellation != null) cell.cancellation.cancel();
     cell.cancellation = new NotebookRichOutput.Cancellation();
     cell.input = input; cell.consumer = consumer; cell.generation++;
-    if (!cell.queued) { cell.queued = true; pending.add(cell); }
-    if (!working) {
-      working = true;
-      try { worker.execute(this::drain); }
-      catch (RuntimeException error) { working = false; throw error; }
+    if (cell.plan != null && cell.plan.pixels() != 0) {
+      // Dropping the cache reference does not borrow pixels still held by the
+      // viewer. First deliver an empty replacement; only then prepare new data.
+      cell.plan.close(); cell.plan = null; cell.clearViewer = true;
     }
+    if (cell.clearViewer) {
+      pending.remove(cell); cell.queued = false; queueDelivery(cell);
+    } else queuePreparation(cell);
+    startWorker(true);
+  }
+  private void queuePreparation(Cell cell) {
+    if (!cell.queued) { cell.queued = true; pending.add(cell); }
+  }
+  private void startWorker(boolean reportFailure) {
+    if (working || pending.isEmpty() || closed) return;
+    working = true;
+    try { worker.execute(this::drain); }
+    catch (RuntimeException error) { working = false; if (reportFailure) throw error; }
+  }
+  private void queueDelivery(Cell cell) {
+    if (!cell.deliveryQueued) { cell.deliveryQueued = true; deliveries.add(cell); }
+    if (!deliveryQueued) { deliveryQueued = true; scheduleDelivery(); }
   }
   private void drain() {
     while (true) {
-      Cell cell; NotebookRichOutput.Input input; NotebookRichOutput.Cancellation cancellation; long generation, allowance;
+      Cell cell; NotebookRichOutput.Input input; NotebookRichOutput.Cancellation cancellation; long generation;
       synchronized (this) {
         cell = pending.poll();
         if (cell == null) { working = false; return; }
         cell.queued = false;
-        if (closed || cells.get(cell.key) != cell) continue;
+        if (closed || cells.get(cell.key) != cell || cell.clearViewer) continue;
         input = cell.input; cancellation = cell.cancellation; generation = cell.generation;
-        allowance = NotebookRichOutput.NOTEBOOK_PIXEL_BUDGET - pixels + (cell.plan == null ? 0 : cell.plan.pixels());
       }
       NotebookRichOutput.Plan prepared;
-      try { prepared = NotebookRichOutput.prepare(input, allowance, cancellation); }
+      try { prepared = NotebookRichOutput.prepare(input, NotebookRichOutput.NOTEBOOK_PIXEL_BUDGET, cancellation, ledger); }
       catch (CancellationException ignored) { continue; }
       catch (RuntimeException error) {
         try {
@@ -63,26 +78,27 @@ public final class NotebookPreviewScheduler implements AutoCloseable {
       }
       synchronized (this) {
         if (closed || cells.get(cell.key) != cell || cell.generation != generation) { prepared.close(); continue; }
-        if (cell.plan != null) { pixels -= cell.plan.pixels(); cell.plan.close(); }
-        cell.plan = prepared; cell.preparedGeneration = generation; pixels += prepared.pixels();
-        if (pixels > NotebookRichOutput.NOTEBOOK_PIXEL_BUDGET) throw new IllegalStateException("Decoded preview pixel budget exceeded");
-        if (!cell.deliveryQueued) { cell.deliveryQueued = true; deliveries.add(cell); }
-        if (!deliveryQueued) { deliveryQueued = true; scheduleDelivery(); }
+        if (cell.plan != null) cell.plan.close();
+        cell.plan = prepared; cell.preparedGeneration = generation; queueDelivery(cell);
       }
     }
   }
   private void scheduleDelivery() {
     try { delivery.execute(this::deliver); }
-    catch (RuntimeException ignored) { synchronized (this) { deliveryQueued = false; } }
+    catch (RuntimeException ignored) { deliveryQueued = false; }
   }
   private void deliver() {
-    Cell cell; NotebookRichOutput.Plan plan = null; Consumer<NotebookRichOutput.Plan> consumer = null;
+    Cell cell; boolean clearing = false;
+    NotebookRichOutput.Plan plan = null; Consumer<NotebookRichOutput.Plan> consumer = null;
     synchronized (this) {
       cell = deliveries.poll();
       if (cell != null) {
         cell.deliveryQueued = false;
-        if (!closed && cells.get(cell.key) == cell && cell.preparedGeneration == cell.generation && cell.plan != null) {
-          plan = cell.plan.retain(); consumer = cell.consumer;
+        if (!closed && cells.get(cell.key) == cell) {
+          clearing = cell.clearViewer;
+          if (clearing) plan = NotebookRichOutput.Plan.empty();
+          else if (cell.preparedGeneration == cell.generation && cell.plan != null) plan = cell.plan.retain();
+          consumer = cell.consumer;
         }
       }
     }
@@ -90,6 +106,9 @@ public final class NotebookPreviewScheduler implements AutoCloseable {
     finally {
       if (plan != null) plan.close();
       synchronized (this) {
+        if (clearing && !closed && cells.get(cell.key) == cell) {
+          cell.clearViewer = false; queuePreparation(cell); startWorker(false);
+        }
         deliveryQueued = false;
         if (!closed && !deliveries.isEmpty()) { deliveryQueued = true; scheduleDelivery(); }
       }
@@ -100,10 +119,12 @@ public final class NotebookPreviewScheduler implements AutoCloseable {
     if (cell == null) return;
     if (cell.cancellation != null) cell.cancellation.cancel();
     cell.input = null; cell.consumer = null;
-    if (cell.plan != null) { pixels -= cell.plan.pixels(); cell.plan.close(); cell.plan = null; }
+    if (cell.plan != null) { cell.plan.close(); cell.plan = null; }
     pending.remove(cell); deliveries.remove(cell);
   }
-  public synchronized long reservedPixels() { return pixels; }
+  /** Includes active decoder reservations, cached images and retained viewer images exactly once. */
+  public long reservedPixels() { return ledger.reservedPixels(); }
+  public long peakReservedPixels() { return ledger.peakPixels(); }
   @Override public synchronized void close() {
     if (closed) return;
     closed = true;

@@ -89,6 +89,30 @@ public final class NotebookRichOutputTest {
     JsonObject stream = new JsonObject(); stream.addProperty("output_type", "stream"); stream.addProperty("text", "prefix-" + "x".repeat(300000));
     try (var plan = prepare(stream)) { require(text(plan).startsWith("prefix-") && text(plan).contains("Preview limited"), "Bounded text lost its prefix/truncation notice"); }
   }
+  private static void finalReferenceReservations() throws Exception {
+    var ledger = new NotebookRichOutput.PixelLedger(4_000_000);
+    JsonObject png = output("image/png", encoded("PNG", 1000, 1000));
+    List<NotebookRichOutput.Plan> plans = new ArrayList<>();
+    for (int i = 0; i < 4; i++) plans.add(NotebookRichOutput.prepare(new NotebookRichOutput.Input(List.of(png), null, true),
+        4_000_000, new NotebookRichOutput.Cancellation(), ledger));
+    var viewer = plans.getFirst().retain(); plans.removeFirst().close();
+    require(ledger.reservedPixels() == 4_000_000, "Cache close returned pixels still owned by its viewer");
+    try (var denied = NotebookRichOutput.prepare(new NotebookRichOutput.Input(List.of(png), null, true), 4_000_000,
+        new NotebookRichOutput.Cancellation(), ledger)) {
+      require(images(denied).isEmpty(), "Decode borrowed still-retained viewer pixels");
+    }
+    viewer.close(); require(ledger.reservedPixels() == 3_000_000, "Final viewer close did not release its pixels");
+    plans.forEach(NotebookRichOutput.Plan::close);
+    require(ledger.reservedPixels() == 0 && ledger.peakPixels() == 4_000_000, "Ledger peak/release did not include active decodes");
+    byte[] complete = Base64.getDecoder().decode(encoded("PNG", 400, 300));
+    JsonObject broken = output("image/png", Base64.getEncoder().encodeToString(Arrays.copyOf(complete, 33)));
+    var failedLedger = new NotebookRichOutput.PixelLedger(4_000_000);
+    try (var failed = NotebookRichOutput.prepare(new NotebookRichOutput.Input(List.of(broken), null, true), 4_000_000,
+        new NotebookRichOutput.Cancellation(), failedLedger)) {
+      require(images(failed).isEmpty(), "Truncated image decoded unexpectedly");
+    }
+    require(failedLedger.peakPixels() > 0 && failedLedger.reservedPixels() == 0, "Decode failure leaked or skipped its pre-read reservation");
+  }
   private static String oversizedPng() throws Exception {
     ByteArrayOutputStream bytes = new ByteArrayOutputStream(); DataOutputStream data = new DataOutputStream(bytes);
     data.writeLong(0x89504e470d0a1a0aL);
@@ -149,7 +173,7 @@ public final class NotebookRichOutputTest {
     result.add(component); if (component instanceof Container parent) for (Component child : parent.getComponents()) walk(child, result);
   }
   public static void main(String[] args) throws Exception {
-    imagesAndLimits(); staticMarkupAndSwing();
-    System.out.println("{\"status\":\"pass\",\"actualPngJpegDecode\":true,\"metadataAndMultiline\":true,\"pixelAndTrustBounds\":true,\"offEdtGuard\":true,\"staticHtmlTable\":true,\"markdownStylesAndGfmTable\":true,\"actualNativeSwingComponents\":true,\"externalFetches\":0,\"nativeIdeLaunched\":false}");
+    imagesAndLimits(); finalReferenceReservations(); staticMarkupAndSwing();
+    System.out.println("{\"status\":\"pass\",\"actualPngJpegDecode\":true,\"metadataAndMultiline\":true,\"pixelAndTrustBounds\":true,\"offEdtGuard\":true,\"staticHtmlTable\":true,\"markdownStylesAndGfmTable\":true,\"actualNativeSwingComponents\":true,\"externalFetches\":0,\"preDecodeFinalReferenceReservations\":true,\"nativeIdeLaunched\":false}");
   }
 }

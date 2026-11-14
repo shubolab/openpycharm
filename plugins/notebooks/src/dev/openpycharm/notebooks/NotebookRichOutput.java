@@ -34,12 +34,45 @@ public final class NotebookRichOutput {
     public void cancel() { cancelled.set(true); }
     public void check() { if (cancelled.get() || Thread.currentThread().isInterrupted()) throw new CancellationException(); }
   }
+  /** A pre-decode reservation survives cache eviction until the final Plan reference releases it. */
+  public static final class PixelLedger {
+    private final long capacity;
+    private long reserved, peak;
+    public PixelLedger(long capacity) { this.capacity = Math.max(0, Math.min(capacity, NOTEBOOK_PIXEL_BUDGET)); }
+    synchronized PixelReservation acquire(long requested) {
+      long amount = Math.min(requested, capacity - reserved);
+      if (amount <= 0) throw new IllegalArgumentException("notebook decoded-pixel budget reached");
+      reserved += amount; peak = Math.max(peak, reserved);
+      return new PixelReservation(this, amount);
+    }
+    synchronized void resize(PixelReservation reservation, long pixels) {
+      if (reservation.released || pixels < 0 || pixels > reservation.pixels) throw new IllegalStateException("Invalid image pixel reservation");
+      reserved -= reservation.pixels - pixels; reservation.pixels = pixels;
+    }
+    synchronized void release(PixelReservation reservation) {
+      if (!reservation.released) { reserved -= reservation.pixels; reservation.released = true; }
+    }
+    public synchronized long reservedPixels() { return reserved; }
+    public synchronized long peakPixels() { return peak; }
+  }
+  private static final class PixelReservation implements AutoCloseable {
+    final PixelLedger ledger;
+    long pixels;
+    boolean released;
+    PixelReservation(PixelLedger ledger, long pixels) { this.ledger = ledger; this.pixels = pixels; }
+    @Override public void close() { ledger.release(this); }
+  }
+  private record DecodedImage(Image image, PixelReservation reservation) { }
   /** Scheduler and Swing viewer hold separate references; stale results release their images. */
   public static final class Plan implements AutoCloseable {
-    private final List<Block> blocks;
+    private volatile List<Block> blocks;
     private final long pixels;
+    private final List<PixelReservation> reservations;
     private final AtomicInteger references = new AtomicInteger(1);
-    Plan(List<Block> blocks, long pixels) { this.blocks = List.copyOf(blocks); this.pixels = pixels; }
+    Plan(List<Block> blocks, long pixels, List<PixelReservation> reservations) {
+      this.blocks = List.copyOf(blocks); this.pixels = pixels; this.reservations = List.copyOf(reservations);
+    }
+    static Plan empty() { return new Plan(List.of(), 0, List.of()); }
     public List<Block> blocks() { return blocks; }
     public long pixels() { return pixels; }
     public Plan retain() {
@@ -51,7 +84,11 @@ public final class NotebookRichOutput {
     public boolean released() { return references.get() == 0; }
     @Override public void close() {
       int count = references.decrementAndGet();
-      if (count == 0) for (Block block : blocks) if (block instanceof Image image) image.image().flush();
+      if (count == 0) {
+        List<Block> released = blocks; blocks = List.of();
+        for (Block block : released) if (block instanceof Image image) image.image().flush();
+        reservations.forEach(PixelReservation::close);
+      }
       if (count < 0) throw new IllegalStateException("Preview released twice");
     }
   }
@@ -59,12 +96,17 @@ public final class NotebookRichOutput {
   static final class Builder {
     final List<Block> blocks = new ArrayList<>();
     final Cancellation cancellation;
+    final PixelLedger ledger;
+    final List<PixelReservation> reservations = new ArrayList<>();
     final long allowance;
     long pixels;
     int characters;
     boolean truncated;
     DefaultStyledDocument document = new DefaultStyledDocument();
-    Builder(long allowance, Cancellation cancellation) { this.allowance = Math.max(0, allowance); this.cancellation = cancellation; }
+    Builder(long allowance, Cancellation cancellation) { this(allowance, cancellation, new PixelLedger(allowance)); }
+    Builder(long allowance, Cancellation cancellation, PixelLedger ledger) {
+      this.allowance = Math.max(0, allowance); this.cancellation = cancellation; this.ledger = ledger;
+    }
     void text(String value) { text(value, 0, 13); }
     void text(String value, int flags, int size) {
       cancellation.check();
@@ -87,10 +129,11 @@ public final class NotebookRichOutput {
       document = new DefaultStyledDocument();
     }
     void table(Table table) { flush(); if (blocks.size() < MAX_BLOCKS - 1) blocks.add(table); else truncated = true; }
-    void image(Image image) {
-      flush();
-      if (blocks.size() < MAX_BLOCKS - 1) { blocks.add(image); pixels += (long)image.image().getWidth() * image.image().getHeight(); }
-      else { image.image().flush(); truncated = true; }
+    void image(DecodedImage decoded) {
+      Image image = decoded.image(); flush();
+      if (blocks.size() < MAX_BLOCKS - 1) {
+        blocks.add(image); reservations.add(decoded.reservation()); pixels += (long)image.image().getWidth() * image.image().getHeight();
+      } else { image.image().flush(); decoded.reservation().close(); truncated = true; }
     }
     Plan finish() {
       flush();
@@ -100,14 +143,20 @@ public final class NotebookRichOutput {
         catch (BadLocationException impossible) { throw new IllegalStateException(impossible); }
         blocks.add(new Text(notice));
       }
-      return new Plan(blocks, pixels);
+      return new Plan(blocks, pixels, reservations);
     }
-    void discard() { for (Block block : blocks) if (block instanceof Image image) image.image().flush(); }
+    void discard() {
+      for (Block block : blocks) if (block instanceof Image image) image.image().flush();
+      reservations.forEach(PixelReservation::close);
+    }
   }
 
   public static Plan prepare(Input input, long pixelAllowance, Cancellation cancellation) {
+    return prepare(input, pixelAllowance, cancellation, new PixelLedger(pixelAllowance));
+  }
+  static Plan prepare(Input input, long pixelAllowance, Cancellation cancellation, PixelLedger ledger) {
     if (SwingUtilities.isEventDispatchThread()) throw new IllegalStateException("MIME parsing/image decoding must run outside the EDT");
-    Builder out = new Builder(Math.min(pixelAllowance, NOTEBOOK_PIXEL_BUDGET), cancellation);
+    Builder out = new Builder(Math.min(pixelAllowance, NOTEBOOK_PIXEL_BUDGET), cancellation, ledger);
     try {
       if (input.markdown() != null) {
         if (input.projectTrusted()) NotebookStaticContent.markdown(input.markdown(), out);
@@ -141,7 +190,7 @@ public final class NotebookRichOutput {
     // The nbformat trusted flag is never permission to execute active content.
     for (String mime : List.of("image/png", "image/jpeg")) if (data.has(mime)) {
       try {
-        out.image(image(read(data.get(mime), MAX_MIME_CHARS), mime, output, out.allowance - out.pixels, out.cancellation));
+        out.image(image(read(data.get(mime), MAX_MIME_CHARS), mime, output, out.allowance - out.pixels, out.cancellation, out.ledger));
         return;
       } catch (IllegalArgumentException error) { out.text("[" + mime + " preview unavailable: " + error.getMessage() + "]\n"); }
     }
@@ -188,7 +237,7 @@ public final class NotebookRichOutput {
     return text.toString();
   }
 
-  private static Image image(String encoded, String mime, JsonObject output, long remaining, Cancellation cancellation) {
+  private static DecodedImage image(String encoded, String mime, JsonObject output, long remaining, Cancellation cancellation, PixelLedger ledger) {
     cancellation.check();
     if (remaining <= 0) throw new IllegalArgumentException("notebook decoded-pixel budget reached");
     StringBuilder clean = new StringBuilder(encoded.length());
@@ -206,13 +255,15 @@ public final class NotebookRichOutput {
     Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName(format);
     if (!readers.hasNext()) throw new IllegalArgumentException("native " + format + " decoder unavailable");
     ImageReader reader = readers.next();
+    PixelReservation reservation = null; BufferedImage decoded = null; boolean transferred = false;
     try (var stream = new MemoryCacheImageInputStream(new ByteArrayInputStream(bytes))) {
       reader.setInput(stream, true, true);
       int width = reader.getWidth(0), height = reader.getHeight(0);
       long pixels = (long)width * height;
       if (width <= 0 || height <= 0 || width > 8192 || height > 8192 || pixels > MAX_SOURCE_PIXELS)
         throw new IllegalArgumentException("source image dimensions exceed the 8-megapixel/8192-side limit");
-      long target = Math.min(MAX_IMAGE_PIXELS, remaining);
+      reservation = ledger.acquire(Math.min(MAX_IMAGE_PIXELS, remaining));
+      long target = reservation.pixels;
       int sampling = 1;
       while ((long)((width + sampling - 1) / sampling) * ((height + sampling - 1) / sampling) > target) sampling++;
       ImageReadParam parameters = reader.getDefaultReadParam(); parameters.setSourceSubsampling(sampling, sampling, 0, 0);
@@ -228,10 +279,11 @@ public final class NotebookRichOutput {
         public void thumbnailComplete(ImageReader source) { }
         public void readAborted(ImageReader source) { }
       });
-      BufferedImage decoded = reader.read(0, parameters);
+      decoded = reader.read(0, parameters);
       try {
         cancellation.check();
         if (decoded == null || (long)decoded.getWidth() * decoded.getHeight() > target) throw new IllegalArgumentException("decoded image exceeds its pixel allowance");
+        ledger.resize(reservation, (long)decoded.getWidth() * decoded.getHeight());
         int displayWidth = Math.min(1000, width), displayHeight = Math.max(1, (int)((long)height * displayWidth / width));
         JsonObject metadata = output.has("metadata") && output.get("metadata").isJsonObject() ? output.getAsJsonObject("metadata") : new JsonObject();
         if (metadata.has(mime) && metadata.get(mime).isJsonObject()) {
@@ -239,10 +291,14 @@ public final class NotebookRichOutput {
           if (requested > 0) { displayWidth = requested; displayHeight = Math.max(1, (int)((long)height * displayWidth / width)); }
         }
         if (displayHeight > 1000) { displayWidth = Math.max(1, (int)((long)displayWidth * 1000 / displayHeight)); displayHeight = 1000; }
-        return new Image(decoded, width, height, displayWidth, displayHeight, mime);
-      } catch (RuntimeException error) { if (decoded != null) decoded.flush(); throw error; }
+        DecodedImage result = new DecodedImage(new Image(decoded, width, height, displayWidth, displayHeight, mime), reservation);
+        transferred = true; return result;
+      } catch (RuntimeException error) { throw error; }
     } catch (IOException error) { throw new IllegalArgumentException("malformed " + format + " image"); }
-    finally { reader.dispose(); }
+    finally {
+      if (!transferred) { if (decoded != null) decoded.flush(); if (reservation != null) reservation.close(); }
+      reader.dispose();
+    }
   }
   private static int dimension(JsonElement value) {
     if (value == null || !value.isJsonPrimitive() || !value.getAsJsonPrimitive().isNumber()) return 0;

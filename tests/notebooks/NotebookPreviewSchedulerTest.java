@@ -35,15 +35,19 @@ public final class NotebookPreviewSchedulerTest {
     }
     while (!deliveries.isEmpty()) deliveries.removeFirst().run();
     require(shown.stream().mapToLong(NotebookRichOutput.Plan::pixels).sum() == 4_000_000, "Decoded image quota did not apply across cells");
-    scheduler.request(keys.getFirst(), new NotebookRichOutput.Input(List.of(image), null, true), keep); workers.removeFirst().run();
+    scheduler.request(keys.getFirst(), new NotebookRichOutput.Input(List.of(image), null, true), keep);
+    require(workers.isEmpty(), "Updated image decoded before its viewer handoff");
+    while (!deliveries.isEmpty()) deliveries.removeFirst().run();
+    workers.removeFirst().run();
     scheduler.remove(keys.getFirst()); while (!deliveries.isEmpty()) deliveries.removeFirst().run();
     int before = shown.size(); Object disposed = new Object();
     scheduler.request(disposed, new NotebookRichOutput.Input(List.of(image), null, true), keep); scheduler.remove(disposed);
     while (!workers.isEmpty()) workers.removeFirst().run(); while (!deliveries.isEmpty()) deliveries.removeFirst().run();
     require(shown.size() == before, "Disposed cell received a stale plan");
     scheduler.close(); scheduler.close();
-    require(scheduler.reservedPixels() == 0, "Disposed scheduler retained its decoded image reservation");
+    require(scheduler.reservedPixels() == 4_000_000, "Closing cache released pixels still owned by viewers");
     for (var plan : shown) plan.close();
+    require(scheduler.reservedPixels() == 0, "Final viewer references did not release their reservations");
     require(shown.stream().allMatch(NotebookRichOutput.Plan::released), "Plan resources survived scheduler/UI disposal");
 
     AtomicInteger attempts = new AtomicInteger();
@@ -73,6 +77,50 @@ public final class NotebookPreviewSchedulerTest {
     while (!deliveries.isEmpty()) deliveries.removeFirst().run();
     require(deliveryAttempts.get() == 2 && recovered.size() == 1 && recovered.getFirst().contains("after rejection"), "Rejected delivery did not recover with the newest result");
     rejectedDelivery.close();
-    System.out.println("{\"status\":\"pass\",\"latestInputAndDeliveryOnly\":true,\"aggregatePixelBudget\":true,\"staleDisposeRejected\":true,\"imageReferencesReleased\":true,\"workerRejectionRecovers\":true}");
+    delayedViewerBudget(image);
+    System.out.println("{\"status\":\"pass\",\"latestInputAndDeliveryOnly\":true,\"aggregatePixelBudget\":true,\"staleDisposeRejected\":true,\"imageReferencesReleased\":true,\"workerRejectionRecovers\":true,\"finalReferencePixelLedger\":true,\"delayedViewerUpdateBounded\":true}");
   }
+  private static void delayedViewerBudget(JsonObject image) throws Exception {
+    ArrayDeque<Runnable> workers = new ArrayDeque<>(), deliveries = new ArrayDeque<>();
+    NotebookPreviewScheduler scheduler = new NotebookPreviewScheduler(workers::add, deliveries::add);
+    IdentityHashMap<Object, NotebookRichOutput.Plan> viewers = new IdentityHashMap<>();
+    List<Object> keys = List.of(new Object(), new Object(), new Object(), new Object());
+    for (Object key : keys) {
+      scheduler.request(key, new NotebookRichOutput.Input(List.of(image), null, true), plan -> {
+        var previous = viewers.put(key, plan.retain()); if (previous != null) previous.close();
+      });
+      workers.removeFirst().run();
+    }
+    while (!deliveries.isEmpty()) deliveries.removeFirst().run();
+    require(livePixels(scheduler, viewers) == 4_000_000 && scheduler.reservedPixels() == 4_000_000, "Initial four viewers did not own four megapixels");
+    for (Object key : keys) for (int generation = 0; generation < 30; generation++)
+      scheduler.request(key, new NotebookRichOutput.Input(List.of(image), null, true), plan -> {
+        var previous = viewers.put(key, plan.retain()); if (previous != null) previous.close();
+      });
+    require(workers.isEmpty() && deliveries.size() == 1, "Blocked UI allowed updated image decodes or unbounded handoff deliveries");
+    require(livePixels(scheduler, viewers) == 4_000_000 && scheduler.reservedPixels() == 4_000_000, "Blocked UI updates exceeded or undercounted retained viewer images");
+    while (!deliveries.isEmpty() || !workers.isEmpty()) {
+      if (!deliveries.isEmpty()) deliveries.removeFirst().run();
+      if (!workers.isEmpty()) workers.removeFirst().run();
+      require(livePixels(scheduler, viewers) <= 4_000_000, "Cache plus viewer overlap exceeded total decoded-image limit");
+      require(livePixels(scheduler, viewers) <= scheduler.reservedPixels(), "Final-reference ledger omitted a live decoded image");
+    }
+    require(viewers.values().stream().mapToLong(NotebookRichOutput.Plan::pixels).sum() == 4_000_000, "Cleared viewers did not receive their latest real images");
+    require(scheduler.peakReservedPixels() <= 4_000_000, "Active decode reservation exceeded aggregate limit");
+    scheduler.close(); require(scheduler.reservedPixels() == 4_000_000, "Disposed cache released live viewer pixels prematurely");
+    viewers.values().forEach(NotebookRichOutput.Plan::close); viewers.clear();
+    require(scheduler.reservedPixels() == 0, "Final UI close leaked decoded reservations");
+  }
+  private static long livePixels(NotebookPreviewScheduler scheduler, Map<Object, NotebookRichOutput.Plan> viewers) throws Exception {
+    Set<java.awt.image.BufferedImage> images = Collections.newSetFromMap(new IdentityHashMap<>());
+    for (var plan : viewers.values()) for (var image : NotebookRichOutputTest.images(plan)) images.add(image.image());
+    var cellsField = NotebookPreviewScheduler.class.getDeclaredField("cells"); cellsField.setAccessible(true);
+    for (Object cell : ((Map<?, ?>)cellsField.get(scheduler)).values()) {
+      var planField = cell.getClass().getDeclaredField("plan"); planField.setAccessible(true);
+      var plan = (NotebookRichOutput.Plan)planField.get(cell);
+      if (plan != null) for (var image : NotebookRichOutputTest.images(plan)) images.add(image.image());
+    }
+    return images.stream().mapToLong(image -> (long)image.getWidth() * image.getHeight()).sum();
+  }
+
 }
