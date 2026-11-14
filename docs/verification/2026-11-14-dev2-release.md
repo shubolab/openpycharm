@@ -2,6 +2,12 @@
 
 **Recorded CI and installed Mac checks passed. / 本页记录的 CI 与 Mac 安装版检查通过。**
 
+Published as a prerelease on 2026-11-14. The [publication receipt](v0.1.0-dev.2-published.json)
+verifies all four server asset digests, the release tag, and public README/GIF bytes.
+
+已于 2026-11-14 发布预览版。[发布收据](v0.1.0-dev.2-published.json)记录四项发行资产的
+服务器摘要、版本标签及公开 README/GIF 字节核对结果。
+
 This document tracks one exact candidate. Earlier successful checks are retained
 as historical evidence, not transferred to the final installed candidate.
 

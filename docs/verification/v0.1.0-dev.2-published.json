@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "releaseId": 444878972,
+  "url": "https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.2",
+  "publishedAt": "2026-11-14T00:40:38Z",
+  "prerelease": true,
+  "tag": "v0.1.0-dev.2",
+  "tagCommit": "867cddb1973ba9a423fd042ee87f459e119cefc4",
+  "productionSourceCommit": "d5fc10d19e295d02707598832fabee20d8d01bee",
+  "allServerDigestsMatchedLocalReleaseManifest": true,
+  "assets": [
+    {
+      "name": "OpenPyCharm-0.1.0-dev.2-macos-arm64.dmg",
+      "bytes": 681276890,
+      "digest": "sha256:900281937ed35dc7858d58e4a90468242eb4addc8276331cc9aecf43c42064c5",
+      "downloadUrl": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.2/OpenPyCharm-0.1.0-dev.2-macos-arm64.dmg"
+    },
+    {
+      "name": "OpenPyCharm-0.1.0-dev.2-provenance.zip",
+      "bytes": 3037491,
+      "digest": "sha256:bff1b36ed7b1856525d843086bf03992f142463cd606b9a149bb429a2c31581d",
+      "downloadUrl": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.2/OpenPyCharm-0.1.0-dev.2-provenance.zip"
+    },
+    {
+      "name": "OpenPyCharm-0.1.0-dev.2-windows-x64-setup.exe",
+      "bytes": 596918304,
+      "digest": "sha256:8fd215445988f91ffe8c88af6e3e837071d47fd08476f9b3d23e290d457e6e18",
+      "downloadUrl": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.2/OpenPyCharm-0.1.0-dev.2-windows-x64-setup.exe"
+    },
+    {
+      "name": "SHA256SUMS.txt",
+      "bytes": 218,
+      "digest": "sha256:24e677269758502835c0d5c6b80c7702efa858819abfb89fa0598bf4a6c433a4",
+      "downloadUrl": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.2/SHA256SUMS.txt"
+    }
+  ],
+  "installerTransferRun": "https://github.com/shubolab/openpycharm/actions/runs/43534625703",
+  "nativeBuildRun": "https://github.com/shubolab/openpycharm/actions/runs/43522231765",
+  "publicDemoAndReadmes": [
+    {
+      "path": "README.md",
+      "bytes": 5127,
+      "sha256": "ff1d7e7750142091d6b1bd21da58d404eb4e7c3f7a89698786d293cf70bc1c2a",
+      "unauthenticatedPublicReadPassed": true
+    },
+    {
+      "path": "README.zh-CN.md",
+      "bytes": 4757,
+      "sha256": "279ca134b70fc3f1caf13400d635b6a5a0fc748568b9656d01c0f9add7f2126e",
+      "unauthenticatedPublicReadPassed": true
+    },
+    {
+      "path": "docs/demo/v0.1.0-dev.2/openpycharm-native.gif",
+      "bytes": 588934,
+      "sha256": "4e8265f7c5118a990a2a24abbd5cd9c1da2a7ad434cd179f5f3ac3b967369c6e",
+      "unauthenticatedPublicReadPassed": true
+    }
+  ]
+}
