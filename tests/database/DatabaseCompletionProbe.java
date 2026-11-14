@@ -16,6 +16,15 @@ public final class DatabaseCompletionProbe {
   private static List<SqlCompletionCandidates.Candidate> candidates(Snapshot snapshot,String marked){return SqlCompletionCandidates.suggest(snapshot,context(marked));}
   private static SqlCompletionCandidates.Candidate named(Snapshot snapshot,String marked,String name){return candidates(snapshot,marked).stream().filter(c->c.name().equals(name)).findFirst().orElseThrow(()->new AssertionError("Missing "+name+" in "+marked));}
   private static String inserted(Snapshot snapshot,String marked,String name){String text=marked.replace("<caret>","");var c=context(marked);return text.substring(0,c.replaceStart())+named(snapshot,marked,name).insertion()+text.substring(c.replaceEnd());}
+  private static void nativePrefix(Snapshot snapshot,String marked,String name){
+    String text=marked.replace("<caret>","");int caret=marked.indexOf("<caret>");var c=context(marked);
+    var matcher=new SqlCompletionPrefixMatcher(c.rawPrefix());
+    check(c.mode()!=SqlCompletionContext.Mode.NONE&&matcher.prefixMatches(com.intellij.codeInsight.lookup.LookupElementBuilder.create(named(snapshot,marked,name).name())),"actual native PrefixMatcher accepts decoded candidate: "+marked);
+    check(matcher.getPrefix().equals(text.substring(c.replaceStart(),caret))&&caret-matcher.getPrefix().length()==c.replaceStart(),"native raw UTF-16 prefix covers identifier opening and escapes: "+marked);
+    var lexer=new SqlLanguage.SqlLexer();lexer.start(text);boolean token=false;
+    while(lexer.getTokenType()!=null){if(lexer.getTokenStart()==c.replaceStart()&&lexer.getTokenEnd()==c.replaceEnd()){token=true;break;}lexer.advance();}
+    check(token,"replacement covers the actual native SQL lexer token: "+marked);
+  }
   public static void main(String[] args)throws Exception{
     Path root=Path.of(args[0]).toAbsolutePath();if(!Files.isDirectory(root)||!root.getFileName().toString().startsWith("owned-sqlite-"))throw new IllegalArgumentException("Owned disposable directory required");
     DatabaseProfile p=new DatabaseProfile();p.file=root.resolve("completion-原生.sqlite").toString();
@@ -62,6 +71,31 @@ public final class DatabaseCompletionProbe {
       check(named(snapshot,"SELECT p.quo<caret> FROM products p","quote\"column").insertion().equals("\"quote\"\"column\""),"column quotes escaped");
       check(session.execute(inserted(snapshot,"SELECT sel<caret> FROM products","select")).columns().contains("select"),"reserved-word column is inserted as a valid quoted identifier");
       check(new com.intellij.codeInsight.completion.PlainPrefixMatcher("列 ",true).prefixMatches("列 名"),"actual native matcher handles quoted Unicode space prefixes");
+      // Regression coordinates from the retained actual source + console gate; these are headless matcher/token controls.
+      nativePrefix(snapshot,"SELECT * FROM pro<caret>;","products");
+      nativePrefix(snapshot,"SELECT p.na<caret> FROM main.products p;","name");
+      nativePrefix(snapshot,"SELECT p.\"列 <caret>名\" FROM main.products p;","列 名");
+      nativePrefix(snapshot,"SELECT p.\"quote\"\"<caret>column\" FROM products p","quote\"column");
+      nativePrefix(snapshot,"SELECT p.\"quote\"<caret>\"column\" FROM products p","quote\"column");
+      nativePrefix(snapshot,"SELECT p.\"列 名\"<caret> FROM products p","列 名");
+      nativePrefix(snapshot,"SELECT * FROM \"odd\"\"<caret>table\"","odd\"table");
+      nativePrefix(snapshot,"SELECT * FROM `pro<caret>`","products");
+      nativePrefix(snapshot,"SELECT * FROM [pro<caret>]","products");
+      check(context("SELECT * FROM pro<caret>;").rawPrefix().equals("pro")&&context("SELECT * FROM pro<caret>;").prefix().equals("pro"),"original caret retains the unquoted prefix instead of copy START coordinates");
+      var quotedPrefix=context("SELECT p.\"列 <caret>名\" FROM products p");
+      check(quotedPrefix.rawPrefix().equals("\"列 ")&&quotedPrefix.prefix().equals("列 "),"raw opening quote is retained independently from decoded prefix");
+      var quotedMatcher=new SqlCompletionPrefixMatcher("\"quote\"\"");
+      check(quotedMatcher.cloneWithPrefix("\"quote\"\"c").prefixMatches("quote\"column"),"typing after an escaped quote retains decoding in the native clone contract");
+      check(!quotedMatcher.cloneWithPrefix("\"quote\"c").prefixMatches("quote\"column"),"text after an unmatched closing quote is not a prefix");
+      String supplementary="\"列😀";
+      check(new SqlCompletionPrefixMatcher(supplementary).prefixMatches("列😀名")&&new SqlCompletionPrefixMatcher(supplementary).getPrefix().length()==4,"supplementary Unicode uses native UTF-16 offsets");
+      check(!new SqlCompletionPrefixMatcher("\"列\ud83d").prefixMatches("列😀名"),"split surrogate prefix is rejected");
+      String escapedLimit="\""+"\"\"".repeat(SqlCompletionContext.MAX_IDENTIFIER)+"\"";
+      check(escapedLimit.length()==SqlCompletionContext.MAX_RAW_PREFIX&&new SqlCompletionPrefixMatcher(escapedLimit).prefixMatches("\"".repeat(SqlCompletionContext.MAX_IDENTIFIER)),"max escaped raw prefix matches the bounded decoded identifier");
+      check(!new SqlCompletionPrefixMatcher(escapedLimit+"x").prefixMatches("anything"),"native cloned raw prefix bound fails closed");
+      check(context("SELECT \""+"\"\"".repeat(SqlCompletionContext.MAX_IDENTIFIER+1)+"<caret>\" FROM products").mode()==SqlCompletionContext.Mode.NONE,"oversized escaped native token is rejected");
+      check(context("SELECT "+"a".repeat(SqlCompletionContext.MAX_IDENTIFIER+1)+"<caret> FROM products").mode()==SqlCompletionContext.Mode.NONE,"oversized decoded prefix is rejected");
+      check(context("SELECT \"<caret>"+"a".repeat(SqlCompletionContext.MAX_RAW_PREFIX)+"\" FROM products").mode()==SqlCompletionContext.Mode.NONE,"oversized remaining token is rejected even with an empty decoded prefix");
       check(context("SELECT <caret>FROM products").replaceEnd()=="SELECT ".length(),"empty completion does not consume following FROM keyword");
       for(String inert:List.of("SELECT 'pro<caret>' FROM products","SELECT $$ pro<caret> $$ FROM products","SELECT 1 -- pro<caret>\n FROM products","SELECT /* pro<caret> */ 1 FROM products","SELECT 'unfinished<caret>","SELECT /* unfinished<caret>"))check(candidates(snapshot,inert).isEmpty(),"comments and literals are inert: "+inert);
       check(candidates(snapshot,"SELECT E'not\\'a pro<caret>' FROM products").isEmpty(),"backslash-escaped quote cannot expose literal content as a completion context");

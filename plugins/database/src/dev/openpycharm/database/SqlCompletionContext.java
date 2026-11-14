@@ -5,10 +5,11 @@ import java.util.*;
 /** Bounded lexical SQL context; no PSI resolution, services, filesystem or JDBC calls. */
 public final class SqlCompletionContext {
   public static final int MAX_TEXT=128*1024,MAX_TOKENS=12000;
+  public static final int MAX_IDENTIFIER=1024,MAX_RAW_PREFIX=2*MAX_IDENTIFIER+2;
   public enum Mode { NONE, RELATION, COLUMN }
   public record Identifier(String name,boolean quoted) {}
   public record Binding(Identifier schema,Identifier table,Identifier alias) {}
-  public record Context(Mode mode,String prefix,int replaceStart,int replaceEnd,boolean followedByDot,List<Identifier> qualifier,List<Binding> bindings) {
+  public record Context(Mode mode,String prefix,String rawPrefix,int replaceStart,int replaceEnd,boolean followedByDot,List<Identifier> qualifier,List<Binding> bindings) {
     public Context {qualifier=List.copyOf(qualifier);bindings=List.copyOf(bindings);}
   }
   private enum Kind { WORD, IDENTIFIER, STRING, COMMENT, DOT, COMMA, SEMICOLON, LEFT, RIGHT, OTHER }
@@ -21,7 +22,7 @@ public final class SqlCompletionContext {
   private static final Set<String> CLAUSES=Set.of("SELECT","FROM","JOIN","UPDATE","INTO","TABLE","WHERE","ON","GROUP","ORDER","HAVING","RETURNING","SET","VALUES","LIMIT","OFFSET","UNION");
   private static final Set<String> RESERVED=Set.of("SELECT","FROM","JOIN","UPDATE","INTO","TABLE","WHERE","ON","GROUP","ORDER","HAVING","RETURNING","SET","VALUES","LIMIT","OFFSET","UNION","AS","LEFT","RIGHT","INNER","OUTER","CROSS","FULL","NATURAL","USING","BY","AND","OR","ASC","DESC","DISTINCT","ALL","WHEN","THEN","ELSE","END");
   private static final Set<String> BIND_RELATIONS=Set.of("FROM","JOIN","UPDATE","INTO"),END_FROM=Set.of("WHERE","ON","GROUP","ORDER","HAVING","SET","VALUES","RETURNING","LIMIT","UNION");
-  private static Context none(int caret){return new Context(Mode.NONE,"",caret,caret,false,List.of(),List.of());}
+  private static Context none(int caret){return new Context(Mode.NONE,"","",caret,caret,false,List.of(),List.of());}
   public static Context analyze(String sql,int caret){
     if(sql.length()>MAX_TEXT||caret<0||caret>sql.length())return none(Math.max(0,caret));
     List<Token> all=lex(sql);if(all==null)return none(caret);
@@ -40,12 +41,9 @@ public final class SqlCompletionContext {
     for(Token t:tokens)if(Set.of("WITH","UNION","INTERSECT","EXCEPT").contains(t.word()))return none(caret);
     for(int i=0;i+1<tokens.size();i++)if(tokens.get(i).kind==Kind.LEFT&&Set.of("SELECT","WITH").contains(tokens.get(i+1).word()))return none(caret);
     int start=current==null?caret:current.start,end=current==null?caret:current.end;
-    String prefix="";
-    if(current!=null){
-      String raw=sql.substring(current.start,caret);
-      if(current.kind==Kind.IDENTIFIER){char close=raw.charAt(0)=='['?']':raw.charAt(0);raw=raw.substring(1);if(current.closed&&caret==current.end&&!raw.isEmpty())raw=raw.substring(0,raw.length()-1);prefix=raw.replace(""+close+close,""+close);}
-      else prefix=raw;
-    }
+    if(end-start>MAX_RAW_PREFIX)return none(caret);
+    String rawPrefix=sql.substring(start,caret),prefix=decodedIdentifierPrefix(rawPrefix);
+    if(prefix==null)return none(caret);
     List<Token> before=new ArrayList<>();for(Token t:tokens)if(t.end<=start)before.add(t);
     List<Identifier> qualifier=new ArrayList<>();int at=before.size()-1;
     if(at>=0&&before.get(at).kind==Kind.DOT){
@@ -66,7 +64,29 @@ public final class SqlCompletionContext {
       else mode=Mode.NONE;
     }
     boolean followedByDot=false;for(Token t:tokens)if(t.start>=end){followedByDot=t.kind==Kind.DOT;break;}
-    return new Context(mode,prefix,start,end,followedByDot,qualifier,bindings(tokens));
+    return new Context(mode,prefix,rawPrefix,start,end,followedByDot,qualifier,bindings(tokens));
+  }
+  /** Raw UTF-16 length belongs to native replacement; decoded text belongs to name matching. */
+  static String decodedIdentifierPrefix(String raw){
+    if(raw.length()>MAX_RAW_PREFIX)return null;
+    if(raw.isEmpty())return "";
+    char open=raw.charAt(0),close=open=='['?']':open;
+    boolean quoted=open=='"'||open=='`'||open=='[';
+    StringBuilder decoded=new StringBuilder();
+    for(int i=quoted?1:0;i<raw.length();){
+      int cp=raw.codePointAt(i),width=Character.charCount(cp);
+      if(cp>=Character.MIN_SURROGATE&&cp<=Character.MAX_SURROGATE)return null;
+      if(quoted&&cp==close){
+        if(i+1<raw.length()&&raw.charAt(i+1)==close){decoded.append(close);i+=2;}
+        else if(i+1==raw.length())break;
+        else return null;
+      }else {
+        if(!quoted&&!(i==0?Character.isJavaIdentifierStart(cp):Character.isJavaIdentifierPart(cp)))return null;
+        decoded.appendCodePoint(cp);i+=width;
+      }
+      if(decoded.length()>MAX_IDENTIFIER)return null;
+    }
+    return decoded.toString();
   }
   private static List<Binding> bindings(List<Token> tokens){
     List<Binding> out=new ArrayList<>();boolean fromList=false;int depth=0;

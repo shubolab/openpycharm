@@ -17,7 +17,8 @@ public final class SqlCompletionContributor extends CompletionContributor implem
     var document=context.getEditor().getDocument();if(document.getTextLength()>SqlCompletionContext.MAX_TEXT)return;
     var parsed=SqlCompletionContext.analyze(document.getText(),context.getEditor().getCaretModel().getOffset());
     if(parsed.mode()==SqlCompletionContext.Mode.NONE)return;
-    context.getOffsetMap().addOffset(CompletionInitializationContext.START_OFFSET,parsed.replaceStart());
+    // START_OFFSET is the caret used to build CompletionParameters, not the identifier start.
+    // Native Lookup derives replacement start from the matcher's raw prefix length.
     context.getOffsetMap().addOffset(CompletionInitializationContext.IDENTIFIER_END_OFFSET,parsed.replaceEnd());
   }
   @Override public void fillCompletionVariants(@NotNull CompletionParameters parameters,@NotNull CompletionResultSet result){
@@ -30,7 +31,7 @@ public final class SqlCompletionContributor extends CompletionContributor implem
     String text=document.getText();var context=SqlCompletionContext.analyze(text,parameters.getOffset());
     if(context.mode()==SqlCompletionContext.Mode.NONE)return;
     String original=text.substring(context.replaceStart(),context.replaceEnd());
-    var matching=result.withPrefixMatcher(new PlainPrefixMatcher(context.prefix(),true)).caseInsensitive();
+    var matching=result.withPrefixMatcher(new SqlCompletionPrefixMatcher(context.rawPrefix()));
     List<LookupElement> prepared=new ArrayList<>();
     for(var candidate:SqlCompletionCandidates.suggest(snapshot,context)){
       if(service.completionSnapshot()!=snapshot)return;
