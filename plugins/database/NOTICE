@@ -1,0 +1,25 @@
+OpenPyCharm Database
+
+The dev.openpycharm.database implementation is independent source authored for
+OpenPyCharm, licensed under this repository's Apache License 2.0. It uses public
+open-source IntelliJ Platform APIs, native IntelliJ editors/Swing and JDBC.
+No proprietary PyCharm Database Tools implementation, assets or source are used.
+
+Unmodified driver JARs are separate, replaceable files under lib. Exact versions,
+upstream links, SHA-256 hashes and Maven Central URLs are in drivers.lock.json:
+
+- Xerial SQLite JDBC 3.54.1.0: Apache License 2.0; the original Zentus driver
+  notice uses the BSD license. SQLite itself is in the public domain. The
+  original driver license files remain in the JAR and are reproduced in legal.
+- PostgreSQL JDBC 42.7.13: BSD 2-Clause. Bundled SCRAM/stringprep component
+  notices remain in its unmodified JAR and are reproduced in legal.
+- MariaDB Connector/J 3.5.11: LGPL 2.1 or later, copyright MariaDB and contributors.
+  This driver supports MariaDB and MySQL protocol servers. The exact matching,
+  unmodified source JAR is distributed under legal next to LGPL/GPL license
+  texts. Users may replace the separate driver JAR with a compatible modified
+  version and reverse engineer/debug those library modifications as permitted
+  by the LGPL. OpenPyCharm imposes no additional restriction on those rights.
+
+The driver downloads are explicitly provisioned and hash authenticated before
+offline compilation/packaging. No production or other user database is accessed
+by the integration checks; those use an owned temporary SQLite file.

@@ -54,9 +54,10 @@ Windows 安装器未签名。[上一预览版 dev.1](https://github.com/shubolab
 python3 -m pip install -r requirements-build.txt
 python3 -m unittest discover -s tests -v
 python3 scripts/provision_http_compiler.py
+python3 scripts/provision_database_drivers.py
 python3 scripts/build.py --target macos-arm64
 python3 scripts/launch.py --profile .state/development fixtures/hello-python
-python3 scripts/installers.py --target macos-arm64 --version 0.1.0-dev.2 --product build/product/OpenPyCharm.app
+python3 scripts/installers.py --target macos-arm64 --version 0.1.0-dev.3 --product build/product/OpenPyCharm.app
 ```
 
 在 Python 示例自己的目录运行其测试：
