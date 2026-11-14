@@ -3,7 +3,6 @@ package dev.openpycharm.notebooks;
 import com.google.gson.*;
 import com.intellij.ide.impl.TrustedProjects;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.WriteIntentReadAction;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.*;
 import com.intellij.openapi.editor.event.DocumentEvent;
@@ -102,13 +101,18 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
     if (document != null) document.addDocumentListener(new DocumentListener() {
       @Override public void documentChanged(DocumentEvent event) {
         if (writing || disposed) return;
-        reloadFromDocument();
+        // A platform background save can normalize the parent document while
+        // holding its own write action. Keep all mutable editor/model state on
+        // the EDT; never wait for that thread from a document callback.
+        if (ApplicationManager.getApplication().isDispatchThread()) reloadFromDocument();
+        else ApplicationManager.getApplication().invokeLater(() -> { if (!disposed && !writing) reloadFromDocument(); });
       }
     }, this);
     if (restored != null && document != null) reloadFromDocument();
   }
 
   private void reloadFromDocument() {
+    ApplicationManager.getApplication().assertIsDispatchThread();
     boolean dirty = persistence.isDirty();
     NotebookModel.Snapshot local = dirty && model != null ? model.snapshot() : null;
     NotebookModel.Snapshot base = baseline;
@@ -354,13 +358,7 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
     saveDocument();
   }
   private void saveDocument() {
-    AppExecutorUtil.getAppExecutorService().execute(() -> {
-      try {
-        WriteIntentReadAction.run(() -> FileDocumentManager.getInstance().saveDocument(document));
-      } catch (RuntimeException error) {
-        ApplicationManager.getApplication().invokeLater(() -> { if (!disposed) status.setText("Save failed: " + error.getMessage()); });
-      }
-    });
+    NotebookDocumentSave.request(document, message -> { if (!disposed) status.setText("Save failed: " + message); });
   }
 
   private final class Cell {
