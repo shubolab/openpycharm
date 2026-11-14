@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "scope": "Frontend protocol harness backpressure/deadline repair only; no IDE or production integration",
+  "sourceCommit": "e9d4d461f3d52bbf000fd937cbb610d4625f8a61",
+  "previousM0Head": "623561a686966dca09153b174344206452246000",
+  "nativeIdeStarted": false,
+  "productionPackaged": false,
+  "changes": [
+    "Single FIFO writer owns stdin; call deadline starts before enqueue/write/flush and also bounds server-request acknowledgements",
+    "A timed-out writer is terminal; independent disposal never acquires pipe locks",
+    "Owned process disposal shares the default eight-second cleanup budget",
+    "stdin/stdout owner-finally and independent stderr task record close errors; every join/stream status is retained"
+  ],
+  "reviewNegativeControl": {
+    "sourceHead": "623561a",
+    "receiptSha256": "381bf51f9a54a76758ec37fbac2a2fc4271dd7f717d16c578479e56033626ae9",
+    "pipeBytes": 65536,
+    "stillBlockedAfterSeconds": 12.004,
+    "reviewerForcedKillRequired": true,
+    "outcome": {
+      "failure": "BrokenPipeError: [Errno 32] Broken pipe"
+    }
+  },
+  "exactFrozenPositiveControl": {
+    "schema": 1,
+    "test": "real owned SIGSTOP plus full stdin close",
+    "nativeIdeStarted": false,
+    "ownedPid": 4374,
+    "fixture": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frontend/.tools/frontend-m0-fixtures/fixture-5138de7994484dc09d95f937268b65bf",
+    "nonce": "5138de7994484dc09d95f937268b65bf",
+    "watchdogForcedKill": false,
+    "pipeBytesWrittenBeforeEagain": 65536,
+    "closeSeconds": 2.584,
+    "closeStillBlocked": false,
+    "closeOutcome": {
+      "cleanup": {
+        "ownedPid": 4374,
+        "observedOwnedGroupPids": [
+          4374,
+          4378,
+          4379
+        ],
+        "remainingOwnedGroupPids": [],
+        "groupObservationScope": "Live owned POSIX process-group members; transient zombies are not running processes",
+        "forcedOwnedSignals": [
+          "SIGTERM",
+          "SIGKILL"
+        ],
+        "windowsJobAssigned": false,
+        "gracefulProtocolExit": false,
+        "processReturnCode": -9,
+        "cleanupComplete": true,
+        "cleanupSeconds": 2.584,
+        "cleanupBudgetSeconds": 8,
+        "streamCleanup": {
+          "stdout": {
+            "attempted": true,
+            "closed": true
+          },
+          "stdin": {
+            "attempted": true,
+            "closed": true,
+            "error": "BrokenPipeError: [Errno 32] Broken pipe"
+          },
+          "stderr": {
+            "attempted": true,
+            "closed": true
+          }
+        },
+        "cleanupErrors": {
+          "protocolShutdown": "TimeoutError: Real LSP write deadline exceeded"
+        },
+        "cleanupThreadsAlive": {
+          "writer": false,
+          "reader": false,
+          "stderrCloser": false
+        }
+      }
+    },
+    "remainingOwnedGroupPids": [],
+    "status": "pass"
+  },
+  "normalRealProtocol": {
+    "schema": 1,
+    "owner": "OpenPyCharm frontend M0",
+    "fixtureRoot": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frontend/.tools/frontend-m0-fixtures/fixture-fbb503bafa9a4c4c9f5d3563847c93ea",
+    "nonce": "fbb503bafa9a4c4c9f5d3563847c93ea",
+    "scope": "Real Node/TypeScript Language Server protocol, no IDE/native editor/UI acceptance",
+    "nativeIdeStarted": false,
+    "toolsReceiptSha256": "8c3eec93f57ce367dd2e6e2283f1f9391e9cd4fe2e68d584e0b87980bb0c1794",
+    "lockSha256": "5a7b20ce2ce915a4012b4ea5dfa35b77c709bdbb19de00be87700404a6f6fff2",
+    "target": "macos-arm64",
+    "checks": {
+      "realInitializeIncrementalUtf16": true,
+      "unsavedTypeScriptDiagnostics": true,
+      "unsavedTypeScriptCompletion": true,
+      "utf16CrossFileDefinition": true,
+      "utf16IncrementalUnsavedChange": true,
+      "unsavedDiagnosticRecovery": true,
+      "unsavedJavaScriptCompletionDefinition": true,
+      "fixtureSourceFilesUnchanged": true,
+      "pinnedToolsAndSourcesUnchangedAfterExit": true
+    },
+    "ownedPid": 4375,
+    "nodeVersion": "v24.22.3",
+    "typescriptLanguageServerVersion": "6.1.0",
+    "initializeServerInfo": null,
+    "definitionPosition": {
+      "line": 1,
+      "character": 39
+    },
+    "typescriptVersionNotifications": [
+      {
+        "version": "6.0.3",
+        "source": "user-setting"
+      }
+    ],
+    "diagnosticCodes": {
+      "initial": [
+        2322,
+        6133,
+        6133
+      ],
+      "utf16Change": [
+        2345,
+        2322,
+        6133,
+        6133
+      ],
+      "repaired": [
+        6133,
+        6133
+      ]
+    },
+    "status": "pass",
+    "cleanup": {
+      "ownedPid": 4375,
+      "observedOwnedGroupPids": [
+        4375,
+        4381,
+        4382
+      ],
+      "remainingOwnedGroupPids": [],
+      "groupObservationScope": "Live owned POSIX process-group members; transient zombies are not running processes",
+      "forcedOwnedSignals": [],
+      "windowsJobAssigned": false,
+      "gracefulProtocolExit": true,
+      "processReturnCode": 0,
+      "cleanupComplete": true,
+      "cleanupSeconds": 0.089,
+      "cleanupBudgetSeconds": 8,
+      "streamCleanup": {
+        "stdout": {
+          "attempted": true,
+          "closed": true
+        },
+        "stderr": {
+          "attempted": true,
+          "closed": true
+        },
+        "stdin": {
+          "attempted": true,
+          "closed": true
+        }
+      },
+      "cleanupErrors": {},
+      "cleanupThreadsAlive": {
+        "writer": false,
+        "reader": false,
+        "stderrCloser": false
+      }
+    },
+    "sourceCommit": "e9d4d461f3d52bbf000fd937cbb610d4625f8a61"
+  },
+  "tests": {
+    "fullUnit": {
+      "run": 102,
+      "passed": 102,
+      "skipped": 0
+    },
+    "newDeadlineAndCleanupControls": 3,
+    "focusedFrontendTests": 18
+  },
+  "unchangedPlugin": {
+    "pluginSourceInputsExactlyEqualPreviousBuild": true,
+    "jarSha256": "96cf635db5381148001a5f21f19a20409095e3c32172dccd62d0e123621bbaff",
+    "jarRebuilt": false,
+    "reason": "Only protocol harness and Python tests changed; none are inputs to the unchanged Java M0 plugin builder closure"
+  },
+  "sourceFileSha256": {
+    "scripts/frontend_protocol_probe.py": "c47372874be6a10493cb8b12ef8f87cb393c38e6d2c05470ef972a14d869bb4f",
+    "tests/frontend/test_frontend_tools.py": "03a511f01fda1a3dfaed7f94c1c7531cf3420cc706f03d642292ee3bbe75ce16",
+    "tests/frontend/protocol_backpressure_probe.py": "8a8cfaab6945ff193e37479d9dbd745063e3c983cc78863ad7f51a270a884173"
+  },
+  "remainingGates": [
+    "Independent bootstrap retest of the original case after this source freeze",
+    "Native PC module/service/stdio/editor gate",
+    "Actual Windows runtime/disposal control",
+    "Production integration/packaging"
+  ]
+}
