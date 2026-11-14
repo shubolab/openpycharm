@@ -11,6 +11,8 @@ import stat
 import sys
 import tarfile
 import tempfile
+import threading
+import time
 from types import SimpleNamespace
 import unittest
 from unittest import mock
@@ -18,7 +20,7 @@ import zipfile
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
 import provision_frontend_tools as tools
-from frontend_protocol_probe import Client, child_environment, position
+from frontend_protocol_probe import Client, DeadlineWriter, child_environment, position
 
 
 class FixtureCase(unittest.TestCase):
@@ -181,6 +183,54 @@ class ProtocolHarnessTests(unittest.TestCase):
             env=child_environment(Path('/owned/state'),Path('/owned/tools/bin/node'))
         self.assertNotIn('NPM_TOKEN',env);self.assertNotIn('GITHUB_TOKEN',env);self.assertEqual(env['NODE_OPTIONS'],'')
         self.assertEqual(env['HOME'],'/owned/state/home')
+
+
+class DeadlineWriterTests(unittest.TestCase):
+    class Blocked:
+        def __init__(self): self.release=threading.Event();self.entered=threading.Event();self.closed=False
+        def write(self, data): self.entered.set();self.release.wait();return len(data)
+        def flush(self): pass
+        def close(self): self.closed=True
+
+    def test_rpc_budget_covers_a_blocked_pipe_write_before_response_wait(self):
+        stream=self.Blocked();closed=[];writer=DeadlineWriter(stream,lambda name,value:(value.close(),closed.append(name)))
+        client=Client.__new__(Client);client.writer=writer;client.closed=False;client.counter=0;client.responses={}
+        client._receive=mock.Mock(side_effect=AssertionError('Response wait must not begin after write timeout'))
+        try:
+            started=time.monotonic()
+            with self.assertRaisesRegex(TimeoutError,'write deadline'):client.call('shutdown',timeout=0.1)
+            self.assertLess(time.monotonic()-started,0.8);self.assertTrue(stream.entered.is_set());client._receive.assert_not_called()
+            started=time.monotonic();writer.stop();self.assertLess(time.monotonic()-started,0.1)
+        finally:
+            stream.release.set();writer.stop();writer.thread.join(2)
+        self.assertFalse(writer.thread.is_alive());self.assertTrue(stream.closed);self.assertEqual(closed,['stdin'])
+
+    def test_server_request_reply_uses_the_original_absolute_deadline(self):
+        stream=self.Blocked();writer=DeadlineWriter(stream,lambda name,value:value.close())
+        client=Client.__new__(Client);client.writer=writer;client.closed=False;client.events=[];client.responses={};client.messages=queue.Queue()
+        client.messages.put({'id':7,'method':'workspace/configuration','params':{'items':[{'section':'formattingOptions'}]}})
+        try:
+            started=time.monotonic()
+            with self.assertRaisesRegex(TimeoutError,'write deadline'):client._receive(started+0.1)
+            self.assertLess(time.monotonic()-started,0.8)
+        finally:
+            stream.release.set();writer.stop();writer.thread.join(2)
+        self.assertFalse(writer.thread.is_alive())
+
+    def test_stdin_close_error_does_not_skip_other_streams_or_joins(self):
+        class BrokenClose(io.BytesIO):
+            def close(self):
+                super().close();raise BrokenPipeError('controlled stdin close failure')
+        stdin=BrokenClose();stdout=io.BytesIO();stderr=io.BytesIO()
+        client=Client.__new__(Client);client.closed=False;client.cleanup_report=None;client.stream_cleanup={};client.job=None
+        client.process=SimpleNamespace(pid=123456,stdin=stdin,stdout=stdout,returncode=0,poll=lambda:0,wait=lambda timeout:0)
+        client.group_members=mock.Mock(return_value=[]);client.stderr=stderr
+        client.writer=DeadlineWriter(stdin,client._close_stream)
+        client.reader=threading.Thread(target=client._close_stream,args=('stdout',stdout),name='controlled-reader');client.reader.start()
+        report=client.close(timeout=1)
+        self.assertTrue(report['cleanupComplete']);self.assertIn('BrokenPipeError',report['streamCleanup']['stdin']['error'])
+        self.assertTrue(all(report['streamCleanup'][name]['closed'] for name in ('stdin','stdout','stderr')))
+        self.assertFalse(any(report['cleanupThreadsAlive'].values()));self.assertIs(client.close(),report)
 
 
 if __name__ == '__main__':unittest.main()

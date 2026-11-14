@@ -8,6 +8,7 @@ provisioned; this script never downloads packages or executes install scripts.
 from __future__ import annotations
 
 import argparse
+from concurrent.futures import Future, InvalidStateError, TimeoutError as FutureTimeout
 import hashlib
 import json
 import os
@@ -69,24 +70,109 @@ def prepare_fixture(tools: dict) -> tuple[Path, str]:
     return root, nonce
 
 
+class DeadlineWriter:
+    """One FIFO pipe owner; caller deadlines never wait for a blocked OS write.
+
+    A timed-out write makes this transport terminal. Only independent process
+    disposal may release its pipe; lifecycle cleanup never takes its stream lock.
+    """
+    def __init__(self, stream, close_stream):
+        self.stream = stream; self.close_stream = close_stream
+        self.pending = queue.Queue(maxsize=8); self.stopping = threading.Event(); self.failed = threading.Event()
+        self.failure = None
+        self.thread = threading.Thread(target=self._run, name="frontend-m0-writer", daemon=True); self.thread.start()
+
+    def send(self, frame: bytes, deadline: float):
+        if self.stopping.is_set() or self.failed.is_set():
+            raise RuntimeError("Real LSP writer is stopped or failed")
+        future = Future(); remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise TimeoutError("Real LSP write deadline exceeded")
+        try:
+            self.pending.put((frame, future, deadline), timeout=remaining)
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise FutureTimeout()
+            future.result(timeout=remaining)
+        except (queue.Full, FutureTimeout) as error:
+            future.cancel(); self.failed.set()
+            raise TimeoutError("Real LSP write deadline exceeded") from error
+
+    def _run(self):
+        try:
+            while not self.stopping.is_set() and not self.failed.is_set():
+                try:
+                    item = self.pending.get(timeout=0.1)
+                except queue.Empty:
+                    continue
+                if item is None:
+                    return
+                frame, future, deadline = item
+                if not future.set_running_or_notify_cancel():
+                    continue
+                if time.monotonic() >= deadline:
+                    future.set_exception(TimeoutError("Queued LSP write expired")); self.failed.set(); return
+                try:
+                    self.stream.write(frame); self.stream.flush()
+                    future.set_result(None)
+                except BaseException as error:
+                    self.failure = error; self.failed.set(); future.set_exception(error); return
+        finally:
+            while True:
+                try:
+                    item = self.pending.get_nowait()
+                except queue.Empty:
+                    break
+                if item is not None and not item[1].done():
+                    try: item[1].set_exception(RuntimeError("LSP writer stopped before dispatch"))
+                    except InvalidStateError: pass  # The caller may cancel a queued future concurrently.
+            self.close_stream("stdin", self.stream)
+
+    def stop(self):
+        # Never close/flush this stream from the disposing caller.
+        self.stopping.set()
+        try:
+            self.pending.put_nowait(None)
+        except queue.Full:
+            pass
+
+
 class Client:
     def __init__(self, tools: dict, root: Path):
         self.root = root; self.events = []; self.responses = {}; self.counter = 0
         self.messages = queue.Queue(); self.read_error = None; self.closed = False
+        self.stream_cleanup = {}; self.cleanup_report = None
         runtime = Path(tools["runtimeRoot"]); entries = tools["entries"]
         self.node = runtime / entries["node"]
         self.command = [str(self.node), str(runtime / entries["typescriptLanguageServer"]), "--stdio", "--log-level", "2"]
         self.stderr = (root / ".m0-runtime/log/tls-stderr.log").open("wb")
         self.job = WindowsJob() if os.name == "nt" else None
         options = {"creationflags": WINDOWS_CREATE_SUSPENDED | WINDOWS_CREATE_NEW_PROCESS_GROUP} if self.job else {"start_new_session": True}
-        self.process = subprocess.Popen(self.command, cwd=root, env=child_environment(root / ".m0-runtime", self.node),
-                                        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=self.stderr, **options)
+        try:
+            self.process = subprocess.Popen(self.command, cwd=root, env=child_environment(root / ".m0-runtime", self.node),
+                                            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=self.stderr, **options)
+        except BaseException:
+            self.stderr.close()
+            if self.job: self.job.stop()
+            raise
         if self.job:
             try:
                 self.job.assign_and_resume(self.process)
             except BaseException:
                 self.process.kill(); self.process.wait(timeout=5); self.job.stop(); self.stderr.close(); raise
+        self.writer = DeadlineWriter(self.process.stdin, self._close_stream)
         self.reader = threading.Thread(target=self._read, name="frontend-m0-stdio", daemon=True); self.reader.start()
+
+    def _close_stream(self, name, stream):
+        record = {"attempted": True, "closed": False}
+        try:
+            stream.close()
+        except BaseException as error:
+            record["error"] = type(error).__name__ + ": " + str(error)
+        finally:
+            record["closed"] = bool(getattr(stream, "closed", False))
+            if not hasattr(self, "stream_cleanup"): self.stream_cleanup = {}
+            self.stream_cleanup[name] = record
 
     def _read(self):
         try:
@@ -113,15 +199,22 @@ class Client:
                 self.messages.put(json.loads(body))
         except BaseException as error:
             self.read_error = error; self.messages.put(None)
+        finally:
+            self._close_stream("stdout", self.process.stdout)
 
-    def send(self, message: dict):
+    def send(self, message: dict, *, deadline: float | None = None, _closing: bool = False):
+        if self.closed and not _closing:
+            raise RuntimeError("Real LSP client is closing")
+        deadline = deadline if deadline is not None else time.monotonic() + 5
         data = json.dumps({"jsonrpc": "2.0", **message}, ensure_ascii=False).encode("utf-8")
-        self.process.stdin.write(f"Content-Length: {len(data)}\r\n\r\n".encode() + data); self.process.stdin.flush()
+        if len(data) > 8_000_000:
+            raise ValueError("Outgoing LSP payload exceeds bound")
+        self.writer.send(f"Content-Length: {len(data)}\r\n\r\n".encode() + data, deadline)
 
-    def notify(self, method: str, params=None):
-        self.send({"method": method, **({"params": params} if params is not None else {})})
+    def notify(self, method: str, params=None, *, deadline: float | None = None, _closing: bool = False):
+        self.send({"method": method, **({"params": params} if params is not None else {})}, deadline=deadline, _closing=_closing)
 
-    def _receive(self, deadline: float):
+    def _receive(self, deadline: float, *, _closing: bool = False):
         remaining = deadline - time.monotonic()
         if remaining <= 0:
             raise TimeoutError("Real LSP response deadline exceeded")
@@ -140,17 +233,18 @@ class Client:
                     value = {"applied": False, "failureReason": "Read-only protocol control never applies workspace edits"}
                 else:
                     value = None
-                self.send({"id": message["id"], "result": value})
+                self.send({"id": message["id"], "result": value}, deadline=deadline, _closing=_closing)
             self.events.append(message)
         elif "id" in message:
             self.responses[message["id"]] = message
 
-    def call(self, method: str, params=None, timeout: float = 25):
+    def call(self, method: str, params=None, timeout: float = 25, *, deadline: float | None = None, _closing: bool = False):
+        # The same absolute budget includes queueing, write/flush and response.
+        deadline = deadline if deadline is not None else time.monotonic() + timeout
         self.counter += 1; identity = self.counter
-        self.send({"id": identity, "method": method, **({"params": params} if params is not None else {})})
-        deadline = time.monotonic() + timeout
+        self.send({"id": identity, "method": method, **({"params": params} if params is not None else {})}, deadline=deadline, _closing=_closing)
         while identity not in self.responses:
-            self._receive(deadline)
+            self._receive(deadline, _closing=_closing)
         response = self.responses.pop(identity)
         if "error" in response:
             raise ValueError("Real server request failed: " + method + ": " + str(response["error"]))
@@ -166,58 +260,89 @@ class Client:
                         return event["params"]
             self._receive(deadline)
 
-    def group_members(self) -> list[int]:
+    def group_members(self, deadline: float | None = None) -> list[int]:
         if os.name == "nt":
             return []
-        output = subprocess.run(["/bin/ps", "-axo", "pid=,pgid=,state="], capture_output=True, text=True, timeout=5).stdout
+        remaining = 1 if deadline is None else min(1, deadline - time.monotonic())
+        if remaining <= 0: raise TimeoutError("Owned process census deadline exceeded")
+        output = subprocess.run(["/bin/ps", "-axo", "pid=,pgid=,state="], capture_output=True, text=True, timeout=remaining, check=True).stdout
         return [int(parts[0]) for line in output.splitlines() if len(parts := line.split()) == 3
                 and int(parts[1]) == self.process.pid and not parts[2].startswith("Z")]
 
-    def close(self) -> dict:
+    def close(self, timeout: float = 8) -> dict:
         if self.closed:
-            return {"alreadyClosed": True}
-        self.closed = True; observed = self.group_members(); graceful = False; signals = []
+            return self.cleanup_report or {"alreadyClosing": True, "cleanupComplete": False}
+        started = time.monotonic(); deadline = started + timeout
+        self.closed = True; graceful = False; signals = []; errors = {}; observed = []; disposal_reached = False
+        def census(label):
+            try: return self.group_members(deadline)
+            except Exception as error:
+                errors[label] = type(error).__name__ + ": " + str(error); return None
+        def wait_group(until):
+            live = census("processCensus")
+            while live and time.monotonic() < until:
+                time.sleep(min(0.025, max(0, until - time.monotonic())))
+                live = census("processCensus")
+            return live
+        def owned_signal(value):
+            try:
+                os.killpg(self.process.pid, value); signals.append(signal.Signals(value).name)
+            except ProcessLookupError: pass
+            except Exception as error: errors["ownedSignal"] = type(error).__name__ + ": " + str(error)
+        observed = census("initialCensus") or []
         try:
-            if self.process.poll() is None:
+            if self.process.poll() is None and not self.writer.failed.is_set():
                 try:
-                    self.call("shutdown", timeout=10); self.notify("exit"); self.process.wait(timeout=10); graceful = self.process.returncode == 0
-                except (Exception, BrokenPipeError):
-                    pass
+                    grace = min(deadline, time.monotonic() + 2)
+                    self.call("shutdown", deadline=grace, _closing=True)
+                    self.notify("exit", deadline=grace, _closing=True)
+                    self.process.wait(timeout=max(0, grace - time.monotonic())); graceful = self.process.returncode == 0
+                except BaseException as error:
+                    errors["protocolShutdown"] = type(error).__name__ + ": " + str(error)
             if self.job:
-                self.job.stop()
+                try: self.job.stop()
+                except Exception as error: errors["windowsJob"] = str(error)
             else:
-                grace_deadline = time.monotonic() + 2
-                while self.group_members() and time.monotonic() < grace_deadline:
-                    time.sleep(0.05)
-                if self.group_members():
-                    try:
-                        os.killpg(self.process.pid, signal.SIGTERM)
-                        signals.append("SIGTERM")
-                    except ProcessLookupError:
-                        pass  # An owned process may exit between ps and killpg.
-                deadline = time.monotonic() + 5
-                while self.group_members() and time.monotonic() < deadline:
-                    time.sleep(0.05)
-                if self.group_members():
-                    try:
-                        os.killpg(self.process.pid, signal.SIGKILL)
-                        signals.append("SIGKILL")
-                    except ProcessLookupError:
-                        pass
-            self.process.wait(timeout=5)
+                live = wait_group(min(deadline, time.monotonic() + (0.5 if graceful else 0)))
+                if live is None or live:
+                    owned_signal(signal.SIGTERM)
+                    live = wait_group(min(deadline, time.monotonic() + 0.5))
+                if live is None or live:
+                    owned_signal(signal.SIGKILL)
+            try: self.process.wait(timeout=max(0, min(1.5, deadline - time.monotonic())))
+            except Exception as error: errors["processReap"] = type(error).__name__ + ": " + str(error)
+            disposal_reached = True
+        except BaseException as error:
+            errors["disposal"] = type(error).__name__ + ": " + str(error)
         finally:
-            if self.process.stdin:
-                self.process.stdin.close()
-            if self.process.stdout:
-                self.process.stdout.close()
-            self.stderr.close(); self.reader.join(timeout=2)
-        remaining = self.group_members()
-        if remaining:
-            raise ValueError("Owned real server process group did not terminate")
-        return {"ownedPid": self.process.pid, "observedOwnedGroupPids": observed, "remainingOwnedGroupPids": remaining,
+            if not disposal_reached:
+                # Cancellation/errors in protocol or disposal cannot skip the
+                # independent last-resort termination of this owned session.
+                if self.job:
+                    try: self.job.stop()
+                    except BaseException as error: errors["windowsJob"] = str(error)
+                else: owned_signal(signal.SIGKILL)
+                try: self.process.wait(timeout=max(0, min(1, deadline - time.monotonic())))
+                except BaseException as error: errors["processReap"] = str(error)
+            # Like the notebook lifecycle, disposal is independent of the pipe
+            # writer. Never acquire BufferedWriter/Reader locks on this caller.
+            self.writer.stop()
+            stderr_closer = threading.Thread(target=self._close_stream, args=("stderr", self.stderr), name="frontend-m0-stderr-close", daemon=True)
+            stderr_closer.start()
+            for thread in (self.writer.thread, self.reader, stderr_closer):
+                try: thread.join(timeout=max(0, deadline - time.monotonic()))
+                except Exception as error: errors[thread.name] = str(error)
+        remaining = census("finalCensus")
+        threads = {"writer": self.writer.thread.is_alive(), "reader": self.reader.is_alive(), "stderrCloser": stderr_closer.is_alive()}
+        complete = (remaining == [] and self.process.poll() is not None and not any(threads.values()) and "windowsJob" not in errors
+                    and all(self.stream_cleanup.get(name, {}).get("closed") is True for name in ("stdin", "stdout", "stderr")))
+        self.cleanup_report = {"ownedPid": self.process.pid, "observedOwnedGroupPids": observed, "remainingOwnedGroupPids": remaining,
                 "groupObservationScope": "Windows assigned Job closure; group census unavailable" if self.job else "Live owned POSIX process-group members; transient zombies are not running processes",
                 "forcedOwnedSignals": signals, "windowsJobAssigned": self.job is not None,
-                "gracefulProtocolExit": graceful, "processReturnCode": self.process.returncode}
+                "gracefulProtocolExit": graceful, "processReturnCode": self.process.returncode,
+                "cleanupComplete": complete, "cleanupSeconds": round(time.monotonic() - started, 3), "cleanupBudgetSeconds": timeout,
+                "streamCleanup": dict(self.stream_cleanup), "cleanupErrors": errors, "cleanupThreadsAlive": threads}
+        return self.cleanup_report
 
 
 def locations(value):
@@ -325,6 +450,8 @@ def run(receipt: Path) -> dict:
         if client:
             try:
                 report["cleanup"] = client.close()
+                if not report["cleanup"].get("cleanupComplete"):
+                    report["status"] = "fail"; report["cleanupFailure"] = "Owned process/stream/thread cleanup was incomplete"
                 if not report["cleanup"].get("gracefulProtocolExit"):
                     report["status"] = "fail"; report["cleanupFailure"] = "Server needed forced cleanup instead of normal shutdown/exit"
                 if report["cleanup"].get("forcedOwnedSignals"):
