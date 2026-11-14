@@ -1,0 +1,163 @@
+{
+  "schema": 1,
+  "status": "bounded-installed-macos-native-pass",
+  "releaseReady": false,
+  "productionSourceCommit": "88387c3f8e819fdedebdabf5a23403845e4ba07e",
+  "productVersion": "0.1.0-dev.4",
+  "os": "macOS 27.2 arm64",
+  "python": "3.14.0",
+  "installerSha256": "8b849bc6db67e929c8dff25ed32f79b0bb1d420c89487b6d85c0e34c8545dd64",
+  "productTreeSha256": "57a94f463eead8fbe8d48ddb5500bc3fb2c3bc92432eb734d6d1a9c5b7a616eb",
+  "strictSignaturePassedAfterWorkflows": true,
+  "allFivePluginPayloadsReauthenticated": [
+    {
+      "id": "dev.openpycharm.http",
+      "version": "0.1.0-dev.4",
+      "jar": "third-party-plugins/openpycharm-http/lib/openpycharm-http.jar",
+      "jarSha256": "a84a3c40c88043a4614a6d5330800996ac4d7dfd75ffc05b0cfaf8f8e4402789"
+    },
+    {
+      "id": "dev.openpycharm.frameworks",
+      "version": "0.1.0-dev.4",
+      "jar": "third-party-plugins/openpycharm-frameworks/lib/frameworks.jar",
+      "jarSha256": "d04006a3b1778280c326442dc8a91090902a87891463860c05d50f325ab855d7"
+    },
+    {
+      "id": "dev.openpycharm.notebooks",
+      "version": "0.1.0-dev.4",
+      "jar": "third-party-plugins/openpycharm-notebooks/lib/notebooks.jar",
+      "jarSha256": "9d73c790ef91ab191ccee17eaf63a60d4fc7576a1e03cfa9cbb20490b6ea8d33"
+    },
+    {
+      "id": "dev.openpycharm.database",
+      "version": "0.1.0-dev.4",
+      "jar": "third-party-plugins/openpycharm-database/lib/database.jar",
+      "jarSha256": "4d1fb21b1701cb1881d9b99477aa7416f42602e747621c3f58525ca1a064af5e"
+    },
+    {
+      "id": "dev.openpycharm.frontend",
+      "version": "0.1.0-dev.4",
+      "jar": "third-party-plugins/openpycharm-frontend/lib/frontend.jar",
+      "jarSha256": "96a52332228d1c2e0fd8d1759ab6b2ab9d7ae6f03372776be23b31560e100b8f"
+    }
+  ],
+  "normalProjectTrust": true,
+  "parentTrustGrant": false,
+  "observed": {
+    "pythonEditRun": "34.00/2.04/36.04 exit0",
+    "nativeUnittest": "9 methods /20 reported items, pass exit0",
+    "debugger": "calculator.py:20 subtotal34.00, native evaluation2.0400, F8 to21, F9 resumed exit0",
+    "pythonPsiCompletion": "native_total = quote.total accepted from quote.tot",
+    "pythonPsiRename": "QuoteCalculator -> NativeQuoteCalculator propagated to main import/call and tests;9 methods20items pass; Undo Rename restored originalname,9/20 rerun pass",
+    "typescript": "default bundled service, quote.total completion, Type string not assignable to number diagnostic, Cmd+B makeQuote to quote.ts1:17",
+    "javascript": "receipt.installedNative_9631 completion from unsaved native editor; identifier absent on disk before acceptance; Chinese/emoji in same line",
+    "projectModuleScope": "corrected to exact owned project, UI module root confirmed",
+    "projectClose": "File Close Project returned Welcome; all three owned Node PIDs gone without forced kill",
+    "normalQuit": "own IDE22681 and debug25423 exited"
+  },
+  "limits": [
+    "Local installer native UI build is from production source88387c3; later commits through63921a4 change tests/docs only. CI installer acceptance is a separate gate.",
+    "Unverified Windows physical UI, abnormal-parent crash/reparenting, native cancellation/backpressure, HTML/CSS and broader JS/TS PSI/refactor parity.",
+    "A mistaken file chooser action selected the home folder; its trust dialog was cancelled with Dont Open. Only named owned fixture projects were trusted.",
+    "Seeded only an existing owned Python interpreter table in the isolated profile; no reference PyCharm configuration was used."
+  ],
+  "logWindow": {
+    "errorSevere": 0,
+    "warn": 15,
+    "sha256": "f1065192e628edfc57b7cb3c7598c424abf4dbc586469cb1bb3bcab914f249d6"
+  },
+  "evidence": {
+    "active-idea.log": {
+      "size": 138004,
+      "sha256": "aa3533d9f997dca2ec2b32507f796849452f6c2a96e1f31c01729ffb1edaf5bc"
+    },
+    "completed-idea.log": {
+      "size": 164658,
+      "sha256": "f1065192e628edfc57b7cb3c7598c424abf4dbc586469cb1bb3bcab914f249d6"
+    },
+    "frontend-owned-processes.json": {
+      "size": 1773,
+      "sha256": "f89733f10f5e7b3ae5b32d00175a769526a395e1e4cdcb390caec5e3c1658044"
+    },
+    "installation.json": {
+      "size": 682,
+      "sha256": "d6a3235fb4c0bd0a4095d830c411371c8a0e244e4dd31a7ee5c9a85af7282b18"
+    },
+    "javascript-unsaved-disk-before.txt": {
+      "size": 100,
+      "sha256": "4f37e57d96000dc18d65a2122910b6ae1175810008bf8f9b846a7de197c53cf0"
+    },
+    "javascript-unsaved.ax.txt": {
+      "size": 7231,
+      "sha256": "e7753b30b45224443e557248d877181518db1f52327ff226cb30c97abe1fd83d"
+    },
+    "javascript-unsaved.png": {
+      "size": 216457,
+      "sha256": "74e0ac4c54a838b9519ac03664c8a75d2c51972f747afb9c951e226bb031fbb3"
+    },
+    "python-completion.ax.txt": {
+      "size": 10686,
+      "sha256": "44eef3a72cbea6df674a7e743bb6fa6f05c2cc93d3110731487e6103ab4a2ab8"
+    },
+    "python-completion.png": {
+      "size": 437527,
+      "sha256": "070cd203e68dddc4e19813b28569093fe116753aa80678953913224d239ec396"
+    },
+    "python-debug-completed.ax.txt": {
+      "size": 10134,
+      "sha256": "4316485aa8ae774bbe8175fc75fde9db61ea7667b30d133cdda19dac8c7b9198"
+    },
+    "python-debug-evaluate.png": {
+      "size": 496517,
+      "sha256": "06b44359262e12fac94ba1cf6e0158bb7c1c018c165e2ba213c5c26c5ee9631f"
+    },
+    "python-debug-step.ax.txt": {
+      "size": 10087,
+      "sha256": "aa4093fca30792f223816023f2d707cbe8c2a488cc1dd1b8fce6312cfff424bb"
+    },
+    "python-debug-step.png": {
+      "size": 512830,
+      "sha256": "e8de71c22f39911dd567559459fe414b646d562c2ee39be5dcbc03803747b75b"
+    },
+    "python-refactor-tests.ax.txt": {
+      "size": 10502,
+      "sha256": "04509818e67d41422692a72304f35b8637c9ee7998137fe2dc91b306d7b451af"
+    },
+    "python-refactor-tests.png": {
+      "size": 427004,
+      "sha256": "0bb7a8f31ccbc9e6fc5619fa087bd15c311c29666b3ae07b06c7df63721a7434"
+    },
+    "python-refactor-undo-tests.ax.txt": {
+      "size": 10516,
+      "sha256": "474d9e033df15b13183d767fb9909978760a171674fa7b1223da2a85051422d3"
+    },
+    "python-run.ax.txt": {
+      "size": 8969,
+      "sha256": "3fa27637a2d33e6606eb5190320b8fbe0a93fa016d45c220ca24ea2787c0076a"
+    },
+    "python-run.png": {
+      "size": 382496,
+      "sha256": "fbeaa3004db711cc2faa57781fd32c61d3ad1d25ee737fec7b608a0c50c72be8"
+    },
+    "python-tests.ax.txt": {
+      "size": 10442,
+      "sha256": "1c3714e0908a5f79ad62d2a737fdb56336fb495dc1d9fc57c1da6b55e8530286"
+    },
+    "python-tests.png": {
+      "size": 422877,
+      "sha256": "7d011cec9011cb56f31bda50a3a33bde65454d19999f7294b2ee25cbf81ec9ac"
+    },
+    "typescript-completion-diagnostic.ax.txt": {
+      "size": 7617,
+      "sha256": "b3b2334a9f6424befc29888149927387453c2f0ae97a6d0abdb7a025e1268b33"
+    },
+    "typescript-completion-diagnostic.png": {
+      "size": 238912,
+      "sha256": "4fa110fcfb002a5f7fc55da4c95fe59fa1839c7f8704ecd9b1a79d7c5f3e1b2d"
+    },
+    "typescript-definition.ax.txt": {
+      "size": 6886,
+      "sha256": "729dec6db3d77267c59aa49759ba44fdd3829eb650a83c5072bbe761a25850c5"
+    }
+  }
+}

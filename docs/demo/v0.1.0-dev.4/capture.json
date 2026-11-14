@@ -1,0 +1,80 @@
+{
+  "productVersion": "0.1.0-dev.4",
+  "upstreamVersion": "2026.1.4",
+  "upstreamBuild": "PC-261.26222.68",
+  "system": "macOS 27.2 arm64",
+  "python": "3.14.0",
+  "captureDate": "2026-11-14",
+  "sourceCommit": "88387c3f8e819fdedebdabf5a23403845e4ba07e",
+  "installer": "OpenPyCharm-0.1.0-dev.4-macos-arm64.dmg",
+  "installerSha256": "8b849bc6db67e929c8dff25ed32f79b0bb1d420c89487b6d85c0e34c8545dd64",
+  "installedApplication": "/Users/wangshubo/develop/openpycharm/build/frontend-dev4-installed/OpenPyCharm.app",
+  "profile": "/Users/wangshubo/develop/openpycharm/.state/frontend-dev4-installed",
+  "releaseStatus": "Native UI capture of the local DMG candidate; CI installer verification remains separate pending evidence",
+  "states": [
+    "Python native edited main.py Run,34.00/2.04/36.04 exit0",
+    "Native unittest9methods/20 reported items pass",
+    "Python breakpoint native evaluation Decimal2.0400; F8 step/F9 resume exit0",
+    "Cross-file Python PSI class Rename, imports/calls updated, tests20items passed; Undo+rerun separately passed",
+    "Bundled TypeScript native member quote.total and real semantic diagnostic",
+    "Bundled JavaScript unsaved document receipt.installedNative_9631 accepted; Chinese emoji; new identifier absent on disk before acceptance"
+  ],
+  "frames": [
+    {
+      "file": "python-run.png",
+      "durationMs": 2600
+    },
+    {
+      "file": "python-tests.png",
+      "durationMs": 2800
+    },
+    {
+      "file": "python-debug-evaluate.png",
+      "durationMs": 3600
+    },
+    {
+      "file": "python-refactor-tests.png",
+      "durationMs": 3200
+    },
+    {
+      "file": "typescript-completion-diagnostic.png",
+      "durationMs": 3600
+    },
+    {
+      "file": "javascript-unsaved.png",
+      "durationMs": 3200
+    }
+  ],
+  "captures": [
+    {
+      "file": "python-run.png",
+      "sha256": "fbeaa3004db711cc2faa57781fd32c61d3ad1d25ee737fec7b608a0c50c72be8"
+    },
+    {
+      "file": "python-tests.png",
+      "sha256": "7d011cec9011cb56f31bda50a3a33bde65454d19999f7294b2ee25cbf81ec9ac"
+    },
+    {
+      "file": "python-debug-evaluate.png",
+      "sha256": "06b44359262e12fac94ba1cf6e0158bb7c1c018c165e2ba213c5c26c5ee9631f"
+    },
+    {
+      "file": "python-refactor-tests.png",
+      "sha256": "0bb7a8f31ccbc9e6fc5619fa087bd15c311c29666b3ae07b06c7df63721a7434"
+    },
+    {
+      "file": "typescript-completion-diagnostic.png",
+      "sha256": "4fa110fcfb002a5f7fc55da4c95fe59fa1839c7f8704ecd9b1a79d7c5f3e1b2d"
+    },
+    {
+      "file": "javascript-unsaved.png",
+      "sha256": "74e0ac4c54a838b9519ac03664c8a75d2c51972f747afb9c951e226bb031fbb3"
+    }
+  ],
+  "captureSize": [
+    2800,
+    1750
+  ],
+  "method": "Real native OpenPyCharm app screenshots assembled into an animated sequence",
+  "gifSha256": "19eb7094a6e2bbda3b57bac80090390b347ac16596bb1fe2b2db201d72e4eb76"
+}
