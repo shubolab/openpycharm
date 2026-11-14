@@ -77,12 +77,12 @@
     "nativeTargetRuntime": true,
     "jarSha256": "8e1ac51c431a51d8ab1434953fc82e8c7587397deefe51a9d919c5d3bb9c2b9c"
   },
-  "probeJarSha256": "088be22400d470e3a01919f7c07abad83fabe75e7cfa05b5e59719502148a6e1",
-  "probeDirectory": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebook-savefix/.tools/notebook-save-native-probe/2b75f8a163d0329f1a10daca7daaf3ffa823741d3ec98aa25413bc6f68bea403/plugin",
+  "probeJarSha256": "7f6aff4bfd947859e80c844f6c92c8efdbdcd8b0512ed6a6eac2bd370f4a1481",
+  "probeDirectory": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebook-savefix/.tools/notebook-save-native-probe/93d2cfa0bb59dde71e92447fceaf63f905fad56a43c92753c4de5cb3d1c24b2b/plugin",
   "probeIdentity": {
     "sources": {
       "NotebookSavePayloadTest.java": "c720e6630b3b9f02bce7c982db40b416e1bb141ed90c0ab8e305224c0d54349c",
-      "NotebookSaveProbe.java": "16b7acdca625cea9cd93af31fd15e2bddeb2e3555d583d8f5fe146f26bd0fa94",
+      "NotebookSaveProbe.java": "bef71720384ac5066ac615098976d8005ff89a640167fa8da11d2d9681c3b06a",
       "plugin.xml": "2e96883c5ecd574054643d7b1ea622904af6c0d1fb74415262110f5b11df9315"
     },
     "productionJarSha256": "8e1ac51c431a51d8ab1434953fc82e8c7587397deefe51a9d919c5d3bb9c2b9c",
@@ -108,7 +108,7 @@
     "Real parent JSON formatting reload and source edit before platform SaveAll",
     "SaveAll persisted source, clean flags and live EDT heartbeat",
     "Reflected reloading/conflicted/persistenceDirty/viewer/modified/status/documentStamp/modificationSequence captures",
-    "Fresh heartbeat tick after reload request prevents acceptance of a prior state capture",
+    "NativeState captureEpoch published only with complete reflected state must exceed the EDT reload request counter; heartbeat is liveness only",
     "Another source edit and SaveAll after successful reload",
     "Full immutable nbformat payload and close/reopen"
   ],
@@ -121,5 +121,6 @@
   "unknown": [
     "New SaveAll/flags scenario actual native behavior",
     "Stamp-only callback race; no generation/stamp changes made on speculative cause"
-  ]
+  ],
+  "reflectionFailure": "Clears nativeState rather than retaining prior settled flags"
 }

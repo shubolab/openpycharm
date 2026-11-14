@@ -42,7 +42,8 @@ public final class NotebookSaveProbe implements StartupActivity.DumbAware {
   private final AtomicReference<String> documentText = new AtomicReference<>("");
   private final AtomicReference<String> cellText = new AtomicReference<>("");
   private final AtomicBoolean editorModified = new AtomicBoolean();
-  private record NativeState(boolean reloading, boolean conflicted, boolean persistenceDirty,
+  private final AtomicLong capturesCompleted = new AtomicLong();
+  private record NativeState(long captureEpoch, boolean reloading, boolean conflicted, boolean persistenceDirty,
                              boolean modified, boolean cellViewer, String status,
                              long documentStamp, long modificationSequence) { }
   private final AtomicReference<NativeState> nativeState = new AtomicReference<>();
@@ -150,12 +151,12 @@ public final class NotebookSaveProbe implements StartupActivity.DumbAware {
       stage.set("platform-save-all");
       // Exercise a real parent-document reload, then the ordinary SaveAll
       // action used by Cmd+S. Status text is checked separately from flags.
-      int reloadTick = edt(() -> {
+      long reloadTick = edt(() -> {
         Document json = FileDocumentManager.getInstance().getCachedDocument(virtual);
         WriteCommandAction.runWriteCommandAction(project, "Native SaveAll formatting control", null,
-            () -> json.setText(json.getText() + "  \n")); return heartbeat.get();
+            () -> json.setText(json.getText() + "  \n")); return capturesCompleted.get();
       });
-      await(() -> heartbeat.get() > reloadTick && settled() && sourceIs(documentText.get(), TARGET), 30, "Parent-document reload did not finish before platform SaveAll");
+      await(() -> nativeState.get() != null && nativeState.get().captureEpoch() > reloadTick && settled() && sourceIs(documentText.get(), TARGET), 30, "Parent-document reload did not finish before platform SaveAll");
       edt(() -> {
         Editor cell = firstCell(editor); require(!cell.isViewer(), "Reload left the cell read-only");
         WriteCommandAction.runWriteCommandAction(project, "Native SaveAll source edit", null, () -> cell.getDocument().setText(INTERIM)); return null;
@@ -219,11 +220,11 @@ public final class NotebookSaveProbe implements StartupActivity.DumbAware {
     Document document = FileDocumentManager.getInstance().getCachedDocument(virtual);
     if (document != null && document.getTextLength() < 200000) documentText.set(document.getText());
     try {
-      if (editor != null && document != null) nativeState.set(new NativeState(
+      if (editor != null && document != null) nativeState.set(new NativeState(capturesCompleted.incrementAndGet(),
           (boolean)field(editor, "reloading"), (boolean)field(editor, "conflicted"),
           ((NotebookPersistence)field(editor, "persistence")).isDirty(), editor.isModified(), firstCell(editor).isViewer(),
           ((JLabel)field(editor, "status")).getText(), document.getModificationStamp(), ((DocumentEx)document).getModificationSequence()));
-    } catch (Exception ignored) { }
+    } catch (Exception failure) { nativeState.set(null); }
   }
   private boolean savedTarget() { return savedSource(TARGET); }
   private boolean savedSource(String source) {
