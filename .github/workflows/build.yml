@@ -157,6 +157,9 @@ jobs:
         if: matrix.target == 'macos-arm64'
         shell: bash
         run: python scripts/markdown_probe.py --app "$PRODUCT" --sdk "$SDK" --profile "build/native-markdown-${TARGET}"
+      - name: Check native Notebook edit, undo, save, merge and reopen
+        shell: bash
+        run: python scripts/notebook_save_probe.py --sdk "$SDK" --app "$PRODUCT" --workspace ".tools/native-notebook-save-${TARGET}" --run --timeout 180
       - name: Check actual bundled HTTP registration with an isolated native API probe
         shell: bash
         run: |
@@ -205,6 +208,14 @@ jobs:
             build/native-markdown-*/idea.properties
             build/native-markdown-*/markdown-launch.log
             build/native-markdown-*/log/
+            .tools/native-notebook-save-*/prepared.json
+            .tools/native-notebook-save-*/native-report.json
+            .tools/native-notebook-save-*/result.json
+            .tools/native-notebook-save-*/external-timeout-threads.txt
+            .tools/native-notebook-save-*/notebook-save-native-timeout-threads.txt
+            .tools/native-notebook-save-*/launch.log
+            .tools/native-notebook-save-*/profile/idea.properties
+            .tools/native-notebook-save-*/profile/log/
             build/native-http-*/http-plugin.json
             build/native-http-*/idea.properties
             build/native-http-*/native-probe-launch.log
@@ -215,6 +226,8 @@ jobs:
             build/native-framework-*/framework-launch.log
             build/native-framework-*/log/
           if-no-files-found: warn
+          # The native Notebook gate uses the explicitly listed owned .tools workspace.
+          include-hidden-files: true
           retention-days: 14
       # Native Python Run/Test/Debug UI acceptance and release publication are
       # separate gates. Creating these artifacts does not publish a release.

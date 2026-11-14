@@ -1,0 +1,139 @@
+{
+  "schema": 1,
+  "observedAt": "2026-11-14T03:34:11.899430+00:00",
+  "releaseReady": false,
+  "candidate": {
+    "sourceCommit": "83cf69aa4e52eb2740dc565f5945e28a4240c0da",
+    "sourceInputs": 137,
+    "manifestSha256": "d3e7f95e38fa090fca2528c98df8014b305b052f9bd534f4cb0043ada2431717",
+    "afterDesktopTreeSha256": "192814544d7048c3e40bdec15c398a0dc89fe1bd2ddd24d24188f0420ecd184a",
+    "productionInputsStillCurrent": true,
+    "pluginJarsVerified": true,
+    "finalInstaller": false,
+    "afterDesktopStrictSignatureVerified": true
+  },
+  "nativeSaveGate": {
+    "assessment": {
+      "status": "pass",
+      "actualNativeSaveEngine": true,
+      "kernelCodeExecuted": false
+    },
+    "productionJarSha256": "6f33f1470d94461b2309e8e9e48ad1ed6a62678ed135cbbd5ddb0053bef22970",
+    "probeJarSha256": "87ad3036b8addaf64fe7dc45e81c653ec7146e0b5f0a27cf10584706bcb620c8",
+    "invocationId": "0e1d319996c14e09997a6e5569a08980",
+    "ownedPid": 35017,
+    "cleanup": {
+      "mode": "owned-posix-session",
+      "pid": 35017,
+      "exitCode": 143
+    },
+    "exit": 143,
+    "checks": {
+      "kernelCodeExecuted": false,
+      "ownedFixtureOnly": true,
+      "projectTrustBypassed": false,
+      "nativeButtonDoClick": true,
+      "projectTrusted": true,
+      "nativeUndoRestored": true,
+      "pendingCellAndTextMerge": true,
+      "nativeSavePersisted": true,
+      "postSaveExternalDirtyMerge": true,
+      "metadataAndExistingOutputsPreserved": true,
+      "closeReopenSourcePreserved": true,
+      "lastCapturedEditorModified": false
+    },
+    "heartbeatTicksAfterSave": 4,
+    "savedBytes": 534,
+    "savedSha256": "4e74959c78b8987997c16b1361bffe0138377c7f1c324c2f327bbe61bd19cb14",
+    "completeNativeReportSha256": "32863072ac60066a382484bf7de9c7acfea753f3a7c84b4ddfc203c4f5fcdb52",
+    "completeLocalResult": ".tools/native-save-fixed-83cf-1/result.json",
+    "kernelCodeExecuted": false,
+    "existingFixtureOutputsAreNotRuntimeEvidence": true
+  },
+  "manualDesktop": {
+    "ownedPid": 35245,
+    "ordinaryProjectTrust": true,
+    "undoRestoredSource": true,
+    "platformSaveShortcutPersistedChineseAndEmoji": true,
+    "savedBytes": 891,
+    "savedSha256": "9cf603340086c7bba83211ae9064c176cc9c103012b8873056cd161366b1e13c",
+    "closedTabAndReopenedTextIntact": true,
+    "projectsClosedNormally": true,
+    "knownRemainingNotebookIssue": "Platform Save All left Preparing status until close/reopen; keep open for native gate extension",
+    "databaseNarrowPaneBeginAndCommitActivated": true,
+    "databaseNativeCompletionAccepted": false,
+    "databaseCompletionFinding": "Fresh Primary SQLite metadata and verified caret 2:18; Basic action produced no visible lookup or insertion",
+    "jdbcDisconnectedNormally": true
+  },
+  "localEvidence": {
+    "after-save-responsive.ax.txt": {
+      "bytes": 8226,
+      "sha256": "292adad4c7f3edff847f3cbb5d61ce63e2bb5566ad5c35830efc4f59954a43b8"
+    },
+    "database-narrow-begin.ax.txt": {
+      "bytes": 10051,
+      "sha256": "2fb05994ffacced6baec6c1a5ae0447f55b4e0c59eb8a9cc761f36cb34a2363e"
+    },
+    "database-narrow-commit.ax.txt": {
+      "bytes": 10031,
+      "sha256": "9860c6be5784e2128bb12f3ce1d4fe305ab3cfee1acb0f0663672fc0fb46177c"
+    },
+    "database-narrow-layout.png": {
+      "bytes": 617316,
+      "sha256": "784a6103db901aae49f6769aca6cc33d90b2db86694ff373c7059858fc279ed6"
+    },
+    "manual-reopened.ax.txt": {
+      "bytes": 8232,
+      "sha256": "c331f1499b4b543087b3bc3fe4d4f907cb8aa448294d0f35f07648e8531d3d4b"
+    },
+    "manual-reopened.png": {
+      "bytes": 340136,
+      "sha256": "1860e0aa1f8e43280ca7fec310a1da7014fe5bfe1f880e091120316903a35684"
+    },
+    "manual-save.ax.txt": {
+      "bytes": 8226,
+      "sha256": "292adad4c7f3edff847f3cbb5d61ce63e2bb5566ad5c35830efc4f59954a43b8"
+    },
+    "manual-undo.ax.txt": {
+      "bytes": 7963,
+      "sha256": "8fe46356fff5b057e4722d610a86a1e71423e7f76d0f1aff8f0c3dffbe296c76"
+    },
+    "sql-completion-no-lookup.ax.txt": {
+      "bytes": 9364,
+      "sha256": "8ea5d6318807c5eba78a80f2b5d30dab00fd66edaba7cfda4cacccb5209f6fac"
+    },
+    "sql-table-lookup.ax.txt": {
+      "bytes": 12408,
+      "sha256": "911f4d35c68f263e59a167ea135a4dfeeb7895b35bc75dd15a8aa4ba1b24a637"
+    },
+    "termination.json": {
+      "bytes": 265,
+      "sha256": "3d5e25e3beac4c4cbfc7dab969f46f2625a5a1f26b5f8ca4f86cdc31942477e6"
+    }
+  },
+  "limitations": [
+    "Uninstalled preflight candidate; final installed dev.3 GIF and acceptance still required",
+    "The actual Notebook Save-button gate passed, while the distinct platform Save All pending-state flow needs further investigation",
+    "SQL completion native integration is not accepted",
+    "Rich notebook rendering remains isolated and under review",
+    "No interactive Windows desktop or full 1:1 PyCharm parity claim"
+  ],
+  "originalCandidateNegative": {
+    "productionJarSha256": "4c3ff6c07e35e5f174fc25e5897e6cac37e40e9789b3d4d819035b5e5bafe8cf",
+    "probeJarSha256": "87ad3036b8addaf64fe7dc45e81c653ec7146e0b5f0a27cf10584706bcb620c8",
+    "invocationId": "0e06feaea68b4f65bfe14d1b457ed7f4",
+    "status": "fail",
+    "stage": "native-save-request",
+    "failure": "java.lang.IllegalStateException: Native Save did not persist edits while continuing its EDT heartbeat (deadline)",
+    "heartbeatAgeMillis": 27,
+    "ownedPid": 46669,
+    "cleanup": {
+      "mode": "owned-posix-session",
+      "pid": 46669,
+      "exitCode": 143
+    },
+    "exit": 143,
+    "resultSha256": "6af794815b8d32fe5cf2f51aa515f6ce7d34402fb663d1f613bc1e68322fe117",
+    "scope": "The identical native gate rejected the original candidate because Save did not persist before its deadline; this run did not establish the earlier manual EDT deadlock"
+  }
+}
