@@ -21,7 +21,9 @@ files and the PSI-backed SQL console. It resolves simple schema/table names and
 aliases in SELECT/FROM/JOIN/WHERE/ON/UPDATE/INTO contexts, quotes inserted
 identifiers with the connected driver's quote style, and preserves Unicode
 names and embedded quotes. Ambiguous joined columns are qualified. Comments,
-strings, unsupported CTEs and nested query scopes do not produce suggestions.
+strings, unsupported CTEs, compound queries and nested query scopes do not produce suggestions.
+SQLite's default namespace is represented as `main` when its JDBC driver
+reports no schema; completed `main.table` SQL is checked on actual SQLite.
 
 Connect or choose **Refresh tables** to refresh completion metadata explicitly.
 The background snapshot includes at most 128 tables, 64 columns per table and

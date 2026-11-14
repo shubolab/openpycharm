@@ -36,8 +36,8 @@ public final class SqlCompletionContext {
     }
     List<Token> tokens=new ArrayList<>();
     for(Token t:all)if(t.start>=statementStart&&t.end<=statementEnd&&t.kind!=Kind.COMMENT)tokens.add(t);
-    // Avoid offering an outer alias in an unsupported nested query/CTE scope.
-    if(!tokens.isEmpty()&&tokens.getFirst().word().equals("WITH"))return none(caret);
+    // Avoid aliases crossing unsupported CTE, compound-arm or nested scopes.
+    for(Token t:tokens)if(Set.of("WITH","UNION","INTERSECT","EXCEPT").contains(t.word()))return none(caret);
     for(int i=0;i+1<tokens.size();i++)if(tokens.get(i).kind==Kind.LEFT&&Set.of("SELECT","WITH").contains(tokens.get(i+1).word()))return none(caret);
     int start=current==null?caret:current.start,end=current==null?caret:current.end;
     String prefix="";

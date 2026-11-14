@@ -22,7 +22,9 @@ after five minutes and remain empty until another explicit connect/refresh.
 Connection changes, disconnect and common DDL invalidate the cache. Generation
 tokens reject a late refresh from an older connection or refresh operation.
 Commit/rollback also invalidates metadata captured after transaction-local DDL,
-so a rolled-back table cannot remain in suggestions. Lookup preparation and
+so a rolled-back table cannot remain in suggestions. A failed resolution keeps
+the dirty-schema marker until a later successful commit/rollback, including
+the deferred-foreign-key failed-COMMIT case. Lookup preparation and
 insertion recheck the snapshot identity; stale insertions restore the original
 identifier text. Existing owned-connection, cancellation-ticket and query
 deadline paths remain in place.
@@ -33,12 +35,14 @@ Observed:
   actual IntelliJ archive-reader verification passed.
 - The existing 80 real SQLite/JVM controls passed, including transactions,
   explicit cancellation, stale cancellation tickets and the 15-second deadline.
-- 75 completion assertions passed across actual disposable SQLite metadata,
+- 87 completion assertions passed across actual disposable SQLite metadata,
   executable completed SQL, native prefix matching, quoted/Unicode identifiers,
   aliases, duplicate names, context bounds, disconnect/reconnect, expiration,
   late refresh rejection, DDL rollback and project-memory-only lookup on EDT.
-  Schema-qualified namespace controls use immutable synthetic namespaces over
-  real SQLite column metadata; no PostgreSQL/MySQL server was contacted.
+  SQLite's JDBC-null schema is normalized to its default `main` namespace and
+  the resulting qualified SQL is executed against SQLite. Additional public/
+  other namespace controls use immutable synthetic namespaces over real SQLite
+  column metadata; no PostgreSQL/MySQL server was contacted.
 - Repository discovery passed 112 tests with six existing notebook-kernel
   dependency-gated skips; all database checks ran. The Python example passed
   nine tests from its fixture directory.
@@ -65,7 +69,7 @@ For root's native UI gate, use only an owned disposable database:
 
 Unknown: native extension registration/popup/keyboard/quote replacement in the
 real IDE, physical display behavior, Windows runtime, server metadata latency,
-and vendor-specific SQL semantics. CTEs, subqueries, full dialect name
+and vendor-specific SQL semantics. CTEs, compound queries, subqueries, full dialect name
 resolution, semantic inspections and completion from unconnected databases
 are intentionally outside this bounded implementation. External schema
 changes require explicit Refresh tables.

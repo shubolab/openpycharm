@@ -5,8 +5,8 @@
     "sources": {
       "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
       "plugins/database/NOTICE": "24da0a8ee481e7d1c0b58cbc5664fa7c7065f9d3d144e2c49ec5155dc00605bc",
-      "plugins/database/README.md": "0bc561347aa8f0e21fb341a256b0e5436f86b73c3525dba8dc052bb8cdd1eef9",
-      "plugins/database/README.zh-CN.md": "849c7560b21a0a40f4c1d65b30cb6ac92effc7f5a544e723983136e1301f7139",
+      "plugins/database/README.md": "4207fd0dd898aff99b9b3999bacf53604be3b33f94efdcbfb46fdc289535a151",
+      "plugins/database/README.zh-CN.md": "8b05e5e5021e1e073bb7785a3ad8b2a99e43345c0ac39991493b323c6e0d1f28",
       "plugins/database/build-support/VerifyDatabaseArchive.java": "61af334fd4ddbe8ad7804d1b3bf716fe691b7631da0576ae5ad8b1fe1977c442",
       "plugins/database/drivers.lock.json": "82eb4999860754b63d9c1ce1c9e01bf940c15c59d56280d3d31ced0eece36f2c",
       "plugins/database/legal/GPL-2.0.txt": "edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6",
@@ -24,10 +24,10 @@
       "plugins/database/src/dev/openpycharm/database/DatabaseProfile.java": "3e578ec23b507c758a9dae5f84a13899876182578accf1c5f601761d170e4a4a",
       "plugins/database/src/dev/openpycharm/database/DatabaseService.java": "43efcfa009c63eb197d5a64a21deaeab744e767c97402beb6419766c54d0d89f",
       "plugins/database/src/dev/openpycharm/database/DatabaseToolWindow.java": "d7ba9d3711ebf2994759b47bb0d2812110822bda10123fc856bfd2d12fa775c1",
-      "plugins/database/src/dev/openpycharm/database/JdbcSession.java": "503f789ad4e3406b127a270cce1c6e4282ff5b8dd101838cd33da5172572b9ce",
+      "plugins/database/src/dev/openpycharm/database/JdbcSession.java": "c2cb0626ba1b4c541ad31c93f77b591d611cbd8654fe92bbc0fc057428b236e9",
       "plugins/database/src/dev/openpycharm/database/RunSqlAction.java": "04cddd35d804f21d03f8c4fac6be49047e2e014a0ebae9edd825f86bdc83a617",
       "plugins/database/src/dev/openpycharm/database/SqlCompletionCandidates.java": "632d0d8843feb35a199c92dd632cbb7b6b4f305335bbf5d8d2c879155e368fc3",
-      "plugins/database/src/dev/openpycharm/database/SqlCompletionContext.java": "cbd23a8e973992929d507a4dddd8918881779c8606e768b2aef3a990fd40b8f1",
+      "plugins/database/src/dev/openpycharm/database/SqlCompletionContext.java": "a87e66e1fd19ee10ab4ea24c170c89bccd1a52b6864ecd216cde49f6236d5275",
       "plugins/database/src/dev/openpycharm/database/SqlCompletionContributor.java": "37ecf68ee3f3b2278d0fc78f3639940bf39319d13a493bd7414c17e6f778df95",
       "plugins/database/src/dev/openpycharm/database/SqlLanguage.java": "474882faefb74af7db23a562bd20bbe8f39b9422ed8aee1883a50e6314ef3204",
       "plugins/database/src/dev/openpycharm/database/SqlParserDefinition.java": "7940e21b977f29fc67c84c25d29f6cbc072884292d7c03b41782228870d79c9d",
@@ -90,9 +90,9 @@
       }
     ]
   },
-  "jarSha256": "a8f74b3c7f9616ce8b5e51aec3ac226e5d14022c37f68d23e713ccbf47d348db",
+  "jarSha256": "e9a6a37725c515fcff51bc45dcb95df5e4a8ccf0f6e23329d9e7a4c5e46b909d",
   "files": {
-    "lib/database.jar": "a8f74b3c7f9616ce8b5e51aec3ac226e5d14022c37f68d23e713ccbf47d348db",
+    "lib/database.jar": "e9a6a37725c515fcff51bc45dcb95df5e4a8ccf0f6e23329d9e7a4c5e46b909d",
     "lib/sqlite-jdbc-3.54.1.0.jar": "f8dce420a6016278497f4f0560f65602b9db858de141b541cf91a4644ebe4639",
     "lib/postgresql-42.7.13.jar": "6e0e4cc2d8cae902084f8a2b18728b073a6fd9d1f87c9d8bff8f298c18185b93",
     "lib/mariadb-java-client-3.5.11.jar": "42604178b9e57ec08ee0035079961516f086e455d0141f0b22c6eff29fb2fff4",
@@ -103,7 +103,7 @@
     "reader": "HashMapZipFile",
     "verifiedEntries": 55,
     "closed": true,
-    "sha256": "a8f74b3c7f9616ce8b5e51aec3ac226e5d14022c37f68d23e713ccbf47d348db"
+    "sha256": "e9a6a37725c515fcff51bc45dcb95df5e4a8ccf0f6e23329d9e7a4c5e46b909d"
   },
   "integrationTests": {
     "status": "pass",
@@ -116,16 +116,16 @@
     "nativeDesktopTested": false,
     "completionTests": {
       "status": "pass",
-      "checks": 75,
+      "checks": 87,
       "realSqliteMetadata": true,
       "quotedUnicodeAliasAndSchemaContexts": true,
       "schemaNamespacesUseInMemoryControls": true,
       "disconnectAndStaleSnapshots": true,
       "nativeCompletionUiTested": false,
       "networkServersTested": false,
-      "testSourceSha256": "45ccf2731c21086c98c9504888c3437d2491ab8d76fb1b2ba0a01de1196b8c4d"
+      "testSourceSha256": "43fdcc200ad9fddf70a940240eb62d28d65eeda501948aeaa9af4bfe61751ea8"
     },
-    "jarSha256": "a8f74b3c7f9616ce8b5e51aec3ac226e5d14022c37f68d23e713ccbf47d348db",
+    "jarSha256": "e9a6a37725c515fcff51bc45dcb95df5e4a8ccf0f6e23329d9e7a4c5e46b909d",
     "testSourceSha256": "ecdf0344967a7b766c0ead01d0dd66d3fcf3a7525f6c30fb186cffcc2fc9695a",
     "targetPlatform": "macos",
     "executionPlatform": "macos",

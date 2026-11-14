@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
+import java.sql.SQLException;
 import javax.swing.SwingUtilities;
 import static dev.openpycharm.database.DatabaseMetadataCache.*;
 
@@ -30,7 +31,10 @@ public final class DatabaseCompletionProbe {
       session.refreshMetadata();Snapshot snapshot=session.completionSnapshot();check(snapshot!=null&&snapshot.tables().size()==6,"snapshot comes from real connected SQLite metadata");
       check(snapshot.tables().stream().filter(t->t.name().equals("products")).findFirst().orElseThrow().columns().size()==6,"real column names captured");
       check(snapshot.tables().stream().filter(t->t.name().equals("wide")).findFirst().orElseThrow().columns().size()==64&&snapshot.truncated(),"wide table columns are bounded and truncation recorded");
-      check(named(snapshot,"SELECT * FROM pro<caret>","products").insertion().equals("\"products\""),"FROM proposes a quoted table");
+      check(named(snapshot,"SELECT * FROM pro<caret>","products").insertion().equals("\"main\".\"products\""),"FROM proposes a quoted SQLite main table");
+      check(named(snapshot,"SELECT * FROM ma<caret>","main").kind().equals("schema"),"real SQLite default main namespace is available");
+      check(named(snapshot,"SELECT * FROM main.pro<caret>","products").insertion().equals("\"products\""),"SQLite schema-qualified table completion");
+      check(named(snapshot,"SELECT main.products.na<caret>","name").kind().equals("column"),"SQLite main.table.column completion");
       check(named(snapshot,"SELECT * FROM products p JOIN ord<caret> ON p.id=1","orders").kind().equals("table/view"),"JOIN proposes a table");
       check(named(snapshot,"UPDATE pro<caret> SET name='x'","products").kind().equals("table/view"),"UPDATE proposes a table");
       check(named(snapshot,"INSERT INTO pro<caret>(id) VALUES(1)","products").kind().equals("table/view"),"INTO proposes a table");
@@ -46,14 +50,14 @@ public final class DatabaseCompletionProbe {
       check(candidates(snapshot,"SELECT missing.<caret> FROM products p").isEmpty(),"unknown qualifier does not leak arbitrary table columns");
       check(named(snapshot,"SELECT \"别名\".商<caret> FROM \"订单 表\" AS \"别名\"","商品 名").insertion().equals("\"商品 名\""),"quoted Unicode table and alias");
       String unicode=inserted(snapshot,"SELECT * FROM \"订单<caret> 表\"","订单 表");
-      check(unicode.equals("SELECT * FROM \"订单 表\""),"quoted table replacement consumes existing closing quote");
+      check(unicode.equals("SELECT * FROM \"main\".\"订单 表\""),"quoted table replacement consumes existing closing quote");
       check(session.execute(unicode).columns().contains("商品 名"),"completed Unicode table SQL executes on real SQLite");
       String column=inserted(snapshot,"SELECT p.\"列 <caret>名\" FROM products p","列 名");
       check(column.equals("SELECT p.\"列 名\" FROM products p")&&session.execute(column).columns().contains("列 名"),"partial quoted Unicode column replacement executes");
       String escaped=inserted(snapshot,"SELECT * FROM \"odd<caret>\"","odd\"table");
       check(escaped.contains("\"odd\"\"table\"")&&session.execute(escaped).columns().contains("col\"umn"),"embedded quote table insertion executes");
-      check(inserted(snapshot,"SELECT * FROM `pro<caret>`","products").equals("SELECT * FROM \"products\""),"backtick prefix replaced with driver-safe identifier quoting");
-      check(inserted(snapshot,"SELECT * FROM [pro<caret>]","products").equals("SELECT * FROM \"products\""),"bracket prefix replaced without dangling close");
+      check(inserted(snapshot,"SELECT * FROM `pro<caret>`","products").equals("SELECT * FROM \"main\".\"products\""),"backtick prefix replaced with driver-safe identifier quoting");
+      check(inserted(snapshot,"SELECT * FROM [pro<caret>]","products").equals("SELECT * FROM \"main\".\"products\""),"bracket prefix replaced without dangling close");
       check(named(snapshot,"SELECT \"has.dot\".<caret>","dot column").insertion().equals("\"dot column\""),"dot inside quoted table name remains one identifier");
       check(named(snapshot,"SELECT p.quo<caret> FROM products p","quote\"column").insertion().equals("\"quote\"\"column\""),"column quotes escaped");
       check(session.execute(inserted(snapshot,"SELECT sel<caret> FROM products","select")).columns().contains("select"),"reserved-word column is inserted as a valid quoted identifier");
@@ -64,6 +68,9 @@ public final class DatabaseCompletionProbe {
       check(candidates(snapshot,"SELECT p.<caret> FROM products p; SELECT * FROM orders p").stream().noneMatch(c->c.name().equals("product_id")),"another statement cannot overwrite current alias");
       check(candidates(snapshot,"WITH p AS (SELECT * FROM products) SELECT p.<caret> FROM p").isEmpty(),"unsupported CTE scopes are conservative");
       check(candidates(snapshot,"SELECT * FROM products p WHERE EXISTS(SELECT p.<caret> FROM orders p)").isEmpty(),"unsupported nested scope cannot reuse outer alias");
+      for(String compound:List.of("UNION","INTERSECT","EXCEPT"))check(candidates(snapshot,"SELECT o.<caret> FROM products p "+compound+" SELECT id FROM orders o").isEmpty(),"compound query cannot import another arm's alias");
+      check(candidates(snapshot,"SELECT <caret> FROM products p UNION SELECT id FROM orders o").isEmpty(),"compound arms cannot mix unqualified column candidates");
+      check(named(snapshot,"SELECT p.na<caret>, 'UNION' FROM products p","name")!=null,"compound keyword in string does not disable a plain SELECT");
       check(SqlCompletionContext.analyze("x".repeat(SqlCompletionContext.MAX_TEXT+1),1).mode()==SqlCompletionContext.Mode.NONE,"completion document bound");
       List<Table> qualified=new ArrayList<>();for(Table t:snapshot.tables())qualified.add(new Table(null,"public",t.name(),t.columns()));
       qualified.add(new Table(null,"other","products",List.of(new Column("foreign_column","TEXT"))));
@@ -89,6 +96,14 @@ public final class DatabaseCompletionProbe {
       check(named(session.completionSnapshot(),"SELECT * FROM transaction_<caret>","transaction_only")!=null,"metadata can reflect current transaction's own schema");
       session.rollback();session.setAutoCommit(true);check(session.completionSnapshot()==null,"rollback invalidates a snapshot captured after uncommitted DDL");
       session.refreshMetadata();check(candidates(session.completionSnapshot(),"SELECT * FROM transaction_<caret>").isEmpty(),"rolled-back table cannot remain in refreshed candidates");
+      session.execute("PRAGMA foreign_keys=ON");session.execute("CREATE TABLE fk_parent(id INTEGER PRIMARY KEY)");session.execute("CREATE TABLE fk_child(parent_id INTEGER REFERENCES fk_parent(id) DEFERRABLE INITIALLY DEFERRED)");
+      session.setAutoCommit(false);session.execute("CREATE TABLE failed_commit_table(temporary_column TEXT)");session.execute("INSERT INTO fk_child VALUES(999)");session.refreshMetadata();
+      boolean failedCommit=false;try{session.commit();}catch(SQLException expected){failedCommit=true;}
+      check(failedCommit&&!session.autoCommit()&&session.completionSnapshot()==null,"deferred FK rejects COMMIT without ending schema transaction or retaining snapshot");
+      session.refreshMetadata();check(named(session.completionSnapshot(),"SELECT * FROM failed_commit_<caret>","failed_commit_table")!=null,"failed COMMIT transaction still exposes its own uncommitted table");
+      session.rollback();session.setAutoCommit(true);check(session.completionSnapshot()==null,"failed COMMIT retains dirty flag so later rollback invalidates refreshed metadata");
+      session.refreshMetadata();boolean tableGone=false;try{session.execute("SELECT * FROM failed_commit_table");}catch(SQLException expected){tableGone=true;}
+      check(tableGone&&candidates(session.completionSnapshot(),"SELECT * FROM failed_commit_<caret>").isEmpty(),"rolled-back failed-COMMIT table is absent in actual SQLite and candidates");
       Snapshot readOnEdt=session.completionSnapshot();SwingUtilities.invokeAndWait(()->check(!candidates(readOnEdt,"SELECT p.na<caret> FROM products p").isEmpty(),"completion is in-memory and safe to read on EDT"));
       session.close();check(session.completionSnapshot()==null,"disconnect discards snapshot");
       DatabaseProfile other=p.copy();other.file=root.resolve("other-endpoint.sqlite").toString();session.connect(other,null);check(session.completionSnapshot()==null,"new endpoint cannot see old snapshot");

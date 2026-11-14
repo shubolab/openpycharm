@@ -48,10 +48,10 @@ public final class JdbcSession implements AutoCloseable {
     background(); if(connection==null || connection.isClosed()) throw new SQLException("Connect to a database first"); return connection;
   }
   public boolean autoCommit() throws SQLException { return connected().getAutoCommit(); }
-  public void setAutoCommit(boolean value) throws SQLException {background();try{connected().setAutoCommit(value);}finally{if(value)resolvedSchemaTransaction();}}
-  public void commit() throws SQLException {background();try{connected().commit();}finally{resolvedSchemaTransaction();}}
-  public void rollback() throws SQLException {background();try{connected().rollback();}finally{resolvedSchemaTransaction();}}
-  private void resolvedSchemaTransaction(){if(transactionChangedSchema)metadataCache.invalidate();transactionChangedSchema=false;}
+  public void setAutoCommit(boolean value) throws SQLException {background();boolean completed=false;try{connected().setAutoCommit(value);completed=true;}finally{if(value)resolvedSchemaTransaction(completed);}}
+  public void commit() throws SQLException {background();boolean completed=false;try{connected().commit();completed=true;}finally{resolvedSchemaTransaction(completed);}}
+  public void rollback() throws SQLException {background();boolean completed=false;try{connected().rollback();completed=true;}finally{resolvedSchemaTransaction(completed);}}
+  private void resolvedSchemaTransaction(boolean completed){if(transactionChangedSchema)metadataCache.invalidate();if(completed)transactionChangedSchema=false;}
   public Result execute(String sql) throws Exception {
     Connection c=connected(); sql=SqlText.forEngine(sql,engine);long start=System.nanoTime();
     if(SqlText.changesSchema(sql)){metadataCache.invalidate();if(!c.getAutoCommit())transactionChangedSchema=true;}
@@ -127,7 +127,8 @@ public final class JdbcSession implements AutoCloseable {
           columns.add(new DatabaseMetadataCache.Column(name,type));total++;
         }
       } catch(SQLException error) {truncated=true;}
-      captured.add(new DatabaseMetadataCache.Table(t.catalog,t.schema,t.name,columns));
+      String snapshotSchema=engine==DatabaseProfile.Engine.SQLITE&&(t.schema==null||t.schema.isBlank())?"main":t.schema;
+      captured.add(new DatabaseMetadataCache.Table(t.catalog,snapshotSchema,t.name,columns));
     }
     metadataCache.publish(token,quote,captured,truncated);
     return visible;
