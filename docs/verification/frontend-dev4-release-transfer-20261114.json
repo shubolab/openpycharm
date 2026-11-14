@@ -1,0 +1,87 @@
+{
+  "schema": 1,
+  "status": "verified-github-internal-transfer-pass",
+  "observedAtUtc": "2026-11-14T16:07:27.692428+00:00",
+  "workflow": {
+    "run": 43613559750,
+    "url": "https://github.com/shubolab/openpycharm/actions/runs/43613559750",
+    "head": "2cf9c13e88f9d053df55f7d924d3f6c39c134cb1",
+    "branch": "codex_dev4_release_transfer",
+    "temporaryBuildWorkflowNeverMerge": true,
+    "job": "verified-draft-transfer",
+    "conclusion": "success"
+  },
+  "receiptArtifact": {
+    "id": 14120324615,
+    "name": "dev4-draft-transfer-43613559750",
+    "size": 895,
+    "sha256": "202b62ac3f065a13606a3ba3ac80115192370976b503675a21e1a6d7488262f1",
+    "apiDigestMatched": true,
+    "crcPass": true
+  },
+  "receipt": {
+    "schema": 1,
+    "status": "verified-draft-four-assets-uploaded",
+    "releaseId": 445401980,
+    "tag": "v0.1.0-dev.4",
+    "releaseStillDraft": true,
+    "publishedByThisJob": false,
+    "sourceCiRun": 43608150941,
+    "workflowRun": "43613559750",
+    "transfer": [
+      {
+        "name": "OpenPyCharm-0.1.0-dev.4-macos-arm64.dmg",
+        "artifactId": 14119163167,
+        "archiveSize": 693250632,
+        "archiveSha256": "840ad6505d0736df48ca04911922c7bfb74c1936af300984010f0f6dfef5691a",
+        "size": 745666387,
+        "sha256": "5b07b72026108082a56da34cad2be600f56b04d99850c8a7e25176cf49eaaa76",
+        "assetId": 748004560
+      },
+      {
+        "name": "OpenPyCharm-0.1.0-dev.4-windows-x64-setup.exe",
+        "artifactId": 14119433953,
+        "archiveSize": 647582321,
+        "archiveSha256": "6c5e73822667a892bd9823456721aed55ad670d5b97ca2ef6a93973ce08f56cd",
+        "size": 646318653,
+        "sha256": "fa1dcf5e36e1a1f5e41e3859c6ee158101f148b75f4e4126dcc90d54621e8aa2",
+        "assetId": 748006142
+      }
+    ],
+    "assets": [
+      {
+        "id": 748004560,
+        "name": "OpenPyCharm-0.1.0-dev.4-macos-arm64.dmg",
+        "size": 745666387,
+        "digest": "sha256:5b07b72026108082a56da34cad2be600f56b04d99850c8a7e25176cf49eaaa76",
+        "state": "uploaded"
+      },
+      {
+        "id": 747946449,
+        "name": "OpenPyCharm-0.1.0-dev.4-provenance.zip",
+        "size": 2171239,
+        "digest": "sha256:db4325acc832110e25b23231e1f52ebfa97cecf40cfba239a5e48e127f113d48",
+        "state": "uploaded"
+      },
+      {
+        "id": 748006142,
+        "name": "OpenPyCharm-0.1.0-dev.4-windows-x64-setup.exe",
+        "size": 646318653,
+        "digest": "sha256:fa1dcf5e36e1a1f5e41e3859c6ee158101f148b75f4e4126dcc90d54621e8aa2",
+        "state": "uploaded"
+      },
+      {
+        "id": 747946447,
+        "name": "SHA256SUMS.txt",
+        "size": 323,
+        "digest": "sha256:0896743799f151681525ffbcb569c6bff9a0953be4062f308ec95841789a0ca5",
+        "state": "uploaded"
+      }
+    ],
+    "installersExecuted": false,
+    "userCredentialForwarded": false
+  },
+  "releaseIndependentlyObservedStillDraft": true,
+  "installersExecuted": false,
+  "publishedByThisTask": false
+}
