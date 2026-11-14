@@ -2,10 +2,10 @@
 
 Full PyCharm 1:1 parity remains incomplete. This record covers the bundled
 frontend preview, native product gates, installer transport and bounded desktop
-observations. Publication is recorded separately after upload.
+observations. Published on 2026-11-15 (Asia/Shanghai); the [publication receipt](v0.1.0-dev.4-published.json) records all four server digests and anonymous public transport checks.
 
 完整 1:1 尚未完成。本页记录前端预览版、原生产品门、安装器传输和有界桌面观察；
-上传后的公开发行结果另留收据。
+公开发行日期为 2026-11-15（Asia/Shanghai），附件摘要及匿名下载核对见发行收据。
 
 | Identity / 来源 | Value / 值 |
 | --- | --- |
@@ -106,3 +106,13 @@ to dev.3; the dev.4 CI/API checks are recorded separately.
 相同源码与 JAR 支持对本预览版代码复用有界功能观察，不证明所有平台和场景。
 Windows 实体桌面、异常进程清理、完整前端语义、HTML/CSS、远程/容器与完整 1:1
 仍未完成。guardian 原型单独保存，不随产品发布；历史桌面结果保留其原版本归属。
+
+## Canonical local installation / 本机正式安装位置
+
+The verified CI app is now installed at `~/Applications/OpenPyCharm.app`,
+with a retained dev.3 app under the repository's `build/retained-installed/dev3-before-dev4`.
+Its isolated native startup, final tree, strict signature and exited owned process
+were checked again. [Installation receipt](frontend-dev4-canonical-installed-20261115.json).
+
+本机 OpenPyCharm 已更新为上述 CI dev.4，保留 dev.3 回退副本；独立启动、最终产品树、
+严格签名及自有进程退出再次通过。该升级没有修改对照 PyCharm 或用户配置。

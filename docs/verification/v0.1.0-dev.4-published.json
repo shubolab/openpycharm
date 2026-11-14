@@ -1,0 +1,92 @@
+{
+  "schema": 1,
+  "status": "published-four-assets-server-digest-and-public-transport-pass",
+  "releaseId": 445401980,
+  "tag": "v0.1.0-dev.4",
+  "releaseUrl": "https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.4",
+  "publishedAtUtc": "2026-11-14T16:07:53Z",
+  "isDraft": false,
+  "isPrerelease": true,
+  "tagCommit": "57d93bd46409b78e4773b8f8dd92ef80f19df1fd",
+  "productionSourceCommit": "63921a4a931e19996b05ea4de4df12d27ff021bf",
+  "sourceCiRun": 43608150941,
+  "assetTransferRun": 43613559750,
+  "assets": [
+    {
+      "name": "OpenPyCharm-0.1.0-dev.4-macos-arm64.dmg",
+      "assetId": 748004560,
+      "bytes": 745666387,
+      "serverSha256": "5b07b72026108082a56da34cad2be600f56b04d99850c8a7e25176cf49eaaa76",
+      "url": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.4/OpenPyCharm-0.1.0-dev.4-macos-arm64.dmg",
+      "anonymousBoundedDownloadProbes": [
+        {
+          "range": "0-1023",
+          "httpStatus": 206,
+          "contentRange": "bytes 0-1023/745666387",
+          "bytesMatched": true,
+          "sha256": "1f0691ae6045671bbea4b074798e69dfc8a2c844b4c7084ca074e2a5c3efe76d"
+        },
+        {
+          "range": "745665363-745666386",
+          "httpStatus": 206,
+          "contentRange": "bytes 745665363-745666386/745666387",
+          "bytesMatched": true,
+          "sha256": "d63f6e24ff63b28863f8af648f503228d126c45bcdeb74571cbad0a1f2f6d209"
+        }
+      ],
+      "largePublicFileFullyRedownloaded": false
+    },
+    {
+      "name": "OpenPyCharm-0.1.0-dev.4-provenance.zip",
+      "assetId": 747946449,
+      "bytes": 2171239,
+      "serverSha256": "db4325acc832110e25b23231e1f52ebfa97cecf40cfba239a5e48e127f113d48",
+      "url": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.4/OpenPyCharm-0.1.0-dev.4-provenance.zip",
+      "httpStatus": 200,
+      "anonymousFullDownloadSha256Matched": true
+    },
+    {
+      "name": "OpenPyCharm-0.1.0-dev.4-windows-x64-setup.exe",
+      "assetId": 748006142,
+      "bytes": 646318653,
+      "serverSha256": "fa1dcf5e36e1a1f5e41e3859c6ee158101f148b75f4e4126dcc90d54621e8aa2",
+      "url": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.4/OpenPyCharm-0.1.0-dev.4-windows-x64-setup.exe",
+      "anonymousBoundedDownloadProbes": [
+        {
+          "range": "0-1023",
+          "httpStatus": 206,
+          "contentRange": "bytes 0-1023/646318653",
+          "bytesMatched": true,
+          "sha256": "3ac0664ad8198182d0542906243eab9070059431c7a9b9e6f11e1ed9dccca1dd"
+        },
+        {
+          "range": "646317629-646318652",
+          "httpStatus": 206,
+          "contentRange": "bytes 646317629-646318652/646318653",
+          "bytesMatched": true,
+          "sha256": "df0a2de833ef4ddca5c094740fa4a1a17dd54c9c4b8ccf2d3ce024defb8c3e4a"
+        }
+      ],
+      "largePublicFileFullyRedownloaded": false
+    },
+    {
+      "name": "SHA256SUMS.txt",
+      "assetId": 747946447,
+      "bytes": 323,
+      "serverSha256": "0896743799f151681525ffbcb569c6bff9a0953be4062f308ec95841789a0ca5",
+      "url": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.4/SHA256SUMS.txt",
+      "httpStatus": 200,
+      "anonymousFullDownloadSha256Matched": true
+    }
+  ],
+  "limits": [
+    "Large installers were fully hashed before publication and matched GitHub full server digests; anonymous public transport rechecked only first/last1KiB.",
+    "Full 1:1 parity and Windows physical desktop remain incomplete."
+  ],
+  "readmeAndDemo": {
+    "README.md": "efa05ee16a746991aaa4e45029f1c540809318d8cf62043b759044f5f0484b33",
+    "README.zh-CN.md": "103af6572dfb5505c8e321b67164e65ea518548290d3e6029bb089abd9daef83",
+    "docs/demo/v0.1.0-dev.4/openpycharm-native.gif": "19eb7094a6e2bbda3b57bac80090390b347ac16596bb1fe2b2db201d72e4eb76",
+    "docs/demo/v0.1.0-dev.4/capture.json": "c6cfa9932c58769ec3b8f0667f53b80a725b87abd069660c79db0c60232c2c25"
+  }
+}
