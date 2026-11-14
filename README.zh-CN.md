@@ -49,6 +49,8 @@ Windows 已通过原生 API Notebook 保存/撤销/重开、本地内核及安�
 原生应用截屏组装。[拍摄清单](docs/demo/v0.1.0-dev.3/capture.json)。每个可发版版本
 都更新实际安装版截屏和对应清单。
 
+[本版发行验收](docs/verification/2026-11-14-dev3-release.md)。
+
 ## 本机构建
 
 打包需要 Python 3.10 或更新版本，并在构建空间之外保留至少 20 GiB 可用磁盘。

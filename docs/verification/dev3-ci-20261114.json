@@ -286,7 +286,6 @@
     "candidateInputs": {
       "tag": "v0.1.0-dev.3",
       "source_commit": "9a243e605c43d86788b0e1b4607ec3bdf11b13d1",
-      "documentation_commit": "<FINAL_REVIEWED_DOC_AND_GIF_COMMIT>",
       "run_id": "43565932969",
       "mac_artifact_id": "14102297519",
       "mac_sha256": "c32a15bedc407dcd90fbfe1f99606e40a7b30f077207d28c41c068a2898464a6",
@@ -298,15 +297,15 @@
     "requiresMainWorkflowRef": true,
     "createsOrPublishesRelease": false,
     "overwritesExistingAsset": false,
-    "finalDocumentationCommitPending": true
+    "documentationCommitBinding": "Final reviewed documentation commit is frozen by v0.1.0-dev.3 tag at draft creation; publication receipt records the full SHA."
   },
   "remainingScope": [
-    "Final installed macOS dev.3 desktop walkthrough, log/signature/tree checks and actual installed-version GIF/capture manifest must be added before publication.",
     "Windows physical keyboard/mouse desktop workflows remain unverified; CI native action/API and silent installer checks do not establish those workflows.",
     "PostgreSQL/MySQL network servers and PasswordSafe provider/authentication workflows remain unverified; SQLite is the executed database control.",
     "Windows forced blocked-pipe/startup/disposal fixture remains explicitly unverified in its session report.",
     "Full 1:1 PyCharm parity, active Notebook JavaScript/widgets, broader framework semantics and frontend M0 are not included or claimed."
   ],
   "published": false,
-  "reviewerLaunchedIdeOrInstaller": false
+  "reviewerLaunchedIdeOrInstaller": false,
+  "finalInstalledDesktopReceipt": "dev3-installed-20261114.json"
 }

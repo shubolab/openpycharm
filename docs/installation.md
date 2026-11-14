@@ -134,12 +134,12 @@ the IDE does not install them automatically:
 ```
 
 On PowerShell, use `& 'C:\path\to\selected\python.exe' -m pip install` with the
-same package pins. The [rich-output fixture](../fixtures/notebooks/native-demo.ipynb)
+same package pins. The [rich-output fixture](../fixtures/notebooks/native-rich-demo.ipynb)
 also uses optional `pandas`, `matplotlib` and `Pillow`; install those separately in
 the same environment when running that example.
 
 PowerShell 使用 `& 'C:\path\to\selected\python.exe' -m pip install` 加相同版本的包。
-[富媒体示例](../fixtures/notebooks/native-demo.ipynb)还使用可选的 `pandas`、`matplotlib`
+[富媒体示例](../fixtures/notebooks/native-rich-demo.ipynb)还使用可选的 `pandas`、`matplotlib`
 和 `Pillow`；运行该示例时在同一环境中另行安装。
 
 Open `.ipynb`, then use **Run Cell**, **Shift+Enter**, **Run All**, **Interrupt** or

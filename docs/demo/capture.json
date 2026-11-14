@@ -1,64 +1,81 @@
 {
-  "productVersion": "0.1.0-dev.2",
+  "productVersion": "0.1.0-dev.3",
   "upstreamVersion": "2026.1.4",
   "upstreamBuild": "PC-261.26222.68",
   "system": "macOS 27.2 arm64",
   "python": "3.14.0",
   "captureDate": "2026-11-14",
-  "states": [
-    "Python Run exited0 with expected totals",
-    "Native unittest9 methods /20items passed",
-    "FastAPI native Debug breakpoint and expression evaluation",
-    "Native HTTP batch and Unicode response"
-  ],
-  "releaseStatus": "v0.1.0-dev.2 release-ready native candidate; installed desktop workflows and post-run tree/signature/log checks passed",
-  "sourceCommit": "d5fc10d19e295d02707598832fabee20d8d01bee",
-  "ciRun": 43522231765,
-  "installer": "OpenPyCharm-0.1.0-dev.2-macos-arm64.dmg",
-  "installerSha256": "900281937ed35dc7858d58e4a90468242eb4addc8276331cc9aecf43c42064c5",
+  "sourceCommit": "9a243e605c43d86788b0e1b4607ec3bdf11b13d1",
+  "ciRun": 43565932969,
+  "installer": "OpenPyCharm-0.1.0-dev.3-macos-arm64.dmg",
+  "installerSha256": "c32a15bedc407dcd90fbfe1f99606e40a7b30f077207d28c41c068a2898464a6",
   "installedApplication": "/Users/wangshubo/Applications/OpenPyCharm.app",
+  "profile": "OpenPyCharm isolated default product profile; normal trust for owned fixtures, no parent-directory trust grant",
+  "releaseStatus": "Installed dev.3 desktop workflows, unchanged product tree, strict signature and bounded session log checked before release",
+  "states": [
+    "Python Run: totals34.00/2.04/36.04, exit0",
+    "Native unittest:9 methods/20items, passed, exit0",
+    "Native Python Debug: breakpoint, quote.total Decimal36.04, step/resume, exit0",
+    "Actual Notebook kernel: updated Matplotlib PNG phase2",
+    "Actual Notebook kernel: pandas DataFrame Beijing99/Shanghai88",
+    "SQLite actual Chinese query results and accepted native table/alias completion"
+  ],
+  "frames": [
+    {
+      "file": "python-run.png",
+      "durationMs": 2600
+    },
+    {
+      "file": "python-tests.png",
+      "durationMs": 3000
+    },
+    {
+      "file": "python-debug.png",
+      "durationMs": 3600
+    },
+    {
+      "file": "notebook-chart.png",
+      "durationMs": 3400
+    },
+    {
+      "file": "notebook-dataframe.png",
+      "durationMs": 3400
+    },
+    {
+      "file": "database-query.png",
+      "durationMs": 4000
+    }
+  ],
   "captures": [
     {
-      "file": "run.png",
-      "sha256": "4252d6b35835cd4d0b30596e65f993ff0ae5ca352f606c07c5481547b74c93d4"
+      "file": "python-run.png",
+      "sha256": "c298f1e5f019e7286103e00da24ff99ae6ab0dfe2564d318e95a6ae268fc81cb"
     },
     {
-      "file": "tests.png",
-      "sha256": "a0d2efc641f15e67c9ca9b7095d9e8d80e6013d86442a6509e8234c079e33a53"
+      "file": "python-tests.png",
+      "sha256": "0cc2a12c9a851f167cf53125efd84cdae5edd9d031a71919a8309eba2e1b6220"
     },
     {
-      "file": "debug.png",
-      "sha256": "0e457bad4682d7c6e21ada727b3fa437b7598409980f2cf8db8b00fe2be24730"
+      "file": "python-debug.png",
+      "sha256": "a0e5eb70f4dbb1f62acd299cb234429acc6f331a325fce91ef452b15139ff444"
     },
     {
-      "file": "step.png",
-      "sha256": "aa4ead0c5c684b4f106a4e1c1cdbf9eaf7f99f1a6eb9cb2d3f692b968363a5f0"
+      "file": "notebook-chart.png",
+      "sha256": "8982a7124710395f3df336ddd26e8723cb57944246ddee7568f14e074f8e516c"
+    },
+    {
+      "file": "notebook-dataframe.png",
+      "sha256": "aa3ac71c4c73f92774ddc565d6fc086caa672c26f1cc26a725ccf13f8e332014"
+    },
+    {
+      "file": "database-query.png",
+      "sha256": "7db2809d6ca4b64d15f89357dc5ca52d9b658e1d3a6b10db204e94a41c771eb4"
     }
   ],
   "captureSize": [
-    2800,
-    2000
+    3420,
+    2190
   ],
   "method": "Real native OpenPyCharm app screenshots assembled into an animated sequence",
-  "gifSha256": "4e8265f7c5118a990a2a24abbd5cd9c1da2a7ad434cd179f5f3ac3b967369c6e",
-  "profile": "OpenPyCharm default isolated product profile; normal trust for owned fixtures; no automatic trust grants",
-  "frameworkProject": ".state/dev2-final/FastAPI 新建",
-  "additionalCaptures": [
-    {
-      "file": "v0.1.0-dev.2/framework-create.jpg",
-      "sha256": "eb54fbe45929880b9094bb7636e8906e7d018feb3c204679a061f129d7e45475"
-    },
-    {
-      "file": "v0.1.0-dev.2/framework-reopen.jpg",
-      "sha256": "4ed987e07baed776b334df081b12b283b90bd1895ed8deeb9cf2e75b0964b91e"
-    },
-    {
-      "file": "v0.1.0-dev.2/http-current.jpg",
-      "sha256": "3ef741f11a875ef060ccff241ac39349777dae88acfe94dba8ed438826725f5a"
-    },
-    {
-      "file": "v0.1.0-dev.2/markdown-restore.jpg",
-      "sha256": "43863bd32682fb54c3cbfa73dc5bc268b6f49ac97d0ab15e8503aa3c8ab141c8"
-    }
-  ]
+  "gifSha256": "66fe947dc2b6ef199d7fba53bb3120298fe572a1bce3a696de62f357795eecf1"
 }

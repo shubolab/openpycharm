@@ -1,0 +1,226 @@
+{
+  "schema": 1,
+  "status": "installed-native-desktop-passed",
+  "version": "0.1.0-dev.3",
+  "sourceCommit": "9a243e605c43d86788b0e1b4607ec3bdf11b13d1",
+  "ciRun": 43565932969,
+  "installer": "OpenPyCharm-0.1.0-dev.3-macos-arm64.dmg",
+  "installerSha256": "c32a15bedc407dcd90fbfe1f99606e40a7b30f077207d28c41c068a2898464a6",
+  "mountedTreeSha256": "7485d3022a1a8fd113cb8a5c485473dd6cd69f16f4d346a6b250cbd0505a2205",
+  "installedTreeSha256": "7485d3022a1a8fd113cb8a5c485473dd6cd69f16f4d346a6b250cbd0505a2205",
+  "strictSignatureVerified": true,
+  "installedApplication": "/Users/wangshubo/Applications/OpenPyCharm.app",
+  "previousVersionRetained": "/Users/wangshubo/develop/openpycharm/build/retained-installed/dev2-d5fc10d/OpenPyCharm.app",
+  "previousVersionTreeSha256": "21c996890ba9bb96c095361cabdd58ffa7dcc7722bc0a2a38efad33e1cbb121e",
+  "referencePyCharmModified": false,
+  "nativeUiExecuted": true,
+  "postWorkflowTreeSha256": "7485d3022a1a8fd113cb8a5c485473dd6cd69f16f4d346a6b250cbd0505a2205",
+  "postWorkflowStrictSignatureVerified": true,
+  "ownedApplicationPid": 13068,
+  "ownedApplicationExited": true,
+  "log": {
+    "sessionStartLine": 8878,
+    "start": "2026-11-14 14:54:54,574",
+    "end": "2026-11-14 16:14:51,223",
+    "sha256": "cf17d959f1b4fdbc968ddcfc855bfec62cfc94f29cabfecd895e3d87d0a20535",
+    "errorCount": 0,
+    "warningCount": 141,
+    "warningCategories": [
+      "#c.i.i.u.UiThemePaletteCheckBoxScope",
+      "#c.i.o.a.ApplicationManager",
+      "#c.i.o.k.i.u.ActionsTreeUtil",
+      "#c.i.p.c.s.s.i.p.UtilsKt",
+      "#c.i.p.instanceContainer",
+      "#c.i.v.g.r.GitRepositoriesHolder",
+      "#c.i.x.i.f.XFramesView",
+      "#c.j.p.d.p.MultiProcessDebugger"
+    ]
+  },
+  "desktopEvidenceDirectory": "/Users/wangshubo/develop/openpycharm/.tools/ci/dev3-final-desktop",
+  "workflows": {
+    "pythonRun": "34.00/2.04/36.04, exit0",
+    "unittest": "9 methods /20items passed, exit0",
+    "pythonDebug": "actual calculator.py:20 and main.py:14 breakpoints, F8 step, quote.total=Decimal(36.04) shown in captured native UI, F9 exit0",
+    "notebook": {
+      "initialFixtureSha256": "6154f2eb0c86713431ba38e597baba7d3efe7ca5dfd8beea804b3803421ee0c8",
+      "executedFixtureSha256": "20c9597ea507de8b7fe58d907ad2aa28462590e4a701d144ada42aac8201a814",
+      "originalTenSourcesAndMetadataPreserved": true,
+      "freshVenvCreatedInNativeSettings": true,
+      "runtime": {
+        "python": "3.14.0 (main, Nov 19 2025, 23:04:28) [Clang 21.1.4 ]",
+        "executable": "/Users/wangshubo/develop/openpycharm/.state/dev3-final/Notebook 演示/.venv/bin/python",
+        "packages": {
+          "jupyter_client": "8.6.3",
+          "ipykernel": "6.29.5",
+          "pandas": "2.3.3",
+          "matplotlib": "3.10.7",
+          "Pillow": "12.1.0",
+          "numpy": "2.5.4"
+        }
+      },
+      "runAllPngPhase2JpegDataFrame99StaticHtmlMarkdown": true,
+      "expectedValueErrorAndRecovery42": true,
+      "interruptKeyboardInterruptThenShiftEnter56And99": true,
+      "saveCloseReopenOutputsPreserved": true,
+      "reopenedKernelStopped": true,
+      "restartOnThisInstalledCandidate": "not repeated; earlier native candidate and CI controls recorded separately"
+    },
+    "database": {
+      "engine": "SQLite",
+      "actualRows": 3,
+      "unicodeQuery": "北京/上海/深圳",
+      "physicalBasicAndReturnInsertedTable": "SELECT * FROM \"main\".\"products\";",
+      "physicalBasicAndReturnInsertedAlias": "SELECT p.\"name\" FROM main.products p;",
+      "cache": "Refreshed by reconnect; previous aged snapshot correctly yielded no suggestions. Snapshot TTL5minutes; ordinary SELECT does not refresh.",
+      "disconnected": true,
+      "networkDatabaseServers": "not exercised"
+    }
+  },
+  "warningReview": {
+    "counts": {
+      "ActionsTreeUtil": 115,
+      "UiThemePaletteCheckBoxScope": 11,
+      "PythonDirectoryScan": 9,
+      "MultiProcessDebugger": 2,
+      "ProjectStoreFactory": 1,
+      "ApplicationManagerBackgroundWriteDiagnostic": 1,
+      "GitRepositoriesHolder": 1,
+      "XFramesView": 1
+    },
+    "backgroundWriteDiagnostic": {
+      "timestamp": "2026-11-14 15:02:10.463",
+      "trigger": "Normal ProjectUtil current/new-window/attach modal was awaiting input while holding platform write intent; SaveAndSync refresh flow waited for permit.",
+      "dumpSha256": "b8edc8fbde327b2d0e3b1fedad7021bb1280fd11143d940172aed41b0e9b071e",
+      "notebookExecutionOrSaveFrameFound": false,
+      "subsequentProjectCloseAndStartupObserved": true,
+      "interpretation": "One retained platform modal wait diagnostic, no demonstrated cyclic Notebook deadlock. Later complete workflows passed; not a proof that all future locking scenarios are safe."
+    },
+    "debuggerWarnings": "Two accept timeout warnings and one transient hidden-frame warning retained; actual step, evaluation and resume/exit passed."
+  },
+  "limitations": [
+    "Full 1:1 parity remains incomplete",
+    "Windows physical interactive desktop remains unverified",
+    "Network PostgreSQL/MySQL and PasswordSafe provider/auth flows unverified",
+    "Static rich Notebook only: no active JS/widgets",
+    "Unsigned Windows installer; ad-hoc signed, non-notarized Mac app"
+  ],
+  "captureManifest": "docs/demo/v0.1.0-dev.3/capture.json",
+  "evidence": {
+    "database-alias-accepted.ax.txt": {
+      "size": 8724,
+      "sha256": "05bacc2dc4895e00da8a6b70265ff03ad878ca8e859a93d57c9915b6d7943649"
+    },
+    "database-completion-accepted.ax.txt": {
+      "size": 8716,
+      "sha256": "59ba8e44679edf1f32d888c548a079ba3c91915fa16ea67af37b839643697aa7"
+    },
+    "database-connect.ax.txt": {
+      "size": 931,
+      "sha256": "8ea5578d574141c13a58b28a9e307a813179e161b0707b9a10c1ad808a0bd070"
+    },
+    "database-disconnected.ax.txt": {
+      "size": 8059,
+      "sha256": "4e7a96cf925b78fe4be1f687c7f73d4a00b35acd78d4dc9e33465e4c6dc822b7"
+    },
+    "database-query-final.ax.txt": {
+      "size": 8389,
+      "sha256": "bd6c02c031b19fef351c8391be023c01dc89e2c90904d1b6309a492ae5fd1cd1"
+    },
+    "database-query.ax.txt": {
+      "size": 8420,
+      "sha256": "bac2eddef14f98111a757bf4239ba0b917fe48a24ba2bd64609f52b5ca12acbe"
+    },
+    "executed-notebook.ipynb": {
+      "size": 36631,
+      "sha256": "20c9597ea507de8b7fe58d907ad2aa28462590e4a701d144ada42aac8201a814"
+    },
+    "installed-session.log": {
+      "size": 265969,
+      "sha256": "cf17d959f1b4fdbc968ddcfc855bfec62cfc94f29cabfecd895e3d87d0a20535"
+    },
+    "notebook-chart.ax.txt": {
+      "size": 21700,
+      "sha256": "1606c2f4b4e2c8f0e962690a4d699dcd296dbcb52e21f3df0af88f48c601d77b"
+    },
+    "notebook-dataframe.ax.txt": {
+      "size": 21700,
+      "sha256": "46b328963f33c2301defdde9f0d1b5ccfb25f5dc8d23ee05dd714fb4f008970d"
+    },
+    "notebook-html-markdown.png": {
+      "size": 510391,
+      "sha256": "b70a5ee6941222a0b86a2675f3634fe2edbe0bb043e5f4edcbf313479cbe3185"
+    },
+    "notebook-initial.ax.txt": {
+      "size": 17636,
+      "sha256": "7cefff6e574e025eecf07115c41a2608e28aa2e54390737b0ddc2bd4cd74a92a"
+    },
+    "notebook-interrupt-recovery.png": {
+      "size": 495873,
+      "sha256": "a1ee35e1efc913b7603087829bfed99cc22f54235dd1ba5dcaadd569aa412d51"
+    },
+    "notebook-interrupt.ax.txt": {
+      "size": 3491,
+      "sha256": "a3386ba9a349e4e35117f1c7b31692696b5e0c8e727d2ed04ae3d454c7f20ff5"
+    },
+    "notebook-log-segment.txt": {
+      "size": 197393,
+      "sha256": "94f7a649c4365f020cf2b8479d93c124608db9b2e0f7fe2a13e0fc0c6763762e"
+    },
+    "notebook-real-run-start.ax.txt": {
+      "size": 800,
+      "sha256": "a9e61a6d82a6b4f833ad17a10c4e3f7ccd2da608669bbe273993798aeb9a9d08"
+    },
+    "notebook-reopened.ax.txt": {
+      "size": 22085,
+      "sha256": "50430c9d55b7bc48f9751f2e575b40161aecb79928513cf965912ac4f3d6c285"
+    },
+    "notebook-run-all-start.ax.txt": {
+      "size": 1933,
+      "sha256": "8957d963833a89a54181fb74df5518a9164492e57702b6ecdd803b49c9cb1cf5"
+    },
+    "notebook-run-results.ax.txt": {
+      "size": 20771,
+      "sha256": "7a19322854af7153a20f94e10e265070098743161c295bd6c6648020235e940c"
+    },
+    "notebook-run-start-maximized.ax.txt": {
+      "size": 2302,
+      "sha256": "1924e9f018e271f4bed7368cf6d774b2b728ca9fc2c6c8f016d3c5eaf45c140a"
+    },
+    "notebook-shift-enter.ax.txt": {
+      "size": 1249,
+      "sha256": "8e321d632e4ed3d4ab57ed4e400a7ca910d432e0e1de78c33a890dd338dea189"
+    },
+    "python-debug-breakpoint.ax.txt": {
+      "size": 10135,
+      "sha256": "47021770f81c7fa6caa3bf15e5692b3ac99c68d95f681406cb6ecdc77f97e655"
+    },
+    "python-debug-evaluate.ax.txt": {
+      "size": 8880,
+      "sha256": "1c5e4e83cbbd377850fd306cdc17e72a7f844188b9566eff4a564c738c707ca3"
+    },
+    "python-debug-exited.ax.txt": {
+      "size": 9063,
+      "sha256": "9071cca6a615ce1b9da78766a3695fcfb59b7fa18fa411ff83475b4ed0350575"
+    },
+    "python-debug-main.ax.txt": {
+      "size": 9027,
+      "sha256": "7952788e7df29426423c789ffdb6ada66404222781acf9c88672e55fd49a1e97"
+    },
+    "python-run.ax.txt": {
+      "size": 8212,
+      "sha256": "a2c18037da2c9115a51fe95ad3b415715c791eefc0e37dbd9b46dc1975d2bed4"
+    },
+    "python-runtime.json": {
+      "size": 359,
+      "sha256": "1bdcd18f49c1fcc5b4c666216b6b5bcf7a7221c04894ad42d25b6b78ed7be112"
+    },
+    "python-tests.ax.txt": {
+      "size": 13176,
+      "sha256": "39832852deee27f26c0880ac6eadbce12445109918e53b1c319439e9889cc118"
+    },
+    "signature.txt": {
+      "size": 324,
+      "sha256": "588522a271b6562051b312a8c251d350b571db1e685d82d9b676f84755b59a23"
+    }
+  }
+}

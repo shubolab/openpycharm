@@ -61,6 +61,8 @@ query. This animation assembles real native app screenshots.
 [Capture manifest](docs/demo/v0.1.0-dev.3/capture.json).
 Each publishable release gets fresh installed-version captures and a manifest.
 
+[Release verification](docs/verification/2026-11-14-dev3-release.md).
+
 ## Build
 
 Python 3.10+ is required to assemble the product. The application includes its

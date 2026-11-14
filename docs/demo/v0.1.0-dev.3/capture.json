@@ -1,0 +1,81 @@
+{
+  "productVersion": "0.1.0-dev.3",
+  "upstreamVersion": "2026.1.4",
+  "upstreamBuild": "PC-261.26222.68",
+  "system": "macOS 27.2 arm64",
+  "python": "3.14.0",
+  "captureDate": "2026-11-14",
+  "sourceCommit": "9a243e605c43d86788b0e1b4607ec3bdf11b13d1",
+  "ciRun": 43565932969,
+  "installer": "OpenPyCharm-0.1.0-dev.3-macos-arm64.dmg",
+  "installerSha256": "c32a15bedc407dcd90fbfe1f99606e40a7b30f077207d28c41c068a2898464a6",
+  "installedApplication": "/Users/wangshubo/Applications/OpenPyCharm.app",
+  "profile": "OpenPyCharm isolated default product profile; normal trust for owned fixtures, no parent-directory trust grant",
+  "releaseStatus": "Installed dev.3 desktop workflows, unchanged product tree, strict signature and bounded session log checked before release",
+  "states": [
+    "Python Run: totals34.00/2.04/36.04, exit0",
+    "Native unittest:9 methods/20items, passed, exit0",
+    "Native Python Debug: breakpoint, quote.total Decimal36.04, step/resume, exit0",
+    "Actual Notebook kernel: updated Matplotlib PNG phase2",
+    "Actual Notebook kernel: pandas DataFrame Beijing99/Shanghai88",
+    "SQLite actual Chinese query results and accepted native table/alias completion"
+  ],
+  "frames": [
+    {
+      "file": "python-run.png",
+      "durationMs": 2600
+    },
+    {
+      "file": "python-tests.png",
+      "durationMs": 3000
+    },
+    {
+      "file": "python-debug.png",
+      "durationMs": 3600
+    },
+    {
+      "file": "notebook-chart.png",
+      "durationMs": 3400
+    },
+    {
+      "file": "notebook-dataframe.png",
+      "durationMs": 3400
+    },
+    {
+      "file": "database-query.png",
+      "durationMs": 4000
+    }
+  ],
+  "captures": [
+    {
+      "file": "python-run.png",
+      "sha256": "c298f1e5f019e7286103e00da24ff99ae6ab0dfe2564d318e95a6ae268fc81cb"
+    },
+    {
+      "file": "python-tests.png",
+      "sha256": "0cc2a12c9a851f167cf53125efd84cdae5edd9d031a71919a8309eba2e1b6220"
+    },
+    {
+      "file": "python-debug.png",
+      "sha256": "a0e5eb70f4dbb1f62acd299cb234429acc6f331a325fce91ef452b15139ff444"
+    },
+    {
+      "file": "notebook-chart.png",
+      "sha256": "8982a7124710395f3df336ddd26e8723cb57944246ddee7568f14e074f8e516c"
+    },
+    {
+      "file": "notebook-dataframe.png",
+      "sha256": "aa3ac71c4c73f92774ddc565d6fc086caa672c26f1cc26a725ccf13f8e332014"
+    },
+    {
+      "file": "database-query.png",
+      "sha256": "7db2809d6ca4b64d15f89357dc5ca52d9b658e1d3a6b10db204e94a41c771eb4"
+    }
+  ],
+  "captureSize": [
+    3420,
+    2190
+  ],
+  "method": "Real native OpenPyCharm app screenshots assembled into an animated sequence",
+  "gifSha256": "66fe947dc2b6ef199d7fba53bb3120298fe572a1bce3a696de62f357795eecf1"
+}
