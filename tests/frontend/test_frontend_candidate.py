@@ -3,6 +3,7 @@ import hashlib
 import json
 from pathlib import Path
 import sys
+import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -23,10 +24,12 @@ class FrontendCandidateTests(unittest.TestCase):
         self.report={'jarSha256':self.digest,'version':'0.1.0-dev.4-m0','payloadSha256':{'plugin':self.digest}}
         self.baseline={'scripts/package.py':'a'*64,'plugins/notebooks/src/Notebook.java':'b'*64}
         self.inputs={**self.baseline,'plugins/frontend/src/Frontend.java':'c'*64}
+        self.protected={'README.md':'d'*64,'README.zh-CN.md':'e'*64}
 
     def test_default_overlay_keeps_baseline_and_does_not_invoke_runtime_checks(self):
         output=self.root/'candidate'
         with patch.object(candidate,'baseline_inputs',return_value=self.baseline), patch.object(candidate,'source_inputs',return_value=self.inputs), \
+             patch.object(candidate,'protected_release_files',return_value=self.protected), \
              patch.object(candidate.frontend,'build',return_value=(self.plugin,self.report)) as build, \
              patch.object(candidate.frontend,'checks') as checks:
             report=candidate.prepare(Path('/authenticated/sdk'),output)
@@ -43,6 +46,7 @@ class FrontendCandidateTests(unittest.TestCase):
 
     def test_determinism_forces_two_compiles_and_rejects_changed_bytes(self):
         with patch.object(candidate,'baseline_inputs',return_value=self.baseline), patch.object(candidate,'source_inputs',return_value=self.inputs), \
+             patch.object(candidate,'protected_release_files',return_value=self.protected), \
              patch.object(candidate.frontend,'build',side_effect=[(self.plugin,self.report),(self.plugin,{**self.report,'jarSha256':'0'*64})]) as build:
             with self.assertRaisesRegex(ValueError,'identical JAR'):
                 candidate.prepare(Path('/sdk'),self.root/'must-not-promote',determinism=True)
@@ -52,6 +56,7 @@ class FrontendCandidateTests(unittest.TestCase):
     def test_changed_compiled_jar_is_rejected_before_candidate_promotion(self):
         self.jar.write_bytes(b'unreceipted bytes')
         with patch.object(candidate,'baseline_inputs',return_value=self.baseline), patch.object(candidate,'source_inputs',return_value=self.inputs), \
+             patch.object(candidate,'protected_release_files',return_value=self.protected), \
              patch.object(candidate.frontend,'build',return_value=(self.plugin,self.report)):
             with self.assertRaisesRegex(ValueError,'authenticated build'):
                 candidate.prepare(Path('/sdk'),self.root/'rejected-jar')
@@ -64,6 +69,26 @@ class FrontendCandidateTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'README unchanged'):
                 candidate.prepare(Path('/sdk'),self.root/'rejected-readme')
             build.assert_not_called()
+
+    def test_actual_readme_guard_uses_its_selected_baseline_and_rejects_changes(self):
+        # Use a self-contained Git history; a shallow checkout need not contain
+        # the historical dev.3 commit just to run these packaging unit controls.
+        release = self.root / 'owned-release'; release.mkdir()
+        original = {'README.md': b'owned English release README\n', 'README.zh-CN.md': b'owned Chinese release README\n'}
+        for name, data in original.items(): (release / name).write_bytes(data)
+        def git(*args):
+            return subprocess.run(['git', *args], cwd=release, capture_output=True, check=True).stdout
+        git('init'); git('add', 'README.md', 'README.zh-CN.md')
+        git('-c', 'user.name=Owned Test', '-c', 'user.email=owned-test@example.invalid', 'commit', '-m', 'Owned baseline')
+        baseline = git('rev-parse', 'HEAD').decode().strip()
+        with patch.object(candidate, 'ROOT', release), patch.object(candidate, 'BASELINE', baseline):
+            expected = {name: hashlib.sha256(data).hexdigest() for name, data in original.items()}
+            self.assertEqual(candidate.protected_release_files(), expected)
+            for name, data in original.items():
+                (release / name).write_bytes(data + b'changed')
+                with self.subTest(readme=name), self.assertRaisesRegex(ValueError, 'README unchanged'):
+                    candidate.protected_release_files()
+                (release / name).write_bytes(data)
 
     def test_changed_removed_or_unrelated_sources_fail_before_building(self):
         for current in ({**self.inputs,'scripts/package.py':'d'*64},

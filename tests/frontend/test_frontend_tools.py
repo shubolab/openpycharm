@@ -182,7 +182,7 @@ class ProtocolHarnessTests(unittest.TestCase):
         with mock.patch.dict('os.environ',{'NPM_TOKEN':'secret','GITHUB_TOKEN':'secret','NODE_OPTIONS':'--require user-code'}):
             env=child_environment(Path('/owned/state'),Path('/owned/tools/bin/node'))
         self.assertNotIn('NPM_TOKEN',env);self.assertNotIn('GITHUB_TOKEN',env);self.assertEqual(env['NODE_OPTIONS'],'')
-        self.assertEqual(env['HOME'],'/owned/state/home')
+        self.assertEqual(env['HOME'],str(Path('/owned/state')/'home'))
 
 
 class DeadlineWriterTests(unittest.TestCase):

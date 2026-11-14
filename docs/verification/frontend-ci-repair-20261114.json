@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "date": "2026-11-14",
+  "run": "https://github.com/shubolab/openpycharm/actions/runs/43607720413",
+  "sourceCommit": "2c3d4bd3f36d37ed620496a8e6e46482fcf25668",
+  "observed": {
+    "conclusion": "failure",
+    "stage": "Run repository controls",
+    "macos-arm64": {
+      "tests": 176,
+      "errors": 3,
+      "skipped": 2
+    },
+    "windows-x64": {
+      "tests": 176,
+      "errors": 3,
+      "failures": 1,
+      "skipped": 6
+    },
+    "causes": [
+      "Three overlay unit controls replaced the historical source inventory but still read release READMEs from Git commit913e59b, absent from the shallow CI checkout.",
+      "A Windows protocol-harness unit assertion required POSIX forward slashes although pathlib correctly returned native path separators."
+    ],
+    "nativeSdkAssemblyInstallerGates": "Not reached; no installer artifacts produced by this failed run.",
+    "repair": [
+      "Make the synthetic overlay unit fixture explicitly provide its protected README digest set.",
+      "Exercise the actual protected_release_files guard against a new test-owned Git repository, including successful exact-read and changed-English/Chinese README rejection.",
+      "Compare the harness HOME path using native pathlib formatting."
+    ],
+    "localChecks": {
+      "status": "pass",
+      "target": "macos-arm64",
+      "tests": 24,
+      "files": [
+        "tests/frontend/test_frontend_candidate.py",
+        "tests/frontend/test_frontend_tools.py"
+      ]
+    }
+  },
+  "unknown": [
+    "The repaired Windows test controls have not run on Windows in this worktree.",
+    "A replacement native installer workflow must complete before claiming successful dual-platform artifacts."
+  ],
+  "productionSourceChanged": false,
+  "historyFetchDepthChanged": false,
+  "productAcceptanceThresholdChanged": false
+}
