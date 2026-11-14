@@ -20,10 +20,11 @@
       "plugins/database/legal/sqlite-jdbc-3.54.1.0.jar-META-INF_maven_org.xerial_sqlite-jdbc_LICENSE.zentus": "5001f15a0a6a49a86e3d39f403b71acd9f33275f591b4ab35441e0aecb65e42d",
       "plugins/database/resources/META-INF/plugin.xml": "6a51d3280cb792cf81b5b87cda34d7eb34921ec01909e05db64751ead18f529b",
       "plugins/database/src/dev/openpycharm/database/CredentialScope.java": "c83b71ea09f69c61d493f66fe07b1486b0de9cb1f00742a677526b1f326a5aea",
+      "plugins/database/src/dev/openpycharm/database/DatabaseContentLayout.java": "20ad0c13310beee81bc8a05bdbdcbe878fdb3ec75a1aec9f4a8ab5272e55443d",
       "plugins/database/src/dev/openpycharm/database/DatabaseProfile.java": "3e578ec23b507c758a9dae5f84a13899876182578accf1c5f601761d170e4a4a",
       "plugins/database/src/dev/openpycharm/database/DatabaseService.java": "d4c69e71ecc78364147c42de29327b07dd646e14d7e5b382601361ae0ed681c6",
-      "plugins/database/src/dev/openpycharm/database/DatabaseToolWindow.java": "d43c15555246e02f09f3f62c572aaab17b79fb0eb5c2553182c668f632b85741",
-      "plugins/database/src/dev/openpycharm/database/DatabaseToolbarLayout.java": "ad0acf187838de98fee4245e103712dacaeb7afdc860a96810288422b32547ac",
+      "plugins/database/src/dev/openpycharm/database/DatabaseToolWindow.java": "84dc1161fea009428f70703829bc056e2a78761839a57619969c1c9f0588b0c3",
+      "plugins/database/src/dev/openpycharm/database/DatabaseToolbarLayout.java": "54ce75f6e07a87b36937cbccf59047a114867f540ae20b771fecdb9abe92885e",
       "plugins/database/src/dev/openpycharm/database/JdbcSession.java": "44a0eebd89a1c98de1f832c93f7398744468be7739b7ac2868f6a663a353767a",
       "plugins/database/src/dev/openpycharm/database/RunSqlAction.java": "04cddd35d804f21d03f8c4fac6be49047e2e014a0ebae9edd825f86bdc83a617",
       "plugins/database/src/dev/openpycharm/database/SqlLanguage.java": "474882faefb74af7db23a562bd20bbe8f39b9422ed8aee1883a50e6314ef3204",
@@ -87,13 +88,13 @@
       }
     ]
   },
-  "jarSha256": "5a4e29581492cc194ffc6930b0d978aa4a9e394caed2e30c3752ee9af57c5444",
+  "jarSha256": "d4ffda3d3e66149f59066fff3b16ce14f7fb2f6a7443cb1b67003ddb648af29d",
   "archiveVerification": {
     "status": "pass",
     "reader": "HashMapZipFile",
-    "verifiedEntries": 40,
+    "verifiedEntries": 42,
     "closed": true,
-    "sha256": "5a4e29581492cc194ffc6930b0d978aa4a9e394caed2e30c3752ee9af57c5444"
+    "sha256": "d4ffda3d3e66149f59066fff3b16ce14f7fb2f6a7443cb1b67003ddb648af29d"
   },
   "integrationTests": {
     "status": "pass",
@@ -106,18 +107,27 @@
     "nativeDesktopTested": false,
     "layoutTests": {
       "status": "pass",
-      "checks": 117,
+      "checks": 1429,
       "offscreenOnly": true,
       "widths": [
         290,
+        300,
         320,
         450,
         700
       ],
+      "fontMetricScales": [
+        1,
+        1.25,
+        1.5,
+        2
+      ],
+      "fullHierarchyAndMinimumDividerTested": true,
+      "narrowTabsTested": true,
       "nativeIdeLaunched": false,
-      "testSourceSha256": "161a67ba2503059838eb7ed1d3f86e77d0e54ffa23dd905bc29c0af92dfb73d5"
+      "testSourceSha256": "612931a737e4dd278a793a76ef6ec56b1b18ad4c7dd0915db8884277432389bd"
     },
-    "jarSha256": "5a4e29581492cc194ffc6930b0d978aa4a9e394caed2e30c3752ee9af57c5444",
+    "jarSha256": "d4ffda3d3e66149f59066fff3b16ce14f7fb2f6a7443cb1b67003ddb648af29d",
     "testSourceSha256": "ecdf0344967a7b766c0ead01d0dd66d3fcf3a7525f6c30fb186cffcc2fc9695a",
     "targetPlatform": "macos",
     "executionPlatform": "macos",

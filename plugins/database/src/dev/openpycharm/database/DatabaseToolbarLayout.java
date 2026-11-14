@@ -15,9 +15,13 @@ public final class DatabaseToolbarLayout extends FlowLayout {
   }
   @Override public Dimension preferredLayoutSize(Container target){return measured(target,false);}
   @Override public Dimension minimumLayoutSize(Container target){return measured(target,true);}
+  public Dimension preferredAtWidth(Container target,int width){return measured(target,false,width);}
   private Dimension measured(Container target,boolean minimum){
+    return measured(target,minimum,0);
+  }
+  private Dimension measured(Container target,boolean minimum,int explicitWidth){
     synchronized(target.getTreeLock()){
-      int width=target.getWidth();Container parent=target.getParent();
+      int width=explicitWidth>0?explicitWidth:target.getWidth();Container parent=target.getParent();
       while(width<=0&&parent!=null){width=parent.getWidth();parent=parent.getParent();}
       if(width<=0)width=Integer.MAX_VALUE;
       Insets insets=target.getInsets();int available=Math.max(1,width-insets.left-insets.right-getHgap()*2);
