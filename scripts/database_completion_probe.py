@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+from contextlib import closing
 import hashlib
 import json
 import os
@@ -116,7 +117,7 @@ def prepare(sdk: Path, workspace: Path, app: Path) -> dict:
     (idea / "modules.xml").write_text('<project version="4"><component name="ProjectModuleManager"><modules><module fileurl="file://$PROJECT_DIR$/completion-probe.iml" filepath="$PROJECT_DIR$/completion-probe.iml"/></modules></component></project>\n', encoding="utf-8")
     (project / "completion-probe.iml").write_text('<module type="PYTHON_MODULE" version="4"><component name="NewModuleRootManager"><content url="file://$MODULE_DIR$"/><orderEntry type="inheritedJdk"/><orderEntry type="sourceFolder" forTests="false"/></component></module>\n', encoding="utf-8")
     database = project / "owned-completion.sqlite"
-    with sqlite3.connect(database) as connection:
+    with closing(sqlite3.connect(database)) as connection, connection:
         connection.executescript('''CREATE TABLE products(id INTEGER, name TEXT, "列 名" TEXT); INSERT INTO products VALUES(1,'产品','中文列');
 CREATE TABLE orders(id INTEGER,product_id INTEGER);
 CREATE TABLE "订单 表"("编号" INTEGER,"商品 名" TEXT);
