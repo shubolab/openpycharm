@@ -1,0 +1,440 @@
+{
+  "schema": 1,
+  "scope": "Next-only source integration and default-off frontend plugin ZIP/overlay; no product assembly, installer, Node or IDE execution",
+  "sourceCommit": "1beee87f3c06514b45d9298c8cd5dd5fbfdf9950",
+  "baseCommit": "913e59b4b41704ca5a25baa6cc1134013b6b5e35",
+  "branch": "codex_frontend_integration_next",
+  "acceptedFrontendOrigins": {
+    "M0": "e83dea015de23a9aba4f9d0272709c68d86ba935",
+    "nativeLifecycleAndIndependentRepairs": "7831730cc86ee64c2526dc2aa7ac03163e5892c0",
+    "acceptedReceipt": "24ee713e666093de34e1979bc35c5956b27707db"
+  },
+  "baselinePreservation": {
+    "productionInputCount": 145,
+    "allUnchanged": true,
+    "sourceMapSha256": "e66720634accd4819e475ebfe71679c4c30806aa3ff74b5a8b83e4074337e966",
+    "rootReadmes": {
+      "README.md": "b5857ec79e9993825e1e62dae7396292fde1eaa15b282176c395699a4573a764",
+      "README.zh-CN.md": "c84569ac72fb2a3471cd0867030905e9991448f1efe48e9303b38932142a69d5"
+    },
+    "productVersion": "0.1.0-dev.3",
+    "defaultAssemblerAndProvenanceUnchanged": true,
+    "fourOriginalPluginsUnchanged": true
+  },
+  "additionalFrontendSourceInputs": {
+    "plugins/frontend/NOTICE": "1400833d6bebb1c89ff72bb6840738433de5bae5d6f2f0e33cf9b105937f8f96",
+    "plugins/frontend/README.md": "a51627d15295b1f5d2c49a79772acf9d73987468734a5c3bae089780babee048",
+    "plugins/frontend/build-support/VerifyFrontendArchive.java": "7d3fdd30572492389f82b352308d4c25afeb483430e72d5ebe80d88543627ccb",
+    "plugins/frontend/resources/META-INF/plugin.xml": "b4c4495c8672be6ab3a37c9510bf5495a0e150b80f9363804ef68d675b685481",
+    "plugins/frontend/src/dev/openpycharm/frontend/FrontendBoundedOutput.java": "6848758d76d277cbeee3ed3f62a585000bff3656c09e48965660131902511e4b",
+    "plugins/frontend/src/dev/openpycharm/frontend/FrontendFixtureScope.java": "cda001beb031f2614173b07946540b8baa53d1bf7b5ec49d71704a85c50b6b94",
+    "plugins/frontend/src/dev/openpycharm/frontend/FrontendLspProvider.java": "f420a48948bc38c9ff52a9c51d9055ec0318d481932255995d97dbe6d4505fd4",
+    "plugins/frontend/src/dev/openpycharm/frontend/FrontendNativeProcess.java": "77889aaed346cb937aa8858ee7afeda88c19a50c5c71ed8886f951e0c622b294",
+    "plugins/frontend/src/dev/openpycharm/frontend/FrontendProcessLifetime.java": "7e85a4ba5e48d088be1ff2f94fbfba094772eb8e8be00d858285d0c257b8ea96",
+    "plugins/frontend/src/dev/openpycharm/frontend/FrontendRuntime.java": "c88693910f326b226cd2aab6d598a0c062bb1bebca82fbffa9e7d7d9d75b1611",
+    "plugins/frontend/tools.lock.json": "5a7b20ce2ce915a4012b4ea5dfa35b77c709bdbb19de00be87700404a6f6fff2",
+    "scripts/build_frontend_plugin.py": "5d571697c5bae06f8999064f6799381537fefcb9b2f06f56ae62d2ffb25df294",
+    "scripts/frontend_native_api_audit.py": "3b527b60af1d138a896821b63a690a94b2bcd6c4470c16d2ebf709044d9d609d",
+    "scripts/frontend_protocol_probe.py": "c47372874be6a10493cb8b12ef8f87cb393c38e6d2c05470ef972a14d869bb4f",
+    "scripts/prepare_frontend_candidate.py": "6798508e495c84bc018df9248fb5c32927e38d6a27cef485e92b4bc253d7f626",
+    "scripts/provision_frontend_tools.py": "9f0e303d7126a974cc528d9ccb8061a7544949cf66a9958a081c2f73157a51ca"
+  },
+  "fullProductionSourceInputCount": 161,
+  "fullProductionSourceMapSha256": "e4847c83f82bda26935ba0179e5f28dbe463891ba23d5224a94c2b01fea89c32",
+  "strictGlobalInventoryNotWeakened": true,
+  "candidate": {
+    "directory": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frontend-integration-next/.tools/frontend-integration-reviewed",
+    "manifestSha256": "fe152008f5091486cf82362a6a8e62b935f7476ffd02cac4f326daa10079e140",
+    "zip": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frontend-integration-next/.tools/frontend-integration-reviewed/frontend-candidate.zip",
+    "zipSha256": "8295b831a619e24ccd1e863b57f19613d5b5aada8106aa5324534e373a0981de",
+    "jarSha256": "2ae4eb2967ab3ff4f8d0f71fed551a19090db087573ed4c9e9485b1e220eca25",
+    "compiledVersion": "0.1.0-dev.4-m0",
+    "deterministicFreshCompiles": 2,
+    "jarAndAllPayloadsIdenticalAcrossCompiles": true,
+    "runtimeToolsBundled": false,
+    "activationEnabledByDefault": false
+  },
+  "compiledChecks": {
+    "status": "pass",
+    "pureScopeChecks": 42,
+    "actualProviderDefaultOffBeforeServices": true,
+    "nativeIdeStarted": false,
+    "boundedOutput": {
+      "status": "pass",
+      "fifoUtf8Preserved": true,
+      "requestInterruptDoesNotTruncateSharedWrites": true,
+      "deadlineTerminal": true,
+      "edtCloseIsAsync": true,
+      "edtWriteRejected": true,
+      "nativeIdeStarted": false
+    },
+    "lifetimeIdentity": {
+      "status": "pass",
+      "missingRootIdentityFailsClosed": true,
+      "reusedPidNotSignalled": true,
+      "rejectedSchedulingDisposesIndependently": true,
+      "unverifiableChildNotClaimedClean": true,
+      "knownRootIdentityLossNotGone": true,
+      "knownChildIdentityLossNotGone": true,
+      "enumerationFailureStillDisposesVerifiedRoot": true,
+      "nativeIdeStarted": false
+    },
+    "targetPlatform": "macos",
+    "executionPlatform": "macos",
+    "nativeTargetRuntime": true,
+    "jarSha256": "2ae4eb2967ab3ff4f8d0f71fed551a19090db087573ed4c9e9485b1e220eca25"
+  },
+  "apiRegistrationAudit": {
+    "schema": 1,
+    "status": "static-registration-closure-pass",
+    "sdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+    "actualBootJars": {
+      "intellij.platform.lsp.jar": "31f9997c16f42c5491d96dc482da9507851844cc906bd79662440df6af2d8705",
+      "intellij.platform.lsp.impl.jar": "13db5f9fd6e5568fb026c6a0e292730d325f176bef3d419127343e92142eda3d",
+      "eclipse.lsp4j.jar": "a36c160d23f6beb0b67edd5a45ea7a81c9fac3c1ba11808db74f5edcf831910a",
+      "eclipse.lsp4j.jsonrpc.jar": "22d43ebeba54c19420f8deae04eb4ac4a6946e8cdc68ba3ff56ecf8fd6d92b78"
+    },
+    "moduleAlias": {
+      "value": "com.intellij.modules.lsp"
+    },
+    "extensionPoint": {
+      "qualifiedName": "com.intellij.platform.lsp.integrationProvider",
+      "interface": "com.intellij.platform.lsp.api.LspIntegrationProvider",
+      "dynamic": "true"
+    },
+    "projectService": {
+      "serviceInterface": "com.intellij.platform.lsp.api.LspClientManager",
+      "serviceImplementation": "com.intellij.platform.lsp.impl.LspClientManagerImpl"
+    },
+    "candidateDependencies": [
+      "com.intellij.modules.lsp",
+      "com.intellij.modules.platform"
+    ],
+    "candidateImplementation": "dev.openpycharm.frontend.FrontendLspProvider",
+    "candidateJarSha256": "2ae4eb2967ab3ff4f8d0f71fed551a19090db087573ed4c9e9485b1e220eca25",
+    "sourceInputsStillCurrent": true,
+    "nativeIdeStarted": false,
+    "nativeModuleEpServiceActivationObserved": false,
+    "limitations": [
+      "Static actual-SDK registration and classpath closure do not prove plugin classloader, service startup, native document/UI behavior, or Windows runtime"
+    ]
+  },
+  "comparisonWithAcceptedFrontendJar": {
+    "peerJarSha256": "c127087d3fba1bd92a3154bc5c3ab4bf08df149eb10253702cbc31d86995ac1a",
+    "candidateJarSha256": "2ae4eb2967ab3ff4f8d0f71fed551a19090db087573ed4c9e9485b1e220eca25",
+    "changedEntries": [
+      "dev/openpycharm/frontend/FrontendBuildScope.class",
+      "dev/openpycharm/frontend/FrontendLspProvider.class",
+      "dev/openpycharm/frontend/FrontendRuntime.class"
+    ],
+    "reason": "Compiled owned fixture/cache absolute path constants; other classes and all resources identical",
+    "legalAndPinResourcesByteIdentical": true
+  },
+  "originalFourPluginCompilesAndChecks": {
+    "notebooks": {
+      "jarSha256": "882248920fe940df597c53dab1c22156c3977bb66b7a651c0df7082d5d1cea28",
+      "archiveVerification": {
+        "status": "pass",
+        "reader": "HashMapZipFile",
+        "verifiedEntries": 52,
+        "closed": true,
+        "sha256": "882248920fe940df597c53dab1c22156c3977bb66b7a651c0df7082d5d1cea28"
+      },
+      "checks": {
+        "status": "pass",
+        "metadataAndAttachmentsPreserved": true,
+        "richOutputsPreserved": true,
+        "sourceRoundTrip": true,
+        "outputsAndCount": true,
+        "addDeleteCells": true,
+        "malformedAndOversizedRejected": true,
+        "asynchronousPersistence": {
+          "status": "pass",
+          "offSubmittingThread": true,
+          "latestOnlyCoalescing": true,
+          "dirtyBeforeCompletion": true,
+          "staleCommitRejected": true,
+          "externalGenerationInvalidated": true,
+          "serializationFailureRemainsDirty": true,
+          "mergeSuspensionKeepsDirty": true,
+          "executorRejectionRecovers": true,
+          "completionQueueBounded": true
+        },
+        "externalMerge": {
+          "status": "pass",
+          "foreignMetadataChars": 2600000,
+          "independentSourceAndMetadata": true,
+          "localRetainedOnConflict": true,
+          "stableCellIdentities": true,
+          "structuralAndAtomicArrays": true,
+          "identicalChanges": true,
+          "missingKeysAndNull": true,
+          "immutableInputs": true,
+          "structuralSharing": true,
+          "exactLargeIntegersAndDecimals": true,
+          "extremeExponents": true,
+          "recursiveNumericEquality": true
+        },
+        "saveThreadContract": {
+          "status": "pass",
+          "unlockedWorker": true,
+          "blockingEdtCallbacksComplete": true,
+          "fileIoOffEdt": true,
+          "utf8FileRoundTrip": true,
+          "unsafeAndRejectedEntryReported": true,
+          "actualIdeSaveEngineExercised": false
+        },
+        "cellReadAccessContract": {
+          "status": "pass",
+          "unguardedSwingCallbackRejected": true,
+          "cellPsiEntryHasReadAccess": true,
+          "exceptionUnwindsReadScope": true,
+          "outerWriteIntentAdded": false,
+          "actualPsiCreationExercised": false,
+          "nativeIdeLaunched": false
+        },
+        "richOutput": {
+          "status": "pass",
+          "actualPngJpegDecode": true,
+          "metadataAndMultiline": true,
+          "pixelAndTrustBounds": true,
+          "offEdtGuard": true,
+          "staticHtmlTable": true,
+          "markdownStylesAndGfmTable": true,
+          "actualNativeSwingComponents": true,
+          "externalFetches": 0,
+          "preDecodeFinalReferenceReservations": true,
+          "nativeIdeLaunched": false
+        },
+        "previewScheduler": {
+          "status": "pass",
+          "latestInputAndDeliveryOnly": true,
+          "aggregatePixelBudget": true,
+          "staleDisposeRejected": true,
+          "imageReferencesReleased": true,
+          "workerRejectionRecovers": true,
+          "finalReferencePixelLedger": true,
+          "delayedViewerUpdateBounded": true
+        },
+        "targetPlatform": "macos",
+        "executionPlatform": "macos",
+        "nativeTargetRuntime": true,
+        "jarSha256": "882248920fe940df597c53dab1c22156c3977bb66b7a651c0df7082d5d1cea28"
+      },
+      "reportSha256": "ea135dddd720d35f1c7997c44398d8183be370a119790d27dbc1a81f125935e9"
+    },
+    "frameworks": {
+      "jarSha256": "0fbd9bfc94d2588ecafcac93522b834bc48acd474bb4f815545d44d8e15e9ce2",
+      "archiveVerification": {
+        "status": "pass",
+        "reader": "HashMapZipFile",
+        "verifiedEntries": 23,
+        "closed": true,
+        "sha256": "0fbd9bfc94d2588ecafcac93522b834bc48acd474bb4f815545d44d8e15e9ce2"
+      },
+      "checks": {
+        "frameworks": 3,
+        "scope": "default commands and native argument codec",
+        "status": "pass",
+        "commands": [
+          {
+            "framework": "django",
+            "moduleMode": false,
+            "scriptName": "manage.py",
+            "arguments": [
+              "runserver",
+              "127.0.0.1:8000",
+              "--noreload"
+            ]
+          },
+          {
+            "framework": "flask",
+            "moduleMode": true,
+            "scriptName": "flask",
+            "arguments": [
+              "--app",
+              "app",
+              "run",
+              "--host",
+              "127.0.0.1",
+              "--port",
+              "5000",
+              "--no-reload",
+              "--no-debugger"
+            ]
+          },
+          {
+            "framework": "fastapi",
+            "moduleMode": true,
+            "scriptName": "uvicorn",
+            "arguments": [
+              "app:app",
+              "--host",
+              "127.0.0.1",
+              "--port",
+              "8000"
+            ]
+          }
+        ],
+        "templateTests": {
+          "status": "pass",
+          "scope": "template plans and transactional filesystem writer",
+          "checks": 257,
+          "symlinksTested": true
+        },
+        "settingsTests": {
+          "status": "pass",
+          "scope": "per-module dependency opt-in request isolation",
+          "checks": 16
+        },
+        "targetPlatform": "macos",
+        "executionPlatform": "macos",
+        "nativeTargetRuntime": true,
+        "jarSha256": "0fbd9bfc94d2588ecafcac93522b834bc48acd474bb4f815545d44d8e15e9ce2"
+      },
+      "reportSha256": "e604d550610535256a0e8b6c691088026716272cfc796601a5e65ef75b5a649e"
+    },
+    "database": {
+      "jarSha256": "499b684993346beb70b0874f67e99796ae49583eebeb10e4ffbe2317e989f73f",
+      "archiveVerification": {
+        "status": "pass",
+        "reader": "HashMapZipFile",
+        "verifiedEntries": 61,
+        "closed": true,
+        "sha256": "499b684993346beb70b0874f67e99796ae49583eebeb10e4ffbe2317e989f73f"
+      },
+      "checks": {
+        "status": "pass",
+        "checks": 80,
+        "sqliteRealConnections": true,
+        "queryCancelAndDeadline": true,
+        "transactionsAndMetadata": true,
+        "connectionsClosed": true,
+        "networkServersTested": false,
+        "nativeDesktopTested": false,
+        "layoutTests": {
+          "status": "pass",
+          "checks": 1429,
+          "offscreenOnly": true,
+          "widths": [
+            290,
+            300,
+            320,
+            450,
+            700
+          ],
+          "fontMetricScales": [
+            1,
+            1.25,
+            1.5,
+            2
+          ],
+          "fullHierarchyAndMinimumDividerTested": true,
+          "narrowTabsTested": true,
+          "nativeIdeLaunched": false,
+          "testSourceSha256": "612931a737e4dd278a793a76ef6ec56b1b18ad4c7dd0915db8884277432389bd"
+        },
+        "completionTests": {
+          "status": "pass",
+          "checks": 208,
+          "realSqliteMetadata": true,
+          "quotedUnicodeAliasAndSchemaContexts": true,
+          "schemaNamespacesUseInMemoryControls": true,
+          "disconnectAndStaleSnapshots": true,
+          "nativeCompletionUiTested": false,
+          "networkServersTested": false,
+          "testSourceSha256": "da4d0b25b7849bd92395fe1fa728b1ec49bd529a0dcbe60f27ae8e0a1630ddf9"
+        },
+        "jarSha256": "499b684993346beb70b0874f67e99796ae49583eebeb10e4ffbe2317e989f73f",
+        "testSourceSha256": "ecdf0344967a7b766c0ead01d0dd66d3fcf3a7525f6c30fb186cffcc2fc9695a",
+        "targetPlatform": "macos",
+        "executionPlatform": "macos",
+        "nativeTargetRuntime": true
+      },
+      "reportSha256": "59ab039bb00b80496d59ce9b8ae5fb3ff306614d2a4daa50c2976fb8e05a2617"
+    },
+    "http": {
+      "jarSha256": "3514e6a321be38bcfbe61c1e0f33f0642897fc61a0220e034a732547f16ffd01",
+      "archiveVerification": {
+        "status": "pass",
+        "reader": "HashMapZipFile",
+        "verifiedEntries": 70,
+        "closed": true,
+        "sha256": "3514e6a321be38bcfbe61c1e0f33f0642897fc61a0220e034a732547f16ffd01"
+      },
+      "checks": {
+        "status": "pass",
+        "serverOwnedClosed": true,
+        "requestFraming": {
+          "rejectedHeaderVariants": 6,
+          "wireContentLength": 5,
+          "wireTransferEncodingAbsent": true,
+          "rejectedRequestsOpenedSockets": false
+        },
+        "checkCount": 9,
+        "checks": [
+          "real UTF-8 POST preserves body whitespace, request/response headers and HTTP error status",
+          "raw response bytes are preserved and binary data is not rendered as text",
+          "redirect responses are visible and requests do not acquire a shared cookie jar",
+          "streaming response limit applies without Content-Length",
+          "cancel completes the pending call and disconnects the active streaming socket",
+          "deadline includes a response body stalled after headers",
+          "file variables, named requests, caret selection and ordered plan requests reach the server",
+          "unsupported credentials, managed headers, variable cycles, missing variables, file bodies and oversized request bodies fail explicitly",
+          "raw HTTP/1.1 wire has one matching Content-Length and no Transfer-Encoding; six manual framing variants fail before connecting"
+        ],
+        "responsePresentationAndRawSave": {
+          "status": "pass",
+          "nativeEditorPresentationPrepared": true,
+          "binaryPreserved": true,
+          "atomicRawSaveBytesMatch": true,
+          "temporarySaveFilesCleaned": true
+        },
+        "nativeLexerRestartRestore": {
+          "status": "pass",
+          "documents": 26,
+          "physicalLineCases": 20,
+          "restartSuffixTokenChecks": 4915,
+          "restoreChecks": 451
+        },
+        "targetPlatform": "macos",
+        "executionPlatform": "macos",
+        "nativeTargetRuntime": true,
+        "jarSha256": "3514e6a321be38bcfbe61c1e0f33f0642897fc61a0220e034a732547f16ffd01"
+      },
+      "reportSha256": "e30c8b8a0c303097f7ca0f97b15affe36b3a8f8d684bd9d1aac4b0099b2ee4c8"
+    }
+  },
+  "unitTests": {
+    "repository": {
+      "total": 150,
+      "passed": 144,
+      "skipped": 6,
+      "skipScope": "Existing real notebook kernel checks require explicitly selected runtime; this round remains compile/headless-only",
+      "logSha256": "85d4efa292e4abc5c6f730a76de13d05bdb95b437616c939bdaf3fff342994ea"
+    },
+    "frontend": {
+      "total": 25,
+      "passed": 25,
+      "skipped": 0,
+      "logSha256": "ef56981ca77b1488a050136a07aa3b4d87448b6694fcc06890eeec67f148ec6f"
+    }
+  },
+  "legalAndPins": {
+    "toolsLockSha256": "5a7b20ce2ce915a4012b4ea5dfa35b77c709bdbb19de00be87700404a6f6fff2",
+    "allPackagedLegalAndPinResourcesIdenticalToAccepted": true,
+    "nodeTlsTsBinariesRedistributed": false,
+    "provisionerAndProtocolCloseCodeCopiedFromAcceptedWithoutChanges": true
+  },
+  "nativeIdeStarted": false,
+  "nodeExecuted": false,
+  "automaticDownloadOrInstall": false,
+  "rootWorktreeOrFrozenPeerModified": false,
+  "pushedOrReleased": false,
+  "unknown": [
+    "IDE module/EP/service activation and native document/diagnostic/completion/navigation UI",
+    "Windows native process lifecycle and unexpected parent-crash reparenting",
+    "Relocatable production frontend distribution; candidate remains bound to this owned fixture/cache parent",
+    "Native acceptance, versioning, installers and README/GIF for the next release remain root-owned future gates"
+  ]
+}
