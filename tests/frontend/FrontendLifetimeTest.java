@@ -26,10 +26,27 @@ public final class FrontendLifetimeTest {
     Handle incompleteRoot = new Handle(103, Instant.ofEpochSecond(4)); Handle unidentified = new Handle(104, null);
     incompleteRoot.descendants = List.of(unidentified);
     FrontendProcessLifetime incomplete = new FrontendProcessLifetime(new FakeProcess(incompleteRoot)); incomplete.close();
-    Map<String,Object> incompleteReport = incomplete.completion().get(3, TimeUnit.SECONDS);
+    Map<String,Object> incompleteReport = incomplete.completion().get(6, TimeUnit.SECONDS);
     require(Boolean.TRUE.equals(incompleteReport.get("identityIncomplete")) && Boolean.FALSE.equals(incompleteReport.get("cleanupComplete"))
         && unidentified.kills == 0, "Unverifiable descendant was killed or claimed completely cleaned");
-    System.out.println("{\"status\":\"pass\",\"missingRootIdentityFailsClosed\":true,\"reusedPidNotSignalled\":true,\"rejectedSchedulingDisposesIndependently\":true,\"unverifiableChildNotClaimedClean\":true,\"nativeIdeStarted\":false}");
+    Handle lostRoot = new Handle(105, Instant.ofEpochSecond(5));
+    FrontendProcessLifetime rootLost = new FrontendProcessLifetime(new FakeProcess(lostRoot)); lostRoot.started = null; rootLost.close();
+    Map<String,Object> rootLostReport = rootLost.completion().get(6, TimeUnit.SECONDS);
+    require(Boolean.FALSE.equals(rootLostReport.get("cleanupComplete")) && Boolean.TRUE.equals(rootLostReport.get("identityIncomplete"))
+        && ((List<?>)rootLostReport.get("uncertainLivePids")).contains(105L) && lostRoot.kills == 0 && lostRoot.alive,
+        "Known root that lost metadata was reported gone or signalled");
+    Handle childRoot = new Handle(106, Instant.ofEpochSecond(6)); Handle lostChild = new Handle(107, Instant.ofEpochSecond(7));
+    childRoot.descendants = List.of(lostChild); FrontendProcessLifetime childLost = new FrontendProcessLifetime(new FakeProcess(childRoot));
+    lostChild.started = null; childLost.close(); Map<String,Object> childLostReport = childLost.completion().get(6, TimeUnit.SECONDS);
+    require(Boolean.FALSE.equals(childLostReport.get("cleanupComplete")) && Boolean.TRUE.equals(childLostReport.get("identityIncomplete"))
+        && ((List<?>)childLostReport.get("uncertainLivePids")).contains(107L) && !childRoot.alive && lostChild.kills == 0 && lostChild.alive,
+        "Known child that lost metadata was evicted or signalled");
+    Handle enumerationRoot = new Handle(108, Instant.ofEpochSecond(8));
+    FrontendProcessLifetime enumeration = new FrontendProcessLifetime(new FakeProcess(enumerationRoot)); enumerationRoot.enumerationFails = true;
+    enumeration.close(); Map<String,Object> enumerationReport = enumeration.completion().get(3, TimeUnit.SECONDS);
+    require(!enumerationRoot.alive && Boolean.TRUE.equals(enumerationReport.get("discoveryIncomplete")) && Boolean.FALSE.equals(enumerationReport.get("cleanupComplete")),
+        "Failed descendant enumeration skipped verified root disposal or claimed full cleanup");
+    System.out.println("{\"status\":\"pass\",\"missingRootIdentityFailsClosed\":true,\"reusedPidNotSignalled\":true,\"rejectedSchedulingDisposesIndependently\":true,\"unverifiableChildNotClaimedClean\":true,\"knownRootIdentityLossNotGone\":true,\"knownChildIdentityLossNotGone\":true,\"enumerationFailureStillDisposesVerifiedRoot\":true,\"nativeIdeStarted\":false}");
   }
   private static final class FakeProcess extends Process {
     final Handle handle; FakeProcess(Handle handle) { this.handle = handle; }
@@ -46,11 +63,12 @@ public final class FrontendLifetimeTest {
   private static final class Handle implements ProcessHandle {
     final long pid; volatile Instant started; volatile boolean alive = true; volatile int kills;
     volatile List<Handle> descendants = List.of();
+    volatile boolean enumerationFails;
     Handle(long pid, Instant started) { this.pid = pid; this.started = started; }
     public long pid() { return pid; }
     public Optional<ProcessHandle> parent() { return Optional.empty(); }
     public Stream<ProcessHandle> children() { return descendants.stream().map(value -> value); }
-    public Stream<ProcessHandle> descendants() { return children(); }
+    public Stream<ProcessHandle> descendants() { if (enumerationFails) throw new IllegalStateException("owned test enumeration failure"); return children(); }
     public Info info() { return new Info() {
       public Optional<String> command() { return Optional.empty(); }
       public Optional<String> commandLine() { return Optional.empty(); }
