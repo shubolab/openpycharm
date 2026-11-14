@@ -41,15 +41,21 @@ def build_probe(sdk: Path, production_jar: Path) -> tuple[Path, dict]:
     with builder.cache_lock(work / "build.lock"):
         with tempfile.TemporaryDirectory(prefix="compile-", dir=work) as directory:
             temporary = Path(directory); classes = temporary / "classes"
-            compilation = builder.compile_java(layout, [SOURCE / "NotebookSaveProbe.java"], classes, temporary / "javac.args", [production_jar], runtime)
-            payloads = {path.relative_to(classes).as_posix(): path.read_bytes() for path in classes.rglob("*.class")}
+            compilation = builder.compile_java(layout, [SOURCE / "NotebookSaveProbe.java", SOURCE / "NotebookSavePayloadTest.java"], classes, temporary / "javac.args", [production_jar], runtime)
+            cp = os.pathsep.join(map(str, [classes, production_jar, *builder.classpath(layout)]))
+            payload_checks = json.loads(builder.run_java(runtime, ["-Djava.awt.headless=true", "-classpath", cp,
+                "dev.openpycharm.notebooks.saveprobe.NotebookSavePayloadTest"], temporary).stdout)
+            if payload_checks.get("status") != "pass":
+                raise ValueError("Actual native-gate payload assertion controls failed")
+            payloads = {path.relative_to(classes).as_posix(): path.read_bytes() for path in classes.rglob("*.class")
+                        if not path.name.startswith("NotebookSavePayloadTest")}
             payloads["META-INF/plugin.xml"] = (SOURCE / "plugin.xml").read_bytes()
             plugin.parent.mkdir(parents=True, exist_ok=True)
             with zipfile.ZipFile(plugin, "w", zipfile.ZIP_DEFLATED) as archive:
                 for name, data in sorted(payloads.items()):
                     info = zipfile.ZipInfo(name, (1980, 1, 1, 0, 0, 0)); info.compress_type = zipfile.ZIP_DEFLATED; archive.writestr(info, data)
     report = {"identity": identity, "pluginSha256": sha256(plugin), "compilation": compilation,
-              "classes": sorted(name for name in payloads if name.endswith(".class"))}
+              "classes": sorted(name for name in payloads if name.endswith(".class")), "payloadAssertionTests": payload_checks}
     (work / "build.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     return plugin.parent.parent, report
 
