@@ -1,0 +1,312 @@
+{
+  "schema": 1,
+  "status": "ci-and-artifact-verified-final-desktop-and-gif-pending",
+  "version": "0.1.0-dev.3",
+  "sourceCommit": "9a243e605c43d86788b0e1b4607ec3bdf11b13d1",
+  "reviewedReleasePreparationCommit": "471858fb5d8aa131225db96e31f56b99900d5614",
+  "checkedAtUtc": "2026-11-14T08:04:23.267158+00:00",
+  "repository": "shubolab/openpycharm",
+  "ci": {
+    "runId": 43565932969,
+    "url": "https://github.com/shubolab/openpycharm/actions/runs/43565932969",
+    "event": "push",
+    "runAttempt": 1,
+    "headCommit": "9a243e605c43d86788b0e1b4607ec3bdf11b13d1",
+    "conclusion": "success"
+  },
+  "productionInputs": {
+    "countPerTarget": 145,
+    "sourceToReviewedCommitTreeUnchanged": true,
+    "finalDocumentationCommitStillMustBeChecked": true,
+    "checkedPaths": [
+      "scripts",
+      "product",
+      "plugins",
+      "requirements-build.txt",
+      "LICENSE",
+      "NOTICE"
+    ],
+    "finalCheckCommand": "git diff --exit-code 9a243e605c43d86788b0e1b4607ec3bdf11b13d1 \"$DOCUMENTATION_COMMIT\" -- scripts product plugins requirements-build.txt LICENSE NOTICE",
+    "fullInventoryVerification": "verify_git_sources requires the complete manifest inventory, file modes and exact Git blobs; Windows accepts only exact recorded UTF-8 LF-to-CRLF checkout conversion.",
+    "finalCheckEnvironment": "Set DOCUMENTATION_COMMIT to the full reviewed release-doc/GIF commit SHA."
+  },
+  "targets": {
+    "macos-arm64": {
+      "jobId": 132359666958,
+      "jobUrl": "https://github.com/shubolab/openpycharm/actions/runs/43565932969/job/132359666958",
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 14102297519,
+        "name": "OpenPyCharm-macos-arm64-9a243e605c43d86788b0e1b4607ec3bdf11b13d1",
+        "bytes": 648745027,
+        "zipSha256": "854dedd78fa0fb10579200b875663757ac533e2a4a0340caca8df2d7c4323408",
+        "archiveLayout": "build/ plus isolated .tools/native Notebook evidence"
+      },
+      "installer": {
+        "name": "OpenPyCharm-0.1.0-dev.3-macos-arm64.dmg",
+        "bytes": 701566993,
+        "sha256": "c32a15bedc407dcd90fbfe1f99606e40a7b30f077207d28c41c068a2898464a6",
+        "productTreeSha256": "7485d3022a1a8fd113cb8a5c485473dd6cd69f16f4d346a6b250cbd0505a2205",
+        "checks": [
+          "hdiutil-verify",
+          "mounted-product-tree",
+          "Applications-symlink",
+          "copied-product-tree",
+          "ad-hoc-signature"
+        ]
+      },
+      "productManifestSha256": "871516408f54dd54874c7bbca716a0279baa2d7e33e4589d5acc5fbdf7fadd58",
+      "sourceInventorySha256": "e66720634accd4819e475ebfe71679c4c30806aa3ff74b5a8b83e4074337e966",
+      "sourceInputCount": 145,
+      "exactWindowsCheckoutConversions": [],
+      "repositoryTests": {
+        "run": 125,
+        "passed": 125,
+        "skipped": 0,
+        "jobLogSha256": "2dcd2ccadf3492d17a33d3a787d152dd915a658ce18ecb02b35876e6b60ebc59"
+      },
+      "fixtureTests": {
+        "run": 9,
+        "passed": 9
+      },
+      "packagedPluginJarSha256": {
+        "dev.openpycharm.http": "3514e6a321be38bcfbe61c1e0f33f0642897fc61a0220e034a732547f16ffd01",
+        "dev.openpycharm.frameworks": "0fbd9bfc94d2588ecafcac93522b834bc48acd474bb4f815545d44d8e15e9ce2",
+        "dev.openpycharm.notebooks": "882248920fe940df597c53dab1c22156c3977bb66b7a651c0df7082d5d1cea28",
+        "dev.openpycharm.database": "499b684993346beb70b0874f67e99796ae49583eebeb10e4ffbe2317e989f73f"
+      },
+      "nativeStartup": {
+        "status": "passed-startup",
+        "errorCount": 0,
+        "fourPackagedPluginsObserved": true
+      },
+      "normalOwnedProjectNotebookGate": {
+        "status": "pass",
+        "mode": "normal-ide-new-owned-project",
+        "normalIdeNewProjectCreation": true,
+        "normalIdeProjectOpen": true,
+        "projectTrusted": true,
+        "parentTrustedBefore": false,
+        "parentTrustedAfter": false,
+        "projectTrustBypassed": false,
+        "globalTrustChecksDisabled": false,
+        "manualTrustClicked": false,
+        "kernelCodeExecuted": false,
+        "passedChecks": [
+          "nativeUndoRestored",
+          "pendingCellAndTextMerge",
+          "nativeSavePersisted",
+          "postSaveExternalDirtyMerge",
+          "metadataAndExistingOutputsPreserved",
+          "closeReopenSourcePreserved",
+          "platformSaveAllPersisted",
+          "successfulReloadStatusRestored",
+          "successfulReloadStateClean",
+          "postSaveAllCanEdit"
+        ],
+        "nativeReportSha256": "e5b8b2d5de991af22925ec1e3fc6ec4a2e3027b64b97e8740eaab4271afc0ee6",
+        "wrapperResultSha256": "fd8250fd3d2cc61d4cb330fae3292b4a2d3ab29ad9ef7f19fbe1d94d542a1bc4",
+        "ownedCleanupMode": "owned-posix-session",
+        "ownedExitCode": 143,
+        "scope": "Actual native action/API save/undo/merge/reopen gate; physical keyboard or mouse interaction is not established."
+      },
+      "nativeJvmKernelSession": {
+        "status": "pass",
+        "jarBoundToInstaller": true,
+        "realExecutionInterruptRestartAndNormalCleanup": true,
+        "forcedBackpressureDisposal": {
+          "status": "pass",
+          "actualBlockedPipe": true,
+          "closeBeforeRequest": true,
+          "closeDuringStartup": true,
+          "doubleClose": true,
+          "boundedOwnedProcessAndDescendantCleanup": true,
+          "blockedWriterCloseMillis": 5138,
+          "startupCloseMillis": 5148,
+          "protocolExecutorRejectionCleanup": true,
+          "rejectedProtocolCloseMillis": 5060
+        }
+      },
+      "databaseControls": {
+        "sqliteAssertions": 80,
+        "completionAssertions": 208,
+        "networkServersTested": false,
+        "nativeCompletionUiTestedByCi": false
+      }
+    },
+    "windows-x64": {
+      "jobId": 132359666846,
+      "jobUrl": "https://github.com/shubolab/openpycharm/actions/runs/43565932969/job/132359666846",
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 14102856659,
+        "name": "OpenPyCharm-windows-x64-9a243e605c43d86788b0e1b4607ec3bdf11b13d1",
+        "bytes": 612761175,
+        "zipSha256": "faa1413f38c576eb6cd3909aef8d0b9ef741a5424e6444ba0c8cba1de404a990",
+        "archiveLayout": "build/ plus isolated .tools/native Notebook evidence"
+      },
+      "installer": {
+        "name": "OpenPyCharm-0.1.0-dev.3-windows-x64-setup.exe",
+        "bytes": 611628694,
+        "sha256": "27fb3f71c9e4e425125ff73acba510347dc5e7e0639988eed87412087da11dd8",
+        "productTreeSha256": "3b97d05f213dfbd3ef432e2547ce1d7ca1bc3ad5c2dbb974b4d1c3734da81579",
+        "checks": [
+          "pinned-Inno-Setup",
+          "official-tool-Authenticode",
+          "executable-installer",
+          "silent-install-file-identity",
+          "installed-native-startup"
+        ]
+      },
+      "productManifestSha256": "b5871a045fb7dff6fc05be8bfa9ae73c382d3b077a7aef3bcbaab75a7d66f1bc",
+      "sourceInventorySha256": "fe2548ee79c9cf9fd72dfbf5f44544b3b375cec74af30545997af0726507c0be",
+      "sourceInputCount": 145,
+      "exactWindowsCheckoutConversions": [
+        "LICENSE",
+        "NOTICE",
+        "plugins/database/NOTICE",
+        "plugins/database/resources/META-INF/plugin.xml",
+        "plugins/frameworks/NOTICE",
+        "plugins/frameworks/resources/META-INF/plugin.xml",
+        "plugins/http-client/NOTICE",
+        "plugins/http-client/examples/demo.http",
+        "plugins/http-client/examples/stop.http",
+        "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpBatchProcessHandler.kt",
+        "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpRequestCall.kt",
+        "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpRequestDocument.kt",
+        "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpRequestRun.kt",
+        "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpRequestSession.kt",
+        "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpResponseCache.kt",
+        "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpResponseView.kt",
+        "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpServicesContributor.kt",
+        "plugins/http-client/src/main/kotlin/dev/openpycharm/http/SaveHttpResponseAction.kt",
+        "plugins/http-client/src/main/kotlin/dev/openpycharm/http/lang/HttpRequestLanguage.kt",
+        "plugins/http-client/src/main/kotlin/dev/openpycharm/http/lang/HttpRequestLexer.kt",
+        "plugins/http-client/src/main/kotlin/dev/openpycharm/http/lang/HttpRequestParserDefinition.kt",
+        "plugins/http-client/src/main/kotlin/dev/openpycharm/http/lang/HttpRequestSyntaxHighlighter.kt",
+        "plugins/http-client/src/main/resources/META-INF/plugin.xml",
+        "plugins/notebooks/NOTICE",
+        "plugins/notebooks/kernel-requirements.txt",
+        "plugins/notebooks/resources/META-INF/plugin.xml",
+        "product/icon.svg",
+        "product/windows/openpycharm.iss",
+        "requirements-build.txt"
+      ],
+      "repositoryTests": {
+        "run": 125,
+        "passed": 122,
+        "skipped": 3,
+        "jobLogSha256": "5b4635ae850ba7532be300e62afd3a531600ccceaf4bcf8239826eec6a2e6048",
+        "skipReasons": [
+          "Windows does not preserve POSIX executable modes",
+          "POSIX SIGTERM case uses separate Windows stdin-EOF path",
+          "Normal-user POSIX helper-directory permissions control"
+        ]
+      },
+      "fixtureTests": {
+        "run": 9,
+        "passed": 9
+      },
+      "packagedPluginJarSha256": {
+        "dev.openpycharm.http": "fb29b354a0cbbcf32165627d824b1e05e31978c894a7f04ddda252d4876c8752",
+        "dev.openpycharm.frameworks": "7a05564c50a4d4cf681ac5e8c60f284fdf09e2ecfa999bc28cdc4f1312c4d85e",
+        "dev.openpycharm.notebooks": "57299387536fff3ab8d6f1a1c956f4d32103c3a05dcf45d9029ec352d6bd444a",
+        "dev.openpycharm.database": "26aba9a0d927a93711bf3ae6477e642b218546745fbea535b9d9f691209e696b"
+      },
+      "nativeStartup": {
+        "status": "passed-startup",
+        "errorCount": 0,
+        "fourPackagedPluginsObserved": true
+      },
+      "normalOwnedProjectNotebookGate": {
+        "status": "pass",
+        "mode": "normal-ide-new-owned-project",
+        "normalIdeNewProjectCreation": true,
+        "normalIdeProjectOpen": true,
+        "projectTrusted": true,
+        "parentTrustedBefore": false,
+        "parentTrustedAfter": false,
+        "projectTrustBypassed": false,
+        "globalTrustChecksDisabled": false,
+        "manualTrustClicked": false,
+        "kernelCodeExecuted": false,
+        "passedChecks": [
+          "nativeUndoRestored",
+          "pendingCellAndTextMerge",
+          "nativeSavePersisted",
+          "postSaveExternalDirtyMerge",
+          "metadataAndExistingOutputsPreserved",
+          "closeReopenSourcePreserved",
+          "platformSaveAllPersisted",
+          "successfulReloadStatusRestored",
+          "successfulReloadStateClean",
+          "postSaveAllCanEdit"
+        ],
+        "nativeReportSha256": "8678ee67415ee13852755cdb1e43061ba3466e03286f97480d897f3b7a2cdf58",
+        "wrapperResultSha256": "e0b5c428db30622b27cf3e3deae9cda64283ca5889ed82009ea726a6792a86a7",
+        "ownedCleanupMode": "owned-windows-job",
+        "ownedExitCode": 0,
+        "scope": "Actual native action/API save/undo/merge/reopen gate; physical keyboard or mouse interaction is not established."
+      },
+      "nativeJvmKernelSession": {
+        "status": "pass",
+        "jarBoundToInstaller": true,
+        "realExecutionInterruptRestartAndNormalCleanup": true,
+        "forcedBackpressureDisposal": {
+          "status": "unverified",
+          "reason": "The fake interpreter fixture needs a native Windows executable wrapper"
+        }
+      },
+      "databaseControls": {
+        "sqliteAssertions": 80,
+        "completionAssertions": 208,
+        "networkServersTested": false,
+        "nativeCompletionUiTestedByCi": false
+      },
+      "installedWindowsStartup": {
+        "status": "passed-startup",
+        "manifestBound": true,
+        "silentInstallAndUninstallVerified": true
+      }
+    }
+  },
+  "transferWorkflow": {
+    "path": ".github/workflows/transfer-ci-installers.yml",
+    "reviewedCommit": "471858fb5d8aa131225db96e31f56b99900d5614",
+    "inputNamesVerified": [
+      "tag",
+      "source_commit",
+      "documentation_commit",
+      "run_id",
+      "mac_artifact_id",
+      "mac_sha256",
+      "windows_artifact_id",
+      "windows_sha256"
+    ],
+    "candidateInputs": {
+      "tag": "v0.1.0-dev.3",
+      "source_commit": "9a243e605c43d86788b0e1b4607ec3bdf11b13d1",
+      "documentation_commit": "<FINAL_REVIEWED_DOC_AND_GIF_COMMIT>",
+      "run_id": "43565932969",
+      "mac_artifact_id": "14102297519",
+      "mac_sha256": "c32a15bedc407dcd90fbfe1f99606e40a7b30f077207d28c41c068a2898464a6",
+      "windows_artifact_id": "14102856659",
+      "windows_sha256": "27fb3f71c9e4e425125ff73acba510347dc5e7e0639988eed87412087da11dd8"
+    },
+    "installerHashesAreStandaloneNotZipHashes": true,
+    "requiresExistingMatchingDraft": true,
+    "requiresMainWorkflowRef": true,
+    "createsOrPublishesRelease": false,
+    "overwritesExistingAsset": false,
+    "finalDocumentationCommitPending": true
+  },
+  "remainingScope": [
+    "Final installed macOS dev.3 desktop walkthrough, log/signature/tree checks and actual installed-version GIF/capture manifest must be added before publication.",
+    "Windows physical keyboard/mouse desktop workflows remain unverified; CI native action/API and silent installer checks do not establish those workflows.",
+    "PostgreSQL/MySQL network servers and PasswordSafe provider/authentication workflows remain unverified; SQLite is the executed database control.",
+    "Windows forced blocked-pipe/startup/disposal fixture remains explicitly unverified in its session report.",
+    "Full 1:1 PyCharm parity, active Notebook JavaScript/widgets, broader framework semantics and frontend M0 are not included or claimed."
+  ],
+  "published": false,
+  "reviewerLaunchedIdeOrInstaller": false
+}
