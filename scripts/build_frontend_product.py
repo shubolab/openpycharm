@@ -264,6 +264,34 @@ def validate_product(plugin: Path, saved: dict) -> None:
         if os.name != "nt" and actual.get("mode") != (0o755 if name == expected["entries"]["node"] else 0o644):
             raise ValueError("Cached frontend runtime receipt cannot authorize different modes")
     inspect_tree(plugin, records, {name: record["mode"] for name, record in records.items()})
+    verify_cached_jar(plugin / "lib/frontend.jar", saved, pin)
+
+
+def verify_cached_jar(jar: Path, saved: dict, pin: dict) -> None:
+    payload_proof = saved.get("payloadSha256", {}); compiler_proof = saved.get("compiledClassSha256", {})
+    version = saved.get("version")
+    if (not payload_proof or not compiler_proof or set(saved.get("classes", [])) != set(compiler_proof)
+            or version != saved.get("identity", {}).get("version")):
+        raise ValueError("Cached frontend compiler/resource proof is incomplete")
+    resources = {path.relative_to(RESOURCES).as_posix(): path.read_bytes() for path in resource_files()}
+    # This recreates only the known resource bytes. Compiler bytes must match
+    # their original per-class proof, separately from a JAR's outer checksum.
+    required_resources = product_payloads({name: b"" for name in compiler_proof}, resources, version, pin)
+    required_resources = {name: data for name, data in required_resources.items() if name not in compiler_proof}
+    try:
+        with zipfile.ZipFile(jar) as archive:
+            names = archive.namelist()
+            if (len(names) != len(set(names)) or set(names) != set(payload_proof)
+                    or {name for name in names if name.endswith(".class")} != set(compiler_proof)
+                    or set(names) - set(compiler_proof) != set(required_resources)):
+                raise ValueError("Cached frontend archive entries differ from the compiler/resource proof")
+            for name in names:
+                data = archive.read(name); digest = hashlib.sha256(data).hexdigest()
+                if (digest != payload_proof[name] or name in compiler_proof and digest != compiler_proof[name]
+                        or name in required_resources and data != required_resources[name]):
+                    raise ValueError("Cached frontend class/resource differs from its original compiler/source proof: " + name)
+    except zipfile.BadZipFile as error:
+        raise ValueError("Cached frontend JAR is invalid") from error
 
 
 def product_payloads(compiled: dict, resources: dict, version: str, pin: dict) -> dict:

@@ -45,6 +45,8 @@ class ProductRuntimeFixture(unittest.TestCase):
                     "payload": {n: record(data) for n, data in self.contents.items() if n.startswith(prefix)}, **extra}
         self.pin = {
             "artifacts": [artifact("node-macos-arm64", "node/", target="macos-arm64", nodeExecutable="node/bin/node"),
+                          {"id": "node-windows-x64", "target": "windows-x64", "size": 123, "sha256": "f" * 64,
+                           "nodeExecutable": "node/node.exe", "payload": {"node/node.exe": record(b"pinned PE bytes")}},
                           artifact("typescript-language-server", "typescript-language-server/"),
                           artifact("typescript", "typescript/"),
                           artifact("notice-commander", "notices/", purpose="bundled-cli-corresponding-notices-only", package="commander", version="15.1.0")],
@@ -53,10 +55,11 @@ class ProductRuntimeFixture(unittest.TestCase):
                                "sourceCount": 1, "packages": {"commander": "15.1.0"}},
         }
         self.pin_path = self.root / "tools.lock.json"; self.pin_path.write_text(json.dumps(self.pin))
+        (self.root / "LICENSE").write_bytes((builder.ROOT / "LICENSE").read_bytes())
         expected = builder.runtime_manifest(self.pin, "macos-arm64")
         self.saved = {"schema": 1, "owner": "OpenPyCharm frontend M0", "target": "macos-arm64", "runtimeRoot": str(self.runtime),
                       "lockSha256": builder.sha256(self.pin_path), **expected,
-                      "artifacts": [{k: item[k] for k in ("id", "sha256", "size")} for item in self.pin["artifacts"]],
+                      "artifacts": [{k: item[k] for k in ("id", "sha256", "size")} for item in self.pin["artifacts"] if not item.get("target") or item["target"] == "macos-arm64"],
                       "installationScriptsExecuted": False, "productionPackaged": False, "bundledPackageNotices": 1}
         self.receipt = self.runtime / "frontend-tools.json"; self.write_receipt()
         for name, value in [("ROOT", self.root), ("PIN", self.pin_path)]:
@@ -172,9 +175,7 @@ class ProductRuntimeFixture(unittest.TestCase):
         self.assertEqual(list(outside.iterdir()), [])
 
     def test_target_payload_is_selected_explicitly_and_cannot_mix_node_binaries(self):
-        windows = {"id": "node-windows-x64", "target": "windows-x64", "nodeExecutable": "node/node.exe",
-                   "payload": {"node/node.exe": record(b"pinned PE bytes")}}
-        pin = copy.deepcopy(self.pin); pin["artifacts"].append(windows)
+        pin = copy.deepcopy(self.pin); windows = next(item for item in pin["artifacts"] if item["id"] == "node-windows-x64")
         mac = builder.runtime_manifest(pin, "macos-arm64"); win = builder.runtime_manifest(pin, "windows-x64")
         self.assertIn("node/bin/node", mac["files"]); self.assertNotIn("node/node.exe", mac["files"])
         self.assertIn("node/node.exe", win["files"]); self.assertNotIn("node/bin/node", win["files"])
@@ -184,15 +185,35 @@ class ProductRuntimeFixture(unittest.TestCase):
 
     def product(self):
         root = self.root / ".tools/product"; (root / "lib").mkdir(parents=True)
-        jar = root / "lib/frontend.jar"; jar.write_bytes(b"owned compiled JAR"); jar.chmod(0o644)
-        runtime = self.runtime / "node/bin/node"
+        compiled = {"dev/openpycharm/frontend/" + name + ".class": ("compiler output " + name).encode() for name in builder.JAVA_NAMES}
+        resources = {path.relative_to(builder.RESOURCES).as_posix(): path.read_bytes() for path in builder.resource_files()}
+        payloads = builder.product_payloads(compiled, resources, builder.VERSION, self.pin)
+        jar = root / "lib/frontend.jar"
+        with zipfile.ZipFile(jar, "w") as archive:
+            for name, data in payloads.items(): archive.writestr(name, data)
+        jar.chmod(0o644)
         copied = builder.copy_runtime(self.authenticate(), root / "runtime/macos-arm64")
         records = {"lib/frontend.jar": {**record(jar.read_bytes()), "mode": stat.S_IMODE(jar.stat().st_mode)}}
         records.update({"runtime/macos-arm64/" + name: value for name, value in copied.items()})
-        saved = {"target": "macos-arm64", "fileRecords": records, "files": {n: r["sha256"] for n, r in records.items()},
+        saved = {"target": "macos-arm64", "version": builder.VERSION, "identity": {"version": builder.VERSION},
+                 "payloadSha256": {n: record(data)["sha256"] for n, data in payloads.items()},
+                 "compiledClassSha256": {n: record(data)["sha256"] for n, data in compiled.items()}, "classes": sorted(compiled),
+                 "fileRecords": records, "files": {n: r["sha256"] for n, r in records.items()},
                  "jarSha256": records["lib/frontend.jar"]["sha256"],
                  "archiveVerification": {"status": "pass", "sha256": records["lib/frontend.jar"]["sha256"]}}
         return root, saved
+
+    def test_cached_jar_outer_hash_update_cannot_replace_original_compiler_bytes(self):
+        root, saved = self.product(); jar = root / "lib/frontend.jar"
+        with zipfile.ZipFile(jar) as archive: payloads = {name: archive.read(name) for name in archive.namelist()}
+        payloads["dev/openpycharm/frontend/FrontendBundledRuntime.class"] = b"valid replacement class from resource; not compiler output"
+        with zipfile.ZipFile(jar, "w") as archive:
+            for name, data in payloads.items(): archive.writestr(name, data)
+        digest = builder.sha256(jar); saved["files"]["lib/frontend.jar"] = digest; saved["jarSha256"] = digest
+        saved["fileRecords"]["lib/frontend.jar"] = {**record(jar.read_bytes()), "mode": stat.S_IMODE(jar.stat().st_mode)}
+        saved["archiveVerification"]["sha256"] = digest
+        with self.assertRaisesRegex(ValueError, "original compiler/source proof"):
+            builder.validate_product(root, saved)
 
     def test_complete_multi_file_receipt_detects_jar_runtime_mode_and_extra_payload_drift(self):
         root, saved = self.product(); builder.validate_product(root, saved)
