@@ -4,6 +4,8 @@ import com.google.gson.*;
 import com.intellij.ide.impl.TrustedProjects;
 import com.intellij.ide.plugins.PluginManagerCore;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.editor.ex.DocumentEx;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.command.undo.UndoManager;
@@ -17,6 +19,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.concurrency.AppExecutorUtil;
 import dev.openpycharm.notebooks.NotebookFileEditor;
 import dev.openpycharm.notebooks.NotebookModel;
+import dev.openpycharm.notebooks.NotebookPersistence;
 import java.awt.*;
 import java.lang.management.ManagementFactory;
 import java.nio.file.*;
@@ -39,6 +42,10 @@ public final class NotebookSaveProbe implements StartupActivity.DumbAware {
   private final AtomicReference<String> documentText = new AtomicReference<>("");
   private final AtomicReference<String> cellText = new AtomicReference<>("");
   private final AtomicBoolean editorModified = new AtomicBoolean();
+  private record NativeState(boolean reloading, boolean conflicted, boolean persistenceDirty,
+                             boolean modified, boolean cellViewer, String status,
+                             long documentStamp, long modificationSequence) { }
+  private final AtomicReference<NativeState> nativeState = new AtomicReference<>();
   private final AtomicReference<String> stage = new AtomicReference<>("startup");
   private javax.swing.Timer timer;
   private volatile NotebookFileEditor editor;
@@ -97,6 +104,7 @@ public final class NotebookSaveProbe implements StartupActivity.DumbAware {
       });
       await(() -> sourceIs(documentText.get(), initialSource) && cellText.get().equals(initialSource), 30, "Native source undo/reload did not restore both source and file document");
       result.put("nativeUndoRestored", true); result.put("undoTarget", undoTarget);
+      result.put("stateAfterUndo", nativeState.get());
       stage.set("cell-edit-and-text-merge");
       edt(() -> {
         Editor cell = firstCell(editor);
@@ -139,6 +147,40 @@ public final class NotebookSaveProbe implements StartupActivity.DumbAware {
       await(() -> savedTarget() && fileHas("externalAfterSave") && !editorModified.get(), 35, "Second native save lost post-save text metadata or source, or remained dirty");
       result.put("postSaveExternalDirtyMerge", true);
       assertPayload(NotebookModel.parse(Files.readString(fixture)), expectedInitial, true);
+      stage.set("platform-save-all");
+      // Exercise a real parent-document reload, then the ordinary SaveAll
+      // action used by Cmd+S. Status text is checked separately from flags.
+      int reloadTick = edt(() -> {
+        Document json = FileDocumentManager.getInstance().getCachedDocument(virtual);
+        WriteCommandAction.runWriteCommandAction(project, "Native SaveAll formatting control", null,
+            () -> json.setText(json.getText() + "  \n")); return heartbeat.get();
+      });
+      await(() -> heartbeat.get() > reloadTick && settled() && sourceIs(documentText.get(), TARGET), 30, "Parent-document reload did not finish before platform SaveAll");
+      edt(() -> {
+        Editor cell = firstCell(editor); require(!cell.isViewer(), "Reload left the cell read-only");
+        WriteCommandAction.runWriteCommandAction(project, "Native SaveAll source edit", null, () -> cell.getDocument().setText(INTERIM)); return null;
+      });
+      await(() -> settled() && sourceIs(documentText.get(), INTERIM) && cellText.get().equals(INTERIM), 30,
+          "Reloaded notebook could not prepare a new edit before SaveAll");
+      result.put("stateBeforePlatformSaveAll", nativeState.get()); int beforeSaveAll = heartbeat.get();
+      String saveAllClass = edt(this::platformSaveAll);
+      await(() -> savedSource(INTERIM) && settled() && !editorModified.get() && heartbeat.get() - beforeSaveAll >= 2, 35,
+          "Platform SaveAll did not persist source with settled editor flags and live EDT heartbeat");
+      result.put("platformSaveAllActionClass", saveAllClass); result.put("platformSaveAllPersisted", true);
+      result.put("stateAfterPlatformSaveAll", nativeState.get());
+      require(nativeState.get().status().startsWith("Kernel stopped"), "Successful reload kept stale Preparing status");
+      result.put("successfulReloadStatusRestored", true); result.put("successfulReloadStateClean", true);
+      stage.set("edit-after-platform-save-all");
+      edt(() -> {
+        Editor cell = firstCell(editor); require(!cell.isViewer(), "SaveAll left the cell read-only");
+        WriteCommandAction.runWriteCommandAction(project, "Native followup edit after SaveAll", null, () -> cell.getDocument().setText(TARGET)); return null;
+      });
+      await(() -> settled() && sourceIs(documentText.get(), TARGET) && cellText.get().equals(TARGET), 30,
+          "Notebook could not accept and prepare another edit after platform SaveAll");
+      edt(this::platformSaveAll);
+      await(() -> savedTarget() && settled() && !editorModified.get(), 35, "Followup source edit did not persist through platform SaveAll");
+      assertPayload(NotebookModel.parse(Files.readString(fixture)), expectedInitial, true);
+      result.put("postSaveAllCanEdit", true); result.put("stateAfterFollowupSaveAll", nativeState.get());
       String savedHash = hash(Files.readAllBytes(fixture)); require(!savedHash.equals(initialHash), "Saved file bytes did not change");
       result.put("savedBytesSha256", savedHash); result.put("savedBytes", Files.size(fixture));
       result.put("metadataAndExistingOutputsPreserved", true);
@@ -160,6 +202,7 @@ public final class NotebookSaveProbe implements StartupActivity.DumbAware {
       result.put("heartbeatAgeMillis", lastHeartbeat.get() == 0 ? -1 : TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - lastHeartbeat.get()));
       result.put("lastCapturedCellSource", cellText.get()); result.put("lastCapturedDocumentText", documentText.get());
       result.put("lastCapturedEditorModified", editorModified.get());
+      result.put("lastCapturedNativeState", nativeState.get());
       try {
         Files.createDirectories(report.getParent()); Path temporary = Files.createTempFile(report.getParent(), ".notebook-save-native-", ".json");
         Files.writeString(temporary, new GsonBuilder().setPrettyPrinting().create().toJson(result));
@@ -175,10 +218,30 @@ public final class NotebookSaveProbe implements StartupActivity.DumbAware {
     try { if (editor != null) { cellText.set(firstCell(editor).getDocument().getText()); editorModified.set(editor.isModified()); } } catch (Exception ignored) { }
     Document document = FileDocumentManager.getInstance().getCachedDocument(virtual);
     if (document != null && document.getTextLength() < 200000) documentText.set(document.getText());
+    try {
+      if (editor != null && document != null) nativeState.set(new NativeState(
+          (boolean)field(editor, "reloading"), (boolean)field(editor, "conflicted"),
+          ((NotebookPersistence)field(editor, "persistence")).isDirty(), editor.isModified(), firstCell(editor).isViewer(),
+          ((JLabel)field(editor, "status")).getText(), document.getModificationStamp(), ((DocumentEx)document).getModificationSequence()));
+    } catch (Exception ignored) { }
   }
-  private boolean savedTarget() {
-    try { NotebookModel value = NotebookModel.parse(Files.readString(fixture)); return value.source(0).equals(TARGET) && value.snapshot().json().contains("externalTextEdit"); }
+  private boolean savedTarget() { return savedSource(TARGET); }
+  private boolean savedSource(String source) {
+    try { NotebookModel value = NotebookModel.parse(Files.readString(fixture)); return value.source(0).equals(source) && value.snapshot().json().contains("externalTextEdit"); }
     catch (Exception ignored) { return false; }
+  }
+  private boolean settled() {
+    NativeState value = nativeState.get();
+    return value != null && !value.reloading() && !value.conflicted() && !value.persistenceDirty() && !value.cellViewer();
+  }
+  private String platformSaveAll() {
+    AnAction action = ActionManager.getInstance().getAction("SaveAll"); require(action != null, "Platform SaveAll action is absent");
+    DataContext context = dataId -> CommonDataKeys.PROJECT.is(dataId) ? project : null;
+    action.actionPerformed(AnActionEvent.createFromAnAction(action, null, ActionPlaces.UNKNOWN, context));
+    return action.getClass().getName();
+  }
+  private static Object field(Object target, String name) throws Exception {
+    var field = target.getClass().getDeclaredField(name); field.setAccessible(true); return field.get(target);
   }
   private boolean fileHas(String key) { try { return Files.readString(fixture).contains(key); } catch (Exception ignored) { return false; } }
   private static boolean sourceIs(String text, String expected) { try { return NotebookModel.parse(text).source(0).equals(expected); } catch (Exception ignored) { return false; } }
