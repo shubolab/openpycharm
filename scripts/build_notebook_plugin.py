@@ -194,7 +194,9 @@ def run_model_tests(sdk: Path, plugin: Path, host_sdk: Path | None = None) -> di
     with tempfile.TemporaryDirectory(prefix="model-", dir=work) as directory:
         temporary = Path(directory)
         classes = temporary / "classes"
-        compile_java(layout, [ROOT / "tests/notebooks/NotebookModelTest.java", ROOT / "tests/notebooks/NotebookPersistenceTest.java", ROOT / "tests/notebooks/NotebookMergeTest.java", ROOT / "tests/notebooks/NotebookDocumentSaveTest.java"], classes, temporary / "javac.args",
+        compile_java(layout, [ROOT / "tests/notebooks/NotebookModelTest.java", ROOT / "tests/notebooks/NotebookPersistenceTest.java", ROOT / "tests/notebooks/NotebookMergeTest.java",
+                             ROOT / "tests/notebooks/NotebookDocumentSaveTest.java", ROOT / "tests/notebooks/NotebookRichOutputTest.java",
+                             ROOT / "tests/notebooks/NotebookPreviewSchedulerTest.java"], classes, temporary / "javac.args",
                      [plugin / "lib/notebooks.jar"], runtime)
         cp = os.pathsep.join(map(str, [classes, plugin / "lib/notebooks.jar", *classpath(layout)]))
         report = json.loads(run_java(runtime, ["-classpath", cp, "dev.openpycharm.notebooks.NotebookModelTest"], temporary).stdout)
@@ -212,6 +214,12 @@ def run_model_tests(sdk: Path, plugin: Path, host_sdk: Path | None = None) -> di
         if contract.get("status") != "pass":
             raise ValueError("Notebook save-thread contract checks did not pass")
         report["saveThreadContract"] = contract
+        for name, key in (("NotebookRichOutputTest", "richOutput"), ("NotebookPreviewSchedulerTest", "previewScheduler")):
+            result = json.loads(run_java(runtime, ["-Djava.awt.headless=true", "--add-modules", "jdk.httpserver", "-classpath", cp,
+                                                  "dev.openpycharm.notebooks." + name], temporary).stdout)
+            if result.get("status") != "pass":
+                raise ValueError("Notebook rich preview checks did not pass: " + name)
+            report[key] = result
         report.update(targetPlatform=layout.platform, executionPlatform=runtime.platform,
                       nativeTargetRuntime=layout.platform == runtime.platform, jarSha256=sha256(plugin / "lib/notebooks.jar"))
         return report

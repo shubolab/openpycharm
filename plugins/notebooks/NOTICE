@@ -15,3 +15,15 @@ https://nbformat.readthedocs.io/en/stable/format_description.html
 https://jupyter-client.readthedocs.io/en/stable/api/client.html
 https://jupyter-client.readthedocs.io/en/stable/messaging.html
 https://github.com/JetBrains/intellij-community/tree/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/editor-ui-api/src/com/intellij/openapi/fileEditor
+
+Static Markdown preview uses the existing Apache-2.0 JetBrains markdown library
+from the authenticated open-source SDK, without vendoring or replacing it:
+https://github.com/JetBrains/markdown
+Pinned SDK lib/intellij.libraries.markdown.jar SHA-256:
+74b475effd0b3b622aa9d20fbbfd168fb4e61e218124989ccffcfa51a680f5dd
+Its upstream notices remain in the SDK/product distribution.
+
+Images use Java ImageIO with memory-only input streams. HTML is converted to
+inert Swing text/table data; no browser, script engine or URL loader is used.
+Matplotlib, pandas and Pillow used by the rich-output tests are external
+test-producer packages, never bundled IDE implementation.

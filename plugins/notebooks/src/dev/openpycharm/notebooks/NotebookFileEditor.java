@@ -3,6 +3,7 @@ package dev.openpycharm.notebooks;
 import com.google.gson.*;
 import com.intellij.ide.impl.TrustedProjects;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.*;
 import com.intellij.openapi.editor.event.DocumentEvent;
@@ -12,6 +13,7 @@ import com.intellij.openapi.fileTypes.*;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.UserDataHolderBase;
@@ -36,6 +38,7 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
   private final VirtualFile file;
   private final Document document;
   private final NotebookPersistence persistence;
+  private final NotebookPreviewScheduler previews;
   private NotebookModel.Snapshot baseline;
   record PendingState(NotebookModel.Snapshot baseline, NotebookModel.Snapshot local) { }
   private NotebookModel model;
@@ -47,8 +50,7 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
   private final List<Cell> cells = new ArrayList<>();
   private final Map<String, Cell> executing = new HashMap<>();
   private final ArrayDeque<Cell> queue = new ArrayDeque<>();
-  private final Map<String, List<DisplayReference>> displays = new HashMap<>();
-  private record DisplayReference(Cell cell, JsonObject output) { }
+  private final NotebookDisplayState<Cell> displays = new NotebookDisplayState<>();
   private NotebookKernelSession session;
   private String sessionPython;
   private volatile boolean writing, disposed, reloading;
@@ -69,6 +71,8 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
     baseline = restored == null ? model == null ? null : model.snapshot() : restored.baseline();
     persistence = new NotebookPersistence(AppExecutorUtil.getAppExecutorService(), action ->
         ApplicationManager.getApplication().invokeLater(action), this::applyPersistence);
+    previews = new NotebookPreviewScheduler(AppExecutorUtil.getAppExecutorService(), action ->
+        ApplicationManager.getApplication().invokeLater(action));
     if (restored != null) persistence.markDirty();
     NotebookProjectCloseHandler.register(this);
     body.setLayout(new BoxLayout(body, BoxLayout.Y_AXIS));
@@ -79,6 +83,7 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
     button(toolbar, "+ Code", () -> add("code"));
     button(toolbar, "+ Markdown", () -> add("markdown"));
     button(toolbar, "Save", this::save);
+    button(toolbar, "Refresh Previews", () -> cells.forEach(Cell::refreshOutput));
     keepNotebook.setVisible(false); useText.setVisible(false);
     keepNotebook.setToolTipText("Keep notebook values for overlapping fields and preserve independent text changes");
     keepNotebook.addActionListener(event -> resolveConflict(true));
@@ -193,7 +198,7 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
     body.revalidate(); body.repaint();
   }
   private void releaseCells() {
-    for (Cell cell : cells) { Disposer.dispose(cell.lifetime); EditorFactory.getInstance().releaseEditor(cell.editor); }
+    for (Cell cell : cells) { previews.remove(cell); cell.output.close(); Disposer.dispose(cell.lifetime); EditorFactory.getInstance().releaseEditor(cell.editor); }
     cells.clear();
   }
   private Sdk selectedSdk() {
@@ -231,7 +236,7 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
     if (busy) { status.setText("Kernel busy — interrupt it or wait for this cell to finish"); return; }
     if (!canExecute()) return;
     int index = cells.indexOf(cell); if (index < 0) return;
-    clearCellOutputs(cell, index); model.executionCount(index, null); cell.refreshOutput(); sync();
+    clearCellOutputs(cell, index); model.executionCount(index, null); cell.lastError = ""; cell.refreshOutput(); sync();
     String id = UUID.randomUUID().toString(); executing.put(id, cell); busy = true;
     cell.label.setText("Python [*]"); status.setText("Kernel running");
     session.request(id, "execute", cell.editor.getDocument().getText());
@@ -247,7 +252,7 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
     if (reloading) return;
     String kind = NotebookKernelSession.string(event, "event");
     String id = NotebookKernelSession.string(event, "id");
-    if (kind.equals("ready")) { status.setText("Kernel ready — " + NotebookKernelSession.string(event, "python")); return; }
+    if (kind.equals("ready")) { status.setText(restarting ? "Restarting kernel…" : busy ? "Kernel running" : "Kernel idle — " + NotebookKernelSession.string(event, "python")); return; }
     if (kind.equals("diagnostic")) { status.setToolTipText(NotebookKernelSession.string(event, "text")); return; }
     if (kind.equals("session_error")) {
       queue.clear(); executing.clear(); displays.clear(); busy = false; restarting = false; status.setText(NotebookKernelSession.string(event, "message"));
@@ -259,31 +264,24 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
     if (index >= 0) {
       switch (kind) {
         case "stream", "display_data", "execute_result", "error" -> {
+          if (kind.equals("error")) cell.lastError = NotebookKernelSession.string(content, "ename");
           if (cell.clearBeforeOutput) clearCellOutputs(cell, index);
           JsonObject captured = model.output(index, kind, content);
-          if (content.has("transient") && content.get("transient").isJsonObject()) {
-            String displayId = NotebookKernelSession.string(content.getAsJsonObject("transient"), "display_id");
-            if (!displayId.isEmpty()) displays.computeIfAbsent(displayId, key -> new ArrayList<>()).add(new DisplayReference(cell, captured));
-          }
+          displays.capture(cell, captured, content);
           cell.refreshOutput(); sync();
         }
         case "update_display_data" -> {
           if (cell.clearBeforeOutput) clearCellOutputs(cell, index);
-          if (content.has("transient") && content.get("transient").isJsonObject()) {
-            String displayId = NotebookKernelSession.string(content.getAsJsonObject("transient"), "display_id");
-            for (DisplayReference reference : displays.getOrDefault(displayId, List.of())) {
-              if (content.has("data")) reference.output().add("data", content.get("data").deepCopy());
-              if (content.has("metadata")) reference.output().add("metadata", content.get("metadata").deepCopy());
-              reference.cell().refreshOutput();
-            }
-            sync();
-          }
+          displays.update(content).forEach(Cell::refreshOutput); sync();
         }
         case "clear_output" -> {
           if (content.has("wait") && content.get("wait").getAsBoolean()) cell.clearBeforeOutput = true;
           else { clearCellOutputs(cell, index); cell.refreshOutput(); sync(); }
         }
         case "execute_input" -> { model.executionCount(index, content.get("execution_count")); sync(); }
+        case "status" -> {
+          if (!restarting) status.setText("busy".equals(NotebookKernelSession.string(content, "execution_state")) ? "Kernel running" : "Kernel idle");
+        }
         case "output_limit" -> {
           if (cell.clearBeforeOutput) clearCellOutputs(cell, index);
           JsonObject notice = new JsonObject(); notice.addProperty("name", "stderr");
@@ -297,7 +295,10 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
       if (cell != null) {
         if (event.has("execution_count")) model.executionCount(index, event.get("execution_count"));
         cell.refreshLabel(); executing.remove(id); sync(); busy = restarting;
-        status.setText("Kernel " + NotebookKernelSession.string(event, "status"));
+        String outcome = NotebookKernelSession.string(event, "status");
+        if (restarting) status.setText("Restarting kernel…");
+        else if (event.has("message") && outcome.equals("error")) status.setText("Cell execution failed: " + NotebookKernelSession.string(event, "message"));
+        else status.setText("Kernel idle — Last cell: " + (outcome.equals("ok") ? "completed" : cell.lastError.isEmpty() ? outcome : cell.lastError));
         next();
       } else if (id.startsWith("restart-")) {
         executing.clear(); displays.clear(); busy = false; restarting = false; status.setText("ok".equals(NotebookKernelSession.string(event, "status"))
@@ -309,8 +310,7 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
   }
   private void clearCellOutputs(Cell cell, int index) {
     model.cell(index).add("outputs", new JsonArray()); cell.clearBeforeOutput = false;
-    displays.values().forEach(references -> references.removeIf(reference -> reference.cell() == cell));
-    displays.values().removeIf(List::isEmpty);
+    displays.clear(cell);
   }
   private void add(String kind) {
     if (model == null || busy || reloading || document == null || !document.isWritable()) return;
@@ -372,10 +372,12 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
     final JPanel panel = new JPanel(new BorderLayout());
     final Editor editor;
     final JLabel label = new JBLabel();
-    final JTextArea output = new JTextArea();
+    final NotebookOutputPanel output = new NotebookOutputPanel();
     final JBScrollPane outputScroll = new JBScrollPane(output);
+    final JCheckBox markdownPreview = new JCheckBox("Markdown Preview", true);
     final Disposable lifetime = Disposer.newDisposable("OpenPyCharm notebook cell");
     boolean clearBeforeOutput;
+    String lastError = "";
     Cell(int index) {
       kind = model.kind(index);
       FileType type = kind.equals("code") ? PythonFileType.INSTANCE : FileTypeManager.getInstance().getFileTypeByExtension(kind.equals("markdown") ? "md" : "txt");
@@ -391,25 +393,38 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
         @Override public void documentChanged(DocumentEvent event) {
           int current = cells.indexOf(Cell.this); if (current < 0 || disposed || reloading) return;
           model.source(current, event.getDocument().getText()); sync();
+          if (kind.equals("markdown")) refreshOutput();
         }
       }, lifetime);
       JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 2)); header.add(label);
       if (kind.equals("code")) button(header, "Run Cell", () -> execute(this));
+      if (kind.equals("markdown")) { header.add(markdownPreview); markdownPreview.addActionListener(event -> refreshOutput()); }
       button(header, "Delete Cell", () -> {
         int current = cells.indexOf(this); if (current < 0 || busy || reloading || document == null || !document.isWritable()) return;
         model.remove(current); sync(); rebuild();
       });
       panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(5, 9, 9, 9), BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor") == null ? Color.GRAY : UIManager.getColor("Component.borderColor"))));
       panel.add(header, BorderLayout.NORTH); panel.add(editor.getComponent(), BorderLayout.CENTER);
-      output.setEditable(false); output.setLineWrap(true); output.setWrapStyleWord(true);
-      output.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12)); output.setBorder(BorderFactory.createEmptyBorder(5, 8, 5, 8));
       panel.add(outputScroll, BorderLayout.SOUTH); panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 900));
+      outputScroll.setPreferredSize(new Dimension(800, 320));
       // cells list is populated immediately after this constructor.
       renderOutput(index); renderLabel(index);
-      editor.getContentComponent().getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, InputEvent.SHIFT_DOWN_MASK), "notebook-run-cell");
-      editor.getContentComponent().getActionMap().put("notebook-run-cell", new AbstractAction() {
-        @Override public void actionPerformed(ActionEvent event) { if (kind.equals("code")) execute(Cell.this); }
-      });
+      if (kind.equals("code")) {
+        // IntelliJ's editor/action dispatcher consumes key events before Swing
+        // InputMap actions. Register with the platform and release it with the
+        // cell so rebuild/delete/close cannot retain an obsolete execution target.
+        DumbAwareAction run = new DumbAwareAction("Run Notebook Cell") {
+          @Override public ActionUpdateThread getActionUpdateThread() { return ActionUpdateThread.EDT; }
+          @Override public void update(AnActionEvent event) {
+            event.getPresentation().setEnabled(!disposed && !reloading && !Disposer.isDisposed(lifetime) && cells.contains(Cell.this));
+          }
+          @Override public void actionPerformed(AnActionEvent event) {
+            if (!disposed && !reloading && !Disposer.isDisposed(lifetime) && cells.contains(Cell.this)) execute(Cell.this);
+          }
+        };
+        run.registerCustomShortcutSet(new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, InputEvent.SHIFT_DOWN_MASK)),
+            editor.getContentComponent(), lifetime);
+      }
     }
     void refreshLabel() { int i = cells.indexOf(this); if (i >= 0) renderLabel(i); }
     void renderLabel(int i) {
@@ -418,24 +433,33 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
     }
     void refreshOutput() { int i = cells.indexOf(this); if (i >= 0) renderOutput(i); }
     void renderOutput(int i) {
-      if (!kind.equals("code")) { outputScroll.setVisible(false); return; }
-      StringBuilder text = new StringBuilder();
-      for (JsonElement item : model.outputs(i)) {
-        JsonObject value = item.getAsJsonObject(); String type = NotebookKernelSession.string(value, "output_type");
-        if (type.equals("stream")) text.append(NotebookModel.sourceText(value.get("text")));
-        else if (type.equals("error")) {
-          if (value.has("traceback")) for (JsonElement line : value.getAsJsonArray("traceback")) text.append(line.getAsString().replaceAll("\u001B\\[[;\\d]*m", "")).append('\n');
-          else text.append(NotebookKernelSession.string(value, "ename")).append(": ").append(NotebookKernelSession.string(value, "evalue")).append('\n');
-        } else if (value.has("data") && value.get("data").isJsonObject()) {
-          JsonObject data = value.getAsJsonObject("data");
-          if (data.has("text/plain")) text.append(NotebookModel.sourceText(data.get("text/plain"))).append('\n');
-          else text.append("[Rich output preserved in notebook; native text renderer supports text/plain]\n");
-        }
-        if (text.length() > 200000) { text.setLength(200000); text.append("\n[Output display truncated; full captured output is saved in notebook]\n"); break; }
+      if (kind.equals("raw") || kind.equals("markdown") && !markdownPreview.isSelected()
+          || kind.equals("code") && model.outputs(i).isEmpty()) {
+        previews.remove(this); output.close(); outputScroll.setVisible(false); return;
       }
-      output.setText(text.toString()); outputScroll.setVisible(!text.isEmpty());
-      outputScroll.setPreferredSize(new Dimension(800, Math.min(320, Math.max(42, 20 * (output.getLineCount() + 1)))));
-      panel.revalidate();
+      boolean trusted = TrustedProjects.isTrusted(project);
+      NotebookRichOutput.Input input;
+      if (kind.equals("markdown")) input = NotebookRichOutput.Input.markdown(editor.getDocument().getText(), trusted);
+      else {
+        List<JsonObject> snapshot = new ArrayList<>();
+        int inspected = 0;
+        // Known mutable containers are copied; MIME/metadata values are immutable
+        // because display updates replace fields rather than mutating their trees.
+        for (JsonElement item : model.outputs(i)) {
+          if (inspected++ > NotebookRichOutput.MAX_OUTPUTS) break;
+          if (!item.isJsonObject()) continue;
+          JsonObject captured = new JsonObject(); item.getAsJsonObject().entrySet().forEach(entry -> captured.add(entry.getKey(), entry.getValue()));
+          snapshot.add(captured);
+        }
+        input = new NotebookRichOutput.Input(snapshot, null, trusted);
+      }
+      try {
+        previews.request(this, input, plan -> {
+          if (disposed || Disposer.isDisposed(lifetime)) return;
+          if (input.projectTrusted() && !TrustedProjects.isTrusted(project)) { refreshOutput(); return; }
+          output.apply(plan.retain()); outputScroll.setVisible(!plan.blocks().isEmpty()); panel.revalidate();
+        });
+      } catch (RuntimeException error) { status.setText("Preview preparation unavailable: " + error.getMessage()); }
     }
   }
   @Override public JComponent getComponent() { return component; }
@@ -460,7 +484,7 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
     });
   }
   @Override public void dispose() {
-    disposed = true; queue.clear(); if (session != null) session.close(); releaseCells();
+    disposed = true; queue.clear(); if (session != null) session.close(); previews.close(); releaseCells();
     if (!persistence.isDirty()) NotebookProjectCloseHandler.unregister(this);
     // A pending immutable snapshot still reaches the ordinary document after tab close.
   }
