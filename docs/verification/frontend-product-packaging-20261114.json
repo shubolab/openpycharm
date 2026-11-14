@@ -1,0 +1,90 @@
+{
+  "schema": 1,
+  "date": "2026-11-14",
+  "scope": "Explicit optional Frontend product integration; ordinary four-plugin dev.3 assembly remains the default",
+  "baseCommit": "2ab8886",
+  "observed": {
+    "sourceInputCount": 171,
+    "sourceInventorySha256": "8c7d8ae8788710e89e488bb1ff85d9b89d48f32d41378caed9fa54601864bc30",
+    "sourceInventoryExclusionsAdded": false,
+    "targetedPythonControls": {
+      "status": "pass",
+      "tests": 37,
+      "files": [
+        "tests/frontend/test_frontend_product_builder.py",
+        "tests/test_package_freshness.py",
+        "tests/test_plugin_receipts.py",
+        "tests/database/test_database_receipts.py"
+      ]
+    },
+    "actualSdkM0Compile": {
+      "status": "pass",
+      "target": "macos-arm64",
+      "jarSha256": "f7877db2015d9844e701550b92be37ff71560c907fe4c819fa9b99fa9c42b047",
+      "classCount": 15,
+      "productClassesInM0": false,
+      "checks": {
+        "status": "pass",
+        "pureScopeChecks": 42,
+        "actualProviderDefaultOffBeforeServices": true,
+        "nativeIdeStarted": false,
+        "boundedOutput": {
+          "status": "pass",
+          "fifoUtf8Preserved": true,
+          "requestInterruptDoesNotTruncateSharedWrites": true,
+          "deadlineTerminal": true,
+          "edtCloseIsAsync": true,
+          "edtWriteRejected": true,
+          "nativeIdeStarted": false
+        },
+        "lifetimeIdentity": {
+          "status": "pass",
+          "missingRootIdentityFailsClosed": true,
+          "reusedPidNotSignalled": true,
+          "rejectedSchedulingDisposesIndependently": true,
+          "unverifiableChildNotClaimedClean": true,
+          "knownRootIdentityLossNotGone": true,
+          "knownChildIdentityLossNotGone": true,
+          "enumerationFailureStillDisposesVerifiedRoot": true,
+          "nativeIdeStarted": false
+        },
+        "targetPlatform": "macos",
+        "executionPlatform": "macos",
+        "nativeTargetRuntime": true,
+        "jarSha256": "f7877db2015d9844e701550b92be37ff71560c907fe4c819fa9b99fa9c42b047"
+      },
+      "attempts": [
+        {
+          "result": "fail",
+          "stage": "existing FrontendBoundedOutputTest",
+          "assertion": "Writer never entered actual blocking sink",
+          "deadlineSeconds": 1
+        },
+        {
+          "result": "pass",
+          "changeBeforeRetry": false
+        }
+      ]
+    },
+    "workflowPythonBlocks": "syntax checked; workflow dispatch has not been run",
+    "assemblyGuards": [
+      "complete frontend pinned payload plus original notices required",
+      "POSIX Node executable mode retained",
+      "outer JAR hash and original compiler proofs both required",
+      "product target/version bound to frontend receipt",
+      "startup and installer use the same complete frontend verification",
+      "normal plugin payload path rules were not broadened"
+    ]
+  },
+  "inferred": [
+    "The first existing headless timing failure may be host scheduling or Swing initialization; no causal claim is made."
+  ],
+  "unknown": [
+    "This worktree did not assemble/sign an IDE or create installers.",
+    "The optional GitHub Actions branch has not been executed.",
+    "Actual Frontend editor UI, bundled-runtime lifecycle and Windows execution require independent native evidence."
+  ],
+  "nodeStarted": false,
+  "ideStarted": false,
+  "referenceInstallationModified": false
+}

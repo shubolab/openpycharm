@@ -27,6 +27,12 @@ from runtime_smoke import WindowsJob, WINDOWS_CREATE_SUSPENDED, WINDOWS_CREATE_N
 SOURCE = ROOT / "plugins/frontend"
 ID = "dev.openpycharm.frontend.m0"
 VERSION = "0.1.0-dev.4-m0"
+# Product provider/settings classes share this source directory but have a
+# separate descriptor, build and lifecycle. They never belong to the M0 JAR.
+JAVA_NAMES = ("FrontendBoundedOutput", "FrontendFixtureScope", "FrontendLspProvider",
+              "FrontendNativeProcess", "FrontendProcessLifetime", "FrontendRuntime")
+CHECK_NAMES = ("FrontendScopeTest", "FrontendBoundedOutputTest", "FrontendLifetimeTest",
+               "FrontendNativeProcessCheck", "FrontendWorkerCheck")
 
 
 def source_inputs() -> dict:
@@ -111,7 +117,7 @@ def build(sdk: Path, version: str = VERSION, host_sdk: Path | None = None, *, fo
                 "static final String CACHE_PARENT=" + json.dumps(identity["compiledCacheParent"]) + ";\n" +
                 "static final String LOCK_SHA256=" + json.dumps(sha256(PIN)) + ";\n}\n")
             classes = temporary / "classes"
-            compilation = compile_java(layout, runtime, [*sorted((SOURCE / "src").rglob("*.java")), generated], classes, temporary / "javac.args")
+            compilation = compile_java(layout, runtime, [*(SOURCE / "src/dev/openpycharm/frontend" / (name + ".java") for name in JAVA_NAMES), generated], classes, temporary / "javac.args")
             payloads = {path.relative_to(classes).as_posix(): path.read_bytes() for path in sorted(classes.rglob("*.class"))}
             for path in sorted((SOURCE / "resources").rglob("*")):
                 if path.is_file():
@@ -194,7 +200,7 @@ def checks(sdk: Path, plugin: Path, host_sdk: Path | None = None, worker_fixture
     directory = owned(ROOT / ".tools/frontend-checks"); directory.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="checks-", dir=directory) as name:
         temporary = Path(name); classes = temporary / "classes"; jar = plugin / "lib/frontend-m0.jar"
-        compile_java(layout, runtime, sorted((ROOT / "tests/frontend").glob("*.java")), classes, temporary / "javac.args", [jar])
+        compile_java(layout, runtime, [ROOT / "tests/frontend" / (name + ".java") for name in CHECK_NAMES], classes, temporary / "javac.args", [jar])
         cp = os.pathsep.join(map(str, [classes, jar, *sorted(layout.lib.glob("*.jar"))]))
         report = json.loads(run_java(runtime, ["-Djava.awt.headless=true", "-cp", cp, "dev.openpycharm.frontend.FrontendScopeTest"], temporary).stdout)
         report["boundedOutput"] = json.loads(run_java(runtime, ["-Djava.awt.headless=true", "-cp", cp,

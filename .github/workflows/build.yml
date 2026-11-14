@@ -11,6 +11,11 @@ on:
         required: true
         default: '0.1.0-dev.3'
         type: string
+      frontend:
+        description: 'Include the experimental bundled frontend (set version to 0.1.0-dev.4)'
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -147,9 +152,41 @@ jobs:
       - name: Compile native Database and check owned disposable SQLite integration
         shell: bash
         run: python scripts/build_database_plugin.py --sdk "$SDK" --version "$RELEASE_VERSION" --test > "build/database-${TARGET}.json"
+      - name: Build and authenticate the optional bundled Frontend candidate
+        if: inputs.frontend
+        shell: bash
+        run: |
+          python - <<'PYFRONTEND'
+          import json, os, pathlib, sys
+          sys.path.insert(0, 'scripts')
+          from provision_frontend_tools import provision
+          from build_frontend_product import build
+          if os.environ['RELEASE_VERSION'] != '0.1.0-dev.4':
+              raise SystemExit('The optional Frontend candidate currently requires version 0.1.0-dev.4')
+          tools = provision(os.environ['TARGET'])
+          plugin, report = build(pathlib.Path(os.environ['SDK']), pathlib.Path(tools['receipt']), os.environ['RELEASE_VERSION'])
+          pathlib.Path('build/frontend-' + os.environ['TARGET'] + '.json').write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
+          with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8', newline='\n') as output:
+              for name, value in {'OPENPYCHARM_FRONTEND_RUNTIME_RECEIPT': tools['receipt'],
+                                  'OPENPYCHARM_FRONTEND_PRODUCT_SDK': str(pathlib.Path(os.environ['SDK']).absolute()),
+                                  'OPENPYCHARM_FRONTEND_PRODUCT_BUNDLE': str(plugin)}.items():
+                  output.write(f'{name}={value}\n')
+          PYFRONTEND
+      - name: Check actual JVM frontend settings, workers and full bundled runtime without launching Node
+        if: inputs.frontend
+        shell: bash
+        run: python -m unittest discover -s tests/frontend -p test_frontend_product.py -v
       - name: Assemble the standalone product
         shell: bash
-        run: python scripts/package.py --target "$TARGET" --sdk "$SDK" --version "$RELEASE_VERSION" --output "$PRODUCT"
+        run: |
+          python - <<'PYASSEMBLE'
+          import os, subprocess, sys
+          command = [sys.executable, 'scripts/package.py', '--target', os.environ['TARGET'],
+                     '--sdk', os.environ['SDK'], '--version', os.environ['RELEASE_VERSION'], '--output', os.environ['PRODUCT']]
+          if os.environ.get('OPENPYCHARM_FRONTEND_RUNTIME_RECEIPT'):
+              command.extend(['--frontend-runtime-receipt', os.environ['OPENPYCHARM_FRONTEND_RUNTIME_RECEIPT']])
+          subprocess.run(command, check=True)
+          PYASSEMBLE
       - name: Check native product startup with an isolated profile
         shell: bash
         run: python scripts/runtime_smoke.py --app "$PRODUCT" --profile "build/runtime-startup-${TARGET}"
@@ -196,6 +233,7 @@ jobs:
             build/notebook-kernel-runtime.json
             build/notebook-session-*.json
             build/database-*.json
+            build/frontend-*.json
             build/framework-servers-*/framework-servers.json
             build/framework-servers-*/*.log
             build/product/**/openpycharm-build.json

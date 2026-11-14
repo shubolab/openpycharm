@@ -102,6 +102,10 @@ def verify_product_plugins(manifest: dict, contents: Path) -> list[dict]:
             raise ValueError("Product plugin JAR must be a bounded regular file")
         if sha256(current) != entry["jarSha256"]:
             raise ValueError("Product plugin JAR digest differs from its build receipt")
+        if entry["id"] == "dev.openpycharm.frontend":
+            build = entry.get("build")
+            if not isinstance(build, dict) or build.get("target") != manifest.get("target"):
+                raise ValueError("Frontend target differs from the product target")
         verify_plugin_payloads(entry, contents)
         verified.append({key: entry[key] for key in ("id", "version", "jar", "jarSha256")})
     return verified
@@ -109,6 +113,9 @@ def verify_product_plugins(manifest: dict, contents: Path) -> list[dict]:
 
 def verify_plugin_payloads(entry: dict, contents: Path) -> None:
     """Bind separate driver binaries and corresponding source to the same receipt."""
+    if entry["id"] == "dev.openpycharm.frontend":
+        verify_frontend_payloads(entry, contents)
+        return
     files = entry.get("files")
     if files is None:
         if entry["id"] == "dev.openpycharm.database":
@@ -153,3 +160,16 @@ def verify_plugin_payloads(entry: dict, contents: Path) -> None:
                 actual.add(path.relative_to(directory).as_posix())
     if actual != set(files):
         raise ValueError("Plugin directory contains missing or unreceipted payload files")
+
+
+def verify_frontend_payloads(entry: dict, contents: Path) -> None:
+    """Require the complete pinned frontend runtime before launch/installation."""
+    from build_frontend_product import PLUGIN_ID, validate_product
+    build = entry.get("build")
+    if (not isinstance(build, dict) or build.get("pluginId") != PLUGIN_ID
+            or build.get("version") != entry["version"]
+            or entry.get("files") != build.get("files")
+            or build.get("jarSha256") != entry["jarSha256"]
+            or entry["jar"] != entry["path"] + "/lib/frontend.jar"):
+        raise ValueError("Frontend requires its complete authenticated build/runtime receipt")
+    validate_product(Path(contents) / entry["path"], build)

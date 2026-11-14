@@ -50,7 +50,22 @@ def copy_plugin_payloads(source, destination, jar_name, build):
     return files
 
 
-def assemble(sdk, target, version, output):
+def copy_frontend_payloads(source, destination, build, target, version):
+    """Copy the complete authenticated frontend runtime without altering Node."""
+    from build_frontend_product import PLUGIN_ID, output_path, validate_product
+    if (build.get("pluginId") != PLUGIN_ID or build.get("target") != target
+            or build.get("version") != version):
+        raise ValueError("Frontend product identity/target/version differs from assembly")
+    source = output_path(Path(source))
+    validate_product(source, build)
+    shutil.copytree(source, destination, symlinks=True)
+    # Includes POSIX executable modes, pinned runtime/legal closure, and the
+    # compiler proof for the exact JAR. Never normalize or re-sign Node here.
+    validate_product(destination, build)
+    return build["files"]
+
+
+def assemble(sdk, target, version, output, frontend_runtime_receipt=None):
     sdk = sdk.resolve()
     macos = target == "macos-arm64"
     receipt_path = sdk.parent / ".openpycharm-platform.json"
@@ -81,6 +96,10 @@ def assemble(sdk, target, version, output):
     notebook_directory, notebooks = build_notebook_plugin(sdk, version=version)
     from build_database_plugin import build_plugin as build_database_plugin
     database_directory, database = build_database_plugin(sdk, version=version)
+    frontend = None
+    if frontend_runtime_receipt is not None:
+        from build_frontend_product import build as build_frontend_product
+        frontend = build_frontend_product(sdk, Path(frontend_runtime_receipt), version)
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="assemble-", dir=output.parent) as staging_name:
         staging = Path(staging_name) / output.name
@@ -111,6 +130,14 @@ def assemble(sdk, target, version, output):
             plugins.append({"id": plugin_id, "name": name, "version": version,
                             "path": directory.relative_to(contents).as_posix(), "jar": jar.relative_to(contents).as_posix(),
                             "jarSha256": build["jarSha256"], "files": files, "build": build})
+        if frontend is not None:
+            frontend_directory, frontend_build = frontend
+            directory = contents / "third-party-plugins/openpycharm-frontend"
+            files = copy_frontend_payloads(frontend_directory, directory, frontend_build, target, version)
+            plugins.append({"id": "dev.openpycharm.frontend", "name": "OpenPyCharm JavaScript and TypeScript",
+                            "version": version, "path": directory.relative_to(contents).as_posix(),
+                            "jar": (directory / "lib/frontend.jar").relative_to(contents).as_posix(),
+                            "jarSha256": frontend_build["jarSha256"], "files": files, "build": frontend_build})
         if macos:
             from icons import mac_icon
             mac_icon(contents)
@@ -158,11 +185,12 @@ def main():
     parser.add_argument("--sdk", type=Path)
     parser.add_argument("--version", default=IDENTITY["version"])
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--frontend-runtime-receipt", type=Path, help="Explicitly bundle the pinned Frontend candidate from an existing provision receipt")
     args = parser.parse_args()
     macos = args.target == "macos-arm64"
     sdk = args.sdk or ROOT / f".tools/platform/pycharm-2026.1.4-{args.target}" / ("PyCharm.app" if macos else "pycharm")
     output = args.output or ROOT / "build/product" / ("OpenPyCharm.app" if macos else "OpenPyCharm")
-    assemble(sdk, args.target, args.version, output)
+    assemble(sdk, args.target, args.version, output, args.frontend_runtime_receipt)
 
 
 if __name__ == "__main__":

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -14,6 +15,11 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
 import build_frontend_product as builder
+from provenance import verify_product_plugins
+
+_package_spec = importlib.util.spec_from_file_location("frontend_packager", builder.ROOT / "scripts/package.py")
+packager = importlib.util.module_from_spec(_package_spec)
+_package_spec.loader.exec_module(packager)
 
 
 def record(data: bytes) -> dict:
@@ -195,13 +201,56 @@ class ProductRuntimeFixture(unittest.TestCase):
         copied = builder.copy_runtime(self.authenticate(), root / "runtime/macos-arm64")
         records = {"lib/frontend.jar": {**record(jar.read_bytes()), "mode": stat.S_IMODE(jar.stat().st_mode)}}
         records.update({"runtime/macos-arm64/" + name: value for name, value in copied.items()})
-        saved = {"target": "macos-arm64", "version": builder.VERSION, "identity": {"version": builder.VERSION},
+        saved = {"pluginId": builder.PLUGIN_ID, "target": "macos-arm64", "version": builder.VERSION, "identity": {"version": builder.VERSION},
                  "payloadSha256": {n: record(data)["sha256"] for n, data in payloads.items()},
                  "compiledClassSha256": {n: record(data)["sha256"] for n, data in compiled.items()}, "classes": sorted(compiled),
                  "fileRecords": records, "files": {n: r["sha256"] for n, r in records.items()},
                  "jarSha256": records["lib/frontend.jar"]["sha256"],
                  "archiveVerification": {"status": "pass", "sha256": records["lib/frontend.jar"]["sha256"]}}
         return root, saved
+
+    def packaged(self, root, saved, contents):
+        directory = contents / "third-party-plugins/openpycharm-frontend"
+        files = packager.copy_frontend_payloads(root, directory, saved, "macos-arm64", builder.VERSION)
+        entry = {"id": builder.PLUGIN_ID, "name": "OpenPyCharm JavaScript and TypeScript", "version": builder.VERSION,
+                 "path": directory.relative_to(contents).as_posix(), "jar": (directory / "lib/frontend.jar").relative_to(contents).as_posix(),
+                 "jarSha256": saved["jarSha256"], "files": files, "build": saved}
+        return directory, entry
+
+    def test_assembler_and_startup_receipt_bind_full_runtime_and_preserve_node_mode(self):
+        root, saved = self.product(); contents = self.root / "build/product"
+        directory, entry = self.packaged(root, saved, contents)
+        manifest = {"target": "macos-arm64", "plugins": [entry]}
+        self.assertEqual(len(verify_product_plugins(manifest, contents)), 1)
+        node = directory / "runtime/macos-arm64/node/bin/node"
+        self.assertEqual(node.read_bytes(), self.contents["node/bin/node"])
+        if os.name != "nt": self.assertEqual(stat.S_IMODE(node.stat().st_mode), 0o755)
+        node.write_bytes(b"changed packaged runtime")
+        with self.assertRaisesRegex(ValueError, "size/SHA-256"):
+            verify_product_plugins(manifest, contents)
+
+    def test_frontend_receipts_cannot_fall_back_to_a_jar_or_different_target(self):
+        root, saved = self.product(); contents = self.root / "build/product"
+        _, entry = self.packaged(root, saved, contents)
+        for key in ("files", "build"):
+            changed = copy.deepcopy(entry); del changed[key]
+            with self.subTest(missing=key), self.assertRaises(ValueError):
+                verify_product_plugins({"target": "macos-arm64", "plugins": [changed]}, contents)
+        with self.assertRaisesRegex(ValueError, "target differs"):
+            verify_product_plugins({"target": "windows-x64", "plugins": [entry]}, contents)
+        changed = copy.deepcopy(entry); changed["files"].pop("runtime/macos-arm64/node/LICENSE")
+        with self.assertRaisesRegex(ValueError, "receipt"):
+            verify_product_plugins({"target": "macos-arm64", "plugins": [changed]}, contents)
+
+    def test_assembler_refuses_runtime_drift_and_wrong_identity_before_copy(self):
+        root, saved = self.product(); destination = self.root / "build/invalid"
+        with self.assertRaisesRegex(ValueError, "identity/target/version"):
+            packager.copy_frontend_payloads(root, destination, saved, "windows-x64", builder.VERSION)
+        self.assertFalse(destination.exists())
+        (root / "runtime/macos-arm64/node/LICENSE").unlink()
+        with self.assertRaises(ValueError):
+            packager.copy_frontend_payloads(root, destination, saved, "macos-arm64", builder.VERSION)
+        self.assertFalse(destination.exists())
 
     def test_cached_jar_outer_hash_update_cannot_replace_original_compiler_bytes(self):
         root, saved = self.product(); jar = root / "lib/frontend.jar"

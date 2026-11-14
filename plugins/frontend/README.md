@@ -133,3 +133,47 @@ production packaging and full PyCharm parity are outside this M0.
 单请求中断不截断共享文档通知，释放独立于堵塞的写入。真实 headless SDK 控件链路通过
 不等于 IDE 模块/服务激活、编辑界面、Windows 或发布验收；意外父进程崩溃后的重归属
 后代发现仍未验证，不能把原协议工具的 session/job 结论移植为 native hook 结论。
+
+
+## Optional product assembly candidate
+
+The original M0 provider remains a separate, explicitly activated experiment.
+The product provider has its own `dev.openpycharm.frontend` ID and settings,
+uses the normal project trust state, and includes the pinned local runtime.
+It is enabled for trusted project JavaScript/TypeScript files. Building or
+starting this candidate does not establish full frontend or PyCharm parity.
+
+The ordinary assembler still produces the published four-plugin product.
+To explicitly include the fifth plugin in a new `0.1.0-dev.4` assembly, first
+run the provisioner, then pass its printed absolute `receipt` path:
+
+```sh
+python3 scripts/provision_frontend_tools.py --target macos-arm64
+python3 scripts/package.py --target macos-arm64 --sdk /absolute/authenticated/PyCharm.app \
+  --version 0.1.0-dev.4 --output build/frontend-candidate/OpenPyCharm.app \
+  --frontend-runtime-receipt /absolute/repository/.tools/frontend-m0-tools/runtime/macos-arm64/LOCK_SHA/frontend-tools.json
+```
+
+Use `windows-x64` and its authenticated SDK/receipt for Windows. Provisioning is
+an explicit network step; the builder and assembler never download or run Node.
+The complete runtime, original notices, relative manifest and executable modes
+are copied under `third-party-plugins/openpycharm-frontend/runtime/<target>`.
+The assembler, startup probe and installer authenticate all of those files;
+frontend cannot fall back to validating only its JAR. The Java compiler output
+proof is checked separately from the outer JAR checksum.
+
+The installer workflow has an optional `frontend` dispatch input, default off.
+For this candidate, select version `0.1.0-dev.4`. The extra CI gate checks the
+actual SDK JVM worker/settings controls and authenticates the full bundled
+runtime without starting Node. The existing native startup gate requires the
+fifth plugin to be loaded with its exact version. Actual native LSP editor,
+project-close and Windows lifetime acceptance remain separate evidence.
+No new installers or release are implied by these source-level integration
+changes. A publishable release also needs a new real installed-version README
+GIF and capture manifest.
+
+中文：默认装配仍为已发布的四插件。显式传入前端工具 provision 的 receipt
+后，才把独立前端产品插件和完整本地运行时装入新的 dev.4 候选。复制、启动前
+检查和安装器验证全部文件、原始许可与固定工具 pin，不只验证一个 JAR。
+CI 可手动选择 frontend=true，版本填 0.1.0-dev.4；实际编辑器和 Windows 生命周期
+验收仍需单独完成，不能把编译、启动或此候选当作完整 1:1 复刻完成。
