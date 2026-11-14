@@ -252,19 +252,32 @@ def startup_proof(data, value, spec, manifest_sha):
             "Native startup identity/isolation/error gate failed")
 
 
+def archive_layout_prefix(package):
+    roots = {"installers", "product", "runtime-startup-macos-arm64", "runtime-startup-windows-x64"}
+    layouts = set()
+    for name in package.members:
+        parts = PurePosixPath(name).parts
+        offset = 1 if parts[0] == "build" else 0
+        if len(parts) > offset and parts[offset] in roots:
+            layouts.add("build/" if offset else "")
+    require(len(layouts) == 1, "Artifact must use one consistent root or build/ proof layout")
+    return layouts.pop()
+
+
 def verify_archive(path, value, spec, metadata, output, source_verifier):
     require(path.is_file() and not path.is_symlink() and path.stat().st_size == metadata["size_in_bytes"]
             and sha(path) == metadata["digest"][7:], "Downloaded archive size/SHA differs from GitHub metadata")
     package = SafeZip(path)
     try:
-        prefix = f"installers/provenance/{value.version}-{spec.target}/"
+        layout = archive_layout_prefix(package)
+        prefix = layout + f"installers/provenance/{value.version}-{spec.target}/"
         raw_manifest = package.read(prefix + "product-build.json")
         manifest = decode_json(raw_manifest)
         require(all(manifest.get(key) == expected for key, expected in
                     {"schema": 1, "name": "OpenPyCharm", "version": value.version, "target": spec.target,
                      "upstreamProduct": "PC", "sourceCommit": value.source_commit}.items()), "Product manifest identity/version/source mismatch")
         product = "product/OpenPyCharm.app/Contents/openpycharm-build.json" if spec.target == "macos-arm64" else "product/OpenPyCharm/openpycharm-build.json"
-        require(decode_json(package.read(product)) == manifest, "Assembled and installer product manifests disagree")
+        require(decode_json(package.read(layout + product)) == manifest, "Assembled and installer product manifests disagree")
         converted = source_verifier(manifest["sourceInputs"])
         receipt = decode_json(package.read(prefix + "installer.json"))
         name = spec.name(value.version)
@@ -278,14 +291,14 @@ def verify_archive(path, value, spec, metadata, output, source_verifier):
                                "executable-installer", "silent-install-file-identity", "installed-native-startup"})
         require(expected_checks.issubset(receipt.get("checks", [])), "Installer verification checks are incomplete")
         manifest_sha = hashlib.sha256(raw_manifest).hexdigest()
-        startup_proof(decode_json(package.read(f"runtime-startup-{spec.target}/startup.json")), value, spec, manifest_sha)
+        startup_proof(decode_json(package.read(layout + f"runtime-startup-{spec.target}/startup.json")), value, spec, manifest_sha)
         if spec.target == "windows-x64":
             startup_proof(decode_json(package.read(prefix + "installed-startup/startup.json")), value, spec, manifest_sha)
             require(receipt.get("installedStartup", {}).get("status") == "passed-startup"
                     and receipt["installedStartup"].get("productManifestSha256") == manifest_sha, "Installed startup receipt mismatch")
-        sidecar = package.read("installers/" + name + ".sha256", 1024).decode("ascii").strip()
+        sidecar = package.read(layout + "installers/" + name + ".sha256", 1024).decode("ascii").strip()
         require(sidecar == f"{spec.installer_sha256}  {name}", "Installer checksum sidecar differs")
-        item = package.members.get("installers/" + name)
+        item = package.members.get(layout + "installers/" + name)
         require(item is not None and not item.is_dir() and item.file_size == receipt["size"], "Installer member size differs from receipt")
         destination = output / name
         with package.archive.open(item) as source, destination.open("xb") as target:

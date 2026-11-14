@@ -59,7 +59,7 @@ def draft(value):
                         "state": "uploaded", "digest": "sha256:" + "c" * 64}]}
 
 
-def archive_fixture(folder, value, target, capture, mutate=None, extra=()):
+def archive_fixture(folder, value, target, capture, mutate=None, extra=(), layout=""):
     """Tiny real ZIPs bind installer bytes to independent product/startup receipts."""
     spec = next(item for item in value.specs if item.target == target)
     name = spec.name(value.version)
@@ -94,6 +94,7 @@ def archive_fixture(folder, value, target, capture, mutate=None, extra=()):
         entries[prefix + "installed-startup/startup.json"] = encode(startup)
     if mutate:
         mutate(entries, prefix, product, name)
+    entries = {layout + name: data for name, data in entries.items()}
     path = folder / f"fixture-{target}.zip"
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", UserWarning)  # duplicate-entry negative fixtures
@@ -362,11 +363,11 @@ class ArchiveReceiptTests(unittest.TestCase):
         self.capture = {"scripts/build.py": digest(b"owned source\n")}
         self.sequence = 0
 
-    def check(self, target="macos-arm64", mutate=None, extra=(), metadata_change=None):
+    def check(self, target="macos-arm64", mutate=None, extra=(), metadata_change=None, layout=""):
         self.sequence += 1
         folder = self.root / str(self.sequence)
         folder.mkdir()
-        path, metadata = archive_fixture(folder, self.value, target, self.capture, mutate, extra)
+        path, metadata = archive_fixture(folder, self.value, target, self.capture, mutate, extra, layout)
         if metadata_change:
             metadata_change(metadata)
         output = folder / "verified"
@@ -387,6 +388,60 @@ class ArchiveReceiptTests(unittest.TestCase):
                 verified = self.check(target)
                 self.assertEqual(expected, verified.path.read_bytes())
                 self.assertEqual(len(expected), verified.size)
+
+    def test_build_prefix_with_hidden_native_evidence_verifies_both_platforms(self):
+        for target, expected in (("macos-arm64", MAC_BYTES), ("windows-x64", WINDOWS_BYTES)):
+            with self.subTest(target=target):
+                verified = self.check(target, layout="build/", extra=[
+                    (".tools/native-save-gate/result.json", b'{"status":"pass"}', stat.S_IFREG | 0o644)])
+                self.assertEqual(expected, verified.path.read_bytes())
+
+    def test_mixed_or_complete_duplicate_layouts_are_rejected_before_source_verification(self):
+        def duplicate(entries, prefix, product, name):
+            entries.update({"build/" + key: data for key, data in list(entries.items())})
+        def move_product(entries, prefix, product, name):
+            entries["build/" + product] = entries.pop(product)
+        def move_startup(entries, prefix, product, name):
+            key = "runtime-startup-macos-arm64/startup.json"
+            entries["build/" + key] = entries.pop(key)
+        def move_installer(entries, prefix, product, name):
+            key = "installers/" + name
+            entries["build/" + key] = entries.pop(key)
+        for mutate in (duplicate, move_product, move_startup, move_installer):
+            with self.subTest(mutation=mutate), self.assertRaisesRegex(ValueError, "consistent.*layout"):
+                self.check(mutate=mutate)
+        with self.assertRaisesRegex(ValueError, "consistent.*layout"):
+            self.check(layout="build/", extra=[("installers/", b"", stat.S_IFDIR | 0o755)])
+        with self.assertRaisesRegex(ValueError, "consistent.*layout"):
+            self.check(layout="nested/")
+
+    def test_build_prefix_does_not_relax_receipt_startup_sidecar_or_payload_checks(self):
+        def wrong_startup(entries, prefix, product, name):
+            key = "runtime-startup-macos-arm64/startup.json"
+            data = json.loads(entries[key]); data["productManifestSha256"] = "f" * 64
+            entries[key] = json.dumps(data).encode()
+        def wrong_installed_startup(entries, prefix, product, name):
+            key = prefix + "installed-startup/startup.json"
+            data = json.loads(entries[key]); data["productManifestSha256"] = "f" * 64
+            entries[key] = json.dumps(data).encode()
+        mutations = [lambda e, p, product, n: e.update({p + "installer.json": b'{"schema":1}'}),
+                     lambda e, p, product, n: e.update({product: b'{"schema":1}'}),
+                     wrong_startup,
+                     lambda e, p, product, n: e.update({"installers/" + n + ".sha256": b"wrong checksum"}),
+                     lambda e, p, product, n: e.update({"installers/" + n: MAC_BYTES[:-1] + b"!"})]
+        for mutate in mutations:
+            with self.subTest(mutation=mutate), self.assertRaises(ValueError):
+                self.check(layout="build/", mutate=mutate)
+        with self.assertRaisesRegex(ValueError, "startup proof"):
+            self.check("windows-x64", layout="build/", mutate=wrong_installed_startup)
+
+    def test_build_prefix_keeps_zip_path_duplicate_and_symlink_rejection(self):
+        prefix = "build/installers/provenance/0.1.0-dev.9-macos-arm64/"
+        for name, mode in ((prefix + "installer.json", stat.S_IFREG | 0o644),
+                           ("build/../outside", stat.S_IFREG | 0o644),
+                           (".tools/link-to-private", stat.S_IFLNK | 0o777)):
+            with self.subTest(name=name), self.assertRaises(ValueError):
+                self.check(layout="build/", extra=[(name, b"not extracted", mode)])
 
     def test_archive_hash_and_length_are_checked_before_proof_parsing(self):
         for mutate in (lambda m: m.update(digest="sha256:" + "f" * 64),
