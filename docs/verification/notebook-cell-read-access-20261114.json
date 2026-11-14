@@ -1,0 +1,180 @@
+{
+  "schema": 1,
+  "baseCommit": "a1aa8f689c4c7c8a28fa83946ca8e21290eda572",
+  "sourceCommit": "d66020bf873ff244bd00afb89d5dd9065c0f9249",
+  "scope": "Minimal notebook PSI/document and SDK read access for ordinary Swing callbacks; no native IDE launched",
+  "observedFailure": {
+    "installedCandidateReportedByRoot": "a1aa8f6 rich candidate",
+    "timestamp": "2026-11-14 13:03:28 Asia/Shanghai",
+    "thread": "AWT-EventQueue-0",
+    "stack": "JButton → NotebookFileEditor.add → rebuild → Cell → PsiFileFactoryImpl.createFileFromText → markGenerated → read-access assertion",
+    "retainedExcerpt": ".tools/psi-read-boundary/original-read-access.log",
+    "excerptSha256": "2621c1064f1326341b6c6142b30ffb8b8308a4a8cb4cbb6ae1cde92ebde37227"
+  },
+  "productionChange": [
+    "Only in-memory PsiFileFactory creation, PsiDocumentManager.getDocument and fallback Document setup are in a short ReadAction.computeBlocking scope.",
+    "Module/project Python SDK lookup and its home path are read in a separate short read action.",
+    "Swing/Editor construction, process work, persistence and background native document save remain outside these scopes."
+  ],
+  "saveSourceAndClassUnchanged": true,
+  "jarSha256": "882248920fe940df597c53dab1c22156c3977bb66b7a651c0df7082d5d1cea28",
+  "pluginDirectory": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebook-psi/.tools/notebook-plugin/eeeea6fb4d885e087930fd68513b5fa1b667232666d3f0ac7a81b777f61820f9/plugin",
+  "authenticatedSdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+  "sourceInputs": {
+    "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "plugins/notebooks/NOTICE": "85b2cb99861388da1db401baf652c409013319579555732781e32c6a5c424a96",
+    "plugins/notebooks/README.md": "05e50546da28c6503e5bd2988f1189c30b1a3959eb7fb1e9ff181cbad41e7138",
+    "plugins/notebooks/build-support/VerifyNotebookArchive.java": "2c48bee6ecfa6e7d90ada60138954df97e8d8141a9fb4bcdc5ba6596b09d4c3d",
+    "plugins/notebooks/kernel-requirements.txt": "0206856a062580549f520ce261c636fa0b5b9bb114c847f8d10dfd2a97b713d1",
+    "plugins/notebooks/resources/META-INF/plugin.xml": "a400e740c77b1f82f27b6ece70d58d21fa143c0d42d57c0c113c642c880e3a3a",
+    "plugins/notebooks/resources/kernel_bridge.py": "361b86385deab957e209e5a743ea14e516e7a5840428165b1dcd29c9cae42e99",
+    "plugins/notebooks/runtime-dependencies.lock.json": "765b2b507abfd6383e3cef9f6c54700fa50ad8fbca81bdb0be401ee6151194d9",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookDisplayState.java": "c7f67049c9dc33533067ef20df629a105be1604f96a69c62113eecc311c84b6a",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookDocumentSave.java": "a1de1f6cd3492456a0e234b5d971a083ede29dfb63c3f4f75bd3faf8f3bab1cb",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookEditorProvider.java": "e49779c7309d07e2d560516d6ad9a6d24d6632dff7d9df53a0e57d9a4217e36c",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookFileEditor.java": "68f93c7047794d3f2fc12fd81c3396f131ba9ba873ea9d7326ccdf374ef1f918",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookFileType.java": "8e1fe08039f9d2f954b664e344fd2d3bc8fa7fb34c8ca721288066eca5fb41f6",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookKernelSession.java": "3f13a2037f784532eece3e26f397f336c68fb980e7ab07a8b3f457a04ff2057b",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookMerge.java": "ea03a4be2b5ef1a0861557c93eca16ac8ec3ae8a18dbda5a44603b216de50fbb",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookModel.java": "e27dced3a99dda43ec5bf867f77688fab829cf7db65a40f1a6a125481a4704cd",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookOutputPanel.java": "41a59c9e14eacb087c5935ca20f9148b97a51436c543c0a57083b0003a921492",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookPersistence.java": "38058e890883d44398851947f99abb20fc1e4173e7dbf58de2334a2ded76a106",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookPreviewScheduler.java": "f27c165453d73c0a369fcafb5d60c1bf7e47b88bb7428a5a0f37cfe2d0f1bfef",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookProjectCloseHandler.java": "ea2b19d0e67442df6bf123d12c486cec613f07a2774516d2f6370bfc28114efb",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookRichOutput.java": "68c19b26eba9b1236778eb15bf8c71f710429d68c2d8b83ea416ab02e29aa1bf",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookStaticContent.java": "d16f575238dfa0eb3218098f827e9691aea4064a8813032a8f5ec58e757f0279",
+    "product/platform.lock.json": "2fe9e477d7e3164e362e33f3b95a2464b16a0699e1bade6cc112b166aed697bd",
+    "product/product.json": "f5d4a28101d3f3462b7877aeb020a1de48886a2ef06758c07531c11af01cfae3",
+    "scripts/bootstrap.py": "a9f405e1fd83ed5a63e0a676efcecbb11a0a1e1975f876e33622756b5b502fff",
+    "scripts/build_notebook_plugin.py": "239633d76d59b4c2b9651855df8e16ce03b4955e668dbfe121cf03f524f5e468",
+    "scripts/platform_layout.py": "500447561715fc996c842c614aa817a2251e7dfbc22305054f7ab40fc31c7037"
+  },
+  "archiveVerification": {
+    "status": "pass",
+    "reader": "HashMapZipFile",
+    "verifiedEntries": 52,
+    "closed": true,
+    "sha256": "882248920fe940df597c53dab1c22156c3977bb66b7a651c0df7082d5d1cea28"
+  },
+  "headlessContracts": {
+    "status": "pass",
+    "metadataAndAttachmentsPreserved": true,
+    "richOutputsPreserved": true,
+    "sourceRoundTrip": true,
+    "outputsAndCount": true,
+    "addDeleteCells": true,
+    "malformedAndOversizedRejected": true,
+    "asynchronousPersistence": {
+      "status": "pass",
+      "offSubmittingThread": true,
+      "latestOnlyCoalescing": true,
+      "dirtyBeforeCompletion": true,
+      "staleCommitRejected": true,
+      "externalGenerationInvalidated": true,
+      "serializationFailureRemainsDirty": true,
+      "mergeSuspensionKeepsDirty": true,
+      "executorRejectionRecovers": true,
+      "completionQueueBounded": true
+    },
+    "externalMerge": {
+      "status": "pass",
+      "foreignMetadataChars": 2600000,
+      "independentSourceAndMetadata": true,
+      "localRetainedOnConflict": true,
+      "stableCellIdentities": true,
+      "structuralAndAtomicArrays": true,
+      "identicalChanges": true,
+      "missingKeysAndNull": true,
+      "immutableInputs": true,
+      "structuralSharing": true,
+      "exactLargeIntegersAndDecimals": true,
+      "extremeExponents": true,
+      "recursiveNumericEquality": true
+    },
+    "saveThreadContract": {
+      "status": "pass",
+      "unlockedWorker": true,
+      "blockingEdtCallbacksComplete": true,
+      "fileIoOffEdt": true,
+      "utf8FileRoundTrip": true,
+      "unsafeAndRejectedEntryReported": true,
+      "actualIdeSaveEngineExercised": false
+    },
+    "cellReadAccessContract": {
+      "status": "pass",
+      "unguardedSwingCallbackRejected": true,
+      "cellPsiEntryHasReadAccess": true,
+      "exceptionUnwindsReadScope": true,
+      "outerWriteIntentAdded": false,
+      "actualPsiCreationExercised": false,
+      "nativeIdeLaunched": false
+    },
+    "richOutput": {
+      "status": "pass",
+      "actualPngJpegDecode": true,
+      "metadataAndMultiline": true,
+      "pixelAndTrustBounds": true,
+      "offEdtGuard": true,
+      "staticHtmlTable": true,
+      "markdownStylesAndGfmTable": true,
+      "actualNativeSwingComponents": true,
+      "externalFetches": 0,
+      "preDecodeFinalReferenceReservations": true,
+      "nativeIdeLaunched": false
+    },
+    "previewScheduler": {
+      "status": "pass",
+      "latestInputAndDeliveryOnly": true,
+      "aggregatePixelBudget": true,
+      "staleDisposeRejected": true,
+      "imageReferencesReleased": true,
+      "workerRejectionRecovers": true,
+      "finalReferencePixelLedger": true,
+      "delayedViewerUpdateBounded": true
+    },
+    "targetPlatform": "macos",
+    "executionPlatform": "macos",
+    "nativeTargetRuntime": true,
+    "jarSha256": "882248920fe940df597c53dab1c22156c3977bb66b7a651c0df7082d5d1cea28"
+  },
+  "repositoryTests": {
+    "run": 116,
+    "passed": 116,
+    "skipped": 0,
+    "testPython": "3.10.18",
+    "ownedKernelPython": "3.11.15",
+    "jupyterClient": "8.6.3",
+    "ipykernel": "6.29.5",
+    "logSha256": "fed9cafc1b1f7fffb0e4351e40bad92e76d2a0f5b5cf47d18dfb0e123a005132"
+  },
+  "fixtureTests": {
+    "run": 9,
+    "passed": 9,
+    "logSha256": "6e226d6d24df2379253ccb6e17c865c7d95ff3ee38a78684c8bfea811c598661"
+  },
+  "primarySources": {
+    "platform/core-api/src/com/intellij/openapi/application/ReadAction.java": {
+      "url": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/core-api/src/com/intellij/openapi/application/ReadAction.java",
+      "sha256": "e94fd2d60e88cec02cc691d8129035efeb22a4de704858493d8a10d3e4e9efb4"
+    },
+    "platform/core-impl/src/com/intellij/psi/impl/PsiFileFactoryImpl.java": {
+      "url": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/core-impl/src/com/intellij/psi/impl/PsiFileFactoryImpl.java",
+      "sha256": "7a7544a71e4773a5bb65792dd88e5d48b5e9270dcb639fdcddb8bf64cb91c55f"
+    },
+    "platform/platform-impl/src/com/intellij/openapi/editor/impl/EditorFactoryImpl.kt": {
+      "url": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/platform-impl/src/com/intellij/openapi/editor/impl/EditorFactoryImpl.kt",
+      "sha256": "84cfc5c2425619bf68d12966155ca6f2abd74cd9cbf02cbfd603257aa8714f96"
+    }
+  },
+  "nativeApplicationLaunched": false,
+  "referenceApplicationsModified": false,
+  "unknown": [
+    "Actual installed +Code/+Markdown/Delete rebuild and no-new-SEVERE result until root desktop verification",
+    "Windows native runtime"
+  ],
+  "nativeRetest": [
+    "On an actual candidate built from this source, click + Code and + Markdown through ordinary Swing buttons, then delete the new cells.",
+    "Verify fresh native editors are editable and PSI-backed, existing source/output payload survives save/reopen, and no new read-access SEVERE is logged.",
+    "Re-run the existing SaveAll native gate to retain the unlocked-background-save regression boundary."
+  ]
+}
