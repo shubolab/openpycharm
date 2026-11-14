@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "observedAtUtc": "2026-11-14T14:54:00Z",
+  "status": "bounded-product-plugin-native-pass",
+  "releaseReady": false,
+  "sourceCommit": "2ab8886",
+  "pluginJarSha256": "96a52332228d1c2e0fd8d1759ab6b2ab9d7ae6f03372776be23b31560e100b8f",
+  "baseInstalledVersion": "0.1.0-dev.3",
+  "externalProductPluginVersion": "0.1.0-dev.4",
+  "os": "macOS 27.2 arm64",
+  "normalProjectTrust": true,
+  "parentTrustCheckbox": false,
+  "m0Properties": false,
+  "observed": {
+    "defaultEnabledBundledTools": true,
+    "typescriptMemberAccepted": "quote.currency",
+    "typescriptDiagnostic": "Type 'string' is not assignable to type 'number'. :3",
+    "typescriptDefinition": "main.ts makeQuote -> quote.ts 1:17",
+    "projectSettingsDisableOldPidsGone": [
+      10469,
+      10478,
+      10479
+    ],
+    "settingsReenableNewPids": [
+      14537,
+      14546,
+      14549
+    ],
+    "javascriptUnsavedCompletion": "receipt.nativeSnapshot_8c21",
+    "javascriptNewIdentifierOnDiskBeforeAcceptance": false,
+    "normalUiQuitAllOwnedPidsGone": true
+  },
+  "controls": {
+    "repositoryTests": 172,
+    "status": "pass",
+    "skipped": 0,
+    "actualSdkCoreChecks": 68,
+    "fullPinnedRuntimeFiles": 191,
+    "pluginPayloadFiles": 193,
+    "logSha256": "4eea997153a400ffc5e3b68d5ef28f4b5abec42e62aaacdf8fee81b78d96fe6d"
+  },
+  "limitations": [
+    "This native window used a product plugin outside the installed dev.3 app; assembled dev.4 app remains a separate gate.",
+    "The hand-created module initially included its owned parent fixture folder; next gate corrects it to the exact project root.",
+    "A LaunchServices retry overlapped prior direct-executable shutdown and produced DirectoryLock Start Failed; a completed shutdown and normal relaunch recovered. Failed attempts are not accepted gates.",
+    "Use ASCII typeText dot and a separate Return after async completion; input-source punctuation and premature actions are not counted.",
+    "Unexpected parent-crash reparenting, native pending cancellation/backpressure, Windows native UI, and full 1:1 parity remain open."
+  ],
+  "logWindow": {
+    "errorSevere": 0,
+    "warnings": 19
+  },
+  "evidence": {
+    "completed-idea.log": {
+      "size": 105831,
+      "sha256": "c67dded20111b0a36752393898237f393858c830cfd9c9c40c164b1b917dfaf1"
+    },
+    "javascript-disk-before.txt": {
+      "size": 56,
+      "sha256": "869a4d63aa364025b6f3ab70d80ed54523bb0d7c4c852e13df5d7a29296e11e3"
+    },
+    "javascript-unsaved-completion.ax.txt": {
+      "size": 7667,
+      "sha256": "874a5844bed7553c532dd52c7c3a4b26830bc22c0575b8b47616f4365ebe658c"
+    },
+    "javascript-unsaved-completion.png": {
+      "size": 252811,
+      "sha256": "68369d7723e7e9d8e3af3edc7e17959ab338c47a9164481cc0ff3cbe6658d988"
+    },
+    "javascript-unsaved-disk-before.txt": {
+      "size": 56,
+      "sha256": "869a4d63aa364025b6f3ab70d80ed54523bb0d7c4c852e13df5d7a29296e11e3"
+    },
+    "processes-before-quit.json": {
+      "size": 1573,
+      "sha256": "b60d405d62d7a5518fc07144a66f690214d4b768f26d50a384a4762375faafc5"
+    },
+    "settings-disabled.ax.txt": {
+      "size": 13168,
+      "sha256": "506d5ef4e3833abf26ffdb376333f94c92ac72a8132c6691fda3904e986d8a85"
+    },
+    "settings-disabled.png": {
+      "size": 141188,
+      "sha256": "9a21e15def85daf3fbba80cdff2070206d0d7587b3776bafc72d4fe8d19d0788"
+    },
+    "typescript-completion.ax.txt": {
+      "size": 6741,
+      "sha256": "68dbdb347fba3e6854aad2adcd8ab0420d8e603dff29fea70671cfe52f296850"
+    },
+    "typescript-completion.png": {
+      "size": 235423,
+      "sha256": "61d2caaa958e61447461b9c9953e8a56d45dd28854125311cfaecc6050a90a8b"
+    },
+    "typescript-definition.ax.txt": {
+      "size": 7324,
+      "sha256": "0a273c74b9c1787d0dfeddb1e2d822df7ecd2a10a5ae0978e7d0481e038c061a"
+    },
+    "typescript-diagnostic.ax.txt": {
+      "size": 8094,
+      "sha256": "9d7cd6458c8066fa6fc9f540914b756cde55aac5dcb423ecbdbab1802a8b7dad"
+    },
+    "typescript-diagnostic.png": {
+      "size": 272033,
+      "sha256": "698a19c695c3ad0af5dac3ba2e479dcd9af6f13cda79908635cf9fe6c31745c0"
+    }
+  }
+}
