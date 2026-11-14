@@ -1,0 +1,258 @@
+{
+  "schema": 1,
+  "observedAtUtc": "2026-11-14T16:07:27.105566+00:00",
+  "status": "standalone-native-windows-prototype-pass",
+  "prototypeOnly": true,
+  "productIntegrated": false,
+  "productReleaseChanged": false,
+  "publishedAsProductFeature": false,
+  "sourceCommit": "5fa6e24ebab3fefffc28bd13c2e49c784c914ee2",
+  "run": {
+    "id": 43613443674,
+    "url": "https://github.com/shubolab/openpycharm/actions/runs/43613443674",
+    "headCommit": "bf96f61d89e6a8a76ae953ed2fecbd3ab11394a4",
+    "jobId": 132503275998,
+    "jobName": "windows-prototype",
+    "conclusion": "success"
+  },
+  "workflow": {
+    "dedicatedWorkflowCommits": [
+      "3f20980a2dbcacd7986cb620ef227bc7259a3e14",
+      "98e1e2250d519d001a6f5f5dc9c6efd97fa0429a"
+    ],
+    "dedicatedPath": ".github/workflows/guardian-prototype.yml",
+    "executedRegisteredPath": ".github/workflows/build.yml",
+    "exactWorkflowBodyMatched": true,
+    "bodySha256": "9329c578949aed4d59ce964c90cf08c05cfb5d21500ced4fc46f784125faf808",
+    "temporaryBuildOverrideMustNotBeMerged": true
+  },
+  "artifact": {
+    "id": 14120229403,
+    "name": "guardian-native-windows-43613443674",
+    "size": 9430,
+    "sha256": "0eba1db423c74649436f99d75c4fc00f761a6d35840e0eac06522d9d68974da5",
+    "apiDigestAndSizeMatched": true,
+    "entries": 21,
+    "crcPass": true,
+    "safePathsAndTypes": true,
+    "allExtractedBytesMatchArchive": true
+  },
+  "host": "Windows-2022Server-10.0.20348-SP0",
+  "toolchain": {
+    "version": "go version go1.26.10 windows/amd64",
+    "goSha256": "de14a33fd6ab5937941f0573e5b6537f04d24979aaf1b0557de1005a28cb7add",
+    "licenseSha256": "911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad",
+    "archiveSha256": "7ecd2d7260e82c59bcbd7f1077a07cee2dea607295b858df67195a1e4e09629b",
+    "archiveMembersMatched": 15045
+  },
+  "preparation": {
+    "schema": 1,
+    "prototypeOnly": true,
+    "sourceCommit": "5fa6e24ebab3fefffc28bd13c2e49c784c914ee2",
+    "officialMetadata": "https://go.dev/dl/?mode=json&include=all",
+    "go": {
+      "url": "https://go.dev/dl/go1.26.10.windows-amd64.zip",
+      "size": 75004774,
+      "sha256": "7ecd2d7260e82c59bcbd7f1077a07cee2dea607295b858df67195a1e4e09629b",
+      "archiveMembersMatchedBeforeExecution": 15045,
+      "version": "go version go1.26.10 windows/amd64"
+    },
+    "xSys": {
+      "version": "v0.38.0",
+      "sum": "h1:3yZWxaJjBmCWXqhN1qh02AkOnCQ1poK6oF+a7xWL6Gc=",
+      "goModSum": "h1:OgkHotnGiDImocRcuBABYBEXf8A9a87e/uXjp9XT3ks="
+    },
+    "explicitNetworkPreparation": true,
+    "ideLaunched": false,
+    "nodeLaunched": false,
+    "windowsRaceExecuted": false
+  },
+  "observed": {
+    "windowsRuntimeExecuted": true,
+    "goUnitPassed": true,
+    "goVetPassed": true,
+    "sdkArchiveAndExactFileClosureAuthenticatedBeforeExecution": true,
+    "sdkFiles": 15045,
+    "sourceFilesMatchFixedSnapshotBytewise": 19,
+    "sourceNewlineConversions": 0,
+    "allCommandLogsMatchVerifierDigests": true,
+    "ownedIntegrationCasesPassed": 10,
+    "cases": [
+      "test_abrupt_guardian_death_cleans_private_group",
+      "test_bytes_arguments_environment_directory_status",
+      "test_closed_lease_before_acknowledgement_never_starts_target",
+      "test_ide_proxy_kernel_death_closes_lease",
+      "test_natural_launcher_exit_cannot_leave_children_or_pipes",
+      "test_normal_lease_close_cleans_root_child_grandchild",
+      "test_rejected_acknowledgement_never_starts_target",
+      "test_stdin_backpressure_does_not_block_lease_death",
+      "test_stdout_backpressure_does_not_block_lease_death",
+      "test_unexpected_lease_byte_cancels"
+    ],
+    "unrelatedOwnedSentinelSurvivesEveryCase": true,
+    "loopbackLeaseAndBackpressureCasesExecuted": true,
+    "windowsRaceExecuted": false,
+    "ideLaunched": false,
+    "nodeLaunched": false,
+    "offlineVerifierExternalNetwork": false,
+    "bothWindowsBinaryDigestsMatchPriorMacCrossBuildReceipt": true
+  },
+  "sources": {
+    "abi_windows_amd64_test.go": "84704bb1e9fc84002243e55d066308a63221144ce7319b9aa056e4492ab18aee",
+    "cmd/tiny-child/identity_unix.go": "3beceee3978cfa8e7a6d1a96adf6db7972519e50c10a3f241989a4baffc41f96",
+    "cmd/tiny-child/identity_windows.go": "619b8f5a929fb093217e36007cbe886fe1d5548af5384abafa06d87992b2d1b5",
+    "cmd/tiny-child/main.go": "7f55fe586edbfc89276e0d53f10a11637234e7162ba1c039a08ec1aee26b9273",
+    "go.mod": "6a79dfd56aae4d69d3db4e98fe5422ddb01dfd12bf748b26c8f0b6a014b17f2d",
+    "go.sum": "28b936a5baa45bf6328134f4ae47a6e60a8a8a0ed4cd02549b2460a447764e8b",
+    "integration_test.py": "0eb57cf4022e8f3f92cb350adf44bfcd83a58703c88736299e704e38ee05bb0b",
+    "licenses/Go-BSD-3-Clause.txt": "911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad",
+    "licenses/x-sys-BSD-3-Clause.txt": "911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad",
+    "main.go": "f95ce0cd0ab77143f731dbff4877649249f90dcc454a961f5c8b2f6a3f744192",
+    "main_test.go": "753147f72fc415dc3d5b3a7c0b7a260bc62fb1a582084c1b88fb176fd39eb130",
+    "owner_unix.go": "5e11ffc9c27aa7ae05db63e805195c84171aeceb4d1b774b4909310246fc3d4a",
+    "owner_windows.go": "f1040bd2344431da0bbe14cc76e9cfa841491174ba98494e91ed983c651db982",
+    "README.md": "8b631f1ea7efef2bf888e55fe5606a8dfee0938c374ff3a49f7af517df225329",
+    "research/api-surface.json": "7919d2badb49156a75c342905e0d963ece8bc00a1ba52cbeac54d273cdc823aa",
+    "research/api-surface.txt": "9259a29ce24f696384c520f2f06b1aa4e50bcbafb9ec298f85d62ba109fdcc87",
+    "research/ApiSurface.java": "2febf5ae71a427531c13411e9886f4d98af47b5a26fe77c9d741b81d6acce04a",
+    "verify.py": "ecf7c1c38d772925ab37f9a1c2f193a6983e3cae5c898b9770946b48bef28b44",
+    "verify_test.py": "91f853eac2b4ddcc7970d7950cfd2492540e49bd5179ded2dfcb5876f518d124"
+  },
+  "binariesSha256ReportedByNativeVerifier": {
+    "guardian.exe": "825f68c7ef704b0be4de3b163311734ef334be547f4464d4d25e303df7323b2d",
+    "tiny-child.exe": "fddedd322d471612a66a9db494a274edb39109887a28c0c6dd8022ab949e78ea"
+  },
+  "commands": [
+    {
+      "name": "verifier-controls",
+      "argv": [
+        "C:\\hostedtoolcache\\windows\\Python\\3.12.10\\x64\\python.exe",
+        "D:\\a\\openpycharm\\openpycharm\\native\\lsp-guardian\\verify_test.py"
+      ],
+      "exit": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "0b2882b5c5088df6e4b5c0bc86ecac3c1bc6b38256dac2187ac115df7e9358ad"
+    },
+    {
+      "name": "go-version",
+      "argv": [
+        "D:\\a\\openpycharm\\openpycharm\\build\\guardian-tools\\go\\bin\\go.exe",
+        "version"
+      ],
+      "exit": 0,
+      "stdoutSha256": "af3e1395bc3f031810270675ec54cecf1d7d02a4bd28c1709efdda0c32e3f576",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "module-verify",
+      "argv": [
+        "D:\\a\\openpycharm\\openpycharm\\build\\guardian-tools\\go\\bin\\go.exe",
+        "mod",
+        "verify"
+      ],
+      "exit": 0,
+      "stdoutSha256": "b4537ed75f533f993f371954de47e42a793b8e5b0587577de7e27fb3e50696bd",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "go-unit",
+      "argv": [
+        "D:\\a\\openpycharm\\openpycharm\\build\\guardian-tools\\go\\bin\\go.exe",
+        "test",
+        "-count=1",
+        "./..."
+      ],
+      "exit": 0,
+      "stdoutSha256": "be2111bb01df11c2503c6ffe3ba4371c3276dddee7dc12e854f9ee0149a303de",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "go-vet",
+      "argv": [
+        "D:\\a\\openpycharm\\openpycharm\\build\\guardian-tools\\go\\bin\\go.exe",
+        "vet",
+        "./..."
+      ],
+      "exit": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "guardian-host",
+      "argv": [
+        "D:\\a\\openpycharm\\openpycharm\\build\\guardian-tools\\go\\bin\\go.exe",
+        "build",
+        "-trimpath",
+        "-buildvcs=false",
+        "-o",
+        "D:\\a\\openpycharm\\openpycharm\\.tools\\guardian-native-windows\\guardian.exe",
+        "."
+      ],
+      "exit": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "child-host",
+      "argv": [
+        "D:\\a\\openpycharm\\openpycharm\\build\\guardian-tools\\go\\bin\\go.exe",
+        "build",
+        "-trimpath",
+        "-buildvcs=false",
+        "-o",
+        "D:\\a\\openpycharm\\openpycharm\\.tools\\guardian-native-windows\\tiny-child.exe",
+        "./cmd/tiny-child"
+      ],
+      "exit": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "owned-integration",
+      "argv": [
+        "C:\\hostedtoolcache\\windows\\Python\\3.12.10\\x64\\python.exe",
+        "-W",
+        "error::ResourceWarning",
+        "D:\\a\\openpycharm\\openpycharm\\native\\lsp-guardian\\integration_test.py"
+      ],
+      "exit": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "bf2fd89782c071f69ead1f71a9ecb54bc5d866f21fe4c1caadacbb33bf55eb42"
+    }
+  ],
+  "priorRun": {
+    "id": 43612843498,
+    "url": "https://github.com/shubolab/openpycharm/actions/runs/43612843498",
+    "headCommit": "95f866b2fd7f1d14d8227552e9c9165d1b299765",
+    "jobId": 132501437933,
+    "conclusion": "success",
+    "ownedCasesPassed": 10,
+    "sourceBytewiseMatches": 6,
+    "exactLfToCrlfConversions": [
+      "abi_windows_amd64_test.go",
+      "cmd/tiny-child/identity_unix.go",
+      "cmd/tiny-child/identity_windows.go",
+      "cmd/tiny-child/main.go",
+      "go.mod",
+      "go.sum",
+      "licenses/Go-BSD-3-Clause.txt",
+      "licenses/x-sys-BSD-3-Clause.txt",
+      "main.go",
+      "main_test.go",
+      "owner_unix.go",
+      "owner_windows.go",
+      "research/api-surface.txt"
+    ],
+    "note": "Native cases passed, but core.autocrlf=false alone left native Windows EOL conversion under text=auto. Dedicated workflow additionally sets core.eol=lf; the final run above matches all19 source files bytewise."
+  },
+  "inferred": [
+    "The fixed standalone guardian source passed its bounded process-lifetime cases on Windows Server2022 with Go1.26.10; this supports the next IDE adapter work."
+  ],
+  "unknown": [
+    "Actual IDE lease adapter and native language-server integration remain unimplemented/unverified.",
+    "Windows physical IDE desktop, Windows race controls, Linux runtime and broader process escape scenarios are not established by this run.",
+    "The currently shipped frontend continues using its existing process handler; this standalone proof does not establish product owner-crash cleanup."
+  ],
+  "rawReceiptSha256": "c41683faf8fc66350e26da5d98dcde1a9b990f0cfcc60b4afd3d384a2ef56835",
+  "integrationLogSha256": "bf2fd89782c071f69ead1f71a9ecb54bc5d866f21fe4c1caadacbb33bf55eb42"
+}
