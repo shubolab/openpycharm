@@ -1,0 +1,138 @@
+{
+  "schema": 1,
+  "observedAt": "2026-11-14",
+  "status": "partial-native-pass-with-release-blocker",
+  "releaseReady": false,
+  "sourceCommit": "a1aa8f689c4c7c8a28fa83946ca8e21290eda572",
+  "productionInputs": 143,
+  "nativeApp": "build/dev3-rich/OpenPyCharm.app",
+  "nativePid": 78937,
+  "notebookJarSha256": "6911eb58cbf63f4b0bdf69ea2e81ade3f2c12f629d3a1960067d65b4e85d0783",
+  "normalProjectTrust": true,
+  "interpreter": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebook-rich/.tools/rich-kernel-314/bin/python",
+  "initialFixtureSha256": "6154f2eb0c86713431ba38e597baba7d3efe7ca5dfd8beea804b3803421ee0c8",
+  "executedFixtureSha256": "4e59bdf25c6fded804d60f49493a850fa09d4dd5842cce9e7db8a6bf73a27703",
+  "checks": {
+    "originalTenCellSourcesPreserved": true,
+    "originalCellMetadataPreserved": true,
+    "notebookMetadataPreservedExactly": true,
+    "pngUpdateMetadataPhase2": true,
+    "largeImageMetadataExact": true,
+    "dataFrameUpdatedHtmlContains99": true,
+    "expectedValueError": true,
+    "keyboardInterrupt": true,
+    "shiftEnterActuallyExecuted56": true,
+    "restartVariableClearAndExecution": true,
+    "unknownMimeExact": true
+  },
+  "nativeUiObserved": [
+    "PNG phase 2 actual plotted line (3,1,5)",
+    "Actual Pillow JPEG native image",
+    "DataFrame native JTable Beijing99/Shanghai88",
+    "Static HTML and Markdown headings/styles/tables",
+    "ValueError traceback then recovery42",
+    "Interrupt running sleep then KeyboardInterrupt/idle",
+    "Real Shift+Return executes last cell56+retains99 with unchanged source",
+    "Restart replaces kernel PID82031 with84580, clears native_frame, executesFalse/42",
+    "CmdS then close/reopen preserves every source and all real outputs"
+  ],
+  "blocker": {
+    "trigger": "Click + Code native JButton after restart",
+    "observed": "SEVERE read-access assertion in Cell.<init> line384 PsiFileFactory.createFileFromText, then rebuild/add",
+    "observedAtLocal": "2026-11-14 13:03:28",
+    "impact": "Cell added and subsequent execution/save succeeded, but ordinary add/delete rebuild callbacks must obey PSI read contract before release",
+    "fix": "Independent minimal ReadAction boundary in progress; not accepted by this record"
+  },
+  "inputCorrection": "First attempt to type added Unicode multiline code with cua.typeText lost non-ASCII/newlines and produced SyntaxError; replaced via native paste, then actual successful execution. This was an input transport correction, not a production parser defect.",
+  "evidence": {
+    ".tools/ci/dev3-rich-desktop/interrupt.ax.txt": {
+      "bytes": 3497,
+      "sha256": "7ca97533b36fae8d7bde8fc49f9cbe58e50b89f6f35d67a58902715c876fe300"
+    },
+    ".tools/ci/dev3-rich-desktop/html-markdown.png": {
+      "bytes": 523163,
+      "sha256": "3f768a8189c264e0d01a817d407776fc1617d404354e929e30f1fd44ad001cd0"
+    },
+    ".tools/ci/dev3-rich-desktop/shift-enter.png": {
+      "bytes": 495311,
+      "sha256": "9939320e716fdf356a7515dedcd1e52630282d946f5abf7debd6895a9ea1c432"
+    },
+    ".tools/ci/dev3-rich-desktop/dataframe-html.png": {
+      "bytes": 509168,
+      "sha256": "c1fe3cbe73c77bbaf9f2b113c4acfb93bfc623ba679c71007968a797fbde62a4"
+    },
+    ".tools/ci/dev3-rich-desktop/restart-result.png": {
+      "bytes": 423187,
+      "sha256": "823aa5a33f0e4bf5f948f0bccb740dde7fd8b605baa02cf27ac79ecc80b8965c"
+    },
+    ".tools/ci/dev3-rich-desktop/jpeg-dataframe.png": {
+      "bytes": 542614,
+      "sha256": "ec76aa5d382b039e8b39ce31a403bfdffba852404379cbef68b9ed3cfd1e57d1"
+    },
+    ".tools/ci/dev3-rich-desktop/restart.ax.txt": {
+      "bytes": 3175,
+      "sha256": "4470ba5ca8af36b36d88867bcd76135eaeff9dc374d8a786b569becc0679b9ee"
+    },
+    ".tools/ci/dev3-rich-desktop/run-all-results.ax.txt": {
+      "bytes": 21027,
+      "sha256": "c6bf5f5be8ea0f68a5b04332ebf307336ee0a46ee10f9eae2fdeef0c68d9af47"
+    },
+    ".tools/ci/dev3-rich-desktop/initial.png": {
+      "bytes": 562810,
+      "sha256": "10fe5c7f59f78a8dc0d08e089584dff90ba7b1072885309ff42c1a0bf729f5a4"
+    },
+    ".tools/ci/dev3-rich-desktop/platform-save.ax.txt": {
+      "bytes": 418,
+      "sha256": "787bb03a78b67e52e6695c47e050aa17e0b330386fda567ffd7cabf262a1e5ba"
+    },
+    ".tools/ci/dev3-rich-desktop/rich-tables.ax.txt": {
+      "bytes": 21956,
+      "sha256": "3354bfc54a78ef1f9c8013e26c9b924c2a81355e772f9b28afaa25433a0df694"
+    },
+    ".tools/ci/dev3-rich-desktop/idea-before-stop.log": {
+      "bytes": 1390645,
+      "sha256": "6f0c46fd322a60e0145c6887195502bea326d6bc6e890952ad46e2801f32f8b5"
+    },
+    ".tools/ci/dev3-rich-desktop/restart-execution-corrected-input.ax.txt": {
+      "bytes": 894,
+      "sha256": "fde0b218ec6e9c0202c06d0e6fd5b4f39349056a64ceb15b9e2d1bd1958c9606"
+    },
+    ".tools/ci/dev3-rich-desktop/png-jpeg.png": {
+      "bytes": 586359,
+      "sha256": "87b8de7542261d90d731cd986f3d52dc31076157e16712a559397d2faef32c14"
+    },
+    ".tools/ci/dev3-rich-desktop/reopened.ax.txt": {
+      "bytes": 23145,
+      "sha256": "802ee277ac667fa7b19f38f834578d22ff75fbec688748781fba0fcd94164610"
+    },
+    ".tools/ci/dev3-rich-desktop/shift-enter.ax.txt": {
+      "bytes": 1255,
+      "sha256": "b4a7faae054e0abcb0fd712bdfe36bbf1305aafcd28953d57ab8051aaffed5de"
+    },
+    ".tools/ci/dev3-rich-desktop/run-all-start.ax.txt": {
+      "bytes": 2350,
+      "sha256": "12ffdc4c6d7496bbb904ca5d64a5f5e0f0537ea1aa7a2821e7a8394986c6aeea"
+    },
+    ".tools/ci/dev3-rich-desktop/executed-native-rich-demo.ipynb": {
+      "bytes": 36955,
+      "sha256": "4e59bdf25c6fded804d60f49493a850fa09d4dd5842cce9e7db8a6bf73a27703"
+    },
+    ".tools/ci/dev3-rich-desktop/restart-execution.ax.txt": {
+      "bytes": 1017,
+      "sha256": "36ad0d0394a2a7aedfb815ec2f2197a305b1abc3b2e1724d48793fa8f1c939ae"
+    }
+  },
+  "limitations": [
+    "Uninstalled candidate, not final CI installer or release GIF",
+    "macOS arm64 only; no native Windows GUI",
+    "Native static rich output, no widgets/remote kernels/cell debugger",
+    "Bounded output scroll panes may require inner scrolling; full upstream visual parity not established"
+  ],
+  "cleanup": {
+    "ownedApp78937Exited": true,
+    "ownedBridge82030Gone": true,
+    "ownedOriginalKernel82031Gone": true,
+    "ownedRestartedKernel84580Gone": true,
+    "signal": "SIGTERM to verified own app only; no SIGKILL"
+  }
+}

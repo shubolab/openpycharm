@@ -1,0 +1,89 @@
+{
+  "schema": 1,
+  "observedAt": "2026-11-14T04:45:47.771488+00:00",
+  "status": "pass",
+  "releaseReady": false,
+  "candidateSourceCommit": "79e128291c98e1974e75ebfdc929e15157e4d7ec",
+  "productionInputs": 137,
+  "productionJarSha256": "8e1ac51c431a51d8ab1434953fc82e8c7587397deefe51a9d919c5d3bb9c2b9c",
+  "helperJarSha256": "7f6aff4bfd947859e80c844f6c92c8efdbdcd8b0512ed6a6eac2bd370f4a1481",
+  "checks": {
+    "kernelCodeExecuted": false,
+    "ownedFixtureOnly": true,
+    "projectTrustBypassed": false,
+    "nativeButtonDoClick": true,
+    "projectTrusted": true,
+    "nativeUndoRestored": true,
+    "pendingCellAndTextMerge": true,
+    "nativeSavePersisted": true,
+    "postSaveExternalDirtyMerge": true,
+    "platformSaveAllPersisted": true,
+    "successfulReloadStatusRestored": true,
+    "successfulReloadStateClean": true,
+    "postSaveAllCanEdit": true,
+    "metadataAndExistingOutputsPreserved": true,
+    "closeReopenSourcePreserved": true,
+    "lastCapturedEditorModified": false
+  },
+  "states": {
+    "stateBeforePlatformSaveAll": {
+      "captureEpoch": 30,
+      "reloading": false,
+      "conflicted": false,
+      "persistenceDirty": false,
+      "modified": true,
+      "cellViewer": false,
+      "status": "Kernel stopped — notebook reloaded from text",
+      "documentStamp": 55,
+      "modificationSequence": 10
+    },
+    "stateAfterPlatformSaveAll": {
+      "captureEpoch": 33,
+      "reloading": false,
+      "conflicted": false,
+      "persistenceDirty": false,
+      "modified": false,
+      "cellViewer": false,
+      "status": "Kernel stopped — notebook reloaded from text",
+      "documentStamp": 55,
+      "modificationSequence": 10
+    },
+    "stateAfterFollowupSaveAll": {
+      "captureEpoch": 38,
+      "reloading": false,
+      "conflicted": false,
+      "persistenceDirty": false,
+      "modified": false,
+      "cellViewer": false,
+      "status": "Kernel stopped — notebook reloaded from text",
+      "documentStamp": 61,
+      "modificationSequence": 11
+    },
+    "lastCapturedNativeState": {
+      "captureEpoch": 41,
+      "reloading": false,
+      "conflicted": false,
+      "persistenceDirty": false,
+      "modified": false,
+      "cellViewer": false,
+      "status": "Kernel stopped — runs only when you execute a cell",
+      "documentStamp": 61,
+      "modificationSequence": 11
+    }
+  },
+  "platformSaveAllActionClass": "com.intellij.ide.actions.SaveAllAction",
+  "ownedPid": 60311,
+  "cleanup": {
+    "mode": "owned-posix-session",
+    "pid": 60311,
+    "exitCode": 143
+  },
+  "exit": 143,
+  "nativeReportSha256": "a523f2773e6feff34a7b753d61d554b9db9a21ff382c5c6e8df14bdd695cbcf8",
+  "localResult": ".tools/native-saveall-fixed-79e1-1/result.json",
+  "limitations": [
+    "Actual native action/API save path; this probe does not generate keyboard events",
+    "No Python kernel execution occurred; existing fixture outputs are not runtime evidence",
+    "The combined Rich candidate and final installers still require fresh acceptance"
+  ]
+}
