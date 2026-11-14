@@ -1,0 +1,293 @@
+{
+  "schema": 1,
+  "observedAtUtc": "2026-11-14T15:35:48.907731+00:00",
+  "status": "independent-ci-artifact-transport-source-pass",
+  "run": {
+    "id": 43608150941,
+    "url": "https://github.com/shubolab/openpycharm/actions/runs/43608150941",
+    "sourceCommit": "63921a4a931e19996b05ea4de4df12d27ff021bf"
+  },
+  "artifacts": [
+    {
+      "target": "macos-arm64",
+      "artifact": {
+        "id": 14119163167,
+        "name": "OpenPyCharm-macos-arm64-63921a4a931e19996b05ea4de4df12d27ff021bf",
+        "archiveBytes": 693250632,
+        "archiveSha256": "840ad6505d0736df48ca04911922c7bfb74c1936af300984010f0f6dfef5691a",
+        "apiMetadataMatched": true,
+        "entryCount": 79,
+        "entryInventorySha256": "38695678f383b62e99d3a63f14cd1182b37877723e54830bbe94d635be742cc2",
+        "allPathsSafe": true,
+        "duplicatePaths": 0,
+        "caseFoldCollisions": 0,
+        "specialEntries": 0,
+        "encryptedEntries": 0,
+        "crcPass": true
+      },
+      "installer": {
+        "path": "build/installers/OpenPyCharm-0.1.0-dev.4-macos-arm64.dmg",
+        "name": "OpenPyCharm-0.1.0-dev.4-macos-arm64.dmg",
+        "bytes": 745666387,
+        "sha256": "5b07b72026108082a56da34cad2be600f56b04d99850c8a7e25176cf49eaaa76",
+        "matchesEmbeddedReceipt": true,
+        "checksumFileMatched": true,
+        "productTreeSha256": "234acb5ede9ebfe39bbae3b464f6b9dfa89a7dfe38bed77bffee48c0a44eb7b9",
+        "receipt": {
+          "path": "build/installers/provenance/0.1.0-dev.4-macos-arm64/installer.json",
+          "size": 595,
+          "sha256": "731c3eb3cad5678059353c927444e5f8f7b46f9d882afdfdf60a6bee7177145a"
+        },
+        "checksReportedByCI": [
+          "hdiutil-verify",
+          "mounted-product-tree",
+          "Applications-symlink",
+          "copied-product-tree",
+          "ad-hoc-signature"
+        ]
+      },
+      "productManifest": {
+        "path": "build/installers/provenance/0.1.0-dev.4-macos-arm64/product-build.json",
+        "size": 216172,
+        "sha256": "cd69814f7a9bfdd593a43c1d79c5d2ca364ab46aa6ac450778cc7b4853560413"
+      },
+      "assembledManifest": {
+        "path": "build/product/OpenPyCharm.app/Contents/openpycharm-build.json",
+        "size": 216172,
+        "sha256": "cd69814f7a9bfdd593a43c1d79c5d2ca364ab46aa6ac450778cc7b4853560413",
+        "matchesInstallerProductManifestBytes": true
+      },
+      "startupReport": {
+        "path": "build/runtime-startup-macos-arm64/startup.json",
+        "size": 4746,
+        "sha256": "da5fcaeb3bac49803424bee2a097dad7d10e286833f259e9f21e0e32ef3901ff",
+        "status": "passed-startup",
+        "manifestSha256Matched": true,
+        "fivePluginIdsMatched": true,
+        "projectTrustBypassed": false
+      },
+      "standaloneFrontendReport": {
+        "path": "build/frontend-macos-arm64.json",
+        "size": 74640,
+        "sha256": "94b4e07d838a789fc7c5436f775293237e08599e8f31f0f3ad1360f930867ca7",
+        "matchesEmbeddedProductBuild": true
+      },
+      "sourceInputs": {
+        "count": 171,
+        "exactGitBlobMatches": 171,
+        "exactLfToCrlfMatches": 0,
+        "lfToCrlfPaths": [],
+        "sourceCommit": "63921a4a931e19996b05ea4de4df12d27ff021bf",
+        "inventorySha256": "fa479b3844383179bcbcc7267f4ff87d95d8c869659af4a53a429d749c7608a6"
+      },
+      "plugins": [
+        {
+          "id": "dev.openpycharm.http",
+          "version": "0.1.0-dev.4",
+          "jarSha256": "a84a3c40c88043a4614a6d5330800996ac4d7dfd75ffc05b0cfaf8f8e4402789",
+          "reportedPayloadFiles": 1
+        },
+        {
+          "id": "dev.openpycharm.frameworks",
+          "version": "0.1.0-dev.4",
+          "jarSha256": "d04006a3b1778280c326442dc8a91090902a87891463860c05d50f325ab855d7",
+          "reportedPayloadFiles": 1
+        },
+        {
+          "id": "dev.openpycharm.notebooks",
+          "version": "0.1.0-dev.4",
+          "jarSha256": "9d73c790ef91ab191ccee17eaf63a60d4fc7576a1e03cfa9cbb20490b6ea8d33",
+          "reportedPayloadFiles": 1
+        },
+        {
+          "id": "dev.openpycharm.database",
+          "version": "0.1.0-dev.4",
+          "jarSha256": "4d1fb21b1701cb1881d9b99477aa7416f42602e747621c3f58525ca1a064af5e",
+          "reportedPayloadFiles": 5
+        },
+        {
+          "id": "dev.openpycharm.frontend",
+          "version": "0.1.0-dev.4",
+          "jarSha256": "96a52332228d1c2e0fd8d1759ab6b2ab9d7ae6f03372776be23b31560e100b8f",
+          "reportedPayloadFiles": 193
+        }
+      ],
+      "frontendManifest": {
+        "runtimePinnedFiles": 191,
+        "pluginPayloadFiles": 193,
+        "toolchainLockSha256": "5a7b20ce2ce915a4012b4ea5dfa35b77c709bdbb19de00be87700404a6f6fff2",
+        "bundledPackageNotices": 21,
+        "compiledClasses": 17,
+        "requiredProductClassesPresent": true,
+        "fixtureOnlyClassesAbsent": true,
+        "allRuntimeNameSizeDigestRecordsMatchPin": true,
+        "compileArchiveReaderPassed": true,
+        "nodeStartedByBuilder": false,
+        "ideStartedByBuilder": false,
+        "installationScriptsExecuted": false
+      }
+    },
+    {
+      "target": "windows-x64",
+      "artifact": {
+        "id": 14119433953,
+        "name": "OpenPyCharm-windows-x64-63921a4a931e19996b05ea4de4df12d27ff021bf",
+        "archiveBytes": 647582321,
+        "archiveSha256": "6c5e73822667a892bd9823456721aed55ad670d5b97ca2ef6a93973ce08f56cd",
+        "apiMetadataMatched": true,
+        "entryCount": 105,
+        "entryInventorySha256": "e52435da0c417e3acda8c3715ab7c122afd4275e33053f541c2953c6cee1cf3a",
+        "allPathsSafe": true,
+        "duplicatePaths": 0,
+        "caseFoldCollisions": 0,
+        "specialEntries": 0,
+        "encryptedEntries": 0,
+        "crcPass": true
+      },
+      "installer": {
+        "path": "build/installers/OpenPyCharm-0.1.0-dev.4-windows-x64-setup.exe",
+        "name": "OpenPyCharm-0.1.0-dev.4-windows-x64-setup.exe",
+        "bytes": 646318653,
+        "sha256": "fa1dcf5e36e1a1f5e41e3859c6ee158101f148b75f4e4126dcc90d54621e8aa2",
+        "matchesEmbeddedReceipt": true,
+        "checksumFileMatched": true,
+        "productTreeSha256": "a3c733d88be0aede88ceb283f3daa6fb1badd0d1af17db16b9b4baf63e035a4a",
+        "receipt": {
+          "path": "build/installers/provenance/0.1.0-dev.4-windows-x64/installer.json",
+          "size": 1273,
+          "sha256": "586bdd96e691a8a92556785eb003a3d9461460e8140d7e4f2f8f1266b0f3095b"
+        },
+        "checksReportedByCI": [
+          "pinned-Inno-Setup",
+          "official-tool-Authenticode",
+          "executable-installer",
+          "silent-install-file-identity",
+          "installed-native-startup"
+        ]
+      },
+      "productManifest": {
+        "path": "build/installers/provenance/0.1.0-dev.4-windows-x64/product-build.json",
+        "size": 218823,
+        "sha256": "997aa2cd6cbeab6c259d8b1f2dc99a021442b2d94a051001e65899d79c1e3cf5"
+      },
+      "assembledManifest": {
+        "path": "build/product/OpenPyCharm/openpycharm-build.json",
+        "size": 218823,
+        "sha256": "997aa2cd6cbeab6c259d8b1f2dc99a021442b2d94a051001e65899d79c1e3cf5",
+        "matchesInstallerProductManifestBytes": true
+      },
+      "startupReport": {
+        "path": "build/runtime-startup-windows-x64/startup.json",
+        "size": 4692,
+        "sha256": "9f3a4253c79f37c1442435024af55cd6ac6d72106988740aeb0b6717995cbcb0",
+        "status": "passed-startup",
+        "manifestSha256Matched": true,
+        "fivePluginIdsMatched": true,
+        "projectTrustBypassed": false
+      },
+      "standaloneFrontendReport": {
+        "path": "build/frontend-windows-x64.json",
+        "size": 75926,
+        "sha256": "0194f93a25dc7192ebf65ace448a6662e0525b517600f5471bd8e5c81a003fc8",
+        "matchesEmbeddedProductBuild": true
+      },
+      "sourceInputs": {
+        "count": 171,
+        "exactGitBlobMatches": 138,
+        "exactLfToCrlfMatches": 33,
+        "lfToCrlfPaths": [
+          "LICENSE",
+          "NOTICE",
+          "plugins/database/NOTICE",
+          "plugins/database/resources/META-INF/plugin.xml",
+          "plugins/frameworks/NOTICE",
+          "plugins/frameworks/resources/META-INF/plugin.xml",
+          "plugins/frontend/NOTICE",
+          "plugins/frontend/product-resources/META-INF/NOTICE",
+          "plugins/frontend/product-resources/META-INF/plugin.xml",
+          "plugins/frontend/resources/META-INF/plugin.xml",
+          "plugins/http-client/NOTICE",
+          "plugins/http-client/examples/demo.http",
+          "plugins/http-client/examples/stop.http",
+          "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpBatchProcessHandler.kt",
+          "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpRequestCall.kt",
+          "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpRequestDocument.kt",
+          "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpRequestRun.kt",
+          "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpRequestSession.kt",
+          "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpResponseCache.kt",
+          "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpResponseView.kt",
+          "plugins/http-client/src/main/kotlin/dev/openpycharm/http/HttpServicesContributor.kt",
+          "plugins/http-client/src/main/kotlin/dev/openpycharm/http/SaveHttpResponseAction.kt",
+          "plugins/http-client/src/main/kotlin/dev/openpycharm/http/lang/HttpRequestLanguage.kt",
+          "plugins/http-client/src/main/kotlin/dev/openpycharm/http/lang/HttpRequestLexer.kt",
+          "plugins/http-client/src/main/kotlin/dev/openpycharm/http/lang/HttpRequestParserDefinition.kt",
+          "plugins/http-client/src/main/kotlin/dev/openpycharm/http/lang/HttpRequestSyntaxHighlighter.kt",
+          "plugins/http-client/src/main/resources/META-INF/plugin.xml",
+          "plugins/notebooks/NOTICE",
+          "plugins/notebooks/kernel-requirements.txt",
+          "plugins/notebooks/resources/META-INF/plugin.xml",
+          "product/icon.svg",
+          "product/windows/openpycharm.iss",
+          "requirements-build.txt"
+        ],
+        "sourceCommit": "63921a4a931e19996b05ea4de4df12d27ff021bf",
+        "inventorySha256": "1068108439149b8c56a225faac6fad282d387b490a9d61cb9a37c76ab59063e2"
+      },
+      "plugins": [
+        {
+          "id": "dev.openpycharm.http",
+          "version": "0.1.0-dev.4",
+          "jarSha256": "699cdcccfa9f21da1cd4ce9ee8aa714fa6d7d109d96d42a81cad5c9a7b648cd9",
+          "reportedPayloadFiles": 1
+        },
+        {
+          "id": "dev.openpycharm.frameworks",
+          "version": "0.1.0-dev.4",
+          "jarSha256": "d70f57e25c0c5594051b493cc92c3ea5691795d320e8eb34aa7e05e97ead8651",
+          "reportedPayloadFiles": 1
+        },
+        {
+          "id": "dev.openpycharm.notebooks",
+          "version": "0.1.0-dev.4",
+          "jarSha256": "3253f92f2e8415719a7a0dc4b7d88383075b46d4e9d56e8e914a80ae0d4d31a6",
+          "reportedPayloadFiles": 1
+        },
+        {
+          "id": "dev.openpycharm.database",
+          "version": "0.1.0-dev.4",
+          "jarSha256": "ba565b41c344bb18513ffd6702d3384ea0e3d9a3e71e6c38d223adfe8d697851",
+          "reportedPayloadFiles": 5
+        },
+        {
+          "id": "dev.openpycharm.frontend",
+          "version": "0.1.0-dev.4",
+          "jarSha256": "475d690676cc9de6365fda5f8f8ec15afeeb8dfead967e00dec8b9a19a4e7647",
+          "reportedPayloadFiles": 193
+        }
+      ],
+      "frontendManifest": {
+        "runtimePinnedFiles": 191,
+        "pluginPayloadFiles": 193,
+        "toolchainLockSha256": "5a7b20ce2ce915a4012b4ea5dfa35b77c709bdbb19de00be87700404a6f6fff2",
+        "bundledPackageNotices": 21,
+        "compiledClasses": 17,
+        "requiredProductClassesPresent": true,
+        "fixtureOnlyClassesAbsent": true,
+        "allRuntimeNameSizeDigestRecordsMatchPin": true,
+        "compileArchiveReaderPassed": true,
+        "nodeStartedByBuilder": false,
+        "ideStartedByBuilder": false,
+        "installationScriptsExecuted": false
+      }
+    }
+  ],
+  "inferred": [],
+  "unknown": [
+    "These checks authenticate complete artifact ZIPs, embedded installer bytes, source manifests and the reported five-plugin/runtime manifest; they do not execute either installer or independently unpack the installed product payload.",
+    "macOS native installed desktop workflows and strict post-workflow application signature are recorded separately by root.",
+    "Windows physical keyboard/mouse, frontend LSP interaction and abnormal-owner-crash cleanup remain unverified here."
+  ],
+  "installerExecuted": false,
+  "ideStarted": false,
+  "referenceInstallationModified": false
+}
