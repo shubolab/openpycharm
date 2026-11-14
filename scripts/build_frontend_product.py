@@ -40,6 +40,7 @@ JAVA_NAMES = (
 FORBIDDEN_CLASSES = ("FrontendLspProvider", "FrontendRuntime", "FrontendFixtureScope", "FrontendBuildScope")
 READER = SOURCE / "product-build-support/VerifyFrontendProductArchive.java"
 RESOURCES = SOURCE / "product-resources"
+RESOURCE_NAMES = frozenset({"META-INF/plugin.xml", "META-INF/NOTICE"})
 
 
 def no_links(path: Path, kind: str | None = None) -> Path:
@@ -201,13 +202,25 @@ def copy_runtime(authenticated: dict, destination: Path) -> dict:
     return inspect_tree(destination, expected, modes)
 
 
-def source_inputs() -> dict:
-    files = [SOURCE / "src/dev/openpycharm/frontend" / (name + ".java") for name in JAVA_NAMES]
+def resource_files() -> list[Path]:
     no_links(RESOURCES, "directory")
+    files = []
     for directory, directories, names in os.walk(RESOURCES, followlinks=False):
         for name in directories:
             no_links(Path(directory) / name, "directory")
-        files.extend(Path(directory) / name for name in names)
+        for name in names:
+            path = no_links(Path(directory) / name, "file")
+            if path.relative_to(RESOURCES).as_posix() not in RESOURCE_NAMES:
+                raise ValueError("Unexpected frontend product resource; compiled/generated entries cannot be overridden")
+            files.append(path)
+    if {path.relative_to(RESOURCES).as_posix() for path in files} != RESOURCE_NAMES:
+        raise ValueError("Product frontend descriptor and accurate product NOTICE are required")
+    return files
+
+
+def source_inputs() -> dict:
+    files = [SOURCE / "src/dev/openpycharm/frontend" / (name + ".java") for name in JAVA_NAMES]
+    files.extend(resource_files())
     files.extend([ROOT / "LICENSE", READER, PIN, PIN_PATH, Path(__file__), ROOT / "scripts/bootstrap.py",
                   ROOT / "scripts/build_framework_plugin.py", ROOT / "scripts/platform_layout.py",
                   ROOT / "scripts/provision_frontend_tools.py"])
@@ -215,8 +228,6 @@ def source_inputs() -> dict:
         no_links(path, "file")
         if not path.is_relative_to(ROOT):
             raise ValueError("Frontend build input escaped its source root")
-    if not {"META-INF/plugin.xml", "META-INF/NOTICE"}.issubset({path.relative_to(RESOURCES).as_posix() for path in files if path.is_relative_to(RESOURCES)}):
-        raise ValueError("Product frontend descriptor and accurate product NOTICE are required")
     return {path.relative_to(ROOT).as_posix(): sha256(path) for path in sorted(set(files))}
 
 
@@ -253,6 +264,40 @@ def validate_product(plugin: Path, saved: dict) -> None:
         if os.name != "nt" and actual.get("mode") != (0o755 if name == expected["entries"]["node"] else 0o644):
             raise ValueError("Cached frontend runtime receipt cannot authorize different modes")
     inspect_tree(plugin, records, {name: record["mode"] for name, record in records.items()})
+
+
+def product_payloads(compiled: dict, resources: dict, version: str, pin: dict) -> dict:
+    required = {"dev/openpycharm/frontend/" + name + ".class" for name in JAVA_NAMES}
+    if not required.issubset(compiled):
+        raise ValueError("A required compiled frontend product class is missing")
+    for name in compiled:
+        if (not name.startswith("dev/openpycharm/frontend/") or not name.endswith(".class")
+                or name.removeprefix("dev/openpycharm/frontend/").removesuffix(".class").split("$", 1)[0] not in JAVA_NAMES):
+            raise ValueError("Unexpected or fixture-only compiled frontend class")
+    if set(resources) != RESOURCE_NAMES or set(compiled) & set(resources):
+        raise ValueError("Frontend resources cannot replace compiled/generated entries")
+    payloads = dict(compiled)
+    payloads.update(resources)
+    payloads["META-INF/plugin.xml"] = render_descriptor(resources["META-INF/plugin.xml"], version)
+    payloads["META-INF/LICENSE"] = (ROOT / "LICENSE").read_bytes()
+    payloads["META-INF/frontend-tools.lock.json"] = PIN.read_bytes()
+    for target in TARGETS:
+        payloads["META-INF/frontend-runtime-" + target + ".json"] = json.dumps(runtime_manifest(pin, target), sort_keys=True).encode()
+    return payloads
+
+
+def verify_emitted_jar(jar: Path, payloads: dict, compiled: dict) -> None:
+    """Bind the final ZIP to both emitted resources and the original compiler bytes."""
+    with zipfile.ZipFile(jar) as archive:
+        names = archive.namelist()
+        if len(names) != len(set(names)) or set(names) != set(payloads):
+            raise ValueError("Frontend archive payload set differs from its compiler/resource closure")
+        if {name for name in names if name.endswith(".class")} != set(compiled):
+            raise ValueError("Frontend archive class set differs from the compiler output")
+        for name in names:
+            data = archive.read(name)
+            if data != payloads[name] or name in compiled and data != compiled[name]:
+                raise ValueError("Frontend archive bytes differ from their compiler/resource source: " + name)
 
 
 def compile_product(layout, runtime, destination: Path, temporary: Path) -> dict:
@@ -315,24 +360,16 @@ def build(sdk: Path, runtime_receipt: Path, version: str = VERSION, host_sdk: Pa
         with tempfile.TemporaryDirectory(prefix="stage-", dir=work) as name:
             temporary = Path(name); staged = temporary / "plugin"; classes = temporary / "classes"
             compilation = compile_product(layout, runtime, classes, temporary)
-            payloads = {path.relative_to(classes).as_posix(): path.read_bytes() for path in sorted(classes.rglob("*.class"))}
-            for name in payloads:
-                if any(name.startswith("dev/openpycharm/frontend/" + forbidden + suffix) for forbidden in FORBIDDEN_CLASSES for suffix in (".", "$")):
-                    raise ValueError("Fixture-only frontend class leaked into the product")
-            for path in sorted(RESOURCES.rglob("*")):
-                if path.is_file():
-                    name = path.relative_to(RESOURCES).as_posix()
-                    payloads[name] = render_descriptor(path.read_bytes(), version) if name == "META-INF/plugin.xml" else path.read_bytes()
-            payloads["META-INF/LICENSE"] = (ROOT / "LICENSE").read_bytes()
-            payloads["META-INF/frontend-tools.lock.json"] = PIN.read_bytes()
-            for item_target in TARGETS:
-                payloads["META-INF/frontend-runtime-" + item_target + ".json"] = json.dumps(runtime_manifest(pin, item_target), sort_keys=True).encode()
+            compiled = {path.relative_to(classes).as_posix(): path.read_bytes() for path in sorted(classes.rglob("*.class"))}
+            resources = {path.relative_to(RESOURCES).as_posix(): path.read_bytes() for path in resource_files()}
+            payloads = product_payloads(compiled, resources, version, pin)
             jar = staged / "lib/frontend.jar"; jar.parent.mkdir(parents=True)
             with zipfile.ZipFile(jar, "w", zipfile.ZIP_DEFLATED) as archive:
                 for entry_name, data in sorted(payloads.items()):
                     entry = zipfile.ZipInfo(entry_name, (1980, 1, 1, 0, 0, 0)); entry.compress_type = zipfile.ZIP_DEFLATED
                     archive.writestr(entry, data)
-            jar.chmod(0o644); verification = verify_archive(layout, runtime, jar, temporary)
+            jar.chmod(0o644); verify_emitted_jar(jar, payloads, compiled)
+            verification = verify_archive(layout, runtime, jar, temporary)
             runtime_records = copy_runtime(authenticated, staged / "runtime" / target)
             # Reauthenticate both source and copied data before publishing: the
             # provision cache is read-only even if a build fails midway.
@@ -344,6 +381,7 @@ def build(sdk: Path, runtime_receipt: Path, version: str = VERSION, host_sdk: Pa
             saved = {"schema": 1, "identity": identity, "pluginId": PLUGIN_ID, "version": version, "target": target,
                      "pluginDirectory": str(plugin), "jarSha256": sha256(jar), "files": {name: record["sha256"] for name, record in records.items()},
                      "fileRecords": records, "payloadSha256": {name: hashlib.sha256(data).hexdigest() for name, data in sorted(payloads.items())},
+                     "compiledClassSha256": {name: hashlib.sha256(data).hexdigest() for name, data in sorted(compiled.items())},
                      "classes": sorted(name for name in payloads if name.endswith(".class")), "compilation": compilation,
                      "archiveVerification": verification, "targetPlatform": layout.platform, "executionPlatform": runtime.platform,
                      "nativeTargetRuntime": layout.platform == runtime.platform, "toolchainLockSha256": authenticated["lockSha256"],

@@ -9,6 +9,7 @@ import stat
 import sys
 import tempfile
 import unittest
+import zipfile
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
@@ -222,6 +223,39 @@ class ProductRuntimeFixture(unittest.TestCase):
 
 
 class ProductReceiptTests(unittest.TestCase):
+    def test_resource_class_cannot_override_compiler_output_or_add_an_uncompiled_class(self):
+        compiled = {"dev/openpycharm/frontend/" + name + ".class": ("compiler bytes " + name).encode() for name in builder.JAVA_NAMES}
+        resources = {"META-INF/plugin.xml": (builder.RESOURCES / "META-INF/plugin.xml").read_bytes(), "META-INF/NOTICE": b"accurate product notices"}
+        pin = builder.load_pin()
+        payloads = builder.product_payloads(compiled, resources, builder.VERSION, pin)
+        name = "dev/openpycharm/frontend/FrontendBundledRuntime.class"
+        self.assertEqual(payloads[name], compiled[name])
+        for resource in (name, "META-INF/Additional.class", "dev/openpycharm/frontend/Uncompiled.class", "META-INF/frontend-tools.lock.json"):
+            with self.subTest(resource=resource), self.assertRaisesRegex(ValueError, "cannot replace"):
+                builder.product_payloads(compiled, {**resources, resource: b"different valid Java class or generated data"}, builder.VERSION, pin)
+        with self.assertRaisesRegex(ValueError, "fixture-only"):
+            builder.product_payloads({**compiled, "dev/openpycharm/frontend/FrontendBuildScope.class": b"absolute fixture data"}, resources, builder.VERSION, pin)
+        # Even a self-consistent final ZIP/payload receipt cannot replace bytes
+        # that originally came from the compiler.
+        tampered = {**payloads, name: b"replacement class, not compiler output"}
+        with tempfile.TemporaryDirectory() as directory:
+            jar = Path(directory) / "tampered.jar"
+            with zipfile.ZipFile(jar, "w") as archive:
+                for entry, data in tampered.items(): archive.writestr(entry, data)
+            with self.assertRaisesRegex(ValueError, "compiler/resource source"):
+                builder.verify_emitted_jar(jar, tampered, compiled)
+
+    def test_resource_tree_refuses_class_override_before_compiling(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve(); (root / "META-INF").mkdir()
+            (root / "META-INF/plugin.xml").write_bytes(b"descriptor")
+            (root / "META-INF/NOTICE").write_bytes(b"notice")
+            override = root / "dev/openpycharm/frontend/FrontendBundledRuntime.class"
+            override.parent.mkdir(parents=True); override.write_bytes(b"uncompiled replacement")
+            with patch.object(builder, "RESOURCES", root):
+                with self.assertRaisesRegex(ValueError, "cannot be overridden"):
+                    builder.resource_files()
+
     def test_m0_descriptor_or_missing_registration_cannot_be_relabeled_as_product(self):
         descriptor = b'<idea-plugin><id>dev.openpycharm.frontend</id><version>@VERSION@</version><depends>com.intellij.modules.platform</depends><depends>com.intellij.modules.lsp</depends><extensions defaultExtensionNs="com.intellij.platform.lsp"><integrationProvider implementation="dev.openpycharm.frontend.FrontendProductLspProvider"/></extensions></idea-plugin>'
         self.assertIn(b"0.1.0-dev.4", builder.render_descriptor(descriptor, builder.VERSION))
