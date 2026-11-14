@@ -1,6 +1,9 @@
 # 0.1.0-dev.3 release verification / 发行验收
 
 The recorded native CI, installers and final installed Mac workflows passed.
+Published on 2026-11-14; the [publication receipt](v0.1.0-dev.3-published.json) records
+all four server asset digests, public download responses and exact README/GIF bytes.
+
 Full PyCharm parity remains incomplete. / 本页记录的原生 CI、安装器与最终 Mac 安装版
 工作流通过；完整 PyCharm 对齐尚未完成。
 

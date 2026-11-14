@@ -1,0 +1,116 @@
+{
+  "schema": 1,
+  "observedAt": "2026-11-14",
+  "version": "0.1.0-dev.3",
+  "status": "published-prerelease",
+  "releaseId": 445150945,
+  "releaseUrl": "https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.3",
+  "publishedAt": "2026-11-14T08:46:41Z",
+  "productionCommit": "9a243e605c43d86788b0e1b4607ec3bdf11b13d1",
+  "documentationCommit": "913e59b4b41704ca5a25baa6cc1134013b6b5e35",
+  "tagCommit": "913e59b4b41704ca5a25baa6cc1134013b6b5e35",
+  "nativeCiRun": 43565932969,
+  "transferCiRun": 43576943427,
+  "assets": [
+    {
+      "id": 746865448,
+      "name": "OpenPyCharm-0.1.0-dev.3-macos-arm64.dmg",
+      "size": 701566993,
+      "sha256": "c32a15bedc407dcd90fbfe1f99606e40a7b30f077207d28c41c068a2898464a6",
+      "url": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/OpenPyCharm-0.1.0-dev.3-macos-arm64.dmg"
+    },
+    {
+      "id": 746873854,
+      "name": "OpenPyCharm-0.1.0-dev.3-provenance.zip",
+      "size": 5716807,
+      "sha256": "8107605dddc5862517e459668ae7f281017c719fde175cef17a5b585aa447ac7",
+      "url": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/OpenPyCharm-0.1.0-dev.3-provenance.zip"
+    },
+    {
+      "id": 746866787,
+      "name": "OpenPyCharm-0.1.0-dev.3-windows-x64-setup.exe",
+      "size": 611628694,
+      "sha256": "27fb3f71c9e4e425125ff73acba510347dc5e7e0639988eed87412087da11dd8",
+      "url": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/OpenPyCharm-0.1.0-dev.3-windows-x64-setup.exe"
+    },
+    {
+      "id": 746874411,
+      "name": "SHA256SUMS.txt",
+      "size": 218,
+      "sha256": "83a67c24e5b95f3a751ea2f7b1fece61b5cb59f5111a16e46dbbd71b3b3f8a4e",
+      "url": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/SHA256SUMS.txt"
+    }
+  ],
+  "publicChecks": [
+    {
+      "url": "https://raw.githubusercontent.com/shubolab/openpycharm/main/README.md",
+      "method": "GET",
+      "status": 200,
+      "size": 5780,
+      "sha256": "b5857ec79e9993825e1e62dae7396292fde1eaa15b282176c395699a4573a764"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/shubolab/openpycharm/main/README.zh-CN.md",
+      "method": "GET",
+      "status": 200,
+      "size": 5379,
+      "sha256": "c84569ac72fb2a3471cd0867030905e9991448f1efe48e9303b38932142a69d5"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/shubolab/openpycharm/v0.1.0-dev.3/docs/demo/v0.1.0-dev.3/openpycharm-native.gif",
+      "method": "GET",
+      "status": 200,
+      "size": 796216,
+      "sha256": "66fe947dc2b6ef199d7fba53bb3120298fe572a1bce3a696de62f357795eecf1"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/shubolab/openpycharm/v0.1.0-dev.3/docs/demo/v0.1.0-dev.3/capture.json",
+      "method": "GET",
+      "status": 200,
+      "size": 2681,
+      "sha256": "dccae8e8d18f27facf15dd241be24560bb95c0fd5e0c97ebd5b3677df706d9d7"
+    },
+    {
+      "url": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/OpenPyCharm-0.1.0-dev.3-macos-arm64.dmg",
+      "method": "HEAD",
+      "status": 200,
+      "contentLength": 701566993
+    },
+    {
+      "url": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/OpenPyCharm-0.1.0-dev.3-windows-x64-setup.exe",
+      "method": "HEAD",
+      "status": 200,
+      "contentLength": 611628694
+    },
+    {
+      "url": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/OpenPyCharm-0.1.0-dev.3-provenance.zip",
+      "method": "GET",
+      "status": 200,
+      "size": 5716807,
+      "sha256": "8107605dddc5862517e459668ae7f281017c719fde175cef17a5b585aa447ac7"
+    },
+    {
+      "url": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/SHA256SUMS.txt",
+      "method": "GET",
+      "status": 200,
+      "size": 218,
+      "sha256": "83a67c24e5b95f3a751ea2f7b1fece61b5cb59f5111a16e46dbbd71b3b3f8a4e"
+    }
+  ],
+  "gif": {
+    "path": "docs/demo/v0.1.0-dev.3/openpycharm-native.gif",
+    "sha256": "66fe947dc2b6ef199d7fba53bb3120298fe572a1bce3a696de62f357795eecf1",
+    "frames": 6,
+    "dimensions": [
+      1280,
+      820
+    ],
+    "actualInstalledVersion": "0.1.0-dev.3"
+  },
+  "installedReceipt": "dev3-installed-20261114.json",
+  "limitations": [
+    "Full 1:1 parity remains incomplete",
+    "Windows physical interactive desktop unverified",
+    "Network PostgreSQL/MySQL and PasswordSafe provider flows unverified"
+  ]
+}
