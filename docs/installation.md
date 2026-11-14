@@ -6,14 +6,16 @@ The currently published preview is
 [v0.1.0-dev.1](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.1).
 Download its macOS Apple silicon DMG or Windows x64 EXE together with
 `SHA256SUMS.txt`. **0.1.0-dev.2 is a candidate, not a published release**;
-its installer hashes, final installed-app acceptance and updated demo are pending.
-See the [dev.2 verification draft](verification/2026-11-14-dev2-release.md).
+its installers have been downloaded and authenticated. Installed macOS desktop
+and post-workflow checks passed, and its actual installed-version GIF was updated.
+See the [dev.2 verification](verification/2026-11-14-dev2-release.md).
 
 当前已发布预览版为
 [v0.1.0-dev.1](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.1)。
 请同时下载对应的 macOS Apple silicon DMG 或 Windows x64 EXE 与
-`SHA256SUMS.txt`。**0.1.0-dev.2 仍是候选版，尚未发布**；安装包摘要、最终安装版
-验收及新版演示待完成，见 [dev.2 验收草稿](verification/2026-11-14-dev2-release.md)。
+`SHA256SUMS.txt`。**0.1.0-dev.2 仍是候选版，尚未发布**；其安装包已下载并认证，
+macOS 安装版桌面和工作流后检通过，实际安装版 GIF 已更新，见
+[dev.2 验收记录](verification/2026-11-14-dev2-release.md)。
 
 ## Verify a download / 核对下载
 

@@ -15,16 +15,16 @@ Django、Flask、FastAPI 项目生成器和运行/调试配置：
   字节，并停止正在执行的请求。
 - 通过原生解释器/venv 选择器创建小型框架项目。依赖安装可选，默认关闭；运行与
   调试沿用所选 Python SDK、工作目录和环境变量。
-- 有界回放开源 JCEF 初始化修复，处理冷启动 Markdown 预览；保留 Markdown 渲染、
-  代理配置及服务认证。
+- 修复 Markdown 预览冷启动初始化，保留正常渲染、代理配置及服务认证。
 
 项目模板和运行/调试支持不代表完整框架语义支持：模板与 ORM 智能分析、框架导航
 和更广的框架行为仍待补齐。**dev.2 不包含 Notebook 和数据库工具。**
-详见[验收矩阵](docs/acceptance.md)与[dev.2 发行说明草稿](docs/releases/v0.1.0-dev.2.md)。
+详见[验收矩阵](docs/acceptance.md)与[dev.2 发行说明](docs/releases/v0.1.0-dev.2.md)。
 
-**dev.2 尚未发布。** 最终 macOS 安装版的运行、测试、FastAPI 调试、HTTP、README
-预览恢复和新版 GIF 均待完成验收；Windows 桌面工作流仍未验收。候选来源和证据见
-[dev.2 验收草稿](docs/verification/2026-11-14-dev2-release.md)。
+**dev.2 尚未发布。** 最终 macOS 安装版已通过 Python 运行与 unittest、全新 FastAPI
+创建与调试、HTTP 请求及 README 预览恢复；工作流结束后产品树未变，严格签名检查通过，
+有界会话日志含 0 条错误、20 条保留警告。Windows 桌面工作流仍未验收。明确来源和
+安装包摘要见 [dev.2 验收记录](docs/verification/2026-11-14-dev2-release.md)。
 
 当前已发布的原生预览版为
 [v0.1.0-dev.1](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.1)：
@@ -40,9 +40,13 @@ Django、Flask、FastAPI 项目生成器和运行/调试配置：
 工作流仍待验收。
 Mac 应用使用临时签名且未公证，Windows 安装器未签名。
 
-**dev.2 实际安装版演示待录制。** 每个可发版版本必须更新真实录屏，并记录版本、
-操作系统、工作流和拍摄清单。[dev.1 演示](docs/demo/README.md)仅保留为历史证据，
-不代表 dev.2 的实际表现。
+![OpenPyCharm 0.1.0-dev.2 实际安装版原生功能演示](docs/demo/v0.1.0-dev.2/openpycharm-native.gif)
+
+实际安装版 **0.1.0-dev.2**，系统 **macOS 27.2 arm64**，Python **3.14.0**。
+展示运行、unittest 结果、FastAPI 断点求值和 HTTP 批量/Unicode 响应。这是由真实
+原生应用截屏组装的动画。
+详见[拍摄清单](docs/demo/v0.1.0-dev.2/capture.json)。每个可发版版本都更新实际
+安装版截屏和对应清单。
 
 ## 本机构建
 
