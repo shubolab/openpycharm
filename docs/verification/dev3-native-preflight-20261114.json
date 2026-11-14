@@ -1,0 +1,176 @@
+{
+  "schema": 1,
+  "observedAt": "2026-11-14T01:55:32.921017+00:00",
+  "status": "rejected_preflight",
+  "releaseReady": false,
+  "installedRelease": "v0.1.0-dev.2",
+  "candidate": {
+    "sourceCommit": "e2ddbfd980d69e1f5da852088aeca6c9c59656fc",
+    "version": "0.1.0-dev.3",
+    "target": "macos-arm64",
+    "sourceInputCount": 129,
+    "manifestSha256": "224d416a3d43dad51022c50d338788cafbd92924ccaef47576731ad48ecef051",
+    "installedFromFinalDmg": false
+  },
+  "repositoryControls": {
+    "tests": 112,
+    "passed": 112,
+    "realKernelPython": "3.11.15",
+    "nativeDesktopPython": "3.14.0"
+  },
+  "nativeDatabase": {
+    "engine": "SQLite",
+    "taskOwnedDisposableDatabase": true,
+    "manualConnect": true,
+    "tablesAndViews": 7,
+    "productsRows": 3,
+    "unicodeNullBinaryPreview": true,
+    "exactUnderscoreTableColumns": 1,
+    "manualTransactionUpdate": [
+      12,
+      11
+    ],
+    "rollbackQuantity": 12,
+    "committedQuantity": 11,
+    "resetQuantity": 12,
+    "disconnectRolledBackQuantity": 12,
+    "previewRows": 500,
+    "totalFixtureRows": 650,
+    "previewTruncatedLabel": true,
+    "cancelThenNextQueryResult": 42,
+    "rawCommitRejectedWithManagedButtonExplanation": true,
+    "profileSurvivedProjectCloseAndReopen": true,
+    "reopenedDisconnected": true,
+    "networkDatabasesVerified": false,
+    "passwordSafeProviderVerified": false,
+    "knownFailure": "Controls clipped in default narrow pane; independent layout fix merged, native retest still required"
+  },
+  "nativeNotebook": {
+    "selectedSdkUsed": true,
+    "actualKernelExecutableSuffix": ".tools/worktrees/notebook-rich/.tools/rich-kernel-314/bin/python",
+    "runAllResults": [
+      "42",
+      "State persists: 40",
+      "中文 notebook output",
+      "ValueError: Notebook error example"
+    ],
+    "originalFixtureUnmodified": true,
+    "undoRestoredSource": true,
+    "editedSourceContainsChineseAndEmoji": true,
+    "shortcutExecuteVerified": false,
+    "saveCompleted": false,
+    "diskStillOriginal": true,
+    "pendingEditRetained": true,
+    "interruptRestartVerifiedInDesktop": false,
+    "knownFailures": [
+      "Kernel error label used for ordinary user exception, although process remained alive",
+      "Native Save stalled with pooled WriteIntentReadAction and FileDocumentManager EDT callback; pending reload and unresponsive AX"
+    ]
+  },
+  "ownedProcessCleanup": {
+    "pid": 9045,
+    "exact_command": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/dev3-integration/build/dev3-static/OpenPyCharm.app/Contents/MacOS/pycharm",
+    "sigterm": true,
+    "sigkill_after_5s": false,
+    "kernel_pids_before_save": [
+      13601,
+      13602
+    ],
+    "retained_pending_edit": "notebook-pending-edit.txt",
+    "unit_checks": 112,
+    "save_acceptance": "failed_native_deadlock"
+  },
+  "localEvidence": {
+    "directory": ".tools/ci/dev3-preflight",
+    "files": {
+      "database-after-cancel.ax.txt": {
+        "bytes": 9076,
+        "sha256": "b2086da8b646c172de60f21e3d967e266fd2ac0bb9c75db326946e384771bd86"
+      },
+      "database-before-rollback.ax.txt": {
+        "bytes": 9807,
+        "sha256": "d1da39e4f01e78c6f005ed992630c9c29f1a6aea817457e633a7d346373fa315"
+      },
+      "database-cancel.ax.txt": {
+        "bytes": 54257,
+        "sha256": "86fb3a8c012e46d141397768cc9004f4bfc8e7855ae4e9e00b221a3966578163"
+      },
+      "database-commit.ax.txt": {
+        "bytes": 19424,
+        "sha256": "e15cac1c9790c314847285a051bd05b5adc725d0a209fb4f7030ffca6a8b529a"
+      },
+      "database-disconnect-rollback.ax.txt": {
+        "bytes": 18627,
+        "sha256": "4d5ecfa228d2de11804aed8627da01084970e883239fd1b6d8e93f357791ee81"
+      },
+      "database-initial.ax.txt": {
+        "bytes": 9810,
+        "sha256": "57f88fc7f3f5c367f3c9797583a77def76386328d74fbf3af31fd05835c6925c"
+      },
+      "database-limit.ax.txt": {
+        "bytes": 15153,
+        "sha256": "23cd31f7a4cbee246a2f75f6999e4981e2d283832b7dcde7a878cf6f99e01088"
+      },
+      "database-managed-transaction.ax.txt": {
+        "bytes": 9130,
+        "sha256": "c616eeb52d0a42784a7c13c80d0e7dbc675cb2c14bda837b2d33b3bf6a412bae"
+      },
+      "database-query.png": {
+        "bytes": 447927,
+        "sha256": "010dbaf89de6fa560daf282c8ff07a847e4527918cdc8d4681e8a57f528e57e5"
+      },
+      "database-reopen.ax.txt": {
+        "bytes": 8005,
+        "sha256": "9a313481378c6a40aea8c32ef7c00dc99ce2f7e90730c8b79cf559c5de273988"
+      },
+      "database-rollback.ax.txt": {
+        "bytes": 9810,
+        "sha256": "57f88fc7f3f5c367f3c9797583a77def76386328d74fbf3af31fd05835c6925c"
+      },
+      "database-update.ax.txt": {
+        "bytes": 9624,
+        "sha256": "c18a7b78187f23e382efc73fb54d1fcbdbd88bbba8c4da8614a1d850939ce74e"
+      },
+      "notebook-pending-edit.txt": {
+        "bytes": 228,
+        "sha256": "304d66a8aff57df55e0e8cdadcaeea1582f687fe96ca0a1437966cc95cd6eb9e"
+      },
+      "notebook-recovery.ax.txt": {
+        "bytes": 8907,
+        "sha256": "7c5be914b2e67e5a889af7b09753790e5011a18e643276bf122a40b8d7f2b5cb"
+      },
+      "notebook-run-all.ax.txt": {
+        "bytes": 8791,
+        "sha256": "d4613451eb8e811aa3065fd2fff1acf3f8a5ce1768f398439a8a5b4a41fe2bea"
+      },
+      "notebook-run-all.png": {
+        "bytes": 479614,
+        "sha256": "6fda2f2f8fe8a433b4c6ca2d864f9f9b832709395445f1c22646b553ab88381e"
+      },
+      "notebook-save-hang.png": {
+        "bytes": 484515,
+        "sha256": "1b2215f2c1ceb173e57348f27348db0535a16b94b4faa73c8d225366d5913e68"
+      },
+      "notebook-save-thread-dump-2.txt": {
+        "bytes": 959067,
+        "sha256": "46694ea62c0fd4ce8e2f0d6828f2c9285f4401e19d2a4017cf2ebf0a914ac1c5"
+      },
+      "notebook-save-thread-dump.txt": {
+        "bytes": 957442,
+        "sha256": "61a15bbc17feacb044571cde3a9a469701e0b11d9fc78096c188549e215341d9"
+      },
+      "notebook-undo.ax.txt": {
+        "bytes": 8774,
+        "sha256": "bda4f9de696415e647b3cdbe55db2ec5d8d0c0d0bdae2c06557b90e03ac21870"
+      }
+    }
+  },
+  "limitations": [
+    "This is the uninstalled static candidate, not final dev.3 installer acceptance",
+    "Database layout fix was validated headlessly but not in the current candidate",
+    "Native Notebook save/reopen/close/interrupt/restart remain unaccepted",
+    "No Windows interactive desktop acceptance",
+    "No full 1:1 PyCharm parity claim",
+    "README release GIF remains the real published dev.2 capture; replace only after accepting the next installed release"
+  ]
+}

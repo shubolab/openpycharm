@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "status": "pass",
+  "version": "0.1.0-dev.3-ci-controls",
+  "targetPlatform": "macos",
+  "executionPlatform": "macos",
+  "nativeTargetRuntime": true,
+  "jarSha256": "dc04be3a8bc08dab30a32bf9572bde1e9989895ec8252defd4f9bcc5de2ba71d",
+  "installerCompilation": {
+    "sha256": "1327349c7cf129ac98fec0c0d85c1d18fe33aa613fad3247e84f1fb0152b1b81",
+    "matched": true
+  },
+  "checks": {
+    "status": "pass",
+    "realJavaSession": true,
+    "selectedPython": true,
+    "streamAndResult": true,
+    "interrupt": true,
+    "restartWhileBusy": true,
+    "stateReset": true,
+    "doubleClose": true,
+    "ownedKernelCleanup": true,
+    "unrelatedProcessSurvived": true,
+    "originalKernelPid": 20286,
+    "restartedKernelPid": 20289,
+    "disposal": {
+      "status": "pass",
+      "actualBlockedPipe": true,
+      "closeBeforeRequest": true,
+      "closeDuringStartup": true,
+      "doubleClose": true,
+      "boundedOwnedProcessAndDescendantCleanup": true,
+      "blockedWriterCloseMillis": 5015,
+      "startupCloseMillis": 5021,
+      "protocolExecutorRejectionCleanup": true,
+      "rejectedProtocolCloseMillis": 5021
+    }
+  },
+  "sourceInputsStillCurrent": true,
+  "observed": [
+    "Authenticated native JVM loaded the actual built NotebookKernelSession and embedded bridge",
+    "Selected Python executed code and delivered stream/result/error events over actual process pipes",
+    "Interrupt and restart while busy reached the actual kernel; state reset and old PID exited",
+    "Repeated session disposal completed and restarted kernel PID exited; unrelated process survived",
+    "Actual POSIX pipe-write backpressure and close-during-startup helpers exited within bounded disposal"
+  ],
+  "unknown": [
+    "Native NotebookFileEditor/Swing desktop behavior is not exercised by this headless class test",
+    "Windows runtime and installer acceptance require execution on Windows",
+    "Forced process-tree cleanup under OS/JVM crash is not established by normal disposal checks"
+  ],
+  "fullLocalReport": {
+    "path": ".tools/ci/dev3-preflight/notebook-session-ci-controls.json",
+    "sha256": "28f05ef96dada00aa3f290bb46819a046c0575e110bc0a3e7d5a3bbde1ebb702"
+  },
+  "negativeBindingControl": {
+    "status": "pass",
+    "exitCode": 2,
+    "sessionReportCreated": false,
+    "stderr": "usage: notebook_session_probe.py [-h] --sdk SDK [--host-sdk HOST_SDK]\n                                 [--version VERSION]\n                                 [--build-report BUILD_REPORT] --python PYTHON\n                                 --output OUTPUT\nnotebook_session_probe.py: error: Notebook session JAR does not match the installer compilation report\n"
+  },
+  "limitations": [
+    "This headless JVM/kernel probe does not exercise NotebookFileEditor native save or establish release readiness",
+    "Windows CI execution remains pending"
+  ]
+}

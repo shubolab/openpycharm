@@ -76,6 +76,32 @@ jobs:
         run: |
           python -m pip install --disable-pip-version-check --requirement requirements-build.txt
           patch --version
+      - name: Prepare a test-owned Python for real Notebook kernel controls
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, os, pathlib, subprocess, venv
+          root = pathlib.Path('build/notebook-kernel-venv').absolute()
+          if root.exists():
+              raise SystemExit('The CI Notebook environment must be fresh')
+          venv.EnvBuilder(with_pip=True).create(root)
+          runtime = root / ('Scripts/python.exe' if os.name == 'nt' else 'bin/python')
+          subprocess.run([str(runtime), '-m', 'pip', 'install', '--disable-pip-version-check',
+                          '--requirement', 'plugins/notebooks/kernel-requirements.txt'], check=True)
+          subprocess.run([str(runtime), '-m', 'pip', 'check'], check=True)
+          identity = subprocess.run([str(runtime), '-c',
+              "import importlib.metadata as m,json,sys; print(json.dumps({'python':sys.executable,'version':sys.version,'packages':{n:m.version(n) for n in ['jupyter_client','ipykernel','pyzmq','tornado','psutil']}}))"],
+              capture_output=True, text=True, timeout=15, check=True)
+          receipt = json.loads(identity.stdout)
+          expected = {'jupyter_client': '8.6.3', 'ipykernel': '6.29.5'}
+          if any(receipt['packages'][name] != version for name, version in expected.items()):
+              raise SystemExit('Notebook kernel dependency pins do not match')
+          pathlib.Path('build/notebook-kernel-runtime.json').write_text(
+              json.dumps(receipt, indent=2) + '\n', encoding='utf-8')
+          with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8', newline='\n') as output:
+              output.write(f'OPENPYCHARM_NOTEBOOK_PYTHON={runtime}\n')
+          print(identity.stdout)
+          PY
       - name: Run repository controls
         shell: bash
         run: python -m unittest discover -s tests -v
@@ -115,6 +141,9 @@ jobs:
       - name: Compile native Notebook and check model, merge and asynchronous persistence
         shell: bash
         run: python scripts/build_notebook_plugin.py --sdk "$SDK" --version "$RELEASE_VERSION" --tests > "build/notebooks-${TARGET}.json"
+      - name: Check actual native JVM Notebook sessions with the selected owned kernel
+        shell: bash
+        run: python scripts/notebook_session_probe.py --sdk "$SDK" --version "$RELEASE_VERSION" --build-report "build/notebooks-${TARGET}.json" --python "$OPENPYCHARM_NOTEBOOK_PYTHON" --output "build/notebook-session-${TARGET}.json"
       - name: Compile native Database and check owned disposable SQLite integration
         shell: bash
         run: python scripts/build_database_plugin.py --sdk "$SDK" --version "$RELEASE_VERSION" --test > "build/database-${TARGET}.json"
@@ -161,6 +190,8 @@ jobs:
             build/http-client-*/protocol-tests.json
             build/framework-*.json
             build/notebooks-*.json
+            build/notebook-kernel-runtime.json
+            build/notebook-session-*.json
             build/database-*.json
             build/framework-servers-*/framework-servers.json
             build/framework-servers-*/*.log

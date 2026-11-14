@@ -26,6 +26,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sdk", type=Path, required=True)
     parser.add_argument("--host-sdk", type=Path)
+    parser.add_argument("--version", help="Plugin version to exercise; match the installer build version")
+    parser.add_argument("--build-report", type=Path, help="Require the exact JAR and build identity from the installer plugin compilation")
     parser.add_argument("--python", type=Path, required=True, help="Test-owned interpreter with kernel requirements installed")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
@@ -34,8 +36,18 @@ def main() -> int:
         parser.error("--python must name an existing dependency-ready interpreter")
     layout = builder.sdk_layout(args.sdk)
     runtime = builder.execution_layout(layout, args.host_sdk)
-    plugin, receipt = builder.build_plugin(args.sdk, host_sdk=args.host_sdk)
+    plugin, receipt = builder.build_plugin(args.sdk, version=args.version, host_sdk=args.host_sdk)
     archive = plugin / "lib/notebooks.jar"
+    build_report = None
+    if args.build_report:
+        if args.build_report.stat().st_size > 4 * 1024**2:
+            parser.error("--build-report is too large")
+        compiled = json.loads(args.build_report.read_text(encoding="utf-8"))
+        if (compiled.get("identity") != receipt["identity"]
+                or compiled.get("jarSha256") != sha256(archive)
+                or compiled.get("archiveVerification", {}).get("status") != "pass"):
+            parser.error("Notebook session JAR does not match the installer compilation report")
+        build_report = {"path": str(args.build_report), "sha256": sha256(args.build_report), "matched": True}
     work = ROOT / ".tools/notebook-session-tests"
     check_space(work, 64 * 1024**2)
     work.mkdir(parents=True, exist_ok=True)
@@ -68,6 +80,7 @@ def main() -> int:
                   "python": str(python), "java": str(runtime.java), "checks": checks,
                   "compilation": compilation, "stderr": stderr, "failure": failure,
                   "jarSha256": sha256(archive), "pluginDirectory": str(plugin),
+                  "version": receipt["version"], "installerCompilation": build_report,
                   "sourceInputsStillCurrent": sources_current,
                   "sdkReceiptSha256": receipt["identity"]["sdkReceiptSha256"],
                   "sources": {"tests/notebooks/NotebookKernelSessionTest.java": sha256(SOURCE),
@@ -77,11 +90,17 @@ def main() -> int:
                   "observed": ["Authenticated native JVM loaded the actual built NotebookKernelSession and embedded bridge",
                                "Selected Python executed code and delivered stream/result/error events over actual process pipes",
                                "Interrupt and restart while busy reached the actual kernel; state reset and old PID exited",
-                               "Repeated session disposal completed and restarted kernel PID exited; unrelated process survived",
-                               "Actual pipe-write backpressure and close-during-startup helpers exited within bounded disposal on POSIX"],
+                               "Repeated session disposal completed and restarted kernel PID exited; unrelated process survived"],
                   "unknown": ["Native NotebookFileEditor/Swing desktop behavior is not exercised by this headless class test",
                               "Windows runtime and installer acceptance require execution on Windows",
                               "Forced process-tree cleanup under OS/JVM crash is not established by normal disposal checks"]}
+        if checks.get("disposal", {}).get("status") == "pass":
+            report["observed"].append("Actual POSIX pipe-write backpressure and close-during-startup helpers exited within bounded disposal")
+        else:
+            report["unknown"].append("Pipe-write backpressure and close-during-startup disposal: "
+                                     + checks.get("disposal", {}).get("reason", "not verified"))
+        if failure is not None:
+            report["observed"] = []
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps({"status": report["status"], "report": str(args.output.absolute()), "jarSha256": report["jarSha256"]}))
