@@ -8,7 +8,7 @@
 
 **当前正在开发，完整 1:1 对齐尚未完成。**
 
-**0.1.0-dev.2 候选版**增加原生 HTTP 请求工具，以及我们独立实现的
+**0.1.0-dev.2 预览版**增加原生 HTTP 请求工具，以及我们独立实现的
 Django、Flask、FastAPI 项目生成器和运行/调试配置：
 
 - 编辑 `.http` 文件，运行当前请求或批量请求，在 Services 查看响应，保存原始响应
@@ -21,24 +21,21 @@ Django、Flask、FastAPI 项目生成器和运行/调试配置：
 和更广的框架行为仍待补齐。**dev.2 不包含 Notebook 和数据库工具。**
 详见[验收矩阵](docs/acceptance.md)与[dev.2 发行说明](docs/releases/v0.1.0-dev.2.md)。
 
-**dev.2 尚未发布。** 最终 macOS 安装版已通过 Python 运行与 unittest、全新 FastAPI
+最终 macOS 安装版已通过 Python 运行与 unittest、全新 FastAPI
 创建与调试、HTTP 请求及 README 预览恢复；工作流结束后产品树未变，严格签名检查通过，
 有界会话日志含 0 条错误、20 条保留警告。Windows 桌面工作流仍未验收。明确来源和
 安装包摘要见 [dev.2 验收记录](docs/verification/2026-11-14-dev2-release.md)。
 
-当前已发布的原生预览版为
-[v0.1.0-dev.1](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.1)：
+预览版：[v0.1.0-dev.2](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.2)。
 
 | 系统 | 安装包 |
 | --- | --- |
-| macOS Apple silicon | [DMG 下载](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.1/OpenPyCharm-0.1.0-dev.1-macos-arm64.dmg) |
-| Windows x64 | [EXE 下载](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.1/OpenPyCharm-0.1.0-dev.1-windows-x64-setup.exe) |
+| macOS Apple silicon | [DMG 下载](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.2/OpenPyCharm-0.1.0-dev.2-macos-arm64.dmg) |
+| Windows x64 | [EXE 下载](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.2/OpenPyCharm-0.1.0-dev.2-windows-x64-setup.exe) |
 
-见[安装说明](docs/installation.md)、[dev.1 校验和](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.1/SHA256SUMS.txt)
-与[dev.1 验收记录](docs/verification/2026-11-14-preview-release.md)。dev.1 的 macOS
-实际安装版通过运行、unittest 和调试；Windows 通过安装和原生启动，Python 桌面
-工作流仍待验收。
-Mac 应用使用临时签名且未公证，Windows 安装器未签名。
+见[安装说明](docs/installation.md)、[校验和](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.2/SHA256SUMS.txt)
+与[验收记录](docs/verification/2026-11-14-dev2-release.md)。Mac 应用使用临时签名且未公证，
+Windows 安装器未签名。[上一预览版 dev.1](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.1)保留下载。
 
 ![OpenPyCharm 0.1.0-dev.2 实际安装版原生功能演示](docs/demo/v0.1.0-dev.2/openpycharm-native.gif)
 

@@ -1,7 +1,6 @@
 # 0.1.0-dev.2 release verification / 发行验收
 
-**Status: recorded CI and installed Mac checks passed; prepared for publication.
-Not published yet. / 状态：本页记录的 CI 与 Mac 安装版检查通过，已准备发行，尚未发布。**
+**Recorded CI and installed Mac checks passed. / 本页记录的 CI 与 Mac 安装版检查通过。**
 
 This document tracks one exact candidate. Earlier successful checks are retained
 as historical evidence, not transferred to the final installed candidate.
@@ -16,7 +15,7 @@ as historical evidence, not transferred to the final installed candidate.
 | Native CI / 原生 CI | [43522231765](https://github.com/shubolab/openpycharm/actions/runs/43522231765) |
 | Upstream / 上游 | Open-source PyCharm `2026.1.4`, build `PC-261.26222.68` |
 | Upstream source / 上游源码 | `456919a9624bae72ac12efafc35d2b916cb0c5c5` |
-| Published release / 已发布版本 | dev.2 pending; [dev.1 remains published](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.1) |
+| Release / 发行 | [v0.1.0-dev.2](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.2) |
 
 ## Installer receipts / 安装包收据
 
@@ -35,12 +34,12 @@ its download receipt. The Mac app was installed from the mounted CI image.
 | `OpenPyCharm-0.1.0-dev.2-macos-arm64.dmg` | 681,276,890 | `900281937ed35dc7858d58e4a90468242eb4addc8276331cc9aecf43c42064c5` |
 | `OpenPyCharm-0.1.0-dev.2-windows-x64-setup.exe` | 596,918,304 | `8fd215445988f91ffe8c88af6e3e837071d47fd08476f9b3d23e290d457e6e18` |
 
-The release checksum/provenance assets and public download links are not
-published yet. Download receipts are retained under
+Release assets and server metadata are on the [release page](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.2).
+Download receipts are retained under
 `.tools/ci/dev2-d5fc10d/{macos-arm64,windows-x64}-download.json` in the release
 workspace. Artifact IDs are `14084262350` (Mac) and `14084531145` (Windows).
 
-校验和/来源发行资产与公开下载链接尚未发布。发行工作区在
+校验和、来源发行资产及服务器元数据见[发行页](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.2)。发行工作区在
 `.tools/ci/dev2-d5fc10d/{macos-arm64,windows-x64}-download.json` 保留下载收据；
 artifact ID 分别为 Mac `14084262350`、Windows `14084531145`。
 
@@ -157,11 +156,11 @@ hash-checked against the release owner's manifest.
   production source, CI run, version, OS, Python and each raw capture.
 
 Both READMEs reference this versioned GIF. No earlier demo was selected as dev.2
-evidence. GitHub Release publication and downloadable release assets are the
-remaining distribution step; Windows interactive desktop acceptance is still open.
+evidence. Publication and downloadable assets are tracked on the release page;
+Windows interactive desktop acceptance is still open.
 
-两个 README 均引用这份版本固定的 GIF，没有将旧演示作为 dev.2 证据。GitHub Release
-发布及公开发行资产仍待发行负责人完成；Windows 交互式桌面验收继续保持未完成。
+两个 README 均引用这份版本固定的 GIF，没有将旧演示作为 dev.2 证据。公开发行资产
+及发布元数据见发行页；Windows 交互式桌面验收继续保持未完成。
 
 ## What dev.2 adds / dev.2 新增范围
 

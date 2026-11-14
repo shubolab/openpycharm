@@ -2,19 +2,15 @@
 
 ## Release status / 发行状态
 
-The currently published preview is
-[v0.1.0-dev.1](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.1).
-Download its macOS Apple silicon DMG or Windows x64 EXE together with
-`SHA256SUMS.txt`. **0.1.0-dev.2 is a candidate, not a published release**;
-its installers have been downloaded and authenticated. Installed macOS desktop
-and post-workflow checks passed, and its actual installed-version GIF was updated.
-See the [dev.2 verification](verification/2026-11-14-dev2-release.md).
+Preview installers: [v0.1.0-dev.2](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.2).
+Download the macOS Apple silicon DMG or Windows x64 EXE together with
+`SHA256SUMS.txt`. Installed macOS desktop and post-workflow checks passed, and
+the README includes the actual installed-version GIF.
+See [dev.2 verification](verification/2026-11-14-dev2-release.md).
 
-当前已发布预览版为
-[v0.1.0-dev.1](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.1)。
-请同时下载对应的 macOS Apple silicon DMG 或 Windows x64 EXE 与
-`SHA256SUMS.txt`。**0.1.0-dev.2 仍是候选版，尚未发布**；其安装包已下载并认证，
-macOS 安装版桌面和工作流后检通过，实际安装版 GIF 已更新，见
+预览版安装包：[v0.1.0-dev.2](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.2)。
+请同时下载 macOS Apple silicon DMG 或 Windows x64 EXE 与 `SHA256SUMS.txt`。
+macOS 安装版桌面和工作流后检通过，README 已包含实际安装版 GIF，见
 [dev.2 验收记录](verification/2026-11-14-dev2-release.md)。
 
 ## Verify a download / 核对下载
@@ -90,12 +86,12 @@ settings are retained.
 
 Select an installed Python interpreter or create a virtual environment in the
 native project settings. Java is included; the project's Python interpreter is
-separate. In the dev.2 candidate, Django/Flask/FastAPI generators use this native
+separate. In dev.2, Django/Flask/FastAPI generators use this native
 interpreter/venv flow. Installing their pinned example dependencies is optional
 and off by default; it uses the selected Python environment and network access.
 
 通过原生项目设置选择本机 Python 解释器或创建虚拟环境。应用内置 Java，但 Python
-项目解释器需要另行选择。dev.2 候选版的 Django/Flask/FastAPI 生成器沿用原生解释器/
+项目解释器需要另行选择。dev.2 预览版的 Django/Flask/FastAPI 生成器沿用原生解释器/
 venv 流程。示例依赖安装可选、默认关闭；开启后使用所选 Python 环境并需要网络。
 
 Framework examples and their Run/Debug configurations are a bounded starting

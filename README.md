@@ -10,7 +10,7 @@ verification.
 
 **Development is in progress. Full 1:1 parity is not yet verified.**
 
-The **0.1.0-dev.2 candidate** adds native HTTP requests and independent
+The **0.1.0-dev.2 preview** adds native HTTP requests and independent
 Django, Flask and FastAPI project generators and Run/Debug configurations:
 
 - Open `.http` files, run the current request or a batch, inspect responses in
@@ -27,26 +27,24 @@ behavior remain pending. Notebook and database tools are **not included in dev.2
 See the [acceptance matrix](docs/acceptance.md) and
 [dev.2 release notes](docs/releases/v0.1.0-dev.2.md).
 
-**dev.2 is not published yet.** The final macOS installation passed Python Run
+The final macOS installation passed Python Run
 and unittest, fresh FastAPI creation and Debug, HTTP requests, and restored README
 preview. Its product tree stayed unchanged and strict signature verification
 passed afterwards; the bounded session log has 0 errors and 20 retained warnings. Windows
 desktop workflows remain unverified. Track the exact source and installer hashes
 in the [dev.2 verification](docs/verification/2026-11-14-dev2-release.md).
 
-The currently published native preview is
-[v0.1.0-dev.1](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.1):
+Preview: [v0.1.0-dev.2](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.2).
 
 | System | Installer |
 | --- | --- |
-| macOS Apple silicon | [DMG](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.1/OpenPyCharm-0.1.0-dev.1-macos-arm64.dmg) |
-| Windows x64 | [EXE](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.1/OpenPyCharm-0.1.0-dev.1-windows-x64-setup.exe) |
+| macOS Apple silicon | [DMG](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.2/OpenPyCharm-0.1.0-dev.2-macos-arm64.dmg) |
+| Windows x64 | [EXE](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.2/OpenPyCharm-0.1.0-dev.2-windows-x64-setup.exe) |
 
-See [installation](docs/installation.md), [dev.1 checksums](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.1/SHA256SUMS.txt)
-and [dev.1 verification](docs/verification/2026-11-14-preview-release.md).
-For dev.1, macOS Run/unittest/Debug passed in the installed app. Windows
-installation and native startup passed; Python desktop workflows remain unverified.
+See [installation](docs/installation.md), [checksums](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.2/SHA256SUMS.txt)
+and [verification](docs/verification/2026-11-14-dev2-release.md).
 The Mac app is ad-hoc signed and not notarized; the Windows installer is unsigned.
+[Previous preview: dev.1](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.1).
 
 ![OpenPyCharm 0.1.0-dev.2 installed native workflows](docs/demo/v0.1.0-dev.2/openpycharm-native.gif)
 
