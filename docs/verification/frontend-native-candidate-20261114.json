@@ -443,5 +443,15 @@
   "nativeIdeStarted": false,
   "nativeLspManagerExercised": false,
   "productionPackaged": false,
-  "rootCandidateOrReleaseModified": false
+  "rootCandidateOrReleaseModified": false,
+  "independentReviewCorrection": {
+    "sourceCommit": "73067cb7341c19835f5ce31c3d3967444416a9b4",
+    "jarSha256": "139d96aa3e894cd7b8707b810a89e21bf15296c89f1d8cc3ceffd6fcf82562f8",
+    "findings": [
+      "Known PID start identity becoming unreadable was incorrectly treated as gone and could report cleanupComplete=true",
+      "Descendant enumeration exception could skip disposal of already verified root/children"
+    ],
+    "fixedBy": "7831730cc86ee64c2526dc2aa7ac03163e5892c0",
+    "replacementReceipt": "frontend-native-identity-20261114.json"
+  }
 }
