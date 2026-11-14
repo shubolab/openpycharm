@@ -181,28 +181,47 @@ class ProductRuntimeFixture(unittest.TestCase):
         pin["artifacts"].append(copy.deepcopy(windows))
         with self.assertRaisesRegex(ValueError, "overlaps"): builder.runtime_manifest(pin, "windows-x64")
 
+    def product(self):
+        root = self.root / ".tools/product"; (root / "lib").mkdir(parents=True)
+        jar = root / "lib/frontend.jar"; jar.write_bytes(b"owned compiled JAR"); jar.chmod(0o644)
+        runtime = self.runtime / "node/bin/node"
+        copied = builder.copy_runtime(self.authenticate(), root / "runtime/macos-arm64")
+        records = {"lib/frontend.jar": {**record(jar.read_bytes()), "mode": stat.S_IMODE(jar.stat().st_mode)}}
+        records.update({"runtime/macos-arm64/" + name: value for name, value in copied.items()})
+        saved = {"target": "macos-arm64", "fileRecords": records, "files": {n: r["sha256"] for n, r in records.items()},
+                 "jarSha256": records["lib/frontend.jar"]["sha256"],
+                 "archiveVerification": {"status": "pass", "sha256": records["lib/frontend.jar"]["sha256"]}}
+        return root, saved
+
+    def test_complete_multi_file_receipt_detects_jar_runtime_mode_and_extra_payload_drift(self):
+        root, saved = self.product(); builder.validate_product(root, saved)
+        jar = root / "lib/frontend.jar"; node = root / "runtime/macos-arm64/node/bin/node"
+        for path in (jar, node):
+            original = path.read_bytes(); path.write_bytes(b"changed payload")
+            with self.assertRaisesRegex(ValueError, "size/SHA-256"): builder.validate_product(root, saved)
+            path.write_bytes(original)
+        if os.name != "nt":
+            node.chmod(0o644)
+            with self.assertRaisesRegex(ValueError, "mode differs"): builder.validate_product(root, saved)
+            node.chmod(0o755)
+        extra = root / "runtime/extra"; extra.write_bytes(b"unreceipted")
+        with self.assertRaises(ValueError): builder.validate_product(root, saved)
+
+    def test_cached_output_receipt_cannot_reauthorize_different_node_or_bundle_authority(self):
+        root, saved = self.product(); relative = "runtime/macos-arm64/node/bin/node"; node = root / relative
+        node.write_bytes(b"tampered cached Node")
+        saved["fileRecords"][relative] = {**record(node.read_bytes()), "mode": 0o755}
+        saved["files"][relative] = builder.sha256(node)
+        with self.assertRaisesRegex(ValueError, "cannot authorize different pinned bytes"):
+            builder.validate_product(root, saved)
+        manifest_path = root / "runtime/macos-arm64/bundled-runtime.json"
+        manifest = json.loads(manifest_path.read_text()); manifest["runtimeRoot"] = "/outside"
+        manifest_path.write_text(json.dumps(manifest))
+        with self.assertRaisesRegex(ValueError, "bundle authority"):
+            builder.validate_product(root, saved)
+
 
 class ProductReceiptTests(unittest.TestCase):
-    def test_complete_multi_file_receipt_detects_jar_runtime_mode_and_extra_payload_drift(self):
-        with tempfile.TemporaryDirectory() as name:
-            root = Path(name).resolve(); (root / "lib").mkdir(); (root / "runtime").mkdir()
-            jar = root / "lib/frontend.jar"; jar.write_bytes(b"owned compiled JAR")
-            node = root / "runtime/node"; node.write_bytes(b"pinned node"); node.chmod(0o755)
-            records = {p.relative_to(root).as_posix(): {**record(p.read_bytes()), "mode": stat.S_IMODE(p.stat().st_mode)} for p in (jar, node)}
-            saved = {"fileRecords": records, "files": {n: r["sha256"] for n, r in records.items()}, "jarSha256": records["lib/frontend.jar"]["sha256"],
-                     "archiveVerification": {"status": "pass", "sha256": records["lib/frontend.jar"]["sha256"]}}
-            builder.validate_product(root, saved)
-            for path in (jar, node):
-                original = path.read_bytes(); path.write_bytes(b"changed payload")
-                with self.assertRaisesRegex(ValueError, "size/SHA-256"): builder.validate_product(root, saved)
-                path.write_bytes(original)
-            if os.name != "nt":
-                node.chmod(0o644)
-                with self.assertRaisesRegex(ValueError, "mode differs"): builder.validate_product(root, saved)
-                node.chmod(0o755)
-            extra = root / "runtime/extra"; extra.write_bytes(b"unreceipted")
-            with self.assertRaises(ValueError): builder.validate_product(root, saved)
-
     def test_m0_descriptor_or_missing_registration_cannot_be_relabeled_as_product(self):
         descriptor = b'<idea-plugin><id>dev.openpycharm.frontend</id><version>@VERSION@</version><depends>com.intellij.modules.platform</depends><depends>com.intellij.modules.lsp</depends><extensions defaultExtensionNs="com.intellij.platform.lsp"><integrationProvider implementation="dev.openpycharm.frontend.FrontendProductLspProvider"/></extensions></idea-plugin>'
         self.assertIn(b"0.1.0-dev.4", builder.render_descriptor(descriptor, builder.VERSION))

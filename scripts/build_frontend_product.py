@@ -147,6 +147,7 @@ def authenticate_runtime(receipt: Path, target: str) -> dict:
     receipt = no_links(receipt, "file")
     if not any(receipt.is_relative_to(no_links(boundary)) and receipt != boundary for boundary in cache_boundaries()):
         raise ValueError("Explicit frontend receipt must be in a repository-owned .tools cache")
+    no_links(PIN, "file")
     pin = load_pin(); lock_sha = sha256(PIN); expected = runtime_manifest(pin, target)
     saved = read_json(receipt)
     keys = {"schema", "owner", "target", "runtimeRoot", "lockSha256", "files", "entries", "artifacts",
@@ -238,6 +239,19 @@ def validate_product(plugin: Path, saved: dict) -> None:
             or saved.get("archiveVerification", {}).get("status") != "pass"
             or saved["archiveVerification"].get("sha256") != saved["jarSha256"]):
         raise ValueError("Frontend product receipt is incomplete or inconsistent")
+    target = saved.get("target"); pin = load_pin(); expected = runtime_manifest(pin, target)
+    prefix = "runtime/" + target + "/"
+    manifest = {"schema": 1, "target": target, "owner": BUNDLE_OWNER, "lockSha256": sha256(PIN), **expected}
+    if read_json(plugin / prefix / "bundled-runtime.json") != manifest:
+        raise ValueError("Cached frontend bundle authority differs from the current pin")
+    if set(records) != {"lib/frontend.jar", prefix + "bundled-runtime.json", *(prefix + name for name in expected["files"])}:
+        raise ValueError("Cached frontend product payload set differs from the current pin")
+    for name, record in expected["files"].items():
+        actual = records[prefix + name]
+        if any(actual.get(key) != record[key] for key in ("size", "sha256")):
+            raise ValueError("Cached frontend runtime receipt cannot authorize different pinned bytes")
+        if os.name != "nt" and actual.get("mode") != (0o755 if name == expected["entries"]["node"] else 0o644):
+            raise ValueError("Cached frontend runtime receipt cannot authorize different modes")
     inspect_tree(plugin, records, {name: record["mode"] for name, record in records.items()})
 
 
