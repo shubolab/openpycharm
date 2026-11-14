@@ -1,271 +1,134 @@
-name: Build native installers
+name: Transfer verified dev4 installers within GitHub
 
 on:
-  push:
-    branches: [main, 'codex_*']
-  pull_request:
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Installer version (for example 0.1.0-dev.3)'
-        required: true
-        default: '0.1.0-dev.3'
-        type: string
-      frontend:
-        description: 'Include the experimental bundled frontend (set version to 0.1.0-dev.4)'
-        required: false
-        default: false
-        type: boolean
 
 permissions:
-  contents: read
+  contents: write
+  actions: read
 
 concurrency:
-  group: native-installers-${{ github.ref }}
+  group: dev4-verified-draft-transfer
   cancel-in-progress: false
 
 jobs:
-  installers:
-    name: ${{ matrix.target }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - target: macos-arm64
-            runner: macos-15
-            sdk: .tools/platform/pycharm-2026.1.4-macos-arm64/PyCharm.app
-            product: build/product/OpenPyCharm.app
-          - target: windows-x64
-            runner: windows-2022
-            sdk: .tools/platform/pycharm-2026.1.4-windows-x64/pycharm
-            product: build/product/OpenPyCharm
-    runs-on: ${{ matrix.runner }}
-    timeout-minutes: 60
+  verified-draft-transfer:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
     env:
-      RELEASE_VERSION: ${{ inputs.version || '0.1.0-dev.3' }}
-      TARGET: ${{ matrix.target }}
-      SDK: ${{ matrix.sdk }}
-      PRODUCT: ${{ matrix.product }}
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: shubolab/openpycharm
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
-        with:
-          python-version: '3.12'
-      - name: Add Git's GNU patch on Windows
-        if: matrix.target == 'windows-x64'
-        shell: pwsh
-        run: |
-          $patchDirectory = 'C:\Program Files\Git\usr\bin'
-          if (-not (Test-Path -LiteralPath (Join-Path $patchDirectory 'patch.exe'))) {
-            throw 'The Windows runner must provide Git for Windows GNU patch'
-          }
-          Add-Content -LiteralPath $env:GITHUB_PATH -Value $patchDirectory
-      - name: Check Python, native architecture and disk reserve
+      - name: Transfer only verified installers into the fixed existing draft
         shell: bash
         run: |
-          python - <<'PY'
-          import os, platform, shutil, sys
-          if sys.version_info < (3, 10):
-              raise SystemExit('Python 3.10+ is required')
-          expected = {'macos-arm64': ('Darwin', {'arm64'}), 'windows-x64': ('Windows', {'amd64', 'x86_64'})}
-          system, machines = expected[os.environ['TARGET']]
-          if platform.system() != system or platform.machine().lower() not in machines:
-              raise SystemExit('Runner architecture does not match the installer target')
-          free = shutil.disk_usage('.').free
-          print(f'Free disk: {free / 1024**3:.1f} GiB')
-          if free < 28 * 1024**3:
-              raise SystemExit('This build requires 20 GiB reserve plus build space; use a larger or self-hosted runner')
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib, json, os, shutil, subprocess, zipfile
+
+          REPO = 'shubolab/openpycharm'
+          TAG = 'v0.1.0-dev.4'
+          RELEASE_ID = 445401980
+          ITEMS = [
+              {'target': 'macos-arm64', 'artifactId': 14119163167, 'archiveSize': 693250632,
+               'archiveSha256': '840ad6505d0736df48ca04911922c7bfb74c1936af300984010f0f6dfef5691a',
+               'name': 'OpenPyCharm-0.1.0-dev.4-macos-arm64.dmg', 'size': 745666387,
+               'sha256': '5b07b72026108082a56da34cad2be600f56b04d99850c8a7e25176cf49eaaa76'},
+              {'target': 'windows-x64', 'artifactId': 14119433953, 'archiveSize': 647582321,
+               'archiveSha256': '6c5e73822667a892bd9823456721aed55ad670d5b97ca2ef6a93973ce08f56cd',
+               'name': 'OpenPyCharm-0.1.0-dev.4-windows-x64-setup.exe', 'size': 646318653,
+               'sha256': 'fa1dcf5e36e1a1f5e41e3859c6ee158101f148b75f4e4126dcc90d54621e8aa2'},
+          ]
+          EXPECTED = {i['name']: {'size': i['size'], 'digest': 'sha256:' + i['sha256']} for i in ITEMS}
+          EXPECTED.update({
+              'SHA256SUMS.txt': {'size': 323, 'digest': 'sha256:0896743799f151681525ffbcb569c6bff9a0953be4062f308ec95841789a0ca5'},
+              'OpenPyCharm-0.1.0-dev.4-provenance.zip': {'size': 2171239, 'digest': 'sha256:db4325acc832110e25b23231e1f52ebfa97cecf40cfba239a5e48e127f113d48'},
+          })
+          work = Path('transfer-evidence'); work.mkdir()
+
+          def api(path):
+              return json.loads(subprocess.check_output(['gh', 'api', 'repos/' + REPO + '/' + path], text=True))
+
+          def release():
+              data = api('releases/' + str(RELEASE_ID))
+              if data['id'] != RELEASE_ID or data['tag_name'] != TAG or data['draft'] is not True:
+                  raise SystemExit('Fixed release is no longer the intended draft; no writes permitted')
+              return data
+
+          def check_asset(asset):
+              expected = EXPECTED[asset['name']]
+              if (asset['state'] != 'uploaded' or asset['size'] != expected['size']
+                      or asset.get('digest') != expected['digest']):
+                  raise SystemExit('Existing asset differs or is incomplete; refusing overwrite: ' + asset['name'])
+
+          def sha(path):
+              with path.open('rb') as stream:
+                  return hashlib.file_digest(stream, 'sha256').hexdigest()
+
+          initial = release()
+          if len(initial['assets']) != len({a['name'] for a in initial['assets']}):
+              raise SystemExit('Duplicate release asset names')
+          for asset in initial['assets']:
+              if asset['name'] not in EXPECTED:
+                  raise SystemExit('Unexpected existing release asset')
+              check_asset(asset)
+          receipts = []
+          for item in ITEMS:
+              current = release()
+              existing = [a for a in current['assets'] if a['name'] == item['name']]
+              if existing:
+                  check_asset(existing[0]); receipts.append({'name': item['name'], 'alreadyVerified': True}); continue
+              metadata = api('actions/artifacts/' + str(item['artifactId']))
+              if (metadata['id'] != item['artifactId'] or metadata['expired'] is not False
+                      or metadata['size_in_bytes'] != item['archiveSize']
+                      or metadata.get('digest') != 'sha256:' + item['archiveSha256']):
+                  raise SystemExit('Artifact API identity differs from the sealed record')
+              archive = work / (item['target'] + '.zip')
+              with archive.open('xb') as output:
+                  subprocess.run(['gh', 'api', 'repos/' + REPO + '/actions/artifacts/' + str(item['artifactId']) + '/zip'],
+                                 stdout=output, check=True, timeout=300)
+              if archive.stat().st_size != item['archiveSize'] or sha(archive) != item['archiveSha256']:
+                  raise SystemExit('Complete artifact ZIP size/SHA-256 mismatch')
+              member = 'build/installers/' + item['name']
+              installer = work / item['name']
+              with zipfile.ZipFile(archive) as package:
+                  names = package.namelist()
+                  if len(names) != len(set(names)) or names.count(member) != 1:
+                      raise SystemExit('Artifact entry identity or duplicate path mismatch')
+                  info = package.getinfo(member)
+                  if info.file_size != item['size'] or info.is_dir():
+                      raise SystemExit('Installer entry size/type mismatch')
+                  with package.open(info) as source, installer.open('xb') as output:
+                      shutil.copyfileobj(source, output, 1024 * 1024)
+              if installer.stat().st_size != item['size'] or sha(installer) != item['sha256']:
+                  raise SystemExit('Standalone installer size/SHA-256 mismatch')
+              # Recheck the fixed draft immediately before each write. No --clobber.
+              release()
+              subprocess.run(['gh', 'release', 'upload', TAG, str(installer), '--repo', REPO], check=True, timeout=300)
+              uploaded = [a for a in release()['assets'] if a['name'] == item['name']]
+              if len(uploaded) != 1: raise SystemExit('Uploaded asset was not uniquely observed')
+              check_asset(uploaded[0])
+              receipts.append({'name': item['name'], 'artifactId': item['artifactId'],
+                               'archiveSize': item['archiveSize'], 'archiveSha256': item['archiveSha256'],
+                               'size': item['size'], 'sha256': item['sha256'], 'assetId': uploaded[0]['id']})
+              archive.unlink(); installer.unlink()
+              print('Verified and uploaded ' + item['name'], flush=True)
+          final = release()
+          if {a['name'] for a in final['assets']} != set(EXPECTED): raise SystemExit('Final four-asset set differs')
+          for asset in final['assets']: check_asset(asset)
+          report = {'schema': 1, 'status': 'verified-draft-four-assets-uploaded', 'releaseId': RELEASE_ID,
+                    'tag': TAG, 'releaseStillDraft': True, 'publishedByThisJob': False,
+                    'sourceCiRun': 43608150941, 'workflowRun': os.environ['GITHUB_RUN_ID'],
+                    'transfer': receipts, 'assets': [{k: a[k] for k in ('id', 'name', 'size', 'digest', 'state')} for a in final['assets']],
+                    'installersExecuted': False, 'userCredentialForwarded': False}
+          (work / 'receipt.json').write_text(json.dumps(report, indent=2) + '\n')
+          print(json.dumps(report, indent=2))
           PY
-      - name: Install pinned build dependencies and check source replay tools
-        shell: bash
-        run: |
-          python -m pip install --disable-pip-version-check --requirement requirements-build.txt
-          patch --version
-      - name: Prepare a test-owned Python for real Notebook kernel controls
-        shell: bash
-        run: |
-          python - <<'PY'
-          import json, os, pathlib, subprocess, venv
-          root = pathlib.Path('build/notebook-kernel-venv').absolute()
-          if root.exists():
-              raise SystemExit('The CI Notebook environment must be fresh')
-          venv.EnvBuilder(with_pip=True).create(root)
-          runtime = root / ('Scripts/python.exe' if os.name == 'nt' else 'bin/python')
-          subprocess.run([str(runtime), '-m', 'pip', 'install', '--disable-pip-version-check',
-                          '--requirement', 'plugins/notebooks/kernel-requirements.txt'], check=True)
-          subprocess.run([str(runtime), '-m', 'pip', 'check'], check=True)
-          identity = subprocess.run([str(runtime), '-c',
-              "import importlib.metadata as m,json,sys; print(json.dumps({'python':sys.executable,'version':sys.version,'packages':{n:m.version(n) for n in ['jupyter_client','ipykernel','pyzmq','tornado','psutil']}}))"],
-              capture_output=True, text=True, timeout=15, check=True)
-          receipt = json.loads(identity.stdout)
-          expected = {'jupyter_client': '8.6.3', 'ipykernel': '6.29.5'}
-          if any(receipt['packages'][name] != version for name, version in expected.items()):
-              raise SystemExit('Notebook kernel dependency pins do not match')
-          pathlib.Path('build/notebook-kernel-runtime.json').write_text(
-              json.dumps(receipt, indent=2) + '\n', encoding='utf-8')
-          with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8', newline='\n') as output:
-              output.write(f'OPENPYCHARM_NOTEBOOK_PYTHON={runtime}\n')
-          print(identity.stdout)
-          PY
-      - name: Run repository controls
-        shell: bash
-        run: python -m unittest discover -s tests -v
-      - name: Check the Python example
-        shell: bash
-        working-directory: fixtures/hello-python
-        run: |
-          python main.py
-          python -m unittest discover -s tests -v
-      - name: Authenticate the open-source platform
-        shell: bash
-        run: python scripts/bootstrap.py --target "$TARGET"
-      - name: Verify the SDK's bundled Java compiler
-        shell: bash
-        run: |
-          python - <<'PY'
-          import os, pathlib, subprocess
-          sdk = pathlib.Path(os.environ['SDK'])
-          relative = 'Contents/jbr/Contents/Home/bin/javac' if os.environ['TARGET'] == 'macos-arm64' else 'jbr/bin/javac.exe'
-          compiler = sdk / relative
-          if not compiler.is_file():
-              raise SystemExit('The authenticated SDK must contain its Java compiler')
-          subprocess.run([str(compiler), '-version'], check=True)
-          PY
-      - name: Provision the pinned HTTP compiler into the owned cache
-        shell: bash
-        run: python scripts/provision_http_compiler.py
-      - name: Compile and check HTTP protocol, lexer and archive against the native SDK
-        shell: bash
-        run: python scripts/build_http_plugin.py --sdk "$SDK" --version "$RELEASE_VERSION" --output "build/http-client-${TARGET}" --compiler-cache .tools/kotlin --test
-      - name: Compile and check native framework commands, templates and request isolation
-        shell: bash
-        run: python scripts/build_framework_plugin.py --sdk "$SDK" --version "$RELEASE_VERSION" --test > "build/framework-${TARGET}.json"
-      - name: Provision pinned JDBC drivers and matching LGPL source
-        shell: bash
-        run: python scripts/provision_database_drivers.py
-      - name: Compile native Notebook and check model, merge and asynchronous persistence
-        shell: bash
-        run: python scripts/build_notebook_plugin.py --sdk "$SDK" --version "$RELEASE_VERSION" --tests > "build/notebooks-${TARGET}.json"
-      - name: Check actual native JVM Notebook sessions with the selected owned kernel
-        shell: bash
-        run: python scripts/notebook_session_probe.py --sdk "$SDK" --version "$RELEASE_VERSION" --build-report "build/notebooks-${TARGET}.json" --python "$OPENPYCHARM_NOTEBOOK_PYTHON" --output "build/notebook-session-${TARGET}.json"
-      - name: Compile native Database and check owned disposable SQLite integration
-        shell: bash
-        run: python scripts/build_database_plugin.py --sdk "$SDK" --version "$RELEASE_VERSION" --test > "build/database-${TARGET}.json"
-      - name: Build and authenticate the optional bundled Frontend candidate
-        if: inputs.frontend
-        shell: bash
-        run: |
-          python - <<'PYFRONTEND'
-          import json, os, pathlib, sys
-          sys.path.insert(0, 'scripts')
-          from provision_frontend_tools import provision
-          from build_frontend_product import build
-          if os.environ['RELEASE_VERSION'] != '0.1.0-dev.4':
-              raise SystemExit('The optional Frontend candidate currently requires version 0.1.0-dev.4')
-          tools = provision(os.environ['TARGET'])
-          plugin, report = build(pathlib.Path(os.environ['SDK']), pathlib.Path(tools['receipt']), os.environ['RELEASE_VERSION'])
-          pathlib.Path('build/frontend-' + os.environ['TARGET'] + '.json').write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
-          with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8', newline='\n') as output:
-              for name, value in {'OPENPYCHARM_FRONTEND_RUNTIME_RECEIPT': tools['receipt'],
-                                  'OPENPYCHARM_FRONTEND_PRODUCT_SDK': str(pathlib.Path(os.environ['SDK']).absolute()),
-                                  'OPENPYCHARM_FRONTEND_PRODUCT_BUNDLE': str(plugin)}.items():
-                  output.write(f'{name}={value}\n')
-          PYFRONTEND
-      - name: Check actual JVM frontend settings, workers and full bundled runtime without launching Node
-        if: inputs.frontend
-        shell: bash
-        run: python -m unittest discover -s tests/frontend -p test_frontend_product.py -v
-      - name: Assemble the standalone product
-        shell: bash
-        run: |
-          python - <<'PYASSEMBLE'
-          import os, subprocess, sys
-          command = [sys.executable, 'scripts/package.py', '--target', os.environ['TARGET'],
-                     '--sdk', os.environ['SDK'], '--version', os.environ['RELEASE_VERSION'], '--output', os.environ['PRODUCT']]
-          if os.environ.get('OPENPYCHARM_FRONTEND_RUNTIME_RECEIPT'):
-              command.extend(['--frontend-runtime-receipt', os.environ['OPENPYCHARM_FRONTEND_RUNTIME_RECEIPT']])
-          subprocess.run(command, check=True)
-          PYASSEMBLE
-      - name: Check native product startup with an isolated profile
-        shell: bash
-        run: python scripts/runtime_smoke.py --app "$PRODUCT" --profile "build/runtime-startup-${TARGET}"
-      - name: Check actual cold Markdown preview rendering on macOS
-        if: matrix.target == 'macos-arm64'
-        shell: bash
-        run: python scripts/markdown_probe.py --app "$PRODUCT" --sdk "$SDK" --profile "build/native-markdown-${TARGET}"
-      - name: Check native Notebook edit, undo, save, merge and reopen
-        shell: bash
-        run: python scripts/notebook_save_probe.py --sdk "$SDK" --app "$PRODUCT" --workspace ".tools/native-notebook-save-${TARGET}" --run --timeout 180
-      - name: Check actual bundled HTTP registration with an isolated native API probe
-        shell: bash
-        run: |
-          python - <<'PY'
-          import shutil
-          shutil.copytree('plugins/http-client/examples', 'build/http-api-fixture',
-                          ignore=shutil.ignore_patterns('.idea', '__pycache__', '*.pyc'))
-          PY
-          python scripts/native_probe.py --mode http --app "$PRODUCT" --sdk "$SDK" --project build/http-api-fixture --test-file build/http-api-fixture/demo.http --profile "build/native-http-${TARGET}" --report "build/native-http-${TARGET}/http-plugin.json" --delay 5 --timeout 90
-      - name: Check packaged framework generation with real isolated venvs and dependency opt-in
-        shell: bash
-        run: |
-          python scripts/framework_probe.py --app "$PRODUCT" --sdk "$SDK" --python "$(python -c 'import sys; print(sys.executable)')" --profile "build/native-framework-${TARGET}" --packaged --generators --timeout 180
-          python scripts/framework_server_smoke.py --sdk "$SDK" --python "build/native-framework-${TARGET}/selected-venv/$([ "$TARGET" = windows-x64 ] && echo Scripts/python.exe || echo bin/python)" --projects "build/native-framework-${TARGET}/generated projects 中文" --output "build/framework-servers-${TARGET}"
-      - name: Build and check the macOS DMG
-        if: matrix.target == 'macos-arm64'
-        shell: bash
-        run: python scripts/installers.py --target "$TARGET" --version "$RELEASE_VERSION" --product "$PRODUCT"
-      - name: Build and silently install/uninstall the Windows EXE
-        if: matrix.target == 'windows-x64'
-        shell: bash
-        run: python scripts/installers.py --target "$TARGET" --version "$RELEASE_VERSION" --product "$PRODUCT" --verify-install
-      - name: Retain installers and verification evidence
+      - name: Retain compact transfer receipt
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: OpenPyCharm-${{ matrix.target }}-${{ github.sha }}
-          path: |
-            build/installers/
-            build/http-client-*/build.json
-            build/http-client-*/protocol-tests.json
-            build/framework-*.json
-            build/notebooks-*.json
-            build/notebook-kernel-runtime.json
-            build/notebook-session-*.json
-            build/database-*.json
-            build/frontend-*.json
-            build/framework-servers-*/framework-servers.json
-            build/framework-servers-*/*.log
-            build/product/**/openpycharm-build.json
-            build/runtime-startup-*/startup.json
-            build/runtime-startup-*/idea.properties
-            build/runtime-startup-*/launcher-output.log
-            build/runtime-startup-*/log/
-            build/native-markdown-*/markdown-startup.json
-            build/native-markdown-*/markdown-native.json
-            build/native-markdown-*/idea.properties
-            build/native-markdown-*/markdown-launch.log
-            build/native-markdown-*/log/
-            .tools/native-notebook-save-*/prepared.json
-            .tools/native-notebook-save-*/native-report.json
-            .tools/native-notebook-save-*/result.json
-            .tools/native-notebook-save-*/external-timeout-threads.txt
-            .tools/native-notebook-save-*/notebook-save-native-timeout-threads.txt
-            .tools/native-notebook-save-*/launch.log
-            .tools/native-notebook-save-*/profile/idea.properties
-            .tools/native-notebook-save-*/profile/log/
-            build/native-http-*/http-plugin.json
-            build/native-http-*/idea.properties
-            build/native-http-*/native-probe-launch.log
-            build/native-http-*/log/
-            build/native-framework-*/framework-probe.json
-            build/native-framework-*/framework-native.json
-            build/native-framework-*/idea.properties
-            build/native-framework-*/framework-launch.log
-            build/native-framework-*/log/
+          name: dev4-draft-transfer-${{ github.run_id }}
+          path: transfer-evidence/receipt.json
           if-no-files-found: warn
-          # The native Notebook gate uses the explicitly listed owned .tools workspace.
-          include-hidden-files: true
           retention-days: 14
-      # Native Python Run/Test/Debug UI acceptance and release publication are
-      # separate gates. Creating these artifacts does not publish a release.
