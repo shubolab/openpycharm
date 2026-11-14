@@ -3,6 +3,7 @@ package dev.openpycharm.notebooks;
 import com.google.gson.*;
 import com.intellij.ide.impl.TrustedProjects;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.*;
@@ -208,7 +209,11 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
     return sdk != null && PythonSdkUtil.isPythonSdk(sdk) && !PythonSdkUtil.isRemote(sdk) ? sdk : null;
   }
   private String refreshInterpreter() {
-    Sdk sdk = selectedSdk(); String path = sdk == null ? null : sdk.getHomePath();
+    // A plain Swing button does not supply the model read access required by
+    // module/project SDK lookup. Keep that scope separate from UI and saves.
+    String path = ReadAction.computeBlocking(() -> {
+      Sdk sdk = selectedSdk(); return sdk == null ? null : sdk.getHomePath();
+    });
     interpreter.setText(path == null ? "Interpreter: configure a local Python interpreter in Project Settings" : "Interpreter: " + path);
     interpreter.setToolTipText("Uses this notebook's module Python SDK, then the project Python SDK. Kernel dependencies must be installed in this interpreter.");
     return path;
@@ -367,6 +372,17 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
     NotebookDocumentSave.request(document, message -> { if (!disposed) status.setText("Save failed: " + message); });
   }
 
+  static Document cellDocument(Project project, String name, FileType type, String text) {
+    // Add/delete/reload can rebuild cells from ordinary Swing callbacks, which
+    // have no implicit read lock. Only in-memory PSI/document setup belongs in
+    // this scope; editor UI creation and background persistence remain outside.
+    return ReadAction.computeBlocking(() -> {
+      PsiFile psi = PsiFileFactory.getInstance(project).createFileFromText(name, type, text);
+      Document source = PsiDocumentManager.getInstance(project).getDocument(psi);
+      return source == null ? EditorFactory.getInstance().createDocument(text) : source;
+    });
+  }
+
   private final class Cell {
     final String kind;
     final JPanel panel = new JPanel(new BorderLayout());
@@ -381,9 +397,7 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
     Cell(int index) {
       kind = model.kind(index);
       FileType type = kind.equals("code") ? PythonFileType.INSTANCE : FileTypeManager.getInstance().getFileTypeByExtension(kind.equals("markdown") ? "md" : "txt");
-      PsiFile psi = PsiFileFactory.getInstance(project).createFileFromText("notebook-cell-" + index + (kind.equals("code") ? ".py" : ".md"), type, model.source(index));
-      Document source = PsiDocumentManager.getInstance(project).getDocument(psi);
-      if (source == null) source = EditorFactory.getInstance().createDocument(model.source(index));
+      Document source = cellDocument(project, "notebook-cell-" + index + (kind.equals("code") ? ".py" : ".md"), type, model.source(index));
       editor = EditorFactory.getInstance().createEditor(source, project, type, false);
       if (document == null || !document.isWritable()) ((com.intellij.openapi.editor.ex.EditorEx)editor).setViewer(true);
       editor.getSettings().setLineNumbersShown(kind.equals("code"));

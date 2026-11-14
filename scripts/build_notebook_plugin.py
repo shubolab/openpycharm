@@ -195,7 +195,7 @@ def run_model_tests(sdk: Path, plugin: Path, host_sdk: Path | None = None) -> di
         temporary = Path(directory)
         classes = temporary / "classes"
         compile_java(layout, [ROOT / "tests/notebooks/NotebookModelTest.java", ROOT / "tests/notebooks/NotebookPersistenceTest.java", ROOT / "tests/notebooks/NotebookMergeTest.java",
-                             ROOT / "tests/notebooks/NotebookDocumentSaveTest.java", ROOT / "tests/notebooks/NotebookRichOutputTest.java",
+                             ROOT / "tests/notebooks/NotebookDocumentSaveTest.java", ROOT / "tests/notebooks/NotebookCellReadAccessTest.java", ROOT / "tests/notebooks/NotebookRichOutputTest.java",
                              ROOT / "tests/notebooks/NotebookPreviewSchedulerTest.java"], classes, temporary / "javac.args",
                      [plugin / "lib/notebooks.jar"], runtime)
         cp = os.pathsep.join(map(str, [classes, plugin / "lib/notebooks.jar", *classpath(layout)]))
@@ -214,6 +214,11 @@ def run_model_tests(sdk: Path, plugin: Path, host_sdk: Path | None = None) -> di
         if contract.get("status") != "pass":
             raise ValueError("Notebook save-thread contract checks did not pass")
         report["saveThreadContract"] = contract
+        cell_read = json.loads(run_java(runtime, ["-Djava.awt.headless=true", "-classpath", cp,
+                                                  "dev.openpycharm.notebooks.NotebookCellReadAccessTest"], temporary).stdout)
+        if cell_read.get("status") != "pass":
+            raise ValueError("Notebook ordinary Swing callback/read-access checks did not pass")
+        report["cellReadAccessContract"] = cell_read
         for name, key in (("NotebookRichOutputTest", "richOutput"), ("NotebookPreviewSchedulerTest", "previewScheduler")):
             result = json.loads(run_java(runtime, ["-Djava.awt.headless=true", "--add-modules", "jdk.httpserver", "-classpath", cp,
                                                   "dev.openpycharm.notebooks." + name], temporary).stdout)
