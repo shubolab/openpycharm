@@ -12,7 +12,11 @@ import java.util.concurrent.*;
 public final class JdbcSession implements AutoCloseable {
   public static final int MAX_ROWS=500, MAX_COLUMNS=100, MAX_CELL=4096, MAX_RESULT_CHARS=2*1024*1024;
   private Connection connection;
+  private final DatabaseMetadataCache metadataCache=new DatabaseMetadataCache();
+  public static final int MAX_COMPLETION_TABLES=128, MAX_COMPLETION_COLUMNS=64, MAX_COMPLETION_TOTAL_COLUMNS=4096;
+  private static final long METADATA_BUDGET_NANOS=TimeUnit.SECONDS.toNanos(3);
   private DatabaseProfile.Engine engine;
+  private boolean transactionChangedSchema;
   public static final class CancelTicket {
     private final Statement statement;
     private final AtomicBoolean cancelled=new AtomicBoolean();
@@ -26,7 +30,7 @@ public final class JdbcSession implements AutoCloseable {
   }
   static void background() { if(SwingUtilities.isEventDispatchThread()) throw new IllegalStateException("JDBC work must run off the event dispatch thread"); }
   public void connect(DatabaseProfile p,char[] password) throws Exception {
-    background(); p.validate(); close();
+    background(); metadataCache.disconnected();p.validate(); close();
     Driver driver=(Driver)Class.forName(switch(p.kind()) {
       case SQLITE -> "org.sqlite.JDBC"; case POSTGRESQL -> "org.postgresql.Driver"; case MYSQL -> "org.mariadb.jdbc.Driver";
     }).getConstructor().newInstance();
@@ -36,6 +40,7 @@ public final class JdbcSession implements AutoCloseable {
       if(connection==null) throw new SQLException("The driver rejected this connection profile");
       connection.setAutoCommit(true);
       engine=p.kind();
+      metadataCache.connected();
     } catch(Exception e) {try{close();}catch(Exception close){e.addSuppressed(close);}throw e;}
     finally { properties.remove("password"); if(password!=null) Arrays.fill(password,'\0'); }
   }
@@ -43,11 +48,13 @@ public final class JdbcSession implements AutoCloseable {
     background(); if(connection==null || connection.isClosed()) throw new SQLException("Connect to a database first"); return connection;
   }
   public boolean autoCommit() throws SQLException { return connected().getAutoCommit(); }
-  public void setAutoCommit(boolean value) throws SQLException { connected().setAutoCommit(value); }
-  public void commit() throws SQLException { connected().commit(); }
-  public void rollback() throws SQLException { connected().rollback(); }
+  public void setAutoCommit(boolean value) throws SQLException {background();try{connected().setAutoCommit(value);}finally{if(value)resolvedSchemaTransaction();}}
+  public void commit() throws SQLException {background();try{connected().commit();}finally{resolvedSchemaTransaction();}}
+  public void rollback() throws SQLException {background();try{connected().rollback();}finally{resolvedSchemaTransaction();}}
+  private void resolvedSchemaTransaction(){if(transactionChangedSchema)metadataCache.invalidate();transactionChangedSchema=false;}
   public Result execute(String sql) throws Exception {
     Connection c=connected(); sql=SqlText.forEngine(sql,engine);long start=System.nanoTime();
+    if(SqlText.changesSchema(sql)){metadataCache.invalidate();if(!c.getAutoCommit())transactionChangedSchema=true;}
     ScheduledFuture<?> alarm=null;
     try(Statement s=c.createStatement()) {
       CancelTicket ticket=new CancelTicket(s);active=ticket;s.setQueryTimeout(15); s.setMaxRows(MAX_ROWS+1);
@@ -98,6 +105,35 @@ public final class JdbcSession implements AutoCloseable {
     }
     return List.copyOf(out);
   }
+  public DatabaseMetadataCache.Snapshot completionSnapshot(){return metadataCache.current();}
+  /** Called only by explicit connect/refresh tasks on the serialized JDBC worker. */
+  public List<Table> refreshMetadata() throws SQLException {
+    Connection c=connected();DatabaseMetadataCache.Token token=metadataCache.beginRefresh();
+    long deadline=System.nanoTime()+METADATA_BUDGET_NANOS;int total=0;
+    List<Table> visible=tables();DatabaseMetaData m=c.getMetaData();
+    String quote=m.getIdentifierQuoteString(),escape=m.getSearchStringEscape();
+    boolean truncated=visible.size()>MAX_COMPLETION_TABLES;
+    List<DatabaseMetadataCache.Table> captured=new ArrayList<>();
+    for(Table t:visible) {
+      if(captured.size()>=MAX_COMPLETION_TABLES||System.nanoTime()>deadline||total>=MAX_COMPLETION_TOTAL_COLUMNS){truncated=true;break;}
+      if(!boundedName(t.name)||!boundedNullableName(t.schema)||!boundedNullableName(t.catalog)){truncated=true;continue;}
+      List<DatabaseMetadataCache.Column> columns=new ArrayList<>();
+      try(ResultSet rs=m.getColumns(t.catalog,pattern(t.schema,escape),pattern(t.name,escape),"%")) {
+        while(rs.next()) {
+          if(columns.size()>=MAX_COMPLETION_COLUMNS||total>=MAX_COMPLETION_TOTAL_COLUMNS||System.nanoTime()>deadline){truncated=true;break;}
+          String name=rs.getString("COLUMN_NAME"),type=rs.getString("TYPE_NAME");
+          if(!boundedName(name)){truncated=true;continue;}
+          if(type==null)type="";if(type.length()>128)type=type.substring(0,128);
+          columns.add(new DatabaseMetadataCache.Column(name,type));total++;
+        }
+      } catch(SQLException error) {truncated=true;}
+      captured.add(new DatabaseMetadataCache.Table(t.catalog,t.schema,t.name,columns));
+    }
+    metadataCache.publish(token,quote,captured,truncated);
+    return visible;
+  }
+  private static boolean boundedName(String name){return name!=null&&!name.isEmpty()&&name.length()<=1024&&name.indexOf('\0')<0;}
+  private static boolean boundedNullableName(String name){return name==null||name.isEmpty()||boundedName(name);}
   public Result columns(Table t) throws Exception {
     DatabaseMetaData m=connected().getMetaData();long start=System.nanoTime();
     String escape=m.getSearchStringEscape();
@@ -115,7 +151,7 @@ public final class JdbcSession implements AutoCloseable {
   }
   private static String quote(String q,String value) {return q+value.replace(q,q+q)+q;}
   @Override public void close() throws SQLException {
-    background();Connection c=connection;connection=null;
+    background();metadataCache.disconnected();transactionChangedSchema=false;Connection c=connection;connection=null;
     if(c!=null) try {if(!c.isClosed()&&!c.getAutoCommit())c.rollback();} finally {c.close();}
   }
   public void dispose() throws SQLException {try{close();}finally{deadline.shutdownNow();}}

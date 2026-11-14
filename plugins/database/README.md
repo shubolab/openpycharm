@@ -16,6 +16,26 @@ Use the transaction buttons for Begin/Commit/Rollback. Direct transaction and
 session-control commands are rejected to keep JDBC and the UI state consistent.
 Normal database-specific implicit-commit rules still apply to DDL.
 
+Native basic completion now proposes schemas, tables and columns in `.sql`
+files and the PSI-backed SQL console. It resolves simple schema/table names and
+aliases in SELECT/FROM/JOIN/WHERE/ON/UPDATE/INTO contexts, quotes inserted
+identifiers with the connected driver's quote style, and preserves Unicode
+names and embedded quotes. Ambiguous joined columns are qualified. Comments,
+strings, unsupported CTEs and nested query scopes do not produce suggestions.
+
+Connect or choose **Refresh tables** to refresh completion metadata explicitly.
+The background snapshot includes at most 128 tables, 64 columns per table and
+4096 total columns; completion returns at most 200 candidates from a document
+of at most 128 KiB. Metadata collection checks a three-second budget between
+driver calls/rows; an individual JDBC call still depends on driver/network
+timeouts. Five-minute-old snapshots stop producing suggestions. Disconnect,
+endpoint changes and common schema-changing DDL invalidate the snapshot;
+concurrent late refresh results cannot republish an older connection's schema.
+External schema changes require Refresh tables. Completion reads project
+memory only and never creates a service, connects, retrieves a password,
+opens files or schedules metadata work. Real native completion UI acceptance
+remains a separate, unverified gate for this source increment.
+
 Profiles persist in the isolated project's workspace file. Passwords are only
 stored via IntelliJ PasswordSafe, whose memory/keychain policy remains under
 the user's control. Keys include canonical project path, generated endpoint,
@@ -61,6 +81,6 @@ Inferred from public driver APIs: PostgreSQL/MySQL connectivity. The bundled
 drivers load and recognize generated URLs; no server was contacted by these
 checks. Unknown: native desktop interaction/registration, real server TLS/auth,
 network cancellation, Windows runtime, large/complex schemas and full 1:1
-compatibility. Schema completion, vendor semantic inspections, migrations,
+compatibility. Dialect semantic inspections, migrations,
 SSH tunnels, editable result cells and export are not implemented in this slice.
 No release, installer or README GIF is claimed for this source-only increment.
