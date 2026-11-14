@@ -29,6 +29,23 @@ remains available.
 README 的[安装版 GIF 与拍摄清单](../README.zh-CN.md)使用真实原生截屏。
 [上一预览版 dev.2](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.2)保留下载。
 
+## dev.4 candidate / dev.4 候选状态
+
+The dev.4 candidate adds bundled JavaScript/TypeScript support. The local macOS
+DMG candidate has been installed and checked, while the complete result and
+installer artifacts of [CI 43608150941](https://github.com/shubolab/openpycharm/actions/runs/43608150941)
+(source `63921a4`) remain pending final confirmation. Windows completed its
+installer checks; macOS is finishing its DMG gate. Keep using the published
+dev.3 downloads above until a dev.4 Release and its checksums are actually available.
+The [dev.4 demo and capture manifest](demo/v0.1.0-dev.4/capture.json)
+record the local installed DMG separately. See the [candidate notes](releases/v0.1.0-dev.4.md).
+
+dev.4 候选增加随包 JavaScript/TypeScript 支持。本机 macOS DMG 候选已安装实测；
+[CI 43608150941](https://github.com/shubolab/openpycharm/actions/runs/43608150941)
+（源码 `63921a4`）完整结果与最终安装器产物尚待确认；Windows 安装器检查已完成，
+macOS 正进行最后的 DMG 检查。在 dev.4 Release 和校验和实际存在
+前，使用上方已发布的 dev.3 下载。详见[候选说明](releases/v0.1.0-dev.4.md)。
+
 ## Verify a download / 核对下载
 
 On macOS, replace the filename with your downloaded DMG:
@@ -194,6 +211,55 @@ implemented.
 PostgreSQL、MySQL 配置与驱动（MySQL 使用 MariaDB Connector/J），保留相关声明及
 要求随附的对应源码。真实网络/TLS/认证及网络取消尚未验收。结果编辑、导出、SSH
 隧道及完整方言智能分析尚未实现。
+
+## JavaScript and TypeScript in dev.4 / dev.4 前端语言服务
+
+In an assembled dev.4 candidate that includes the frontend plugin, trust the
+local project and open a `.js`, `.jsx`, `.mjs`, `.cjs`, `.ts`, `.tsx`, `.mts` or
+`.cts` file within its content roots. The native LSP service starts by default.
+Use **Settings → Languages & Frameworks → JavaScript and TypeScript** to disable
+or re-enable it for that project. Keep normal project trust in place.
+
+在包含前端插件的 dev.4 候选中，先信任本地项目，再打开项目内容根下的 `.js`、`.jsx`、
+`.mjs`、`.cjs`、`.ts`、`.tsx`、`.mts` 或 `.cts` 文件，原生 LSP 服务默认启动。
+可在 **Settings → Languages & Frameworks → JavaScript and TypeScript** 中
+按项目关闭或重新启用；保留普通项目的信任流程。
+
+The distribution includes Node.js 24.22.3, TypeScript 6.0.3 and
+typescript-language-server 6.1.0. It authenticates the complete pinned runtime
+before starting, with no runtime download or dependency installation on editor
+opening. Completion/diagnostics/definition support does not imply complete
+JavaScript/TypeScript PSI/refactoring, HTML/CSS or frontend framework support.
+
+发行包携带 Node.js 24.22.3、TypeScript 6.0.3 和 typescript-language-server 6.1.0，
+启动前核对完整固定运行时；打开编辑器不下载运行时或安装依赖。已有补全、诊断和
+定义跳转不代表完整 JavaScript/TypeScript PSI/重构、HTML/CSS 或前端框架支持。
+
+## Build the five-plugin dev.4 candidate / 构建五插件 dev.4 候选
+
+The ordinary build CLI still defaults to dev.3. Explicitly provision the frontend
+build inputs, then supply its printed `receipt` path and the dev.4 version. The
+provision step is a build-time network action; regular editor opening uses
+bundled tools. Install the pinned build dependencies and provision the HTTP
+compiler/JDBC drivers as shown in the root README first.
+
+普通构建命令仍默认 dev.3。显式准备前端构建工具，再传入输出中的 `receipt` 路径和
+dev.4 版本。准备工具需要构建时网络访问，普通编辑器打开只用随包工具。先按根 README
+安装固定构建依赖、准备 HTTP 编译器与 JDBC 驱动。
+
+```sh
+python3 scripts/bootstrap.py --target macos-arm64
+python3 scripts/provision_frontend_tools.py --target macos-arm64
+python3 scripts/package.py --target macos-arm64 --version 0.1.0-dev.4 --output build/dev4/OpenPyCharm.app --frontend-runtime-receipt /absolute/path/from-provision/frontend-tools.json
+python3 scripts/installers.py --target macos-arm64 --version 0.1.0-dev.4 --product build/dev4/OpenPyCharm.app
+```
+
+Choose a new output directory for each assembly. On Windows use `python`,
+`--target windows-x64` and `build/dev4/OpenPyCharm`. A build, installer or launch
+alone does not establish full desktop or 1:1 acceptance.
+
+每次组装选择新的输出目录。Windows 使用 `python`、`--target windows-x64` 和
+`build/dev4/OpenPyCharm`。仅构建、生成安装器或启动成功不等于完整桌面或 1:1 验收。
 
 ## Isolated development profile / 隔离开发配置
 

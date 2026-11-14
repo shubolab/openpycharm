@@ -8,30 +8,38 @@
 
 **当前正在开发，完整 1:1 对齐尚未完成。**
 
-**0.1.0-dev.3 预览版**增加原生 Notebook 与数据库工具：
+**0.1.0-dev.4 候选版**在 Python、Notebook、数据库、HTTP 与框架工具基础上，
+新增原生 JavaScript 和 TypeScript 语言服务：
 
-- 在原生 Python 单元中编辑 nbformat 4 格式的 `.ipynb`。使用所选本机 Python
-  内核运行单元、Shift+Enter 或 Run All；可中断执行，查看 PNG/JPEG 图表、静态
-  HTML/DataFrame 表格、Markdown 和错误堆栈，再保存并重新打开。打开文件不会执行代码。
-- 添加连接配置，手动连接数据库，浏览元数据，在原生编辑器/控制台执行 SQL，并在
-  只读结果表格中查看数据。提供事务、取消和基于缓存的 schema/表/列补全。
-  补全前点击 **Refresh tables**；快照五分钟后过期，普通 SELECT 不会刷新它。
-- 保留 dev.2 的原生 `.http`/Services 请求工具，以及独立实现的 Django、Flask、
-  FastAPI 生成器与运行/调试配置。框架依赖安装仍可选，默认关闭。
+- 打开已信任的本地项目，使用原生补全、诊断和定义跳转。语言服务默认开启，
+  可在 **Settings → Languages & Frameworks → JavaScript and TypeScript**
+  中按项目关闭。
+- 随包携带 Node.js **24.22.3**、TypeScript **6.0.3** 和
+  typescript-language-server **6.1.0**，启动前核对完整固定文件。
+  打开编辑器不下载运行时、不安装依赖，分析状态写入独立的 OpenPyCharm 缓存目录。
+- 保留原生 `.ipynb` 单元和本地内核、SQL 连接/控制台与缓存元数据补全、
+  `.http`/Services 请求工具，以及 Django/Flask/FastAPI 生成器与运行/调试配置。
 
-Notebook 执行要求信任项目，并在所选本机 Python 中自行安装依赖；尚不支持远程内核、
-widgets 和 Notebook 调试。数据库结果编辑/导出、完整 SQL 方言语义尚未实现；随包
-携带 PostgreSQL 与 MySQL/MariaDB 驱动，但真实网络连接尚未验收。框架模板、ORM 智能
-分析及更广的导航支持也仍不完整。详见[安装说明](docs/installation.md)与
-[验收矩阵](docs/acceptance.md)。
+本机实际安装的 dev.4 DMG 候选已完成 Python 编辑、运行、unittest（9 个方法/
+20 项）、断点/单步/求值/继续、原生补全和跨文件 Rename/Undo。JavaScript/TypeScript
+实测覆盖成员补全、类型诊断、定义跳转，以及含中文、emoji 的未保存文本补全。
+正常关闭项目后，三个自有 Node 进程均已退出；安装版产品树未变，严格签名核对通过。
 
-最终 macOS 安装版已通过 Python 运行、unittest、两处断点调试，本地 Notebook
-执行、富媒体输出及保存重开，以及 SQLite 查询和真实按键表/列补全。安装包来源为
-`9a243e6`，对应[双平台 CI 43565932969](https://github.com/shubolab/openpycharm/actions/runs/43565932969)。
-Windows 已通过原生 API Notebook 保存/撤销/重开、本地内核及安装/启动/卸载检查；
-实际键盘、鼠标交互工作流仍待验收。
+[CI 43608150941](https://github.com/shubolab/openpycharm/actions/runs/43608150941)
+正在构建源码 `63921a4`。两平台前端 JVM、完整运行时和产品启动检查已通过；
+Windows 安装器检查已完成，macOS 正进行最后的 DMG 检查。**完整 CI 结果、最终
+产物收据与 dev.4 公开发行尚未确认**。
+详见[dev.4 候选说明](docs/releases/v0.1.0-dev.4.md)。
 
-预览版：[v0.1.0-dev.3](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.3)。
+HTML/CSS、JavaScript/TypeScript 专用语法 PSI 与重构、前端框架智能分析和完整
+PyCharm 对齐仍未完成。框架模板/ORM、网络数据库、Windows 实际键鼠桌面及进程
+所有者意外崩溃后的清理仍待实现或验收。Notebook 远程内核、widgets、调试和数据库
+结果编辑/导出尚未实现。详见[安装说明](docs/installation.md)与[验收矩阵](docs/acceptance.md)。
+
+## 已发布预览版
+
+当前已发布安装包仍为 [v0.1.0-dev.3](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.3)，
+源码 `9a243e6`，对应[CI 43565932969](https://github.com/shubolab/openpycharm/actions/runs/43565932969)。
 
 | 系统 | 安装包 |
 | --- | --- |
@@ -39,34 +47,52 @@ Windows 已通过原生 API Notebook 保存/撤销/重开、本地内核及安�
 | Windows x64 | [EXE 下载](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/OpenPyCharm-0.1.0-dev.3-windows-x64-setup.exe) |
 
 见[安装说明](docs/installation.md)、[校验和](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/SHA256SUMS.txt)
-与[验收矩阵](docs/acceptance.md)。Mac 应用使用临时签名且未公证，Windows 安装器未签名。
-[上一预览版 dev.2](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.2)保留下载。
+与[dev.3 发行验收](docs/verification/2026-11-14-dev3-release.md)。Mac 应用使用临时
+签名且未公证，Windows 安装器未签名。[上一预览版 dev.2](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.2)保留下载。
 
-![OpenPyCharm 0.1.0-dev.3 实际安装版原生功能演示](docs/demo/v0.1.0-dev.3/openpycharm-native.gif)
+![OpenPyCharm 0.1.0-dev.4 实际安装版原生功能演示](docs/demo/v0.1.0-dev.4/openpycharm-native.gif)
 
-实际安装版 **0.1.0-dev.3**，系统 **macOS 27.2 arm64**，本机 Python **3.14**。
-展示运行、unittest、断点调试、Notebook 图表/DataFrame 与 SQLite 查询；动画由真实
-原生应用截屏组装。[拍摄清单](docs/demo/v0.1.0-dev.3/capture.json)。每个可发版版本
-都更新实际安装版截屏和对应清单。
+实际安装版 **0.1.0-dev.4**，系统 **macOS 27.2 arm64**，Python **3.14.0**。
+六帧展示 Python 运行、unittest、断点/求值、跨文件 Rename 后测试、TypeScript 补全/
+诊断和 JavaScript 未保存补全。动画来自**本机 DMG 候选**的真实原生截屏，源码
+`88387c3`，DMG SHA-256：`8b849bc6db67e929c8dff25ed32f79b0bb1d420c89487b6d85c0e34c8545dd64`。
+拍摄来源与 CI 安装器验收分别记录。[拍摄清单](docs/demo/v0.1.0-dev.4/capture.json)。
+每个可发版版本都更新实际安装版演示和清单。
+[dev.3 历史演示](docs/demo/v0.1.0-dev.3/openpycharm-native.gif)保留。
 
-[本版发行验收](docs/verification/2026-11-14-dev3-release.md)。
+## 构建 dev.4 候选
 
-## 本机构建
-
-打包需要 Python 3.10 或更新版本，并在构建空间之外保留至少 20 GiB 可用磁盘。
-应用内置 Java 运行时；Python 项目使用你选择的本机 Python 解释器。
+需要 Python 3.10 或更新版本，并在构建空间之外保留至少 20 GiB 可用磁盘。应用内置
+Java；Python 项目使用你选择的本机解释器。普通构建命令仍默认 dev.3，组装五插件
+候选版须显式指定版本和前端运行时收据：
 
 ```sh
 python3 -m pip install -r requirements-build.txt
 python3 -m unittest discover -s tests -v
+python3 scripts/bootstrap.py --target macos-arm64
 python3 scripts/provision_http_compiler.py
 python3 scripts/provision_database_drivers.py
-python3 scripts/build.py --target macos-arm64
-python3 scripts/launch.py --profile .state/development fixtures/hello-python
-python3 scripts/installers.py --target macos-arm64 --version 0.1.0-dev.3 --product build/product/OpenPyCharm.app
+python3 scripts/provision_frontend_tools.py --target macos-arm64
+python3 scripts/package.py --target macos-arm64 --version 0.1.0-dev.4 --output build/dev4/OpenPyCharm.app --frontend-runtime-receipt /absolute/path/from-provision/frontend-tools.json
+python3 scripts/launch.py --app build/dev4/OpenPyCharm.app --profile .state/development fixtures/hello-python
+python3 scripts/installers.py --target macos-arm64 --version 0.1.0-dev.4 --product build/dev4/OpenPyCharm.app
 ```
 
-在 Python 示例自己的目录运行其测试：
+将收据占位路径替换为 provision 输出的 `receipt`。准备工具是显式的构建时网络动作，
+普通编辑器打开只使用随包工具。每次组装选择新的输出路径。
+Windows 使用 `python`、`--target windows-x64` 和 `build/dev4/OpenPyCharm`；安装器
+构建器按需取得并验证 Inno Setup 编译器。
+
+基础包来自[官方开源发行页](https://github.com/JetBrains/intellij-community/releases/tag/pycharm/2026.1.4)，
+下载时核对大小和 SHA-256，复用缓存时核对完整文件树。已安装的商业 IDE 及其数据
+仅用于只读比对。本地 IDE 使用不包含 IDE 账号、计费、订阅、试用和升级流程；保留
+Git、GitHub、私有仓库及用户选择的服务认证。源码修改采用 Apache-2.0，保留上游及
+第三方声明。OpenPyCharm 由我们独立维护。
+
+## 示例与验收
+
+[hello-python](fixtures/hello-python) 提供 Python 编辑、导航、重构、运行、unittest
+和断点调试示例。在示例自己的目录另行运行命令行检查：
 
 ```sh
 cd fixtures/hello-python
@@ -74,19 +100,5 @@ python3 main.py
 python3 -m unittest discover -s tests -v
 ```
 
-Windows 使用 `python` 和 `--target windows-x64`，产物目录为
-`build/product/OpenPyCharm`。安装器构建器按需取得并验证 Inno Setup 编译器。
-详见[安装说明](docs/installation.md)。
-
-基础包来自[官方开源发行页](https://github.com/JetBrains/intellij-community/releases/tag/pycharm/2026.1.4)，
-下载时核对大小和 SHA-256，复用缓存时核对完整文件树。已安装的商业 IDE 及其用户
-数据只用于只读比对，不作为分发输入。本地 IDE 使用不包含 IDE 账号、计费、订阅、
-试用和升级推广流程；Git、GitHub、私有仓库及用户选择的开发服务认证保留。
-
-## 示例与验收
-
-[hello-python](fixtures/hello-python) 提供补全、跨文件导航、重构、运行、unittest
-和断点调试示例。命令行测试通过与桌面验收分开记录。参考版本和范围见
+命令行、原生 API 与安装版桌面验收分别记录。参考范围见
 [本机观察记录](docs/reference/installed-pycharm.md)与[架构说明](docs/architecture.md)。
-
-源码修改采用 Apache-2.0，保留上游及第三方声明。OpenPyCharm 由我们独立维护。

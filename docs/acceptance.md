@@ -5,6 +5,29 @@
 **完整 1:1 对齐尚未完成。** 上游已有功能、资源存在、构建通过或 headless 控件测试，
 均不能替代本产品的实际桌面证据。
 
+## dev.4 候选的新增实测
+
+当前开发候选为 **0.1.0-dev.4**。本机 DMG 安装后的实际键鼠会话通过下列有界工作流，
+本机 DMG 来源 `88387c3`、摘要与实际六帧演示已写入
+[dev.4 拍摄清单](demo/v0.1.0-dev.4/capture.json)；与公开安装器的关联仍待封存。源码 `63921a4` 的
+[CI 43608150941](https://github.com/shubolab/openpycharm/actions/runs/43608150941)
+已通过双平台前端 JVM/完整运行时和产品启动门；Windows 安装器检查通过，macOS
+正在完成 DMG 门。完整结果、最终产物收据与公开发行待确认。
+当前已发布下载仍为 dev.3。
+
+| 范围 | dev.4 本机安装版已观察 | 仍未验收或未实现 |
+| --- | --- | --- |
+| Python 编辑与 PSI | 原生补全、跨文件 Rename、引用一起更新、Undo 后再运行测试通过 | 更多诊断/快速修复、重构类型、冲突、Redo、大项目仍待逐项验收 |
+| Python Run/Test | 实际运行和原生 unittest 9 个方法/20 项通过，Rename/Undo 后再次通过 | 失败重跑、pytest、完整参数/环境/停止场景待验收 |
+| Python Debug | 断点、F8、表达式显示 `2.0400`、F9 继续通过 | Watches、测试调试等其余路径待验收 |
+| JavaScript/TypeScript | 产品默认对已信任的本地项目开启；成员补全、类型诊断、Cmd+B 定义跳转；含中文/emoji 的未保存 JS 文本补全通过；正常关闭项目后三个自有 Node 进程退出 | 专用完整语法 PSI/重构、HTML/CSS、前端框架智能分析和调试仍未完成；异常所有者崩溃后的孤儿清理与 Windows 物理桌面未验收 |
+| 运行时与分发 | 五插件装配，固定 Node 24.22.3/TS 6.0.3/TLS 6.1.0，191 运行时文件与声明认证；本机安装版树未变、严格签名通过 | 最终双平台产物收据与公开 Release 待封存，dev.4 GIF/清单已记录本机安装候选；开发 M0 和 guardian 原型不随产品分发 |
+
+本轮未将 dev.3 的 Notebook/SQLite 桌面结果改记为 dev.4 新实测。具体新增范围与发行
+门槛见[dev.4 候选说明](releases/v0.1.0-dev.4.md)。
+
+## 已发布 dev.3 验收记录
+
 本版为 **0.1.0-dev.3**，安装器源码 `9a243e605c43d86788b0e1b4607ec3bdf11b13d1`，
 [双平台 CI 43565932969](https://github.com/shubolab/openpycharm/actions/runs/43565932969)通过。
 当前安装包和 SHA-256 见[安装说明](installation.md)，真实安装版演示见
