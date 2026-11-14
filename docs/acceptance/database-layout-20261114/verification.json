@@ -1,0 +1,138 @@
+{
+  "identity": {
+    "pluginId": "dev.openpycharm.database",
+    "version": "0.1.0-dev.3",
+    "sources": {
+      "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "plugins/database/NOTICE": "24da0a8ee481e7d1c0b58cbc5664fa7c7065f9d3d144e2c49ec5155dc00605bc",
+      "plugins/database/README.md": "9fee3149594d53458744f7fea46c755da1feabde2f1ca48bd3a4b4e5ec17818a",
+      "plugins/database/README.zh-CN.md": "be83d4d9435b73190a9cc4aace481912b9407420e569d51fc659a6b6efb0cf8f",
+      "plugins/database/build-support/VerifyDatabaseArchive.java": "61af334fd4ddbe8ad7804d1b3bf716fe691b7631da0576ae5ad8b1fe1977c442",
+      "plugins/database/drivers.lock.json": "82eb4999860754b63d9c1ce1c9e01bf940c15c59d56280d3d31ced0eece36f2c",
+      "plugins/database/legal/GPL-2.0.txt": "edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6",
+      "plugins/database/legal/LGPL-2.1.txt": "20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95",
+      "plugins/database/legal/postgresql-42.7.13.jar-META-INF_LICENSE": "08bb580d3cb8f9a4a05f008466a294fdb019e0e177d03a035d46f1eb94077de5",
+      "plugins/database/legal/postgresql-42.7.13.jar-META-INF_licenses_com.ongres.scram_scram-client-3.2_META-INF_LICENSE": "7c89807167a03a92d2fbfc936aff4f87d8ce31434637381c89e38282c8c99198",
+      "plugins/database/legal/postgresql-42.7.13.jar-META-INF_licenses_com.ongres.scram_scram-common-3.2_META-INF_LICENSE": "7c89807167a03a92d2fbfc936aff4f87d8ce31434637381c89e38282c8c99198",
+      "plugins/database/legal/postgresql-42.7.13.jar-META-INF_licenses_com.ongres.stringprep_saslprep-2.2_META-INF_LICENSE": "5c49fc155ebccd206277e0d1f424aadbf365f0a9ccfb54d400d728a375d523f9",
+      "plugins/database/legal/postgresql-42.7.13.jar-META-INF_licenses_com.ongres.stringprep_stringprep-2.2_META-INF_LICENSE": "5c49fc155ebccd206277e0d1f424aadbf365f0a9ccfb54d400d728a375d523f9",
+      "plugins/database/legal/sqlite-jdbc-3.54.1.0.jar-META-INF_maven_org.xerial_sqlite-jdbc_LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "plugins/database/legal/sqlite-jdbc-3.54.1.0.jar-META-INF_maven_org.xerial_sqlite-jdbc_LICENSE.zentus": "5001f15a0a6a49a86e3d39f403b71acd9f33275f591b4ab35441e0aecb65e42d",
+      "plugins/database/resources/META-INF/plugin.xml": "6a51d3280cb792cf81b5b87cda34d7eb34921ec01909e05db64751ead18f529b",
+      "plugins/database/src/dev/openpycharm/database/CredentialScope.java": "c83b71ea09f69c61d493f66fe07b1486b0de9cb1f00742a677526b1f326a5aea",
+      "plugins/database/src/dev/openpycharm/database/DatabaseContentLayout.java": "20ad0c13310beee81bc8a05bdbdcbe878fdb3ec75a1aec9f4a8ab5272e55443d",
+      "plugins/database/src/dev/openpycharm/database/DatabaseProfile.java": "3e578ec23b507c758a9dae5f84a13899876182578accf1c5f601761d170e4a4a",
+      "plugins/database/src/dev/openpycharm/database/DatabaseService.java": "d4c69e71ecc78364147c42de29327b07dd646e14d7e5b382601361ae0ed681c6",
+      "plugins/database/src/dev/openpycharm/database/DatabaseToolWindow.java": "84dc1161fea009428f70703829bc056e2a78761839a57619969c1c9f0588b0c3",
+      "plugins/database/src/dev/openpycharm/database/DatabaseToolbarLayout.java": "54ce75f6e07a87b36937cbccf59047a114867f540ae20b771fecdb9abe92885e",
+      "plugins/database/src/dev/openpycharm/database/JdbcSession.java": "44a0eebd89a1c98de1f832c93f7398744468be7739b7ac2868f6a663a353767a",
+      "plugins/database/src/dev/openpycharm/database/RunSqlAction.java": "04cddd35d804f21d03f8c4fac6be49047e2e014a0ebae9edd825f86bdc83a617",
+      "plugins/database/src/dev/openpycharm/database/SqlLanguage.java": "474882faefb74af7db23a562bd20bbe8f39b9422ed8aee1883a50e6314ef3204",
+      "plugins/database/src/dev/openpycharm/database/SqlParserDefinition.java": "7940e21b977f29fc67c84c25d29f6cbc072884292d7c03b41782228870d79c9d",
+      "plugins/database/src/dev/openpycharm/database/SqlText.java": "789b228ec1d3ff9ecd73046ef0e69f0ecc3ed336d2256a0696814d672b1d43ab",
+      "scripts/bootstrap.py": "a9f405e1fd83ed5a63e0a676efcecbb11a0a1e1975f876e33622756b5b502fff",
+      "scripts/build_database_plugin.py": "b209579f598eb7f7ac96d783d53cfb6a2eef8901adb2db54a13efdfb6c943d45",
+      "scripts/build_framework_plugin.py": "fc91e08c6f717e643093ba25ff5c272f288d2a10c35de95c157551a52dbb8970",
+      "scripts/platform_layout.py": "500447561715fc996c842c614aa817a2251e7dfbc22305054f7ab40fc31c7037"
+    },
+    "sdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+    "executionSdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+    "drivers": [
+      {
+        "group": "org.xerial",
+        "artifact": "sqlite-jdbc",
+        "version": "3.54.1.0",
+        "name": "sqlite-jdbc-3.54.1.0.jar",
+        "url": "https://repo.maven.apache.org/maven2/org/xerial/sqlite-jdbc/3.54.1.0/sqlite-jdbc-3.54.1.0.jar",
+        "size": 12132578,
+        "sha256": "f8dce420a6016278497f4f0560f65602b9db858de141b541cf91a4644ebe4639",
+        "license": "Apache-2.0",
+        "project": "https://github.com/xerial/sqlite-jdbc",
+        "role": "driver"
+      },
+      {
+        "group": "org.postgresql",
+        "artifact": "postgresql",
+        "version": "42.7.13",
+        "name": "postgresql-42.7.13.jar",
+        "url": "https://repo.maven.apache.org/maven2/org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar",
+        "size": 1220948,
+        "sha256": "6e0e4cc2d8cae902084f8a2b18728b073a6fd9d1f87c9d8bff8f298c18185b93",
+        "license": "BSD-2-Clause",
+        "project": "https://github.com/pgjdbc/pgjdbc",
+        "role": "driver"
+      },
+      {
+        "group": "org.mariadb.jdbc",
+        "artifact": "mariadb-java-client",
+        "version": "3.5.11",
+        "name": "mariadb-java-client-3.5.11.jar",
+        "url": "https://repo.maven.apache.org/maven2/org/mariadb/jdbc/mariadb-java-client/3.5.11/mariadb-java-client-3.5.11.jar",
+        "size": 793387,
+        "sha256": "42604178b9e57ec08ee0035079961516f086e455d0141f0b22c6eff29fb2fff4",
+        "license": "LGPL-2.1-or-later",
+        "project": "https://github.com/mariadb-corporation/mariadb-connector-j",
+        "role": "driver"
+      },
+      {
+        "group": "org.mariadb.jdbc",
+        "artifact": "mariadb-java-client",
+        "version": "3.5.11",
+        "name": "mariadb-java-client-3.5.11-sources.jar",
+        "url": "https://repo.maven.apache.org/maven2/org/mariadb/jdbc/mariadb-java-client/3.5.11/mariadb-java-client-3.5.11-sources.jar",
+        "size": 550188,
+        "sha256": "b0ded5b6f00b86d35f3682aa5fa4f39fd6d159c568aa1841705df981e6c4e04a",
+        "license": "LGPL-2.1-or-later",
+        "project": "https://github.com/mariadb-corporation/mariadb-connector-j",
+        "role": "source"
+      }
+    ]
+  },
+  "jarSha256": "d4ffda3d3e66149f59066fff3b16ce14f7fb2f6a7443cb1b67003ddb648af29d",
+  "archiveVerification": {
+    "status": "pass",
+    "reader": "HashMapZipFile",
+    "verifiedEntries": 42,
+    "closed": true,
+    "sha256": "d4ffda3d3e66149f59066fff3b16ce14f7fb2f6a7443cb1b67003ddb648af29d"
+  },
+  "integrationTests": {
+    "status": "pass",
+    "checks": 80,
+    "sqliteRealConnections": true,
+    "queryCancelAndDeadline": true,
+    "transactionsAndMetadata": true,
+    "connectionsClosed": true,
+    "networkServersTested": false,
+    "nativeDesktopTested": false,
+    "layoutTests": {
+      "status": "pass",
+      "checks": 1429,
+      "offscreenOnly": true,
+      "widths": [
+        290,
+        300,
+        320,
+        450,
+        700
+      ],
+      "fontMetricScales": [
+        1,
+        1.25,
+        1.5,
+        2
+      ],
+      "fullHierarchyAndMinimumDividerTested": true,
+      "narrowTabsTested": true,
+      "nativeIdeLaunched": false,
+      "testSourceSha256": "612931a737e4dd278a793a76ef6ec56b1b18ad4c7dd0915db8884277432389bd"
+    },
+    "jarSha256": "d4ffda3d3e66149f59066fff3b16ce14f7fb2f6a7443cb1b67003ddb648af29d",
+    "testSourceSha256": "ecdf0344967a7b766c0ead01d0dd66d3fcf3a7525f6c30fb186cffcc2fc9695a",
+    "targetPlatform": "macos",
+    "executionPlatform": "macos",
+    "nativeTargetRuntime": true
+  },
+  "targetPlatform": "macos",
+  "executionPlatform": "macos"
+}
