@@ -345,5 +345,10 @@
     "Remote kernels, interactive stdin and notebook debugging"
   ],
   "nativeIdeLaunched": false,
-  "rootCheckoutCandidateReleaseModified": false
+  "rootCheckoutCandidateReleaseModified": false,
+  "independentReviewCorrection": {
+    "finding": "The old4MP cached-plan counter did not include retained viewer overlap; independent delayed-UI control observed8MP. Old initial headless controls did not cover this boundary.",
+    "fixedBy": "c3630ba668c4ffc8b20ebc1f8f933410fd6fc86b",
+    "replacementReceipt": "notebook-rich-resources-20261114.json"
+  }
 }
