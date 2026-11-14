@@ -88,5 +88,36 @@
     "README.zh-CN.md": "103af6572dfb5505c8e321b67164e65ea518548290d3e6029bb089abd9daef83",
     "docs/demo/v0.1.0-dev.4/openpycharm-native.gif": "19eb7094a6e2bbda3b57bac80090390b347ac16596bb1fe2b2db201d72e4eb76",
     "docs/demo/v0.1.0-dev.4/capture.json": "c6cfa9932c58769ec3b8f0667f53b80a725b87abd069660c79db0c60232c2c25"
-  }
+  },
+  "publicMainReadmeAndDemo": [
+    {
+      "path": "README.md",
+      "publicHttpStatus": 200,
+      "size": 7048,
+      "sha256": "efa05ee16a746991aaa4e45029f1c540809318d8cf62043b759044f5f0484b33",
+      "commit": "94e7e606678b259c31805ace9d67e27cca39a6e0"
+    },
+    {
+      "path": "README.zh-CN.md",
+      "publicHttpStatus": 200,
+      "size": 6556,
+      "sha256": "103af6572dfb5505c8e321b67164e65ea518548290d3e6029bb089abd9daef83",
+      "commit": "94e7e606678b259c31805ace9d67e27cca39a6e0"
+    },
+    {
+      "path": "docs/demo/v0.1.0-dev.4/openpycharm-native.gif",
+      "publicHttpStatus": 200,
+      "size": 818309,
+      "sha256": "19eb7094a6e2bbda3b57bac80090390b347ac16596bb1fe2b2db201d72e4eb76",
+      "commit": "94e7e606678b259c31805ace9d67e27cca39a6e0"
+    },
+    {
+      "path": "docs/demo/v0.1.0-dev.4/capture.json",
+      "publicHttpStatus": 200,
+      "size": 2837,
+      "sha256": "c6cfa9932c58769ec3b8f0667f53b80a725b87abd069660c79db0c60232c2c25",
+      "commit": "94e7e606678b259c31805ace9d67e27cca39a6e0"
+    }
+  ],
+  "mainObservedAtCommit": "94e7e606678b259c31805ace9d67e27cca39a6e0"
 }

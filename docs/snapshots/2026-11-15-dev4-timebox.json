@@ -1,0 +1,398 @@
+{
+  "schema": 1,
+  "snapshotAtUtc": "2026-11-14T16:36:43.645146+00:00",
+  "snapshotAtAsiaShanghai": "2026-11-15T00:36:43.645146+08:00",
+  "timebox": {
+    "hours": 2,
+    "startedAtUtc": "2026-11-14T14:43:42Z",
+    "hardDeadlineUtc": "2026-11-14T16:43:42Z",
+    "supersedesEarlierTenHourRequest": true,
+    "closedWithinBudget": true
+  },
+  "snapshotRef": "snapshot-20261115-dev4",
+  "branch": "codex_openpycharm",
+  "headBeforeSnapshotCommit": "94e7e606678b259c31805ace9d67e27cca39a6e0",
+  "fullGoalAchieved": false,
+  "release": {
+    "tag": "v0.1.0-dev.4",
+    "url": "https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.4",
+    "tagCommit": "57d93bd46409b78e4773b8f8dd92ef80f19df1fd",
+    "productionSourceCommit": "63921a4a931e19996b05ea4de4df12d27ff021bf",
+    "sourceCiRun": 43608150941,
+    "assetTransferRun": 43613559750,
+    "publishedAtUtc": "2026-11-14T16:07:53Z",
+    "actualAssets": [
+      {
+        "name": "OpenPyCharm-0.1.0-dev.4-macos-arm64.dmg",
+        "assetId": 748004560,
+        "bytes": 745666387,
+        "serverSha256": "5b07b72026108082a56da34cad2be600f56b04d99850c8a7e25176cf49eaaa76",
+        "url": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.4/OpenPyCharm-0.1.0-dev.4-macos-arm64.dmg",
+        "anonymousBoundedDownloadProbes": [
+          {
+            "range": "0-1023",
+            "httpStatus": 206,
+            "contentRange": "bytes 0-1023/745666387",
+            "bytesMatched": true,
+            "sha256": "1f0691ae6045671bbea4b074798e69dfc8a2c844b4c7084ca074e2a5c3efe76d"
+          },
+          {
+            "range": "745665363-745666386",
+            "httpStatus": 206,
+            "contentRange": "bytes 745665363-745666386/745666387",
+            "bytesMatched": true,
+            "sha256": "d63f6e24ff63b28863f8af648f503228d126c45bcdeb74571cbad0a1f2f6d209"
+          }
+        ],
+        "largePublicFileFullyRedownloaded": false
+      },
+      {
+        "name": "OpenPyCharm-0.1.0-dev.4-provenance.zip",
+        "assetId": 747946449,
+        "bytes": 2171239,
+        "serverSha256": "db4325acc832110e25b23231e1f52ebfa97cecf40cfba239a5e48e127f113d48",
+        "url": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.4/OpenPyCharm-0.1.0-dev.4-provenance.zip",
+        "httpStatus": 200,
+        "anonymousFullDownloadSha256Matched": true
+      },
+      {
+        "name": "OpenPyCharm-0.1.0-dev.4-windows-x64-setup.exe",
+        "assetId": 748006142,
+        "bytes": 646318653,
+        "serverSha256": "fa1dcf5e36e1a1f5e41e3859c6ee158101f148b75f4e4126dcc90d54621e8aa2",
+        "url": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.4/OpenPyCharm-0.1.0-dev.4-windows-x64-setup.exe",
+        "anonymousBoundedDownloadProbes": [
+          {
+            "range": "0-1023",
+            "httpStatus": 206,
+            "contentRange": "bytes 0-1023/646318653",
+            "bytesMatched": true,
+            "sha256": "3ac0664ad8198182d0542906243eab9070059431c7a9b9e6f11e1ed9dccca1dd"
+          },
+          {
+            "range": "646317629-646318652",
+            "httpStatus": 206,
+            "contentRange": "bytes 646317629-646318652/646318653",
+            "bytesMatched": true,
+            "sha256": "df0a2de833ef4ddca5c094740fa4a1a17dd54c9c4b8ccf2d3ce024defb8c3e4a"
+          }
+        ],
+        "largePublicFileFullyRedownloaded": false
+      },
+      {
+        "name": "SHA256SUMS.txt",
+        "assetId": 747946447,
+        "bytes": 323,
+        "serverSha256": "0896743799f151681525ffbcb569c6bff9a0953be4062f308ec95841789a0ca5",
+        "url": "https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.4/SHA256SUMS.txt",
+        "httpStatus": 200,
+        "anonymousFullDownloadSha256Matched": true
+      }
+    ]
+  },
+  "currentLocalApp": {
+    "status": "canonical-ci-dev4-installed-with-dev3-backup",
+    "target": "/Users/wangshubo/Applications/OpenPyCharm.app",
+    "oldVersion": "0.1.0-dev.3",
+    "oldProductTreeSha256": "7485d3022a1a8fd113cb8a5c485473dd6cd69f16f4d346a6b250cbd0505a2205",
+    "newVersion": "0.1.0-dev.4",
+    "newProductTreeSha256": "234acb5ede9ebfe39bbae3b464f6b9dfa89a7dfe38bed77bffee48c0a44eb7b9",
+    "referencePyCharmModified": false,
+    "backup": "/Users/wangshubo/develop/openpycharm/build/retained-installed/dev3-before-dev4/OpenPyCharm.app",
+    "releaseUrl": "https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.4",
+    "canonicalUserDataModifiedByUpgrade": false,
+    "strictSignaturePassed": true,
+    "canonicalNativeStartup": "passed-startup",
+    "postStartupTreeUnchanged": true,
+    "postStartupStrictSignaturePassed": true,
+    "canonicalTaskProcessExited": true,
+    "startupReceiptSha256": "cbb314aa5b8519b0dd9b4686c0c33a9c45ae01020492b154b8ed5f991fa07f35"
+  },
+  "verified": {
+    "repositoryTests": 177,
+    "passed": 177,
+    "skips": 0,
+    "rootTestLogSha256": "b16a3fbc1d2a6b5867cfdc1439f6d3b919d730ed1d3bd9b046c25eb18921e394",
+    "actualNativeMac": [
+      "Python edit/run/unittest/debug/PSI completion/cross-file Rename+Undo",
+      "TypeScript completion/type diagnostics/definition",
+      "JavaScript unsaved Unicode/emoji completion",
+      "Owned project close and process cleanup",
+      "Actual installed six-frame README GIF with manifest"
+    ],
+    "ci": [
+      "macOS DMG",
+      "Windows EXE silent installation/startup/uninstallation",
+      "5-plugin actual native/API/JVM gates and pinned191-file frontend authentication"
+    ],
+    "standaloneGuardian": {
+      "sourceSnapshot": "snapshot-20261114-lsp-guardian",
+      "sourceCommit": "5fa6e24ebab3fefffc28bd13c2e49c784c914ee2",
+      "macosOwnedCases": 10,
+      "windowsOwnedCases": 10,
+      "windowsCiRun": 43613443674,
+      "windowsSourceFilesRawMatched": 19,
+      "windowsBinariesMatchPriorMacCrossCompile": true,
+      "integratedIntoProduct": false,
+      "receipt": "../verification/lsp-guardian-windows-native-20261115.json"
+    },
+    "publicMainReadmeAndDemoBytesMatched": true,
+    "standaloneJvmLease": {
+      "sourceCommit": "a2baf6a43c2a4076aa26b189142ee5e1bfacdbc9",
+      "branch": "codex_guardian_jvm_bridge",
+      "status": "bounded-macos-jvm-lease-pass",
+      "boundaryControls": 5,
+      "realJbrGoCases": [
+        {
+          "case": "normal-close",
+          "status": "pass",
+          "ownedTargetCount": 3,
+          "unrelatedOwnedSentinelSurvived": true,
+          "stdoutNotDrainedUntilJvmExitAndOwnedCleanup": false
+        },
+        {
+          "case": "jvm-abrupt-exit",
+          "status": "pass",
+          "ownedTargetCount": 3,
+          "unrelatedOwnedSentinelSurvived": true,
+          "stdoutNotDrainedUntilJvmExitAndOwnedCleanup": false
+        },
+        {
+          "case": "stdout-undrained",
+          "status": "pass",
+          "ownedTargetCount": 1,
+          "unrelatedOwnedSentinelSurvived": true,
+          "stdoutNotDrainedUntilJvmExitAndOwnedCleanup": true
+        }
+      ],
+      "integratedIntoProduct": false,
+      "receiptUrl": "https://github.com/shubolab/openpycharm/blob/a2baf6a43c2a4076aa26b189142ee5e1bfacdbc9/docs/verification/guardian-jvm-lease-20261115.json",
+      "unknown": [
+        "Actual IDE Disposable/ProcessHandler wiring",
+        "Windows/Linux JVM bridge",
+        "Full race matrix"
+      ]
+    }
+  },
+  "remaining": [
+    "Integrate the separately tested guardian with the real IDE/LSP lease lifecycle; product owner-crash cleanup remains unverified.",
+    "Implement and verify HTML/CSS, full frontend syntax PSI/refactoring/framework semantics/debugging.",
+    "Complete network database/TLS/authentication, framework template/ORM, remote/container and broader Python workflows.",
+    "Obtain physical Windows desktop acceptance; standalone native process tests do not establish IDE UI parity.",
+    "Continue the versioned acceptance matrix; do not treat this preview, CI or snapshots as full1:1 completion."
+  ],
+  "recovery": {
+    "installerDirectory": "/Users/wangshubo/develop/openpycharm/build/release/v0.1.0-dev.4",
+    "retainedCiArchives": "/Users/wangshubo/develop/openpycharm/build/frontend-ci43608150941/archives",
+    "latestInstalledApp": "/Users/wangshubo/Applications/OpenPyCharm.app",
+    "dev3Rollback": "/Users/wangshubo/develop/openpycharm/build/retained-installed/dev3-before-dev4/OpenPyCharm.app",
+    "sourceBuildInstructions": "../installation.md and ../../README.md; explicit dev4 frontend provision receipt required",
+    "cachePolicy": "Pinned downloads, verified installers/apps and all worktrees retained; no reference installation changed",
+    "allRefsGitBundle": ".tools/snapshots/snapshot-20261115-dev4.bundle"
+  },
+  "worktreeInventoryBeforeFinalCommit": [
+    {
+      "path": "/Users/wangshubo/develop/openpycharm",
+      "head": "94e7e606678b259c31805ace9d67e27cca39a6e0",
+      "branch": "refs/heads/codex_openpycharm",
+      "nonIgnoredChangesBeforeSnapshotCommit": [
+        " M docs/verification/frontend-dev4-canonical-installed-20261115.json",
+        " M docs/verification/v0.1.0-dev.4-published.json",
+        "?? docs/snapshots/"
+      ]
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/database",
+      "head": "13d6dc52c3d0922c5afb14b50661612e10578c2a",
+      "branch": "refs/heads/codex_database",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/database-completion",
+      "head": "95995f9e93fc0febff01007a93b01d2f81acccb2",
+      "branch": "refs/heads/codex_database_completion",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/database-completion-insert",
+      "head": "0901511fbc278f90309f8408fade8da644362004",
+      "branch": "refs/heads/codex_database_completion_insert",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/database-layout",
+      "head": "1d9bc971db94b922630404f6c1b2879d1ecbbdc1",
+      "branch": "refs/heads/codex_database_layout",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/database-native-probe",
+      "head": "3b6b6f9e1396a992bdbb9a4c6608a5a1c516079a",
+      "branch": "refs/heads/codex_database_native_probe",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/database-probe-utf8",
+      "head": "87e30a9e3ea6806871f2da02f7d97e6898cd5234",
+      "branch": "refs/heads/codex_database_probe_utf8",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/dev3-integration",
+      "head": "0e8d7a984b4cae5cf045f04405593fdf61ca9066",
+      "branch": "refs/heads/codex_dev3_integration",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/dev3-release-docs",
+      "head": "6abf71f3b0ffbb95c245f48c92812c603b1e1bdc",
+      "branch": "refs/heads/codex_dev3_release_docs",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frameworks",
+      "head": "13db7203b2fd49ea0d89851aab9178151030f1cd",
+      "branch": "refs/heads/codex_frameworks",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frontend",
+      "head": "e83dea015de23a9aba4f9d0272709c68d86ba935",
+      "branch": "refs/heads/codex_frontend_m0",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frontend-artifact-seal",
+      "head": "553ad0ab0a960330a5229b1da21665156a7012c0",
+      "branch": "refs/heads/codex_frontend_artifact_seal",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frontend-integration-next",
+      "head": "406934f3a1d39a15085fca5633c99528205fa0ee",
+      "branch": "refs/heads/codex_frontend_integration_next",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frontend-native",
+      "head": "24ee713e666093de34e1979bc35c5956b27707db",
+      "branch": "refs/heads/codex_frontend_native",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frontend-packaging",
+      "head": "911c14dffdde601c05ece15d176db8186157c566",
+      "branch": "refs/heads/codex_frontend_packaging",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frontend-product-builder",
+      "head": "19d6938d90924c8dac834439827d6281fd4c0c63",
+      "branch": "refs/heads/codex_frontend_product_builder",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frontend-product-core",
+      "head": "801e39b22cebc44c0ff93c8ebe503c3135c93376",
+      "branch": "refs/heads/codex_frontend_product_core",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frontend-release-docs",
+      "head": "83abb4b5f0156eaacf5b7c5090d12f3ed12726a2",
+      "branch": "refs/heads/codex_frontend_release_docs",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frontend-release-transfer",
+      "head": "27ac5caf9564b828874a084265655d06b9c5e577",
+      "branch": "refs/heads/codex_dev4_release_transfer",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/frontend-review-fix",
+      "head": "d2ecd6f849459a7497b3303bfb5bb92c7f27279f",
+      "branch": "refs/heads/codex_frontend_review_fix",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/guardian-ci",
+      "head": "3eeeb987f085bdf16573e31cb571984cec45b031",
+      "branch": "refs/heads/codex_guardian_ci",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/guardian-jvm",
+      "head": "a2baf6a43c2a4076aa26b189142ee5e1bfacdbc9",
+      "branch": "refs/heads/codex_guardian_jvm_bridge",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/http-client",
+      "head": "7244e45ed6a0fcb255eba2e1bbef64f19b37120e",
+      "branch": "refs/heads/codex_http_client",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/lsp-guardian",
+      "head": "5fa6e24ebab3fefffc28bd13c2e49c784c914ee2",
+      "branch": "refs/heads/codex_lsp_guardian",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/markdown-startup",
+      "head": "36f65978196cbff5d1715f962d20661a42de1bdc",
+      "branch": "refs/heads/codex_dev2_docs",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/native-owned-project",
+      "head": "3c73a3d4b7f07cdbb5e0280d80d965b4fc779c32",
+      "branch": "refs/heads/codex_native_owned_project",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebook-psi",
+      "head": "db5ad45e0d77162ea284490eea0fcde78fbf9e24",
+      "branch": "refs/heads/codex_notebook_psi",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebook-rich",
+      "head": "11a043681b356b7b156141ed22fb8897560aaf59",
+      "branch": "refs/heads/codex_notebook_rich",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebook-savefix",
+      "head": "26be0f9287f4d6d522431e81ac22693b31ed69ce",
+      "branch": "refs/heads/codex_notebook_savefix",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebooks",
+      "head": "736e72dfc80598ec515bb805c5532ae7e31787bf",
+      "branch": "refs/heads/codex_notebooks",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/release-layout",
+      "head": "b98623f89aa740d64168479cdbf8c1fda43355e0",
+      "branch": "refs/heads/codex_release_layout",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    },
+    {
+      "path": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/release-tools",
+      "head": "0173b825be19381ab66aeff7654a656de532bca7",
+      "branch": "refs/heads/codex_release_tools",
+      "nonIgnoredChangesBeforeSnapshotCommit": []
+    }
+  ],
+  "parkedTemporaryWorkflowBranches": {
+    "doNotMergeWholeBranches": [
+      "codex_guardian_ci",
+      "codex_dev4_release_transfer"
+    ],
+    "reason": "These branches temporarily replace registered build.yml only to dispatch isolated tests/transfer. Dedicated guardian workflow and documentation were separately cherry-picked; published product build.yml is unchanged."
+  }
+}

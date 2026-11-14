@@ -5,7 +5,6 @@
   "oldProductTreeSha256": "7485d3022a1a8fd113cb8a5c485473dd6cd69f16f4d346a6b250cbd0505a2205",
   "newVersion": "0.1.0-dev.4",
   "newProductTreeSha256": "234acb5ede9ebfe39bbae3b464f6b9dfa89a7dfe38bed77bffee48c0a44eb7b9",
-  "configCachesPluginsLogsModified": false,
   "referencePyCharmModified": false,
   "backup": "/Users/wangshubo/develop/openpycharm/build/retained-installed/dev3-before-dev4/OpenPyCharm.app",
   "releaseUrl": "https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.4",
