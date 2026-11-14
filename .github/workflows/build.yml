@@ -17,7 +17,9 @@ jobs:
     steps:
       - name: Keep the disposable source checkout byte-exact
         shell: pwsh
-        run: git config --global core.autocrlf false
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           # Standalone source only; no IDE adapter or product integration.
