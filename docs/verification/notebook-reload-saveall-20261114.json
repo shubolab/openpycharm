@@ -1,0 +1,125 @@
+{
+  "schema": 1,
+  "scope": "Successful parent-document reload status fix and expanded native SaveAll/flags harness; compile/headless only",
+  "coreCommit": "63574041aeb9e6e4e4434b7e475862aecd48d5f2",
+  "jarSha256": "8e1ac51c431a51d8ab1434953fc82e8c7587397deefe51a9d919c5d3bb9c2b9c",
+  "pluginDirectory": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebook-savefix/.tools/notebook-plugin/5c1cff32414282ba40d2818190bca96a3c0134cd4e6727973d0742b3b13fb964/plugin",
+  "productionSources": {
+    "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "plugins/notebooks/NOTICE": "06c09522f58b11483e42c965bd8b6d2bca8a5003430ae2a0766d711d6ecd8f39",
+    "plugins/notebooks/README.md": "4e520001577392ab52228323aab70f3c1a1a4bc8191647fafb8c0ef8a614d8e3",
+    "plugins/notebooks/build-support/VerifyNotebookArchive.java": "2c48bee6ecfa6e7d90ada60138954df97e8d8141a9fb4bcdc5ba6596b09d4c3d",
+    "plugins/notebooks/kernel-requirements.txt": "0206856a062580549f520ce261c636fa0b5b9bb114c847f8d10dfd2a97b713d1",
+    "plugins/notebooks/resources/META-INF/plugin.xml": "a400e740c77b1f82f27b6ece70d58d21fa143c0d42d57c0c113c642c880e3a3a",
+    "plugins/notebooks/resources/kernel_bridge.py": "361b86385deab957e209e5a743ea14e516e7a5840428165b1dcd29c9cae42e99",
+    "plugins/notebooks/runtime-dependencies.lock.json": "765b2b507abfd6383e3cef9f6c54700fa50ad8fbca81bdb0be401ee6151194d9",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookDocumentSave.java": "a1de1f6cd3492456a0e234b5d971a083ede29dfb63c3f4f75bd3faf8f3bab1cb",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookEditorProvider.java": "e49779c7309d07e2d560516d6ad9a6d24d6632dff7d9df53a0e57d9a4217e36c",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookFileEditor.java": "5840a484ffa7192a7ea8d8972f10371f7b8ae60af8ac514c3f1352bb2848217a",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookFileType.java": "8e1fe08039f9d2f954b664e344fd2d3bc8fa7fb34c8ca721288066eca5fb41f6",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookKernelSession.java": "3f13a2037f784532eece3e26f397f336c68fb980e7ab07a8b3f457a04ff2057b",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookMerge.java": "ea03a4be2b5ef1a0861557c93eca16ac8ec3ae8a18dbda5a44603b216de50fbb",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookModel.java": "e27dced3a99dda43ec5bf867f77688fab829cf7db65a40f1a6a125481a4704cd",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookPersistence.java": "38058e890883d44398851947f99abb20fc1e4173e7dbf58de2334a2ded76a106",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookProjectCloseHandler.java": "ea2b19d0e67442df6bf123d12c486cec613f07a2774516d2f6370bfc28114efb",
+    "product/platform.lock.json": "2fe9e477d7e3164e362e33f3b95a2464b16a0699e1bade6cc112b166aed697bd",
+    "product/product.json": "f5d4a28101d3f3462b7877aeb020a1de48886a2ef06758c07531c11af01cfae3",
+    "scripts/bootstrap.py": "a9f405e1fd83ed5a63e0a676efcecbb11a0a1e1975f876e33622756b5b502fff",
+    "scripts/build_notebook_plugin.py": "7aedb310b3c69ccd17fe8efd5c050e0f240d2979c1dc50f049ad944df1df515b",
+    "scripts/platform_layout.py": "500447561715fc996c842c614aa817a2251e7dfbc22305054f7ab40fc31c7037"
+  },
+  "modelPersistenceMergeSaveThreadTests": {
+    "status": "pass",
+    "metadataAndAttachmentsPreserved": true,
+    "richOutputsPreserved": true,
+    "sourceRoundTrip": true,
+    "outputsAndCount": true,
+    "addDeleteCells": true,
+    "malformedAndOversizedRejected": true,
+    "asynchronousPersistence": {
+      "status": "pass",
+      "offSubmittingThread": true,
+      "latestOnlyCoalescing": true,
+      "dirtyBeforeCompletion": true,
+      "staleCommitRejected": true,
+      "externalGenerationInvalidated": true,
+      "serializationFailureRemainsDirty": true,
+      "mergeSuspensionKeepsDirty": true,
+      "executorRejectionRecovers": true,
+      "completionQueueBounded": true
+    },
+    "externalMerge": {
+      "status": "pass",
+      "foreignMetadataChars": 2600000,
+      "independentSourceAndMetadata": true,
+      "localRetainedOnConflict": true,
+      "stableCellIdentities": true,
+      "structuralAndAtomicArrays": true,
+      "identicalChanges": true,
+      "missingKeysAndNull": true,
+      "immutableInputs": true,
+      "structuralSharing": true,
+      "exactLargeIntegersAndDecimals": true,
+      "extremeExponents": true,
+      "recursiveNumericEquality": true
+    },
+    "saveThreadContract": {
+      "status": "pass",
+      "unlockedWorker": true,
+      "blockingEdtCallbacksComplete": true,
+      "fileIoOffEdt": true,
+      "utf8FileRoundTrip": true,
+      "unsafeAndRejectedEntryReported": true,
+      "actualIdeSaveEngineExercised": false
+    },
+    "targetPlatform": "macos",
+    "executionPlatform": "macos",
+    "nativeTargetRuntime": true,
+    "jarSha256": "8e1ac51c431a51d8ab1434953fc82e8c7587397deefe51a9d919c5d3bb9c2b9c"
+  },
+  "probeJarSha256": "088be22400d470e3a01919f7c07abad83fabe75e7cfa05b5e59719502148a6e1",
+  "probeDirectory": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebook-savefix/.tools/notebook-save-native-probe/2b75f8a163d0329f1a10daca7daaf3ffa823741d3ec98aa25413bc6f68bea403/plugin",
+  "probeIdentity": {
+    "sources": {
+      "NotebookSavePayloadTest.java": "c720e6630b3b9f02bce7c982db40b416e1bb141ed90c0ab8e305224c0d54349c",
+      "NotebookSaveProbe.java": "16b7acdca625cea9cd93af31fd15e2bddeb2e3555d583d8f5fe146f26bd0fa94",
+      "plugin.xml": "2e96883c5ecd574054643d7b1ea622904af6c0d1fb74415262110f5b11df9315"
+    },
+    "productionJarSha256": "8e1ac51c431a51d8ab1434953fc82e8c7587397deefe51a9d919c5d3bb9c2b9c",
+    "sdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+    "builderSha256": "da69731b25fd4739c81cee534a2c793d9cc0f936c3639095ec1ddb3f7872703c"
+  },
+  "payloadAssertionTests": {
+    "status": "pass",
+    "validSavePayloads": 2,
+    "immutableCorruptionsRejected": 16,
+    "actualIdeSaveEngineExercised": false
+  },
+  "probeBoundaryTests": {
+    "count": 4,
+    "passed": 4
+  },
+  "observed": [
+    "Successful reload previously left its Preparing label even after reloading=false and editable cells were restored",
+    "Production change restores actual stopped-kernel status before sync; no generation/stamp/dirty semantics changed",
+    "Expanded probe compiles against exact new product JAR and actual pinned platform SaveAll action API"
+  ],
+  "nativeProbeRequired": [
+    "Real parent JSON formatting reload and source edit before platform SaveAll",
+    "SaveAll persisted source, clean flags and live EDT heartbeat",
+    "Reflected reloading/conflicted/persistenceDirty/viewer/modified/status/documentStamp/modificationSequence captures",
+    "Fresh heartbeat tick after reload request prevents acceptance of a prior state capture",
+    "Another source edit and SaveAll after successful reload",
+    "Full immutable nbformat payload and close/reopen"
+  ],
+  "nativeApplicationLaunched": false,
+  "actualSaveAllAcceptance": "pending root native run",
+  "separateHistoricalRootResults": [
+    "Root reports original137 production6f33/helper87ad native SaveButton/Undo/merge/payload/reopen positive",
+    "Root reports old129 candidate same helper reaches Save deadline negative; does not reproduce original EDT lock cycle"
+  ],
+  "unknown": [
+    "New SaveAll/flags scenario actual native behavior",
+    "Stamp-only callback race; no generation/stamp changes made on speculative cause"
+  ]
+}

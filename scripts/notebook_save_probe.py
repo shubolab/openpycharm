@@ -140,7 +140,8 @@ def run(app: Path, prepared: dict, timeout: int) -> dict:
             native = json.loads(report.read_text(encoding="utf-8")); result["native"] = native
             if native.get("invocationId") != invocation or native.get("plugin", {}).get("jarSha256") != prepared["productionJarSha256"]:
                 raise ValueError("Native report does not bind this invocation and actual product notebook JAR")
-            required = ["nativeUndoRestored", "pendingCellAndTextMerge", "nativeSavePersisted", "postSaveExternalDirtyMerge", "metadataAndExistingOutputsPreserved", "closeReopenSourcePreserved"]
+            required = ["nativeUndoRestored", "pendingCellAndTextMerge", "nativeSavePersisted", "postSaveExternalDirtyMerge", "metadataAndExistingOutputsPreserved", "closeReopenSourcePreserved", "platformSaveAllPersisted",
+                        "successfulReloadStatusRestored", "successfulReloadStateClean", "postSaveAllCanEdit"]
             if native.get("status") != "pass" or not all(native.get(key) is True for key in required) or native.get("heartbeatTicksAfterSave", 0) < 2:
                 raise ValueError("Actual native edit/save/reopen or EDT heartbeat gate failed")
             result["assessment"] = {"status": "pass", "actualNativeSaveEngine": True, "kernelCodeExecuted": False}
