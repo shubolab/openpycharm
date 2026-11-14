@@ -1,0 +1,2657 @@
+{
+  "schema": 1,
+  "status": "pass-native-six-insertions",
+  "observedAt": "2026-11-14",
+  "candidateSourceCommit": "59fd8ee08f7bf821fe57a39389faa13ebffa1db1",
+  "productionJarSha256": "499b684993346beb70b0874f67e99796ae49583eebeb10e4ffbe2317e989f73f",
+  "probeJarSha256": "1e338594a004cb9895a7b3b27f22f44d4fbd02751dc52c06304fa1faf42d8727",
+  "probeSourceIdentity": {
+    "sources": {
+      "DatabaseCompletionNativeProbe.java": "72e88e4f7d2a90b7e12f366206486213fec6694c31d3a97ab86b6927aca724fb",
+      "VerifyDatabaseCompletionProbe.java": "f75bce59fc9ba46ef3522dcbe60c772c2b33e40a0a715f38a6ab2dce4beaf51e",
+      "plugin.xml": "271bd9f031e1c68e24792302a95d2934e9acdec1756c9eea556635a25cb74646"
+    },
+    "productionJarSha256": "499b684993346beb70b0874f67e99796ae49583eebeb10e4ffbe2317e989f73f",
+    "sdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+    "builderSha256": "f4ce473dbb39c35cc87e10ad195e659f5b3d765a3e9c666555bf78f573bd3f40"
+  },
+  "ownedPid": 89824,
+  "cleanup": {
+    "mode": "owned-posix-session",
+    "pid": 89824,
+    "exitCode": 143
+  },
+  "assessment": {
+    "status": "pass",
+    "actualNativeBasicLookupAndInsertion": true,
+    "keyboardInputTested": false,
+    "scope": "Native action/API integration in an owned actual IDE; not full product or keyboard acceptance"
+  },
+  "normalTrustClickedByRoot": true,
+  "trustAllParentSelected": false,
+  "cases": [
+    {
+      "name": "source-table",
+      "handlerDiagnostic": false,
+      "expectedAfter": "SELECT * FROM \"main\".\"products\";",
+      "nativeEntryPoint": "ActionUtil.invokeAction:CodeCompletion",
+      "before": {
+        "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+        "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+        "project": {
+          "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+          "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+          "class": "com.intellij.openapi.project.impl.ProjectImpl",
+          "default": false
+        },
+        "caret": 17,
+        "documentText": "SELECT * FROM pro;",
+        "psiPresent": true,
+        "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+        "psiLanguage": "OpenPyCharmSQL",
+        "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+        "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+        "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+        "isDispatchThread": true,
+        "showing": true,
+        "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@133c7b9b",
+        "focusWithinEditor": true
+      },
+      "actionContextEditorMatches": true,
+      "actionContextProject": {
+        "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+        "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+        "class": "com.intellij.openapi.project.impl.ProjectImpl",
+        "default": false
+      },
+      "observedLookupClass": "com.intellij.codeInsight.lookup.impl.LookupImpl",
+      "observedItems": [
+        {
+          "lookup": "products",
+          "type": "table/view",
+          "tail": "  main"
+        }
+      ],
+      "nativePopupShown": true,
+      "lookupStart": 14,
+      "selectedItem": "products",
+      "nativeSelectionMethod": "LookupImpl.finishLookup",
+      "after": "SELECT * FROM \"main\".\"products\";",
+      "afterEditor": {
+        "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+        "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+        "project": {
+          "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+          "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+          "class": "com.intellij.openapi.project.impl.ProjectImpl",
+          "default": false
+        },
+        "caret": 31,
+        "documentText": "SELECT * FROM \"main\".\"products\";",
+        "psiPresent": true,
+        "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+        "psiLanguage": "OpenPyCharmSQL",
+        "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+        "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+        "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+        "isDispatchThread": true,
+        "showing": true,
+        "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@133c7b9b",
+        "focusWithinEditor": true
+      },
+      "nativeInsertionMatched": true,
+      "heartbeatTicksDuringCase": 8,
+      "events": [
+        {
+          "event": "first-before",
+          "initProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 17,
+            "documentText": "SELECT * FROM pro;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": true,
+            "showing": true,
+            "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@133c7b9b",
+            "focusWithinEditor": true
+          },
+          "startOffset": 17,
+          "selectionEndOffset": 17,
+          "identifierEndOffset": 17,
+          "fileLanguage": "OpenPyCharmSQL",
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        },
+        {
+          "event": "last-before",
+          "initProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 17,
+            "documentText": "SELECT * FROM pro;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": true,
+            "showing": true,
+            "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@133c7b9b",
+            "focusWithinEditor": true
+          },
+          "startOffset": 17,
+          "selectionEndOffset": 17,
+          "identifierEndOffset": 17,
+          "fileLanguage": "OpenPyCharmSQL",
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        },
+        {
+          "event": "first-fill",
+          "parameterOffset": 17,
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 17,
+            "documentText": "SELECT * FROM pro;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": false
+          },
+          "originalProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "originalLanguage": "OpenPyCharmSQL",
+          "positionLanguage": "OpenPyCharmSQL",
+          "positionText": "proIntellijIdeaRulezzz",
+          "positionRange": "(14,36)",
+          "contributors": [
+            "com.intellij.codeInsight.completion.ComboEditorCompletionContributor",
+            "com.intellij.refactoring.rename.inplace.CompletionContributorForInplaceRename",
+            "com.intellij.codeInsight.completion.XmlCompletionContributor",
+            "com.intellij.completion.ml.sorting.ContextFeaturesContributor",
+            "org.jetbrains.plugins.terminal.block.completion.TerminalCommandSpecCompletionContributorGen1",
+            "org.jetbrains.plugins.terminal.block.completion.powershell.PowerShellCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$BeforeObserver",
+            "com.intellij.codeInsight.template.impl.LiveTemplateCompletionContributor",
+            "com.intellij.codeInsight.completion.command.CommandCompletionContributor",
+            "com.intellij.codeInsight.completion.FilePathCompletionContributor",
+            "com.intellij.codeInsight.completion.CustomFileTypeCompletionContributor",
+            "com.intellij.microservices.url.references.UrlPathReferenceCompletionContributor",
+            "com.intellij.microservices.http.HttpHeaderReferenceCompletionContributor",
+            "com.intellij.structuralsearch.plugin.ui.StructuralSearchTemplatesCompletionContributor",
+            "com.intellij.codeInsight.template.emmet.completion.EmmetCompletionContributor",
+            "com.intellij.codeInsight.completion.HtmlCompletionContributor",
+            "com.intellij.codeInsight.completion.XmlNonFirstCompletionContributor",
+            "org.intellij.plugins.intelliLang.references.LanguageWordInCommentCompletionContributor",
+            "com.intellij.lang.properties.references.PropertiesCompletionContributor",
+            "dev.openpycharm.database.SqlCompletionContributor",
+            "com.intellij.codeInsight.completion.LegacyCompletionContributor",
+            "com.intellij.codeInsight.completion.DefaultCompletionContributor",
+            "com.intellij.codeInsight.completion.ReferenceBasedCompletionContributor",
+            "com.intellij.codeInsight.template.postfix.completion.PostfixTemplateCompletionContributor",
+            "com.intellij.platform.lsp.impl.features.completion.LspCompletionContributor",
+            "com.intellij.codeInsight.completion.WordCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$AfterObserver"
+          ],
+          "diagnosticContextAtParameter": {
+            "replaceStart": 14,
+            "replaceEnd": 17,
+            "prefix": "pro",
+            "mode": "RELATION"
+          },
+          "diagnosticContextAtCaret": {
+            "replaceStart": 14,
+            "replaceEnd": 17,
+            "prefix": "pro",
+            "mode": "RELATION"
+          },
+          "nativeResultPrefix": "pro",
+          "resultStopped": false,
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        },
+        {
+          "event": "last-fill",
+          "parameterOffset": 17,
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 17,
+            "documentText": "SELECT * FROM pro;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": false
+          },
+          "originalProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "originalLanguage": "OpenPyCharmSQL",
+          "positionLanguage": "OpenPyCharmSQL",
+          "positionText": "proIntellijIdeaRulezzz",
+          "positionRange": "(14,36)",
+          "contributors": [
+            "com.intellij.codeInsight.completion.ComboEditorCompletionContributor",
+            "com.intellij.refactoring.rename.inplace.CompletionContributorForInplaceRename",
+            "com.intellij.codeInsight.completion.XmlCompletionContributor",
+            "com.intellij.completion.ml.sorting.ContextFeaturesContributor",
+            "org.jetbrains.plugins.terminal.block.completion.TerminalCommandSpecCompletionContributorGen1",
+            "org.jetbrains.plugins.terminal.block.completion.powershell.PowerShellCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$BeforeObserver",
+            "com.intellij.codeInsight.template.impl.LiveTemplateCompletionContributor",
+            "com.intellij.codeInsight.completion.command.CommandCompletionContributor",
+            "com.intellij.codeInsight.completion.FilePathCompletionContributor",
+            "com.intellij.codeInsight.completion.CustomFileTypeCompletionContributor",
+            "com.intellij.microservices.url.references.UrlPathReferenceCompletionContributor",
+            "com.intellij.microservices.http.HttpHeaderReferenceCompletionContributor",
+            "com.intellij.structuralsearch.plugin.ui.StructuralSearchTemplatesCompletionContributor",
+            "com.intellij.codeInsight.template.emmet.completion.EmmetCompletionContributor",
+            "com.intellij.codeInsight.completion.HtmlCompletionContributor",
+            "com.intellij.codeInsight.completion.XmlNonFirstCompletionContributor",
+            "org.intellij.plugins.intelliLang.references.LanguageWordInCommentCompletionContributor",
+            "com.intellij.lang.properties.references.PropertiesCompletionContributor",
+            "dev.openpycharm.database.SqlCompletionContributor",
+            "com.intellij.codeInsight.completion.LegacyCompletionContributor",
+            "com.intellij.codeInsight.completion.DefaultCompletionContributor",
+            "com.intellij.codeInsight.completion.ReferenceBasedCompletionContributor",
+            "com.intellij.codeInsight.template.postfix.completion.PostfixTemplateCompletionContributor",
+            "com.intellij.platform.lsp.impl.features.completion.LspCompletionContributor",
+            "com.intellij.codeInsight.completion.WordCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$AfterObserver"
+          ],
+          "diagnosticContextAtParameter": {
+            "replaceStart": 14,
+            "replaceEnd": 17,
+            "prefix": "pro",
+            "mode": "RELATION"
+          },
+          "diagnosticContextAtCaret": {
+            "replaceStart": 14,
+            "replaceEnd": 17,
+            "prefix": "pro",
+            "mode": "RELATION"
+          },
+          "nativeResultPrefix": "pro",
+          "resultStopped": false,
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        }
+      ],
+      "endSnapshot": {
+        "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+        "present": true,
+        "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+        "tableCount": 5,
+        "columnCount": 11,
+        "tables": [
+          "main.odd\"table",
+          "main.orders",
+          "main.products",
+          "main.订单 表",
+          "main.available_products"
+        ],
+        "truncated": false
+      }
+    },
+    {
+      "name": "source-alias",
+      "handlerDiagnostic": false,
+      "expectedAfter": "SELECT p.\"name\" FROM main.products p;",
+      "nativeEntryPoint": "ActionUtil.invokeAction:CodeCompletion",
+      "before": {
+        "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+        "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+        "project": {
+          "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+          "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+          "class": "com.intellij.openapi.project.impl.ProjectImpl",
+          "default": false
+        },
+        "caret": 11,
+        "documentText": "SELECT p.na FROM main.products p;",
+        "psiPresent": true,
+        "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+        "psiLanguage": "OpenPyCharmSQL",
+        "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+        "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+        "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+        "isDispatchThread": true,
+        "showing": true,
+        "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@133c7b9b",
+        "focusWithinEditor": true
+      },
+      "actionContextEditorMatches": true,
+      "actionContextProject": {
+        "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+        "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+        "class": "com.intellij.openapi.project.impl.ProjectImpl",
+        "default": false
+      },
+      "observedLookupClass": "com.intellij.codeInsight.lookup.impl.LookupImpl",
+      "observedItems": [
+        {
+          "lookup": "name",
+          "type": "column",
+          "tail": "  \"main\".\"products\" · TEXT"
+        }
+      ],
+      "nativePopupShown": true,
+      "lookupStart": 9,
+      "selectedItem": "name",
+      "nativeSelectionMethod": "LookupImpl.finishLookup",
+      "after": "SELECT p.\"name\" FROM main.products p;",
+      "afterEditor": {
+        "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+        "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+        "project": {
+          "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+          "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+          "class": "com.intellij.openapi.project.impl.ProjectImpl",
+          "default": false
+        },
+        "caret": 15,
+        "documentText": "SELECT p.\"name\" FROM main.products p;",
+        "psiPresent": true,
+        "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+        "psiLanguage": "OpenPyCharmSQL",
+        "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+        "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+        "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+        "isDispatchThread": true,
+        "showing": true,
+        "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@133c7b9b",
+        "focusWithinEditor": true
+      },
+      "nativeInsertionMatched": true,
+      "heartbeatTicksDuringCase": 7,
+      "events": [
+        {
+          "event": "first-before",
+          "initProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 11,
+            "documentText": "SELECT p.na FROM main.products p;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": true,
+            "showing": true,
+            "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@133c7b9b",
+            "focusWithinEditor": true
+          },
+          "startOffset": 11,
+          "selectionEndOffset": 11,
+          "identifierEndOffset": 11,
+          "fileLanguage": "OpenPyCharmSQL",
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        },
+        {
+          "event": "last-before",
+          "initProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 11,
+            "documentText": "SELECT p.na FROM main.products p;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": true,
+            "showing": true,
+            "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@133c7b9b",
+            "focusWithinEditor": true
+          },
+          "startOffset": 11,
+          "selectionEndOffset": 11,
+          "identifierEndOffset": 11,
+          "fileLanguage": "OpenPyCharmSQL",
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        },
+        {
+          "event": "first-fill",
+          "parameterOffset": 11,
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 11,
+            "documentText": "SELECT p.na FROM main.products p;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": false
+          },
+          "originalProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "originalLanguage": "OpenPyCharmSQL",
+          "positionLanguage": "OpenPyCharmSQL",
+          "positionText": "naIntellijIdeaRulezzz",
+          "positionRange": "(9,30)",
+          "contributors": [
+            "com.intellij.codeInsight.completion.ComboEditorCompletionContributor",
+            "com.intellij.refactoring.rename.inplace.CompletionContributorForInplaceRename",
+            "com.intellij.codeInsight.completion.XmlCompletionContributor",
+            "com.intellij.completion.ml.sorting.ContextFeaturesContributor",
+            "org.jetbrains.plugins.terminal.block.completion.TerminalCommandSpecCompletionContributorGen1",
+            "org.jetbrains.plugins.terminal.block.completion.powershell.PowerShellCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$BeforeObserver",
+            "com.intellij.codeInsight.template.impl.LiveTemplateCompletionContributor",
+            "com.intellij.codeInsight.completion.command.CommandCompletionContributor",
+            "com.intellij.codeInsight.completion.FilePathCompletionContributor",
+            "com.intellij.codeInsight.completion.CustomFileTypeCompletionContributor",
+            "com.intellij.microservices.url.references.UrlPathReferenceCompletionContributor",
+            "com.intellij.microservices.http.HttpHeaderReferenceCompletionContributor",
+            "com.intellij.structuralsearch.plugin.ui.StructuralSearchTemplatesCompletionContributor",
+            "com.intellij.codeInsight.template.emmet.completion.EmmetCompletionContributor",
+            "com.intellij.codeInsight.completion.HtmlCompletionContributor",
+            "com.intellij.codeInsight.completion.XmlNonFirstCompletionContributor",
+            "org.intellij.plugins.intelliLang.references.LanguageWordInCommentCompletionContributor",
+            "com.intellij.lang.properties.references.PropertiesCompletionContributor",
+            "dev.openpycharm.database.SqlCompletionContributor",
+            "com.intellij.codeInsight.completion.LegacyCompletionContributor",
+            "com.intellij.codeInsight.completion.DefaultCompletionContributor",
+            "com.intellij.codeInsight.completion.ReferenceBasedCompletionContributor",
+            "com.intellij.codeInsight.template.postfix.completion.PostfixTemplateCompletionContributor",
+            "com.intellij.platform.lsp.impl.features.completion.LspCompletionContributor",
+            "com.intellij.codeInsight.completion.WordCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$AfterObserver"
+          ],
+          "diagnosticContextAtParameter": {
+            "replaceStart": 9,
+            "replaceEnd": 11,
+            "prefix": "na",
+            "mode": "COLUMN"
+          },
+          "diagnosticContextAtCaret": {
+            "replaceStart": 9,
+            "replaceEnd": 11,
+            "prefix": "na",
+            "mode": "COLUMN"
+          },
+          "nativeResultPrefix": "na",
+          "resultStopped": false,
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        },
+        {
+          "event": "last-fill",
+          "parameterOffset": 11,
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 11,
+            "documentText": "SELECT p.na FROM main.products p;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": false
+          },
+          "originalProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "originalLanguage": "OpenPyCharmSQL",
+          "positionLanguage": "OpenPyCharmSQL",
+          "positionText": "naIntellijIdeaRulezzz",
+          "positionRange": "(9,30)",
+          "contributors": [
+            "com.intellij.codeInsight.completion.ComboEditorCompletionContributor",
+            "com.intellij.refactoring.rename.inplace.CompletionContributorForInplaceRename",
+            "com.intellij.codeInsight.completion.XmlCompletionContributor",
+            "com.intellij.completion.ml.sorting.ContextFeaturesContributor",
+            "org.jetbrains.plugins.terminal.block.completion.TerminalCommandSpecCompletionContributorGen1",
+            "org.jetbrains.plugins.terminal.block.completion.powershell.PowerShellCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$BeforeObserver",
+            "com.intellij.codeInsight.template.impl.LiveTemplateCompletionContributor",
+            "com.intellij.codeInsight.completion.command.CommandCompletionContributor",
+            "com.intellij.codeInsight.completion.FilePathCompletionContributor",
+            "com.intellij.codeInsight.completion.CustomFileTypeCompletionContributor",
+            "com.intellij.microservices.url.references.UrlPathReferenceCompletionContributor",
+            "com.intellij.microservices.http.HttpHeaderReferenceCompletionContributor",
+            "com.intellij.structuralsearch.plugin.ui.StructuralSearchTemplatesCompletionContributor",
+            "com.intellij.codeInsight.template.emmet.completion.EmmetCompletionContributor",
+            "com.intellij.codeInsight.completion.HtmlCompletionContributor",
+            "com.intellij.codeInsight.completion.XmlNonFirstCompletionContributor",
+            "org.intellij.plugins.intelliLang.references.LanguageWordInCommentCompletionContributor",
+            "com.intellij.lang.properties.references.PropertiesCompletionContributor",
+            "dev.openpycharm.database.SqlCompletionContributor",
+            "com.intellij.codeInsight.completion.LegacyCompletionContributor",
+            "com.intellij.codeInsight.completion.DefaultCompletionContributor",
+            "com.intellij.codeInsight.completion.ReferenceBasedCompletionContributor",
+            "com.intellij.codeInsight.template.postfix.completion.PostfixTemplateCompletionContributor",
+            "com.intellij.platform.lsp.impl.features.completion.LspCompletionContributor",
+            "com.intellij.codeInsight.completion.WordCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$AfterObserver"
+          ],
+          "diagnosticContextAtParameter": {
+            "replaceStart": 9,
+            "replaceEnd": 11,
+            "prefix": "na",
+            "mode": "COLUMN"
+          },
+          "diagnosticContextAtCaret": {
+            "replaceStart": 9,
+            "replaceEnd": 11,
+            "prefix": "na",
+            "mode": "COLUMN"
+          },
+          "nativeResultPrefix": "na",
+          "resultStopped": false,
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        }
+      ],
+      "endSnapshot": {
+        "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+        "present": true,
+        "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+        "tableCount": 5,
+        "columnCount": 11,
+        "tables": [
+          "main.odd\"table",
+          "main.orders",
+          "main.products",
+          "main.订单 表",
+          "main.available_products"
+        ],
+        "truncated": false
+      }
+    },
+    {
+      "name": "source-quoted",
+      "handlerDiagnostic": false,
+      "expectedAfter": "SELECT p.\"列 名\" FROM main.products p;",
+      "nativeEntryPoint": "ActionUtil.invokeAction:CodeCompletion",
+      "before": {
+        "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+        "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+        "project": {
+          "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+          "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+          "class": "com.intellij.openapi.project.impl.ProjectImpl",
+          "default": false
+        },
+        "caret": 12,
+        "documentText": "SELECT p.\"列 名\" FROM main.products p;",
+        "psiPresent": true,
+        "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+        "psiLanguage": "OpenPyCharmSQL",
+        "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+        "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+        "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+        "isDispatchThread": true,
+        "showing": true,
+        "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@133c7b9b",
+        "focusWithinEditor": true
+      },
+      "actionContextEditorMatches": true,
+      "actionContextProject": {
+        "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+        "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+        "class": "com.intellij.openapi.project.impl.ProjectImpl",
+        "default": false
+      },
+      "observedLookupClass": "com.intellij.codeInsight.lookup.impl.LookupImpl",
+      "observedItems": [
+        {
+          "lookup": "列 名",
+          "type": "column",
+          "tail": "  \"main\".\"products\" · TEXT"
+        }
+      ],
+      "nativePopupShown": true,
+      "lookupStart": 9,
+      "selectedItem": "列 名",
+      "nativeSelectionMethod": "LookupImpl.finishLookup",
+      "after": "SELECT p.\"列 名\" FROM main.products p;",
+      "afterEditor": {
+        "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+        "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+        "project": {
+          "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+          "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+          "class": "com.intellij.openapi.project.impl.ProjectImpl",
+          "default": false
+        },
+        "caret": 14,
+        "documentText": "SELECT p.\"列 名\" FROM main.products p;",
+        "psiPresent": true,
+        "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+        "psiLanguage": "OpenPyCharmSQL",
+        "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+        "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+        "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+        "isDispatchThread": true,
+        "showing": true,
+        "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@133c7b9b",
+        "focusWithinEditor": true
+      },
+      "nativeInsertionMatched": true,
+      "heartbeatTicksDuringCase": 8,
+      "events": [
+        {
+          "event": "first-before",
+          "initProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 12,
+            "documentText": "SELECT p.\"列 名\" FROM main.products p;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": true,
+            "showing": true,
+            "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@133c7b9b",
+            "focusWithinEditor": true
+          },
+          "startOffset": 12,
+          "selectionEndOffset": 12,
+          "identifierEndOffset": 13,
+          "fileLanguage": "OpenPyCharmSQL",
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        },
+        {
+          "event": "last-before",
+          "initProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 12,
+            "documentText": "SELECT p.\"列 名\" FROM main.products p;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": true,
+            "showing": true,
+            "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@133c7b9b",
+            "focusWithinEditor": true
+          },
+          "startOffset": 12,
+          "selectionEndOffset": 12,
+          "identifierEndOffset": 14,
+          "fileLanguage": "OpenPyCharmSQL",
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        },
+        {
+          "event": "first-fill",
+          "parameterOffset": 12,
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 12,
+            "documentText": "SELECT p.\"列 名\" FROM main.products p;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": false
+          },
+          "originalProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "originalLanguage": "OpenPyCharmSQL",
+          "positionLanguage": "OpenPyCharmSQL",
+          "positionText": "\"列 IntellijIdeaRulezzz 名\"",
+          "positionRange": "(9,34)",
+          "contributors": [
+            "com.intellij.codeInsight.completion.ComboEditorCompletionContributor",
+            "com.intellij.refactoring.rename.inplace.CompletionContributorForInplaceRename",
+            "com.intellij.codeInsight.completion.XmlCompletionContributor",
+            "com.intellij.completion.ml.sorting.ContextFeaturesContributor",
+            "org.jetbrains.plugins.terminal.block.completion.TerminalCommandSpecCompletionContributorGen1",
+            "org.jetbrains.plugins.terminal.block.completion.powershell.PowerShellCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$BeforeObserver",
+            "com.intellij.codeInsight.template.impl.LiveTemplateCompletionContributor",
+            "com.intellij.codeInsight.completion.command.CommandCompletionContributor",
+            "com.intellij.codeInsight.completion.FilePathCompletionContributor",
+            "com.intellij.codeInsight.completion.CustomFileTypeCompletionContributor",
+            "com.intellij.microservices.url.references.UrlPathReferenceCompletionContributor",
+            "com.intellij.microservices.http.HttpHeaderReferenceCompletionContributor",
+            "com.intellij.structuralsearch.plugin.ui.StructuralSearchTemplatesCompletionContributor",
+            "com.intellij.codeInsight.template.emmet.completion.EmmetCompletionContributor",
+            "com.intellij.codeInsight.completion.HtmlCompletionContributor",
+            "com.intellij.codeInsight.completion.XmlNonFirstCompletionContributor",
+            "org.intellij.plugins.intelliLang.references.LanguageWordInCommentCompletionContributor",
+            "com.intellij.lang.properties.references.PropertiesCompletionContributor",
+            "dev.openpycharm.database.SqlCompletionContributor",
+            "com.intellij.codeInsight.completion.LegacyCompletionContributor",
+            "com.intellij.codeInsight.completion.DefaultCompletionContributor",
+            "com.intellij.codeInsight.completion.ReferenceBasedCompletionContributor",
+            "com.intellij.codeInsight.template.postfix.completion.PostfixTemplateCompletionContributor",
+            "com.intellij.platform.lsp.impl.features.completion.LspCompletionContributor",
+            "com.intellij.codeInsight.completion.WordCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$AfterObserver"
+          ],
+          "diagnosticContextAtParameter": {
+            "replaceStart": 9,
+            "replaceEnd": 14,
+            "prefix": "列 ",
+            "mode": "COLUMN"
+          },
+          "diagnosticContextAtCaret": {
+            "replaceStart": 9,
+            "replaceEnd": 14,
+            "prefix": "列 ",
+            "mode": "COLUMN"
+          },
+          "nativeResultPrefix": "",
+          "resultStopped": false,
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        },
+        {
+          "event": "last-fill",
+          "parameterOffset": 12,
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 12,
+            "documentText": "SELECT p.\"列 名\" FROM main.products p;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": false
+          },
+          "originalProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "originalLanguage": "OpenPyCharmSQL",
+          "positionLanguage": "OpenPyCharmSQL",
+          "positionText": "\"列 IntellijIdeaRulezzz 名\"",
+          "positionRange": "(9,34)",
+          "contributors": [
+            "com.intellij.codeInsight.completion.ComboEditorCompletionContributor",
+            "com.intellij.refactoring.rename.inplace.CompletionContributorForInplaceRename",
+            "com.intellij.codeInsight.completion.XmlCompletionContributor",
+            "com.intellij.completion.ml.sorting.ContextFeaturesContributor",
+            "org.jetbrains.plugins.terminal.block.completion.TerminalCommandSpecCompletionContributorGen1",
+            "org.jetbrains.plugins.terminal.block.completion.powershell.PowerShellCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$BeforeObserver",
+            "com.intellij.codeInsight.template.impl.LiveTemplateCompletionContributor",
+            "com.intellij.codeInsight.completion.command.CommandCompletionContributor",
+            "com.intellij.codeInsight.completion.FilePathCompletionContributor",
+            "com.intellij.codeInsight.completion.CustomFileTypeCompletionContributor",
+            "com.intellij.microservices.url.references.UrlPathReferenceCompletionContributor",
+            "com.intellij.microservices.http.HttpHeaderReferenceCompletionContributor",
+            "com.intellij.structuralsearch.plugin.ui.StructuralSearchTemplatesCompletionContributor",
+            "com.intellij.codeInsight.template.emmet.completion.EmmetCompletionContributor",
+            "com.intellij.codeInsight.completion.HtmlCompletionContributor",
+            "com.intellij.codeInsight.completion.XmlNonFirstCompletionContributor",
+            "org.intellij.plugins.intelliLang.references.LanguageWordInCommentCompletionContributor",
+            "com.intellij.lang.properties.references.PropertiesCompletionContributor",
+            "dev.openpycharm.database.SqlCompletionContributor",
+            "com.intellij.codeInsight.completion.LegacyCompletionContributor",
+            "com.intellij.codeInsight.completion.DefaultCompletionContributor",
+            "com.intellij.codeInsight.completion.ReferenceBasedCompletionContributor",
+            "com.intellij.codeInsight.template.postfix.completion.PostfixTemplateCompletionContributor",
+            "com.intellij.platform.lsp.impl.features.completion.LspCompletionContributor",
+            "com.intellij.codeInsight.completion.WordCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$AfterObserver"
+          ],
+          "diagnosticContextAtParameter": {
+            "replaceStart": 9,
+            "replaceEnd": 14,
+            "prefix": "列 ",
+            "mode": "COLUMN"
+          },
+          "diagnosticContextAtCaret": {
+            "replaceStart": 9,
+            "replaceEnd": 14,
+            "prefix": "列 ",
+            "mode": "COLUMN"
+          },
+          "nativeResultPrefix": "",
+          "resultStopped": false,
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        }
+      ],
+      "endSnapshot": {
+        "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+        "present": true,
+        "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+        "tableCount": 5,
+        "columnCount": 11,
+        "tables": [
+          "main.odd\"table",
+          "main.orders",
+          "main.products",
+          "main.订单 表",
+          "main.available_products"
+        ],
+        "truncated": false
+      }
+    },
+    {
+      "name": "console-table",
+      "handlerDiagnostic": false,
+      "expectedAfter": "SELECT * FROM \"main\".\"products\";",
+      "nativeEntryPoint": "ActionUtil.invokeAction:CodeCompletion",
+      "before": {
+        "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@13bb97f1",
+        "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@560d275e",
+        "project": {
+          "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+          "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+          "class": "com.intellij.openapi.project.impl.ProjectImpl",
+          "default": false
+        },
+        "caret": 17,
+        "documentText": "SELECT * FROM pro;",
+        "psiPresent": true,
+        "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+        "psiLanguage": "OpenPyCharmSQL",
+        "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+        "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+        "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+        "isDispatchThread": true,
+        "showing": true,
+        "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@435f3cd3",
+        "focusWithinEditor": true
+      },
+      "actionContextEditorMatches": true,
+      "actionContextProject": {
+        "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+        "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+        "class": "com.intellij.openapi.project.impl.ProjectImpl",
+        "default": false
+      },
+      "observedLookupClass": "com.intellij.codeInsight.lookup.impl.LookupImpl",
+      "observedItems": [
+        {
+          "lookup": "products",
+          "type": "table/view",
+          "tail": "  main"
+        }
+      ],
+      "nativePopupShown": true,
+      "lookupStart": 14,
+      "selectedItem": "products",
+      "nativeSelectionMethod": "LookupImpl.finishLookup",
+      "after": "SELECT * FROM \"main\".\"products\";",
+      "afterEditor": {
+        "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@13bb97f1",
+        "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@560d275e",
+        "project": {
+          "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+          "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+          "class": "com.intellij.openapi.project.impl.ProjectImpl",
+          "default": false
+        },
+        "caret": 31,
+        "documentText": "SELECT * FROM \"main\".\"products\";",
+        "psiPresent": true,
+        "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+        "psiLanguage": "OpenPyCharmSQL",
+        "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+        "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+        "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+        "isDispatchThread": true,
+        "showing": true,
+        "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@435f3cd3",
+        "focusWithinEditor": true
+      },
+      "nativeInsertionMatched": true,
+      "heartbeatTicksDuringCase": 7,
+      "events": [
+        {
+          "event": "first-before",
+          "initProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@13bb97f1",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@560d275e",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 17,
+            "documentText": "SELECT * FROM pro;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": true,
+            "showing": true,
+            "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@435f3cd3",
+            "focusWithinEditor": true
+          },
+          "startOffset": 17,
+          "selectionEndOffset": 17,
+          "identifierEndOffset": 17,
+          "fileLanguage": "OpenPyCharmSQL",
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        },
+        {
+          "event": "last-before",
+          "initProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@13bb97f1",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@560d275e",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 17,
+            "documentText": "SELECT * FROM pro;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": true,
+            "showing": true,
+            "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@435f3cd3",
+            "focusWithinEditor": true
+          },
+          "startOffset": 17,
+          "selectionEndOffset": 17,
+          "identifierEndOffset": 17,
+          "fileLanguage": "OpenPyCharmSQL",
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        },
+        {
+          "event": "first-fill",
+          "parameterOffset": 17,
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@13bb97f1",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@560d275e",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 17,
+            "documentText": "SELECT * FROM pro;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": false
+          },
+          "originalProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "originalLanguage": "OpenPyCharmSQL",
+          "positionLanguage": "OpenPyCharmSQL",
+          "positionText": "proIntellijIdeaRulezzz",
+          "positionRange": "(14,36)",
+          "contributors": [
+            "com.intellij.codeInsight.completion.ComboEditorCompletionContributor",
+            "com.intellij.refactoring.rename.inplace.CompletionContributorForInplaceRename",
+            "com.intellij.codeInsight.completion.XmlCompletionContributor",
+            "com.intellij.completion.ml.sorting.ContextFeaturesContributor",
+            "org.jetbrains.plugins.terminal.block.completion.TerminalCommandSpecCompletionContributorGen1",
+            "org.jetbrains.plugins.terminal.block.completion.powershell.PowerShellCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$BeforeObserver",
+            "com.intellij.codeInsight.template.impl.LiveTemplateCompletionContributor",
+            "com.intellij.codeInsight.completion.command.CommandCompletionContributor",
+            "com.intellij.codeInsight.completion.FilePathCompletionContributor",
+            "com.intellij.codeInsight.completion.CustomFileTypeCompletionContributor",
+            "com.intellij.microservices.url.references.UrlPathReferenceCompletionContributor",
+            "com.intellij.microservices.http.HttpHeaderReferenceCompletionContributor",
+            "com.intellij.structuralsearch.plugin.ui.StructuralSearchTemplatesCompletionContributor",
+            "com.intellij.codeInsight.template.emmet.completion.EmmetCompletionContributor",
+            "com.intellij.codeInsight.completion.HtmlCompletionContributor",
+            "com.intellij.codeInsight.completion.XmlNonFirstCompletionContributor",
+            "org.intellij.plugins.intelliLang.references.LanguageWordInCommentCompletionContributor",
+            "com.intellij.lang.properties.references.PropertiesCompletionContributor",
+            "dev.openpycharm.database.SqlCompletionContributor",
+            "com.intellij.codeInsight.completion.LegacyCompletionContributor",
+            "com.intellij.codeInsight.completion.DefaultCompletionContributor",
+            "com.intellij.codeInsight.completion.ReferenceBasedCompletionContributor",
+            "com.intellij.codeInsight.template.postfix.completion.PostfixTemplateCompletionContributor",
+            "com.intellij.platform.lsp.impl.features.completion.LspCompletionContributor",
+            "com.intellij.codeInsight.completion.WordCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$AfterObserver"
+          ],
+          "diagnosticContextAtParameter": {
+            "replaceStart": 14,
+            "replaceEnd": 17,
+            "prefix": "pro",
+            "mode": "RELATION"
+          },
+          "diagnosticContextAtCaret": {
+            "replaceStart": 14,
+            "replaceEnd": 17,
+            "prefix": "pro",
+            "mode": "RELATION"
+          },
+          "nativeResultPrefix": "pro",
+          "resultStopped": false,
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        },
+        {
+          "event": "last-fill",
+          "parameterOffset": 17,
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@13bb97f1",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@560d275e",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 17,
+            "documentText": "SELECT * FROM pro;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": false
+          },
+          "originalProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "originalLanguage": "OpenPyCharmSQL",
+          "positionLanguage": "OpenPyCharmSQL",
+          "positionText": "proIntellijIdeaRulezzz",
+          "positionRange": "(14,36)",
+          "contributors": [
+            "com.intellij.codeInsight.completion.ComboEditorCompletionContributor",
+            "com.intellij.refactoring.rename.inplace.CompletionContributorForInplaceRename",
+            "com.intellij.codeInsight.completion.XmlCompletionContributor",
+            "com.intellij.completion.ml.sorting.ContextFeaturesContributor",
+            "org.jetbrains.plugins.terminal.block.completion.TerminalCommandSpecCompletionContributorGen1",
+            "org.jetbrains.plugins.terminal.block.completion.powershell.PowerShellCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$BeforeObserver",
+            "com.intellij.codeInsight.template.impl.LiveTemplateCompletionContributor",
+            "com.intellij.codeInsight.completion.command.CommandCompletionContributor",
+            "com.intellij.codeInsight.completion.FilePathCompletionContributor",
+            "com.intellij.codeInsight.completion.CustomFileTypeCompletionContributor",
+            "com.intellij.microservices.url.references.UrlPathReferenceCompletionContributor",
+            "com.intellij.microservices.http.HttpHeaderReferenceCompletionContributor",
+            "com.intellij.structuralsearch.plugin.ui.StructuralSearchTemplatesCompletionContributor",
+            "com.intellij.codeInsight.template.emmet.completion.EmmetCompletionContributor",
+            "com.intellij.codeInsight.completion.HtmlCompletionContributor",
+            "com.intellij.codeInsight.completion.XmlNonFirstCompletionContributor",
+            "org.intellij.plugins.intelliLang.references.LanguageWordInCommentCompletionContributor",
+            "com.intellij.lang.properties.references.PropertiesCompletionContributor",
+            "dev.openpycharm.database.SqlCompletionContributor",
+            "com.intellij.codeInsight.completion.LegacyCompletionContributor",
+            "com.intellij.codeInsight.completion.DefaultCompletionContributor",
+            "com.intellij.codeInsight.completion.ReferenceBasedCompletionContributor",
+            "com.intellij.codeInsight.template.postfix.completion.PostfixTemplateCompletionContributor",
+            "com.intellij.platform.lsp.impl.features.completion.LspCompletionContributor",
+            "com.intellij.codeInsight.completion.WordCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$AfterObserver"
+          ],
+          "diagnosticContextAtParameter": {
+            "replaceStart": 14,
+            "replaceEnd": 17,
+            "prefix": "pro",
+            "mode": "RELATION"
+          },
+          "diagnosticContextAtCaret": {
+            "replaceStart": 14,
+            "replaceEnd": 17,
+            "prefix": "pro",
+            "mode": "RELATION"
+          },
+          "nativeResultPrefix": "pro",
+          "resultStopped": false,
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        }
+      ],
+      "endSnapshot": {
+        "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+        "present": true,
+        "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+        "tableCount": 5,
+        "columnCount": 11,
+        "tables": [
+          "main.odd\"table",
+          "main.orders",
+          "main.products",
+          "main.订单 表",
+          "main.available_products"
+        ],
+        "truncated": false
+      }
+    },
+    {
+      "name": "console-alias",
+      "handlerDiagnostic": false,
+      "expectedAfter": "SELECT p.\"name\" FROM main.products p;",
+      "nativeEntryPoint": "ActionUtil.invokeAction:CodeCompletion",
+      "before": {
+        "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@13bb97f1",
+        "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@560d275e",
+        "project": {
+          "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+          "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+          "class": "com.intellij.openapi.project.impl.ProjectImpl",
+          "default": false
+        },
+        "caret": 11,
+        "documentText": "SELECT p.na FROM main.products p;",
+        "psiPresent": true,
+        "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+        "psiLanguage": "OpenPyCharmSQL",
+        "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+        "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+        "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+        "isDispatchThread": true,
+        "showing": true,
+        "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@435f3cd3",
+        "focusWithinEditor": true
+      },
+      "actionContextEditorMatches": true,
+      "actionContextProject": {
+        "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+        "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+        "class": "com.intellij.openapi.project.impl.ProjectImpl",
+        "default": false
+      },
+      "observedLookupClass": "com.intellij.codeInsight.lookup.impl.LookupImpl",
+      "observedItems": [
+        {
+          "lookup": "name",
+          "type": "column",
+          "tail": "  \"main\".\"products\" · TEXT"
+        }
+      ],
+      "nativePopupShown": true,
+      "lookupStart": 9,
+      "selectedItem": "name",
+      "nativeSelectionMethod": "LookupImpl.finishLookup",
+      "after": "SELECT p.\"name\" FROM main.products p;",
+      "afterEditor": {
+        "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@13bb97f1",
+        "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@560d275e",
+        "project": {
+          "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+          "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+          "class": "com.intellij.openapi.project.impl.ProjectImpl",
+          "default": false
+        },
+        "caret": 15,
+        "documentText": "SELECT p.\"name\" FROM main.products p;",
+        "psiPresent": true,
+        "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+        "psiLanguage": "OpenPyCharmSQL",
+        "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+        "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+        "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+        "isDispatchThread": true,
+        "showing": true,
+        "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@435f3cd3",
+        "focusWithinEditor": true
+      },
+      "nativeInsertionMatched": true,
+      "heartbeatTicksDuringCase": 7,
+      "events": [
+        {
+          "event": "first-before",
+          "initProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@13bb97f1",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@560d275e",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 11,
+            "documentText": "SELECT p.na FROM main.products p;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": true,
+            "showing": true,
+            "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@435f3cd3",
+            "focusWithinEditor": true
+          },
+          "startOffset": 11,
+          "selectionEndOffset": 11,
+          "identifierEndOffset": 11,
+          "fileLanguage": "OpenPyCharmSQL",
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        },
+        {
+          "event": "last-before",
+          "initProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@13bb97f1",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@560d275e",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 11,
+            "documentText": "SELECT p.na FROM main.products p;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": true,
+            "showing": true,
+            "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@435f3cd3",
+            "focusWithinEditor": true
+          },
+          "startOffset": 11,
+          "selectionEndOffset": 11,
+          "identifierEndOffset": 11,
+          "fileLanguage": "OpenPyCharmSQL",
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        },
+        {
+          "event": "first-fill",
+          "parameterOffset": 11,
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@13bb97f1",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@560d275e",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 11,
+            "documentText": "SELECT p.na FROM main.products p;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": false
+          },
+          "originalProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "originalLanguage": "OpenPyCharmSQL",
+          "positionLanguage": "OpenPyCharmSQL",
+          "positionText": "naIntellijIdeaRulezzz",
+          "positionRange": "(9,30)",
+          "contributors": [
+            "com.intellij.codeInsight.completion.ComboEditorCompletionContributor",
+            "com.intellij.refactoring.rename.inplace.CompletionContributorForInplaceRename",
+            "com.intellij.codeInsight.completion.XmlCompletionContributor",
+            "com.intellij.completion.ml.sorting.ContextFeaturesContributor",
+            "org.jetbrains.plugins.terminal.block.completion.TerminalCommandSpecCompletionContributorGen1",
+            "org.jetbrains.plugins.terminal.block.completion.powershell.PowerShellCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$BeforeObserver",
+            "com.intellij.codeInsight.template.impl.LiveTemplateCompletionContributor",
+            "com.intellij.codeInsight.completion.command.CommandCompletionContributor",
+            "com.intellij.codeInsight.completion.FilePathCompletionContributor",
+            "com.intellij.codeInsight.completion.CustomFileTypeCompletionContributor",
+            "com.intellij.microservices.url.references.UrlPathReferenceCompletionContributor",
+            "com.intellij.microservices.http.HttpHeaderReferenceCompletionContributor",
+            "com.intellij.structuralsearch.plugin.ui.StructuralSearchTemplatesCompletionContributor",
+            "com.intellij.codeInsight.template.emmet.completion.EmmetCompletionContributor",
+            "com.intellij.codeInsight.completion.HtmlCompletionContributor",
+            "com.intellij.codeInsight.completion.XmlNonFirstCompletionContributor",
+            "org.intellij.plugins.intelliLang.references.LanguageWordInCommentCompletionContributor",
+            "com.intellij.lang.properties.references.PropertiesCompletionContributor",
+            "dev.openpycharm.database.SqlCompletionContributor",
+            "com.intellij.codeInsight.completion.LegacyCompletionContributor",
+            "com.intellij.codeInsight.completion.DefaultCompletionContributor",
+            "com.intellij.codeInsight.completion.ReferenceBasedCompletionContributor",
+            "com.intellij.codeInsight.template.postfix.completion.PostfixTemplateCompletionContributor",
+            "com.intellij.platform.lsp.impl.features.completion.LspCompletionContributor",
+            "com.intellij.codeInsight.completion.WordCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$AfterObserver"
+          ],
+          "diagnosticContextAtParameter": {
+            "replaceStart": 9,
+            "replaceEnd": 11,
+            "prefix": "na",
+            "mode": "COLUMN"
+          },
+          "diagnosticContextAtCaret": {
+            "replaceStart": 9,
+            "replaceEnd": 11,
+            "prefix": "na",
+            "mode": "COLUMN"
+          },
+          "nativeResultPrefix": "na",
+          "resultStopped": false,
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        },
+        {
+          "event": "last-fill",
+          "parameterOffset": 11,
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@13bb97f1",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@560d275e",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 11,
+            "documentText": "SELECT p.na FROM main.products p;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": false
+          },
+          "originalProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "originalLanguage": "OpenPyCharmSQL",
+          "positionLanguage": "OpenPyCharmSQL",
+          "positionText": "naIntellijIdeaRulezzz",
+          "positionRange": "(9,30)",
+          "contributors": [
+            "com.intellij.codeInsight.completion.ComboEditorCompletionContributor",
+            "com.intellij.refactoring.rename.inplace.CompletionContributorForInplaceRename",
+            "com.intellij.codeInsight.completion.XmlCompletionContributor",
+            "com.intellij.completion.ml.sorting.ContextFeaturesContributor",
+            "org.jetbrains.plugins.terminal.block.completion.TerminalCommandSpecCompletionContributorGen1",
+            "org.jetbrains.plugins.terminal.block.completion.powershell.PowerShellCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$BeforeObserver",
+            "com.intellij.codeInsight.template.impl.LiveTemplateCompletionContributor",
+            "com.intellij.codeInsight.completion.command.CommandCompletionContributor",
+            "com.intellij.codeInsight.completion.FilePathCompletionContributor",
+            "com.intellij.codeInsight.completion.CustomFileTypeCompletionContributor",
+            "com.intellij.microservices.url.references.UrlPathReferenceCompletionContributor",
+            "com.intellij.microservices.http.HttpHeaderReferenceCompletionContributor",
+            "com.intellij.structuralsearch.plugin.ui.StructuralSearchTemplatesCompletionContributor",
+            "com.intellij.codeInsight.template.emmet.completion.EmmetCompletionContributor",
+            "com.intellij.codeInsight.completion.HtmlCompletionContributor",
+            "com.intellij.codeInsight.completion.XmlNonFirstCompletionContributor",
+            "org.intellij.plugins.intelliLang.references.LanguageWordInCommentCompletionContributor",
+            "com.intellij.lang.properties.references.PropertiesCompletionContributor",
+            "dev.openpycharm.database.SqlCompletionContributor",
+            "com.intellij.codeInsight.completion.LegacyCompletionContributor",
+            "com.intellij.codeInsight.completion.DefaultCompletionContributor",
+            "com.intellij.codeInsight.completion.ReferenceBasedCompletionContributor",
+            "com.intellij.codeInsight.template.postfix.completion.PostfixTemplateCompletionContributor",
+            "com.intellij.platform.lsp.impl.features.completion.LspCompletionContributor",
+            "com.intellij.codeInsight.completion.WordCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$AfterObserver"
+          ],
+          "diagnosticContextAtParameter": {
+            "replaceStart": 9,
+            "replaceEnd": 11,
+            "prefix": "na",
+            "mode": "COLUMN"
+          },
+          "diagnosticContextAtCaret": {
+            "replaceStart": 9,
+            "replaceEnd": 11,
+            "prefix": "na",
+            "mode": "COLUMN"
+          },
+          "nativeResultPrefix": "na",
+          "resultStopped": false,
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        }
+      ],
+      "endSnapshot": {
+        "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+        "present": true,
+        "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+        "tableCount": 5,
+        "columnCount": 11,
+        "tables": [
+          "main.odd\"table",
+          "main.orders",
+          "main.products",
+          "main.订单 表",
+          "main.available_products"
+        ],
+        "truncated": false
+      }
+    },
+    {
+      "name": "console-quoted",
+      "handlerDiagnostic": false,
+      "expectedAfter": "SELECT p.\"列 名\" FROM main.products p;",
+      "nativeEntryPoint": "ActionUtil.invokeAction:CodeCompletion",
+      "before": {
+        "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@13bb97f1",
+        "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@560d275e",
+        "project": {
+          "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+          "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+          "class": "com.intellij.openapi.project.impl.ProjectImpl",
+          "default": false
+        },
+        "caret": 12,
+        "documentText": "SELECT p.\"列 名\" FROM main.products p;",
+        "psiPresent": true,
+        "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+        "psiLanguage": "OpenPyCharmSQL",
+        "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+        "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+        "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+        "isDispatchThread": true,
+        "showing": true,
+        "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@435f3cd3",
+        "focusWithinEditor": true
+      },
+      "actionContextEditorMatches": true,
+      "actionContextProject": {
+        "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+        "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+        "class": "com.intellij.openapi.project.impl.ProjectImpl",
+        "default": false
+      },
+      "observedLookupClass": "com.intellij.codeInsight.lookup.impl.LookupImpl",
+      "observedItems": [
+        {
+          "lookup": "列 名",
+          "type": "column",
+          "tail": "  \"main\".\"products\" · TEXT"
+        }
+      ],
+      "nativePopupShown": true,
+      "lookupStart": 9,
+      "selectedItem": "列 名",
+      "nativeSelectionMethod": "LookupImpl.finishLookup",
+      "after": "SELECT p.\"列 名\" FROM main.products p;",
+      "afterEditor": {
+        "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@13bb97f1",
+        "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@560d275e",
+        "project": {
+          "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+          "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+          "class": "com.intellij.openapi.project.impl.ProjectImpl",
+          "default": false
+        },
+        "caret": 14,
+        "documentText": "SELECT p.\"列 名\" FROM main.products p;",
+        "psiPresent": true,
+        "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+        "psiLanguage": "OpenPyCharmSQL",
+        "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+        "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+        "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+        "isDispatchThread": true,
+        "showing": true,
+        "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@435f3cd3",
+        "focusWithinEditor": true
+      },
+      "nativeInsertionMatched": true,
+      "heartbeatTicksDuringCase": 7,
+      "events": [
+        {
+          "event": "first-before",
+          "initProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@13bb97f1",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@560d275e",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 12,
+            "documentText": "SELECT p.\"列 名\" FROM main.products p;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": true,
+            "showing": true,
+            "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@435f3cd3",
+            "focusWithinEditor": true
+          },
+          "startOffset": 12,
+          "selectionEndOffset": 12,
+          "identifierEndOffset": 13,
+          "fileLanguage": "OpenPyCharmSQL",
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        },
+        {
+          "event": "last-before",
+          "initProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@13bb97f1",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@560d275e",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 12,
+            "documentText": "SELECT p.\"列 名\" FROM main.products p;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": true,
+            "showing": true,
+            "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@435f3cd3",
+            "focusWithinEditor": true
+          },
+          "startOffset": 12,
+          "selectionEndOffset": 12,
+          "identifierEndOffset": 14,
+          "fileLanguage": "OpenPyCharmSQL",
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        },
+        {
+          "event": "first-fill",
+          "parameterOffset": 12,
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@13bb97f1",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@560d275e",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 12,
+            "documentText": "SELECT p.\"列 名\" FROM main.products p;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": false
+          },
+          "originalProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "originalLanguage": "OpenPyCharmSQL",
+          "positionLanguage": "OpenPyCharmSQL",
+          "positionText": "\"列 IntellijIdeaRulezzz 名\"",
+          "positionRange": "(9,34)",
+          "contributors": [
+            "com.intellij.codeInsight.completion.ComboEditorCompletionContributor",
+            "com.intellij.refactoring.rename.inplace.CompletionContributorForInplaceRename",
+            "com.intellij.codeInsight.completion.XmlCompletionContributor",
+            "com.intellij.completion.ml.sorting.ContextFeaturesContributor",
+            "org.jetbrains.plugins.terminal.block.completion.TerminalCommandSpecCompletionContributorGen1",
+            "org.jetbrains.plugins.terminal.block.completion.powershell.PowerShellCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$BeforeObserver",
+            "com.intellij.codeInsight.template.impl.LiveTemplateCompletionContributor",
+            "com.intellij.codeInsight.completion.command.CommandCompletionContributor",
+            "com.intellij.codeInsight.completion.FilePathCompletionContributor",
+            "com.intellij.codeInsight.completion.CustomFileTypeCompletionContributor",
+            "com.intellij.microservices.url.references.UrlPathReferenceCompletionContributor",
+            "com.intellij.microservices.http.HttpHeaderReferenceCompletionContributor",
+            "com.intellij.structuralsearch.plugin.ui.StructuralSearchTemplatesCompletionContributor",
+            "com.intellij.codeInsight.template.emmet.completion.EmmetCompletionContributor",
+            "com.intellij.codeInsight.completion.HtmlCompletionContributor",
+            "com.intellij.codeInsight.completion.XmlNonFirstCompletionContributor",
+            "org.intellij.plugins.intelliLang.references.LanguageWordInCommentCompletionContributor",
+            "com.intellij.lang.properties.references.PropertiesCompletionContributor",
+            "dev.openpycharm.database.SqlCompletionContributor",
+            "com.intellij.codeInsight.completion.LegacyCompletionContributor",
+            "com.intellij.codeInsight.completion.DefaultCompletionContributor",
+            "com.intellij.codeInsight.completion.ReferenceBasedCompletionContributor",
+            "com.intellij.codeInsight.template.postfix.completion.PostfixTemplateCompletionContributor",
+            "com.intellij.platform.lsp.impl.features.completion.LspCompletionContributor",
+            "com.intellij.codeInsight.completion.WordCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$AfterObserver"
+          ],
+          "diagnosticContextAtParameter": {
+            "replaceStart": 9,
+            "replaceEnd": 14,
+            "prefix": "列 ",
+            "mode": "COLUMN"
+          },
+          "diagnosticContextAtCaret": {
+            "replaceStart": 9,
+            "replaceEnd": 14,
+            "prefix": "列 ",
+            "mode": "COLUMN"
+          },
+          "nativeResultPrefix": "",
+          "resultStopped": false,
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        },
+        {
+          "event": "last-fill",
+          "parameterOffset": 12,
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@13bb97f1",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@560d275e",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 12,
+            "documentText": "SELECT p.\"列 名\" FROM main.products p;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": false
+          },
+          "originalProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "originalLanguage": "OpenPyCharmSQL",
+          "positionLanguage": "OpenPyCharmSQL",
+          "positionText": "\"列 IntellijIdeaRulezzz 名\"",
+          "positionRange": "(9,34)",
+          "contributors": [
+            "com.intellij.codeInsight.completion.ComboEditorCompletionContributor",
+            "com.intellij.refactoring.rename.inplace.CompletionContributorForInplaceRename",
+            "com.intellij.codeInsight.completion.XmlCompletionContributor",
+            "com.intellij.completion.ml.sorting.ContextFeaturesContributor",
+            "org.jetbrains.plugins.terminal.block.completion.TerminalCommandSpecCompletionContributorGen1",
+            "org.jetbrains.plugins.terminal.block.completion.powershell.PowerShellCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$BeforeObserver",
+            "com.intellij.codeInsight.template.impl.LiveTemplateCompletionContributor",
+            "com.intellij.codeInsight.completion.command.CommandCompletionContributor",
+            "com.intellij.codeInsight.completion.FilePathCompletionContributor",
+            "com.intellij.codeInsight.completion.CustomFileTypeCompletionContributor",
+            "com.intellij.microservices.url.references.UrlPathReferenceCompletionContributor",
+            "com.intellij.microservices.http.HttpHeaderReferenceCompletionContributor",
+            "com.intellij.structuralsearch.plugin.ui.StructuralSearchTemplatesCompletionContributor",
+            "com.intellij.codeInsight.template.emmet.completion.EmmetCompletionContributor",
+            "com.intellij.codeInsight.completion.HtmlCompletionContributor",
+            "com.intellij.codeInsight.completion.XmlNonFirstCompletionContributor",
+            "org.intellij.plugins.intelliLang.references.LanguageWordInCommentCompletionContributor",
+            "com.intellij.lang.properties.references.PropertiesCompletionContributor",
+            "dev.openpycharm.database.SqlCompletionContributor",
+            "com.intellij.codeInsight.completion.LegacyCompletionContributor",
+            "com.intellij.codeInsight.completion.DefaultCompletionContributor",
+            "com.intellij.codeInsight.completion.ReferenceBasedCompletionContributor",
+            "com.intellij.codeInsight.template.postfix.completion.PostfixTemplateCompletionContributor",
+            "com.intellij.platform.lsp.impl.features.completion.LspCompletionContributor",
+            "com.intellij.codeInsight.completion.WordCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$AfterObserver"
+          ],
+          "diagnosticContextAtParameter": {
+            "replaceStart": 9,
+            "replaceEnd": 14,
+            "prefix": "列 ",
+            "mode": "COLUMN"
+          },
+          "diagnosticContextAtCaret": {
+            "replaceStart": 9,
+            "replaceEnd": 14,
+            "prefix": "列 ",
+            "mode": "COLUMN"
+          },
+          "nativeResultPrefix": "",
+          "resultStopped": false,
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        }
+      ],
+      "endSnapshot": {
+        "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+        "present": true,
+        "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+        "tableCount": 5,
+        "columnCount": 11,
+        "tables": [
+          "main.odd\"table",
+          "main.orders",
+          "main.products",
+          "main.订单 表",
+          "main.available_products"
+        ],
+        "truncated": false
+      }
+    },
+    {
+      "name": "source-handler-diagnostic",
+      "handlerDiagnostic": true,
+      "expectedAfter": "SELECT * FROM \"main\".\"products\";",
+      "nativeEntryPoint": "CodeCompletionHandlerBase.invokeCompletion (diagnostic only)",
+      "before": {
+        "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+        "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+        "project": {
+          "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+          "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+          "class": "com.intellij.openapi.project.impl.ProjectImpl",
+          "default": false
+        },
+        "caret": 17,
+        "documentText": "SELECT * FROM pro;",
+        "psiPresent": true,
+        "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+        "psiLanguage": "OpenPyCharmSQL",
+        "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+        "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+        "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+        "isDispatchThread": true,
+        "showing": true,
+        "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@133c7b9b",
+        "focusWithinEditor": true
+      },
+      "observedLookupClass": "com.intellij.codeInsight.lookup.impl.LookupImpl",
+      "observedItems": [
+        {
+          "lookup": "products",
+          "type": "table/view",
+          "tail": "  main"
+        }
+      ],
+      "nativePopupShown": true,
+      "lookupStart": 14,
+      "selectedItem": "products",
+      "nativeSelectionMethod": "LookupImpl.finishLookup",
+      "after": "SELECT * FROM \"main\".\"products\";",
+      "afterEditor": {
+        "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+        "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+        "project": {
+          "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+          "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+          "class": "com.intellij.openapi.project.impl.ProjectImpl",
+          "default": false
+        },
+        "caret": 31,
+        "documentText": "SELECT * FROM \"main\".\"products\";",
+        "psiPresent": true,
+        "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+        "psiLanguage": "OpenPyCharmSQL",
+        "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+        "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+        "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+        "isDispatchThread": true,
+        "showing": true,
+        "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@133c7b9b",
+        "focusWithinEditor": true
+      },
+      "nativeInsertionMatched": true,
+      "heartbeatTicksDuringCase": 7,
+      "events": [
+        {
+          "event": "first-before",
+          "initProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 17,
+            "documentText": "SELECT * FROM pro;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": true,
+            "showing": true,
+            "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@133c7b9b",
+            "focusWithinEditor": true
+          },
+          "startOffset": 17,
+          "selectionEndOffset": 17,
+          "identifierEndOffset": 17,
+          "fileLanguage": "OpenPyCharmSQL",
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        },
+        {
+          "event": "last-before",
+          "initProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 17,
+            "documentText": "SELECT * FROM pro;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": true,
+            "showing": true,
+            "focusOwner": "com.intellij.openapi.editor.impl.EditorComponentImpl@133c7b9b",
+            "focusWithinEditor": true
+          },
+          "startOffset": 17,
+          "selectionEndOffset": 17,
+          "identifierEndOffset": 17,
+          "fileLanguage": "OpenPyCharmSQL",
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        },
+        {
+          "event": "first-fill",
+          "parameterOffset": 17,
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 17,
+            "documentText": "SELECT * FROM pro;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": false
+          },
+          "originalProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "originalLanguage": "OpenPyCharmSQL",
+          "positionLanguage": "OpenPyCharmSQL",
+          "positionText": "proIntellijIdeaRulezzz",
+          "positionRange": "(14,36)",
+          "contributors": [
+            "com.intellij.codeInsight.completion.ComboEditorCompletionContributor",
+            "com.intellij.refactoring.rename.inplace.CompletionContributorForInplaceRename",
+            "com.intellij.codeInsight.completion.XmlCompletionContributor",
+            "com.intellij.completion.ml.sorting.ContextFeaturesContributor",
+            "org.jetbrains.plugins.terminal.block.completion.TerminalCommandSpecCompletionContributorGen1",
+            "org.jetbrains.plugins.terminal.block.completion.powershell.PowerShellCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$BeforeObserver",
+            "com.intellij.codeInsight.template.impl.LiveTemplateCompletionContributor",
+            "com.intellij.codeInsight.completion.command.CommandCompletionContributor",
+            "com.intellij.codeInsight.completion.FilePathCompletionContributor",
+            "com.intellij.codeInsight.completion.CustomFileTypeCompletionContributor",
+            "com.intellij.microservices.url.references.UrlPathReferenceCompletionContributor",
+            "com.intellij.microservices.http.HttpHeaderReferenceCompletionContributor",
+            "com.intellij.structuralsearch.plugin.ui.StructuralSearchTemplatesCompletionContributor",
+            "com.intellij.codeInsight.template.emmet.completion.EmmetCompletionContributor",
+            "com.intellij.codeInsight.completion.HtmlCompletionContributor",
+            "com.intellij.codeInsight.completion.XmlNonFirstCompletionContributor",
+            "org.intellij.plugins.intelliLang.references.LanguageWordInCommentCompletionContributor",
+            "com.intellij.lang.properties.references.PropertiesCompletionContributor",
+            "dev.openpycharm.database.SqlCompletionContributor",
+            "com.intellij.codeInsight.completion.LegacyCompletionContributor",
+            "com.intellij.codeInsight.completion.DefaultCompletionContributor",
+            "com.intellij.codeInsight.completion.ReferenceBasedCompletionContributor",
+            "com.intellij.codeInsight.template.postfix.completion.PostfixTemplateCompletionContributor",
+            "com.intellij.platform.lsp.impl.features.completion.LspCompletionContributor",
+            "com.intellij.codeInsight.completion.WordCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$AfterObserver"
+          ],
+          "diagnosticContextAtParameter": {
+            "replaceStart": 14,
+            "replaceEnd": 17,
+            "prefix": "pro",
+            "mode": "RELATION"
+          },
+          "diagnosticContextAtCaret": {
+            "replaceStart": 14,
+            "replaceEnd": 17,
+            "prefix": "pro",
+            "mode": "RELATION"
+          },
+          "nativeResultPrefix": "pro",
+          "resultStopped": false,
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        },
+        {
+          "event": "last-fill",
+          "parameterOffset": 17,
+          "editor": {
+            "editorIdentity": "com.intellij.openapi.editor.impl.EditorImpl@6990ef03",
+            "documentIdentity": "com.intellij.openapi.editor.impl.DocumentImpl@e2262d0",
+            "project": {
+              "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+              "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+              "class": "com.intellij.openapi.project.impl.ProjectImpl",
+              "default": false
+            },
+            "caret": 17,
+            "documentText": "SELECT * FROM pro;",
+            "psiPresent": true,
+            "psiClass": "dev.openpycharm.database.SqlParserDefinition$1",
+            "psiLanguage": "OpenPyCharmSQL",
+            "psiFileType": "dev.openpycharm.database.SqlLanguage$FileType",
+            "psiViewProvider": "com.intellij.psi.SingleRootFileViewProvider",
+            "parserDefinition": "dev.openpycharm.database.SqlParserDefinition",
+            "isDispatchThread": false
+          },
+          "originalProject": {
+            "identity": "com.intellij.openapi.project.impl.ProjectImpl@5ff89422",
+            "basePath": "/Users/wangshubo/develop/openpycharm/.tools/native-database-insertion-59fd-1/project",
+            "class": "com.intellij.openapi.project.impl.ProjectImpl",
+            "default": false
+          },
+          "originalLanguage": "OpenPyCharmSQL",
+          "positionLanguage": "OpenPyCharmSQL",
+          "positionText": "proIntellijIdeaRulezzz",
+          "positionRange": "(14,36)",
+          "contributors": [
+            "com.intellij.codeInsight.completion.ComboEditorCompletionContributor",
+            "com.intellij.refactoring.rename.inplace.CompletionContributorForInplaceRename",
+            "com.intellij.codeInsight.completion.XmlCompletionContributor",
+            "com.intellij.completion.ml.sorting.ContextFeaturesContributor",
+            "org.jetbrains.plugins.terminal.block.completion.TerminalCommandSpecCompletionContributorGen1",
+            "org.jetbrains.plugins.terminal.block.completion.powershell.PowerShellCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$BeforeObserver",
+            "com.intellij.codeInsight.template.impl.LiveTemplateCompletionContributor",
+            "com.intellij.codeInsight.completion.command.CommandCompletionContributor",
+            "com.intellij.codeInsight.completion.FilePathCompletionContributor",
+            "com.intellij.codeInsight.completion.CustomFileTypeCompletionContributor",
+            "com.intellij.microservices.url.references.UrlPathReferenceCompletionContributor",
+            "com.intellij.microservices.http.HttpHeaderReferenceCompletionContributor",
+            "com.intellij.structuralsearch.plugin.ui.StructuralSearchTemplatesCompletionContributor",
+            "com.intellij.codeInsight.template.emmet.completion.EmmetCompletionContributor",
+            "com.intellij.codeInsight.completion.HtmlCompletionContributor",
+            "com.intellij.codeInsight.completion.XmlNonFirstCompletionContributor",
+            "org.intellij.plugins.intelliLang.references.LanguageWordInCommentCompletionContributor",
+            "com.intellij.lang.properties.references.PropertiesCompletionContributor",
+            "dev.openpycharm.database.SqlCompletionContributor",
+            "com.intellij.codeInsight.completion.LegacyCompletionContributor",
+            "com.intellij.codeInsight.completion.DefaultCompletionContributor",
+            "com.intellij.codeInsight.completion.ReferenceBasedCompletionContributor",
+            "com.intellij.codeInsight.template.postfix.completion.PostfixTemplateCompletionContributor",
+            "com.intellij.platform.lsp.impl.features.completion.LspCompletionContributor",
+            "com.intellij.codeInsight.completion.WordCompletionContributor",
+            "dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$AfterObserver"
+          ],
+          "diagnosticContextAtParameter": {
+            "replaceStart": 14,
+            "replaceEnd": 17,
+            "prefix": "pro",
+            "mode": "RELATION"
+          },
+          "diagnosticContextAtCaret": {
+            "replaceStart": 14,
+            "replaceEnd": 17,
+            "prefix": "pro",
+            "mode": "RELATION"
+          },
+          "nativeResultPrefix": "pro",
+          "resultStopped": false,
+          "snapshot": {
+            "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+            "present": true,
+            "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+            "tableCount": 5,
+            "columnCount": 11,
+            "tables": [
+              "main.odd\"table",
+              "main.orders",
+              "main.products",
+              "main.订单 表",
+              "main.available_products"
+            ],
+            "truncated": false
+          }
+        }
+      ],
+      "endSnapshot": {
+        "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+        "present": true,
+        "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+        "tableCount": 5,
+        "columnCount": 11,
+        "tables": [
+          "main.odd\"table",
+          "main.orders",
+          "main.products",
+          "main.订单 表",
+          "main.available_products"
+        ],
+        "truncated": false
+      }
+    }
+  ],
+  "actualMetadataSnapshot": {
+    "createdServiceIdentity": "dev.openpycharm.database.DatabaseService@2b4749a4",
+    "present": true,
+    "identity": "dev.openpycharm.database.DatabaseMetadataCache$Snapshot@53fd1b92",
+    "tableCount": 5,
+    "columnCount": 11,
+    "tables": [
+      "main.odd\"table",
+      "main.orders",
+      "main.products",
+      "main.订单 表",
+      "main.available_products"
+    ],
+    "truncated": false
+  },
+  "connectionDisconnected": true,
+  "originalNegativeReportSha256": "5a8e368e2f91b7a344ef25571f1db3a959f6a9ba95102ddf7c1ff4c9ffe69ceb",
+  "originalExpectedCasesUnchanged": true,
+  "evidence": {
+    "result": {
+      "path": ".tools/native-database-insertion-59fd-1/result.json",
+      "sha256": "3b240e32a91fb0a4011c793143919c636b541fb7a55d7309992138e124af1878"
+    },
+    "nativeReport": {
+      "path": ".tools/native-database-insertion-59fd-1/native-report.json",
+      "sha256": "a70fc25838e85cfbd81198d27aa7ecd8868078cbfde6ecfb4c509f4c22f6e2fd"
+    }
+  },
+  "limitations": [
+    "ActualnativeBasicAction/APIandLookup.finishLookup,notphysicalkeyboard",
+    "macOSarm64SQLiteonly; networkdriversandWindowsUIunverified",
+    "NativegatepreservesordinarytrustandmayawaitmanualTrustProjectinafreshprofile;notunattendedCIgating"
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "status": "pass-native-regression",
+  "observedAt": "2026-11-14",
+  "candidateSourceCommit": "59fd8ee08f7bf821fe57a39389faa13ebffa1db1",
+  "jarSha256": "882248920fe940df597c53dab1c22156c3977bb66b7a651c0df7082d5d1cea28",
+  "nativeApp": "build/dev3-insertion-psi/OpenPyCharm.app",
+  "ownedPid": 90551,
+  "normalProjectTrustRetained": true,
+  "actualNativeChecks": [
+    "+ Code ordinary JButton creates PSI-backed editor",
+    "Native paste Unicode, real ShiftEnter Python3.14 prints42",
+    "+ Markdown ordinary JButton creates source and real styled preview",
+    "Native Save button persisted13cells includingactualnewoutput",
+    "Delete only newly addedMarkdown/Code cells throughordinarybuttons",
+    "CmdS andclose/reopen returns original11cells exactly includingalloutputs/metadata"
+  ],
+  "latestStartupErrorCount": 0,
+  "latestStartupSevereCount": 0,
+  "priorFailurePreserved": "docs/verification/notebook-rich-native-preflight-20261114.json",
+  "exactExecutedNotebookPreservedAfterDeletion": true,
+  "cleanup": {
+    "ownAppExitedAfterSigterm": true,
+    "kernelDisposedOnNotebookClose": true
+  },
+  "evidence": {
+    ".tools/ci/dev3-psi-desktop/new-cells.png": {
+      "bytes": 325903,
+      "sha256": "b79e254d0ef5825ec13d950a53ec9993a6c9b64d933fd93e97ff609e134bb7d3"
+    },
+    ".tools/ci/dev3-psi-desktop/markdown-preview.ax.txt": {
+      "bytes": 3071,
+      "sha256": "33b70e18589a53c5101c38ced51d3b4f9393166e2b1de5454e5e9dfc06ababe5"
+    },
+    ".tools/ci/dev3-psi-desktop/new-code-completed.ax.txt": {
+      "bytes": 23359,
+      "sha256": "ffdede3143164845d3a0f9b0c798f59ace60d24466fc836860d712ea8c20867c"
+    },
+    ".tools/ci/dev3-psi-desktop/delete-markdown.ax.txt": {
+      "bytes": 23091,
+      "sha256": "d55dfb01546c7273df264128171b6be2f1b0b5d858c1c7c807230048c2c3c10b"
+    },
+    ".tools/ci/dev3-psi-desktop/after-temporary-cell-deletion.ipynb": {
+      "bytes": 36955,
+      "sha256": "4e59bdf25c6fded804d60f49493a850fa09d4dd5842cce9e7db8a6bf73a27703"
+    },
+    ".tools/ci/dev3-psi-desktop/add-markdown.ax.txt": {
+      "bytes": 23743,
+      "sha256": "025d3718781c117fb2c646c478ab86ae791d8c678fa350e8fdcc92bd81f92963"
+    },
+    ".tools/ci/dev3-psi-desktop/with-new-cells.ipynb": {
+      "bytes": 37354,
+      "sha256": "838ea4a2675693772e0bfb76cb716f5b357857af0456c3f359820ec0bb51c6e8"
+    },
+    ".tools/ci/dev3-psi-desktop/new-code-executed.ax.txt": {
+      "bytes": 1488,
+      "sha256": "c948f9501d3417c845fc20a8d9ffcddebdb3b3df5c3618a270ef543bab9d58e2"
+    },
+    ".tools/ci/dev3-psi-desktop/reopened.ax.txt": {
+      "bytes": 22219,
+      "sha256": "50b27f202657b4b45705d85aa053fc78ead7858f4fec2bd4b458e15f5dba051e"
+    },
+    ".tools/ci/dev3-psi-desktop/latest-idea.log": {
+      "bytes": 96293,
+      "sha256": "ae769eecf94485d7822fb4e64b30c971028fefc7da0d6634ff67282fb4737a4b"
+    },
+    ".tools/ci/dev3-psi-desktop/add-code.ax.txt": {
+      "bytes": 23078,
+      "sha256": "4f0820c4f4a52ad45affbf3fd5974ca468d919db1ed6c48bf2888939c079dd84"
+    },
+    ".tools/ci/dev3-psi-desktop/delete-code-saved.ax.txt": {
+      "bytes": 22832,
+      "sha256": "d2df03f2bf7f292424891a4c6b3863e4d5d115b9670a9ee077c7857695394599"
+    }
+  },
+  "limitations": [
+    "UninstalledmacOScandidate; finalinstallerGIFmustberecordedseparately",
+    "DoesnotclaimfullNotebookorWindowsUIparity"
+  ]
+}
