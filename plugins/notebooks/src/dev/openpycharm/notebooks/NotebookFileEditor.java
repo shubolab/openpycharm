@@ -152,7 +152,13 @@ public final class NotebookFileEditor extends UserDataHolderBase implements File
         conflicted = false; keepNotebook.setVisible(false); useText.setVisible(false);
         reloading = false; model = replacement; baseline = received == null ? null : received.snapshot();
         if (replacement == null) { persistence.invalidate(); showProblem(message); }
-        else { rebuild(); if (dirty) sync(); else persistence.invalidate(); }
+        else {
+          rebuild();
+          // Reload stopped the owned kernel above. Restore its actual state
+          // before sync, so a real persistence failure can replace this status.
+          status.setText("Kernel stopped — notebook reloaded from text");
+          if (dirty) sync(); else persistence.invalidate();
+        }
       });
     });
   }
