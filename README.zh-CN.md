@@ -8,7 +8,7 @@
 
 **当前正在开发，完整 1:1 对齐尚未完成。**
 
-**0.1.0-dev.4 候选版**在 Python、Notebook、数据库、HTTP 与框架工具基础上，
+**0.1.0-dev.4 预览版**在 Python、Notebook、数据库、HTTP 与框架工具基础上，
 新增原生 JavaScript 和 TypeScript 语言服务：
 
 - 打开已信任的本地项目，使用原生补全、诊断和定义跳转。语言服务默认开启，
@@ -26,10 +26,10 @@
 正常关闭项目后，三个自有 Node 进程均已退出；安装版产品树未变，严格签名核对通过。
 
 [CI 43608150941](https://github.com/shubolab/openpycharm/actions/runs/43608150941)
-正在构建源码 `63921a4`。两平台前端 JVM、完整运行时和产品启动检查已通过；
-Windows 安装器检查已完成，macOS 正进行最后的 DMG 检查。**完整 CI 结果、最终
-产物收据与 dev.4 公开发行尚未确认**。
-详见[dev.4 候选说明](docs/releases/v0.1.0-dev.4.md)。
+已在源码 `63921a4` 上双平台通过，包括前端 JVM、完整运行时、原生产品和安装器
+检查。完整下载的 ZIP 和安装器已独立核对摘要；CI DMG 也已实际复制安装、启动，
+签名与产品树保持不变。其 171 项生产输入和五个插件 JAR 与本机桌面实测版本一致。
+详见[dev.4 发行验收](docs/verification/2026-11-14-dev4-release.md)。
 
 HTML/CSS、JavaScript/TypeScript 专用语法 PSI 与重构、前端框架智能分析和完整
 PyCharm 对齐仍未完成。框架模板/ORM、网络数据库、Windows 实际键鼠桌面及进程
@@ -38,17 +38,17 @@ PyCharm 对齐仍未完成。框架模板/ORM、网络数据库、Windows 实际
 
 ## 已发布预览版
 
-当前已发布安装包仍为 [v0.1.0-dev.3](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.3)，
-源码 `9a243e6`，对应[CI 43565932969](https://github.com/shubolab/openpycharm/actions/runs/43565932969)。
+[v0.1.0-dev.4](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.4)，源码 `63921a4`，
+对应[双平台 CI 43608150941](https://github.com/shubolab/openpycharm/actions/runs/43608150941)。
 
 | 系统 | 安装包 |
 | --- | --- |
-| macOS Apple silicon | [DMG 下载](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/OpenPyCharm-0.1.0-dev.3-macos-arm64.dmg) |
-| Windows x64 | [EXE 下载](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/OpenPyCharm-0.1.0-dev.3-windows-x64-setup.exe) |
+| macOS Apple silicon | [DMG 下载](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.4/OpenPyCharm-0.1.0-dev.4-macos-arm64.dmg) |
+| Windows x64 | [EXE 下载](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.4/OpenPyCharm-0.1.0-dev.4-windows-x64-setup.exe) |
 
-见[安装说明](docs/installation.md)、[校验和](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/SHA256SUMS.txt)
-与[dev.3 发行验收](docs/verification/2026-11-14-dev3-release.md)。Mac 应用使用临时
-签名且未公证，Windows 安装器未签名。[上一预览版 dev.2](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.2)保留下载。
+见[安装说明](docs/installation.md)、[校验和](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.4/SHA256SUMS.txt)
+与[发行验收](docs/verification/2026-11-14-dev4-release.md)。Mac 应用使用临时签名且未
+公证，Windows 安装器未签名。[上一预览版 dev.3](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.3)保留下载。
 
 ![OpenPyCharm 0.1.0-dev.4 实际安装版原生功能演示](docs/demo/v0.1.0-dev.4/openpycharm-native.gif)
 
@@ -60,11 +60,11 @@ PyCharm 对齐仍未完成。框架模板/ORM、网络数据库、Windows 实际
 每个可发版版本都更新实际安装版演示和清单。
 [dev.3 历史演示](docs/demo/v0.1.0-dev.3/openpycharm-native.gif)保留。
 
-## 构建 dev.4 候选
+## 构建 dev.4 预览版
 
 需要 Python 3.10 或更新版本，并在构建空间之外保留至少 20 GiB 可用磁盘。应用内置
 Java；Python 项目使用你选择的本机解释器。普通构建命令仍默认 dev.3，组装五插件
-候选版须显式指定版本和前端运行时收据：
+预览版须显式指定版本和前端运行时收据：
 
 ```sh
 python3 -m pip install -r requirements-build.txt

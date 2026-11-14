@@ -10,7 +10,7 @@ verification.
 
 **Development is in progress. Full 1:1 parity is not yet verified.**
 
-The **0.1.0-dev.4 candidate** adds native JavaScript and TypeScript language
+The **0.1.0-dev.4 preview** adds native JavaScript and TypeScript language
 services to the existing Python, Notebook, Database, HTTP and framework tools:
 
 - Open a trusted local project and edit JavaScript or TypeScript with native
@@ -33,10 +33,11 @@ and emoji. Closing the project removed its three owned Node processes. The
 installed app tree stayed unchanged and strict signature verification passed.
 
 [CI 43608150941](https://github.com/shubolab/openpycharm/actions/runs/43608150941)
-is building source `63921a4`. Its frontend JVM/full-runtime and startup gates passed on
-both platforms. Windows completed the installer checks; macOS is finishing the
-DMG gate. The full CI result, final artifact receipt and public dev.4 release
-have **not yet been confirmed**. See the [dev.4 candidate notes](docs/releases/v0.1.0-dev.4.md).
+passed for source `63921a4` on both platforms, including frontend JVM/full-runtime,
+native product and installer gates. Downloaded ZIPs and installers were independently
+hashed; the exact CI DMG was installed and started, with an unchanged signed app tree.
+Its 171 production inputs and all five plugin JARs match the local desktop-tested build.
+See [release verification](docs/verification/2026-11-14-dev4-release.md).
 
 HTML/CSS, dedicated JavaScript/TypeScript syntax PSI and refactorings, frontend
 framework intelligence and full PyCharm parity remain incomplete. Framework
@@ -48,18 +49,18 @@ results are not implemented. See [installation](docs/installation.md) and the
 
 ## Published preview
 
-The current published installers are [v0.1.0-dev.3](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.3),
-from source `9a243e6` and [CI 43565932969](https://github.com/shubolab/openpycharm/actions/runs/43565932969).
+[v0.1.0-dev.4](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.4) uses source `63921a4` and
+[CI 43608150941](https://github.com/shubolab/openpycharm/actions/runs/43608150941).
 
 | System | Installer |
 | --- | --- |
-| macOS Apple silicon | [DMG](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/OpenPyCharm-0.1.0-dev.3-macos-arm64.dmg) |
-| Windows x64 | [EXE](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/OpenPyCharm-0.1.0-dev.3-windows-x64-setup.exe) |
+| macOS Apple silicon | [DMG](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.4/OpenPyCharm-0.1.0-dev.4-macos-arm64.dmg) |
+| Windows x64 | [EXE](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.4/OpenPyCharm-0.1.0-dev.4-windows-x64-setup.exe) |
 
-See [installation](docs/installation.md), [checksums](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/SHA256SUMS.txt)
-and [dev.3 verification](docs/verification/2026-11-14-dev3-release.md). The Mac app
-is ad-hoc signed and not notarized; the Windows installer is unsigned.
-[Previous preview: dev.2](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.2).
+See [installation](docs/installation.md), [checksums](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.4/SHA256SUMS.txt)
+and [verification](docs/verification/2026-11-14-dev4-release.md). The Mac app is
+ad-hoc signed and not notarized; the Windows installer is unsigned.
+[Previous preview: dev.3](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.3).
 
 ![OpenPyCharm 0.1.0-dev.4 installed native workflows](docs/demo/v0.1.0-dev.4/openpycharm-native.gif)
 
@@ -73,12 +74,12 @@ This capture is distinct from the CI installer verification.
 Each publishable release gets fresh installed-version captures and a manifest.
 [Historical dev.3 demo](docs/demo/v0.1.0-dev.3/openpycharm-native.gif).
 
-## Build the dev.4 candidate
+## Build the dev.4 preview
 
 Python 3.10+ is required. The application includes Java; select a separate local
 Python interpreter for Python projects. Keep at least 20 GiB free in addition
 to build space. The ordinary build CLI still defaults to dev.3; use the explicit
-version and frontend receipt below to assemble the five-plugin candidate.
+version and frontend receipt below to assemble the five-plugin preview.
 
 ```sh
 python3 -m pip install -r requirements-build.txt

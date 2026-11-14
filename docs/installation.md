@@ -2,49 +2,32 @@
 
 ## Release status / 发行状态
 
-Current preview: [v0.1.0-dev.3](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.3),
-built from source `9a243e6` by
-[dual-platform CI 43565932969](https://github.com/shubolab/openpycharm/actions/runs/43565932969).
-The final macOS installation passed the Python, Notebook and SQLite workflows
-listed in [acceptance](acceptance.md). Windows passed installer/startup/uninstall,
-native API Notebook save/undo/reopen and local-kernel checks; physical
-keyboard-and-mouse workflows remain unverified.
+Current preview: [v0.1.0-dev.4](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.4), source `63921a4`,
+[successful native CI 43608150941](https://github.com/shubolab/openpycharm/actions/runs/43608150941).
+Both installer ZIPs, independent installer hashes and source manifests were checked.
+The CI DMG was copied to an owned installation folder and passed native startup,
+post-startup tree identity and strict signature checks. The local DMG of the same
+version supplied the [real native desktop captures](demo/v0.1.0-dev.4/capture.json);
+its 171 production inputs and five plugin JARs match the CI app exactly.
+Windows passed native API/kernel and silent install/startup/uninstall checks;
+physical keyboard-and-mouse workflows remain unverified.
 
-当前预览版：[v0.1.0-dev.3](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.3)，
-来源为 `9a243e6`，对应[双平台 CI 43565932969](https://github.com/shubolab/openpycharm/actions/runs/43565932969)。
-最终 macOS 安装版的 Python、Notebook 和 SQLite 实测范围见[验收矩阵](acceptance.md)。
-Windows 已通过安装/启动/卸载、原生 API Notebook 保存/撤销/重开及本地内核检查，
-实际键盘、鼠标工作流仍待验收。
+当前预览版为 [v0.1.0-dev.4](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.4)，源码 `63921a4`，
+[双平台 CI 43608150941](https://github.com/shubolab/openpycharm/actions/runs/43608150941)通过。完整 ZIP、独立
+安装包摘要和源码清单已核对；CI DMG 已复制安装并通过原生启动、产品树及严格签名
+复核。同版本本机 DMG 提供[真实桌面演示](demo/v0.1.0-dev.4/capture.json)，其 171 项
+生产输入和五个插件 JAR 与 CI 应用逐字节相同。Windows 安装/启动/卸载、原生 API
+及内核门通过，实体键鼠桌面仍待验收。详见[发行验收](verification/2026-11-14-dev4-release.md)。
 
 | System / 系统 | Download / 下载 |
 | --- | --- |
-| macOS Apple silicon | [OpenPyCharm-0.1.0-dev.3-macos-arm64.dmg](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/OpenPyCharm-0.1.0-dev.3-macos-arm64.dmg) |
-| Windows x64 | [OpenPyCharm-0.1.0-dev.3-windows-x64-setup.exe](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/OpenPyCharm-0.1.0-dev.3-windows-x64-setup.exe) |
-| SHA-256 | [SHA256SUMS.txt](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/SHA256SUMS.txt) |
+| macOS Apple silicon | [DMG](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.4/OpenPyCharm-0.1.0-dev.4-macos-arm64.dmg) |
+| Windows x64 | [EXE](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.4/OpenPyCharm-0.1.0-dev.4-windows-x64-setup.exe) |
+| SHA-256 | [SHA256SUMS.txt](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.4/SHA256SUMS.txt) |
 
-The README's [installed-version GIF and capture manifest](../README.md) use real
-native captures. [Previous preview dev.2](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.2)
-remains available.
-
-README 的[安装版 GIF 与拍摄清单](../README.zh-CN.md)使用真实原生截屏。
-[上一预览版 dev.2](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.2)保留下载。
-
-## dev.4 candidate / dev.4 候选状态
-
-The dev.4 candidate adds bundled JavaScript/TypeScript support. The local macOS
-DMG candidate has been installed and checked, while the complete result and
-installer artifacts of [CI 43608150941](https://github.com/shubolab/openpycharm/actions/runs/43608150941)
-(source `63921a4`) remain pending final confirmation. Windows completed its
-installer checks; macOS is finishing its DMG gate. Keep using the published
-dev.3 downloads above until a dev.4 Release and its checksums are actually available.
-The [dev.4 demo and capture manifest](demo/v0.1.0-dev.4/capture.json)
-record the local installed DMG separately. See the [candidate notes](releases/v0.1.0-dev.4.md).
-
-dev.4 候选增加随包 JavaScript/TypeScript 支持。本机 macOS DMG 候选已安装实测；
-[CI 43608150941](https://github.com/shubolab/openpycharm/actions/runs/43608150941)
-（源码 `63921a4`）完整结果与最终安装器产物尚待确认；Windows 安装器检查已完成，
-macOS 正进行最后的 DMG 检查。在 dev.4 Release 和校验和实际存在
-前，使用上方已发布的 dev.3 下载。详见[候选说明](releases/v0.1.0-dev.4.md)。
+The Mac app is ad-hoc signed and not notarized. The Windows installer is unsigned.
+[Previous dev.3](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.3) remains available.
+Mac 使用临时签名、未经公证，Windows 安装器未签名；上一版保留下载。
 
 ## Verify a download / 核对下载
 
@@ -53,13 +36,13 @@ On macOS, replace the filename with your downloaded DMG:
 在 macOS 中，将文件名替换为你实际下载的 DMG：
 
 ```sh
-shasum -a 256 OpenPyCharm-0.1.0-dev.3-macos-arm64.dmg
+shasum -a 256 OpenPyCharm-0.1.0-dev.4-macos-arm64.dmg
 ```
 
 On Windows PowerShell / Windows PowerShell：
 
 ```powershell
-Get-FileHash .\OpenPyCharm-0.1.0-dev.3-windows-x64-setup.exe -Algorithm SHA256
+Get-FileHash .\OpenPyCharm-0.1.0-dev.4-windows-x64-setup.exe -Algorithm SHA256
 ```
 
 Compare the complete SHA-256 with that release's `SHA256SUMS.txt`. Do not use a
@@ -70,12 +53,12 @@ checksum from a different version or an earlier candidate.
 
 ## macOS Apple silicon
 
-Mount `OpenPyCharm-0.1.0-dev.3-macos-arm64.dmg`, then drag **OpenPyCharm.app** to
+Mount `OpenPyCharm-0.1.0-dev.4-macos-arm64.dmg`, then drag **OpenPyCharm.app** to
 **Applications** or `~/Applications`. Launch that installed copy. The application
 includes its Java runtime. It is ad-hoc signed and **not notarized**; this preview
 does not have an Apple Developer ID signature.
 
-打开 `OpenPyCharm-0.1.0-dev.3-macos-arm64.dmg`，将 **OpenPyCharm.app** 拖到
+打开 `OpenPyCharm-0.1.0-dev.4-macos-arm64.dmg`，将 **OpenPyCharm.app** 拖到
 **Applications** 或 `~/Applications`，再启动安装后的应用。应用内置 Java 运行时。
 预览版使用临时签名，**未经 Apple 公证**，没有 Apple Developer ID 签名。
 
@@ -95,19 +78,18 @@ The installed reference PyCharm and its data are not modified.
 
 ## Windows x64
 
-Run `OpenPyCharm-0.1.0-dev.3-windows-x64-setup.exe`. The installer installs per user,
+Run `OpenPyCharm-0.1.0-dev.4-windows-x64-setup.exe`. The installer installs per user,
 does not require an administrator, and offers an optional `.py` association.
-The EXE is **unsigned**. Native Windows CI ran 125 repository tests
-(122 passed, three POSIX-only skips), actual Notebook save/undo/reopen through the
-normal IDE new-project lifecycle, local JVM/kernel controls, and silent
-install/startup/uninstall. Physical Python/Notebook/Database/HTTP keyboard-and-mouse
-workflows remain unverified on Windows.
+The EXE is **unsigned**. Windows CI ran 177 repository controls (171 passed,
+6 explicit skips), then passed all four actual-SDK frontend controls, native
+Notebook/HTTP/framework/kernel gates and silent install/startup/uninstall.
+Physical Python/Notebook/Database/HTTP/frontend keyboard-and-mouse workflows
+remain unverified on Windows.
 
-运行 `OpenPyCharm-0.1.0-dev.3-windows-x64-setup.exe`。安装器按当前用户安装，不需要管理员
-权限，并提供可选的 `.py` 文件关联。EXE **未签名**。原生 Windows CI 共运行 125 项
-仓库测试，122 项通过、3 项仅限 POSIX 的检查跳过；正常 IDE 新建项目生命周期下的
-Notebook 保存/撤销/重开、本地 JVM/内核、静默安装/启动/卸载检查通过。Python、
-Notebook、数据库和 HTTP 的实际键盘、鼠标工作流仍未在 Windows 验收。
+运行 `OpenPyCharm-0.1.0-dev.4-windows-x64-setup.exe`。按当前用户安装，不需要管理员
+权限，并提供可选的 `.py` 文件关联。EXE **未签名**。Windows CI 的 177 项仓库控制
+中 171 项通过、6 项明确跳过；随后四项前端实际 SDK 控制、原生 Notebook/HTTP/
+框架/内核及静默安装/启动/卸载检查通过。实体键鼠桌面仍待验收。
 
 | Data / 数据 | Location / 位置 |
 | --- | --- |

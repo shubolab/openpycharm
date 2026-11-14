@@ -5,15 +5,16 @@
 **完整 1:1 对齐尚未完成。** 上游已有功能、资源存在、构建通过或 headless 控件测试，
 均不能替代本产品的实际桌面证据。
 
-## dev.4 候选的新增实测
+## dev.4 新增实测
 
-当前开发候选为 **0.1.0-dev.4**。本机 DMG 安装后的实际键鼠会话通过下列有界工作流，
-本机 DMG 来源 `88387c3`、摘要与实际六帧演示已写入
-[dev.4 拍摄清单](demo/v0.1.0-dev.4/capture.json)；与公开安装器的关联仍待封存。源码 `63921a4` 的
-[CI 43608150941](https://github.com/shubolab/openpycharm/actions/runs/43608150941)
-已通过双平台前端 JVM/完整运行时和产品启动门；Windows 安装器检查通过，macOS
-正在完成 DMG 门。完整结果、最终产物收据与公开发行待确认。
-当前已发布下载仍为 dev.3。
+当前预览版 **0.1.0-dev.4**，CI 安装器源码 `63921a4`，
+[双平台 CI 43608150941](https://github.com/shubolab/openpycharm/actions/runs/43608150941)全部通过。
+[产物收据](verification/frontend-dev4-artifacts-20261114.json)逐项核对 ZIP、安装包和 171 项生产
+输入；[CI DMG 安装收据](verification/frontend-dev4-ci-installed-20261114.json)记录实际复制安装、
+原生启动、产品树和严格签名。本机 DMG `88387c3` 的真实键鼠会话覆盖下表，
+[拍摄清单](demo/v0.1.0-dev.4/capture.json)记录其版本、系统和来源；171 项生产输入及五个
+插件 JAR 与 CI 应用逐字节一致。没有将源码一致改称在 CI 安装包上重复了所有键鼠操作。
+Windows 实体桌面仍未验收。[完整发行验收](verification/2026-11-14-dev4-release.md)。
 
 | 范围 | dev.4 本机安装版已观察 | 仍未验收或未实现 |
 | --- | --- | --- |
@@ -21,10 +22,10 @@
 | Python Run/Test | 实际运行和原生 unittest 9 个方法/20 项通过，Rename/Undo 后再次通过 | 失败重跑、pytest、完整参数/环境/停止场景待验收 |
 | Python Debug | 断点、F8、表达式显示 `2.0400`、F9 继续通过 | Watches、测试调试等其余路径待验收 |
 | JavaScript/TypeScript | 产品默认对已信任的本地项目开启；成员补全、类型诊断、Cmd+B 定义跳转；含中文/emoji 的未保存 JS 文本补全通过；正常关闭项目后三个自有 Node 进程退出 | 专用完整语法 PSI/重构、HTML/CSS、前端框架智能分析和调试仍未完成；异常所有者崩溃后的孤儿清理与 Windows 物理桌面未验收 |
-| 运行时与分发 | 五插件装配，固定 Node 24.22.3/TS 6.0.3/TLS 6.1.0，191 运行时文件与声明认证；本机安装版树未变、严格签名通过 | 最终双平台产物收据与公开 Release 待封存，dev.4 GIF/清单已记录本机安装候选；开发 M0 和 guardian 原型不随产品分发 |
+| 运行时与分发 | 五插件装配，固定 Node 24.22.3/TS 6.0.3/TLS 6.1.0，191 运行时文件与声明认证；本机安装版树未变、严格签名通过 | 双平台安装器、完整产物收据和真实 dev.4 GIF/清单已形成；完整 1:1 仍未完成；开发 M0 和 guardian 原型不随产品分发 |
 
 本轮未将 dev.3 的 Notebook/SQLite 桌面结果改记为 dev.4 新实测。具体新增范围与发行
-门槛见[dev.4 候选说明](releases/v0.1.0-dev.4.md)。
+门槛见[dev.4 发行说明](releases/v0.1.0-dev.4.md)。
 
 ## 已发布 dev.3 验收记录
 

@@ -1,0 +1,168 @@
+{
+  "status": "ci-dmg-installed-tree-signature-and-payload-pass",
+  "sourceCommit": "63921a4a931e19996b05ea4de4df12d27ff021bf",
+  "installerSha256": "5b07b72026108082a56da34cad2be600f56b04d99850c8a7e25176cf49eaaa76",
+  "installerSize": 745666387,
+  "installedApplication": "/Users/wangshubo/develop/openpycharm/build/frontend-ci-installed/OpenPyCharm.app",
+  "productTreeSha256": "234acb5ede9ebfe39bbae3b464f6b9dfa89a7dfe38bed77bffee48c0a44eb7b9",
+  "all171ProductionInputsAndFivePluginJarsEqualLocalNativeAcceptedBuild": true,
+  "fivePlugins": [
+    {
+      "id": "dev.openpycharm.http",
+      "version": "0.1.0-dev.4",
+      "jar": "third-party-plugins/openpycharm-http/lib/openpycharm-http.jar",
+      "jarSha256": "a84a3c40c88043a4614a6d5330800996ac4d7dfd75ffc05b0cfaf8f8e4402789"
+    },
+    {
+      "id": "dev.openpycharm.frameworks",
+      "version": "0.1.0-dev.4",
+      "jar": "third-party-plugins/openpycharm-frameworks/lib/frameworks.jar",
+      "jarSha256": "d04006a3b1778280c326442dc8a91090902a87891463860c05d50f325ab855d7"
+    },
+    {
+      "id": "dev.openpycharm.notebooks",
+      "version": "0.1.0-dev.4",
+      "jar": "third-party-plugins/openpycharm-notebooks/lib/notebooks.jar",
+      "jarSha256": "9d73c790ef91ab191ccee17eaf63a60d4fc7576a1e03cfa9cbb20490b6ea8d33"
+    },
+    {
+      "id": "dev.openpycharm.database",
+      "version": "0.1.0-dev.4",
+      "jar": "third-party-plugins/openpycharm-database/lib/database.jar",
+      "jarSha256": "4d1fb21b1701cb1881d9b99477aa7416f42602e747621c3f58525ca1a064af5e"
+    },
+    {
+      "id": "dev.openpycharm.frontend",
+      "version": "0.1.0-dev.4",
+      "jar": "third-party-plugins/openpycharm-frontend/lib/frontend.jar",
+      "jarSha256": "96a52332228d1c2e0fd8d1759ab6b2ab9d7ae6f03372776be23b31560e100b8f"
+    }
+  ],
+  "physicalNativeUiReplayedOnCiArtifact": false,
+  "nativeDesktopEvidence": "frontend-dev4-installed-20261114.json; same source inputs and JAR bytes, local DMG captured separately",
+  "postStartupTreeUnchanged": true,
+  "postStartupStrictSignaturePassed": true,
+  "startupReceiptSha256": "47070e3979bc40d84f4ec06f389e4d0e091b9a64bdee6728974932f2d86a8826",
+  "startupStatus": "passed-startup",
+  "startupReceipt": {
+    "schema": 1,
+    "status": "passed-startup",
+    "application": "/Users/wangshubo/develop/openpycharm/build/frontend-ci-installed/OpenPyCharm.app",
+    "profile": "/Users/wangshubo/develop/openpycharm/.state/frontend-ci-installed-startup",
+    "target": "macos-arm64",
+    "version": "0.1.0-dev.4",
+    "productManifestSha256": "cd69814f7a9bfdd593a43c1d79c5d2ca364ab46aa6ac450778cc7b4853560413",
+    "verifiedPluginJars": [
+      {
+        "id": "dev.openpycharm.http",
+        "version": "0.1.0-dev.4",
+        "jar": "third-party-plugins/openpycharm-http/lib/openpycharm-http.jar",
+        "jarSha256": "a84a3c40c88043a4614a6d5330800996ac4d7dfd75ffc05b0cfaf8f8e4402789"
+      },
+      {
+        "id": "dev.openpycharm.frameworks",
+        "version": "0.1.0-dev.4",
+        "jar": "third-party-plugins/openpycharm-frameworks/lib/frameworks.jar",
+        "jarSha256": "d04006a3b1778280c326442dc8a91090902a87891463860c05d50f325ab855d7"
+      },
+      {
+        "id": "dev.openpycharm.notebooks",
+        "version": "0.1.0-dev.4",
+        "jar": "third-party-plugins/openpycharm-notebooks/lib/notebooks.jar",
+        "jarSha256": "9d73c790ef91ab191ccee17eaf63a60d4fc7576a1e03cfa9cbb20490b6ea8d33"
+      },
+      {
+        "id": "dev.openpycharm.database",
+        "version": "0.1.0-dev.4",
+        "jar": "third-party-plugins/openpycharm-database/lib/database.jar",
+        "jarSha256": "4d1fb21b1701cb1881d9b99477aa7416f42602e747621c3f58525ca1a064af5e"
+      },
+      {
+        "id": "dev.openpycharm.frontend",
+        "version": "0.1.0-dev.4",
+        "jar": "third-party-plugins/openpycharm-frontend/lib/frontend.jar",
+        "jarSha256": "96a52332228d1c2e0fd8d1759ab6b2ab9d7ae6f03372776be23b31560e100b8f"
+      }
+    ],
+    "command": [
+      "/Users/wangshubo/develop/openpycharm/build/frontend-ci-installed/OpenPyCharm.app/Contents/MacOS/pycharm",
+      "/Users/wangshubo/develop/openpycharm/.state/frontend-ci-installed-startup/project/hello-python"
+    ],
+    "projectTrustBypassed": false,
+    "limitations": [
+      "Project trust and first-run dialogs remain normal and may await user input",
+      "Startup logs do not establish Run/Test/Debug or other native UI acceptance"
+    ],
+    "pid": 46818,
+    "observation": {
+      "ideStarted": true,
+      "productIdentity": true,
+      "vendorIdentity": true,
+      "isolatedPaths": {
+        "config": true,
+        "system": true,
+        "plugins": true,
+        "log": true
+      },
+      "loadedPlugins": {
+        "Python Community Edition": true,
+        "Git": true,
+        "Terminal": true
+      },
+      "packagedPlugins": {
+        "dev.openpycharm.http": true,
+        "dev.openpycharm.frameworks": true,
+        "dev.openpycharm.notebooks": true,
+        "dev.openpycharm.database": true,
+        "dev.openpycharm.frontend": true
+      },
+      "projectOpenRequested": true,
+      "projectOpenedInLog": false,
+      "errorCount": 0,
+      "errors": [],
+      "warningCount": 1,
+      "warnings": [
+        "2026-11-14 23:35:47,567 [   1434]   WARN - #c.i.p.instanceContainer - InstanceNotOverridableException: Override failed for com.intellij.openapi.project.impl.ProjectStoreFactory: com.intellij.configurationScript.providers.ConfigurationScriptProjectStoreFactory attempts to override com.intellij.configurationStore.PlatformLangProjectStoreFactory, but the existing implementation is not overriddable (not declared as 'open=true')"
+      ]
+    },
+    "cleanup": {
+      "mode": "owned-posix-session",
+      "pid": 46818,
+      "exitCode": 143
+    },
+    "elapsedSeconds": 19.31,
+    "logSha256": "0280de0de9fefe5c1666a42ac46060d3c6299cf8e8d82a94acaae311f33f3781",
+    "finalObservation": {
+      "ideStarted": true,
+      "productIdentity": true,
+      "vendorIdentity": true,
+      "isolatedPaths": {
+        "config": true,
+        "system": true,
+        "plugins": true,
+        "log": true
+      },
+      "loadedPlugins": {
+        "Python Community Edition": true,
+        "Git": true,
+        "Terminal": true
+      },
+      "packagedPlugins": {
+        "dev.openpycharm.http": true,
+        "dev.openpycharm.frameworks": true,
+        "dev.openpycharm.notebooks": true,
+        "dev.openpycharm.database": true,
+        "dev.openpycharm.frontend": true
+      },
+      "projectOpenRequested": true,
+      "projectOpenedInLog": false,
+      "errorCount": 0,
+      "errors": [],
+      "warningCount": 2,
+      "warnings": [
+        "2026-11-14 23:35:47,567 [   1434]   WARN - #c.i.p.instanceContainer - InstanceNotOverridableException: Override failed for com.intellij.openapi.project.impl.ProjectStoreFactory: com.intellij.configurationScript.providers.ConfigurationScriptProjectStoreFactory attempts to override com.intellij.configurationStore.PlatformLangProjectStoreFactory, but the existing implementation is not overriddable (not declared as 'open=true')",
+        "2026-11-14 23:35:57,194 [  11061]   WARN - #c.i.o.v.i.l.NativeFileWatcherImpl - Watcher terminated with exit code 143"
+      ]
+    }
+  }
+}
