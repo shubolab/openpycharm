@@ -1,0 +1,135 @@
+{
+  "schema": 1,
+  "status": "headless-controls-pass-native-pending",
+  "scope": "Pinned-platform save contract controls and compile-only native edit/undo/merge/save/reopen harness",
+  "coreCommit": "28378bd5420877b5b6b524d9c899c9b0ddddd0cf",
+  "baseCommit": "c125e69",
+  "nativeApplicationLaunched": false,
+  "actualIdeSaveAcceptance": "pending root-controlled native gate",
+  "productionJarSha256": "6f33f1470d94461b2309e8e9e48ad1ed6a62678ed135cbbd5ddb0053bef22970",
+  "productionPluginDirectory": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebook-savefix/.tools/notebook-plugin/e87ac7000f382a250ff357df6fcc8ecbcfd59ce06ed521d93dbf4dfbec6fa5ea/plugin",
+  "productionSources": {
+    "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "plugins/notebooks/NOTICE": "06c09522f58b11483e42c965bd8b6d2bca8a5003430ae2a0766d711d6ecd8f39",
+    "plugins/notebooks/README.md": "4e520001577392ab52228323aab70f3c1a1a4bc8191647fafb8c0ef8a614d8e3",
+    "plugins/notebooks/build-support/VerifyNotebookArchive.java": "2c48bee6ecfa6e7d90ada60138954df97e8d8141a9fb4bcdc5ba6596b09d4c3d",
+    "plugins/notebooks/kernel-requirements.txt": "0206856a062580549f520ce261c636fa0b5b9bb114c847f8d10dfd2a97b713d1",
+    "plugins/notebooks/resources/META-INF/plugin.xml": "a400e740c77b1f82f27b6ece70d58d21fa143c0d42d57c0c113c642c880e3a3a",
+    "plugins/notebooks/resources/kernel_bridge.py": "361b86385deab957e209e5a743ea14e516e7a5840428165b1dcd29c9cae42e99",
+    "plugins/notebooks/runtime-dependencies.lock.json": "765b2b507abfd6383e3cef9f6c54700fa50ad8fbca81bdb0be401ee6151194d9",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookDocumentSave.java": "a1de1f6cd3492456a0e234b5d971a083ede29dfb63c3f4f75bd3faf8f3bab1cb",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookEditorProvider.java": "e49779c7309d07e2d560516d6ad9a6d24d6632dff7d9df53a0e57d9a4217e36c",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookFileEditor.java": "aeadded1912c35d7337225342f77d3ce9532e2de0f1d35139a954e59454ead9b",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookFileType.java": "8e1fe08039f9d2f954b664e344fd2d3bc8fa7fb34c8ca721288066eca5fb41f6",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookKernelSession.java": "3f13a2037f784532eece3e26f397f336c68fb980e7ab07a8b3f457a04ff2057b",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookMerge.java": "ea03a4be2b5ef1a0861557c93eca16ac8ec3ae8a18dbda5a44603b216de50fbb",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookModel.java": "e27dced3a99dda43ec5bf867f77688fab829cf7db65a40f1a6a125481a4704cd",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookPersistence.java": "38058e890883d44398851947f99abb20fc1e4173e7dbf58de2334a2ded76a106",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookProjectCloseHandler.java": "ea2b19d0e67442df6bf123d12c486cec613f07a2774516d2f6370bfc28114efb",
+    "product/platform.lock.json": "2fe9e477d7e3164e362e33f3b95a2464b16a0699e1bade6cc112b166aed697bd",
+    "product/product.json": "f5d4a28101d3f3462b7877aeb020a1de48886a2ef06758c07531c11af01cfae3",
+    "scripts/bootstrap.py": "a9f405e1fd83ed5a63e0a676efcecbb11a0a1e1975f876e33622756b5b502fff",
+    "scripts/build_notebook_plugin.py": "7aedb310b3c69ccd17fe8efd5c050e0f240d2979c1dc50f049ad944df1df515b",
+    "scripts/platform_layout.py": "500447561715fc996c842c614aa817a2251e7dfbc22305054f7ab40fc31c7037"
+  },
+  "probeJarSha256": "7d75be0502f16ebd039ba18b9268bfae65c54c90d24d94645c8e77df4be2d02e",
+  "probeDirectory": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebook-savefix/.tools/notebook-save-native-probe/e72502aad98fbb6f76e18507de874fa4a2d8b6120a1e00ac2fa891fb9236a684/plugin",
+  "probeBuildIdentity": {
+    "sources": {
+      "NotebookSaveProbe.java": "52996eb57efe596692b17e1c04bdca1ad5bf9e82d879b9c03a0cb212df852000",
+      "plugin.xml": "2e96883c5ecd574054643d7b1ea622904af6c0d1fb74415262110f5b11df9315"
+    },
+    "productionJarSha256": "6f33f1470d94461b2309e8e9e48ad1ed6a62678ed135cbbd5ddb0053bef22970",
+    "sdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+    "builderSha256": "c24f0f77721fe966ff2c1d76d8f7a8d4942fecfe1b228df864ffb702da2a1233"
+  },
+  "pinnedPlatformCommit": "456919a9624bae72ac12efafc35d2b916cb0c5c5",
+  "pinnedSourceSha256": {
+    "SaveAndSyncHandlerImpl.kt": "19e76ec082360c3c2b424d8f261eda517d886b009f38cc1039909d26e792a3bc",
+    "FileDocumentManagerImpl.java": "42063aa59eb07b2baf7a680b0daf6afd7428777368a470e945a6d01863da3bd9",
+    "FileDocumentManager.java": "47406864ea241029c130a04f9df96c86161fcbf45474751898c747cec3e79bce",
+    "NonBlockingFlushQueue.kt": "968e1bbc754d81e6a0dad8c3ec430617d8d83e9fcbfa6a86f57045935964a8fe",
+    "WriteIntentReadAction.java": "00d58371a965796c77067974e0ccfe31db9415b3c6dba529c88ce94ebc68aa13",
+    "TransactionGuardImpl.java": "fac5065c5b04925d32fcf87aa6a718c2673532e8c320125f1ba519cd57039f06"
+  },
+  "publicApiCaveat": "Pinned public FileDocumentManager.java106–114 still documents EDT under write intent and @RequiresWriteLock, while the same pinned implementation and its official background caller support a different background-entry path. Treat background saving as a pinned-platform implementation dependency verified by native acceptance, not a cross-version public API guarantee.",
+  "checks": {
+    "pythonRepositoryTests": {
+      "count": 116,
+      "passed": 116,
+      "skipped": 0,
+      "actualKernelPython": "3.14.0",
+      "logSha256": "b1a8c168ce76b11dca37dc4c4f9710d2336590b8f7ec93ebae97043ef5c86776"
+    },
+    "modelPersistenceMerge": {
+      "status": "pass",
+      "metadataAndAttachmentsPreserved": true,
+      "richOutputsPreserved": true,
+      "sourceRoundTrip": true,
+      "outputsAndCount": true,
+      "addDeleteCells": true,
+      "malformedAndOversizedRejected": true,
+      "asynchronousPersistence": {
+        "status": "pass",
+        "offSubmittingThread": true,
+        "latestOnlyCoalescing": true,
+        "dirtyBeforeCompletion": true,
+        "staleCommitRejected": true,
+        "externalGenerationInvalidated": true,
+        "serializationFailureRemainsDirty": true,
+        "mergeSuspensionKeepsDirty": true,
+        "executorRejectionRecovers": true,
+        "completionQueueBounded": true
+      },
+      "externalMerge": {
+        "status": "pass",
+        "foreignMetadataChars": 2600000,
+        "independentSourceAndMetadata": true,
+        "localRetainedOnConflict": true,
+        "stableCellIdentities": true,
+        "structuralAndAtomicArrays": true,
+        "identicalChanges": true,
+        "missingKeysAndNull": true,
+        "immutableInputs": true,
+        "structuralSharing": true,
+        "exactLargeIntegersAndDecimals": true,
+        "extremeExponents": true,
+        "recursiveNumericEquality": true
+      },
+      "saveThreadContract": {
+        "status": "pass",
+        "unlockedWorker": true,
+        "blockingEdtCallbacksComplete": true,
+        "fileIoOffEdt": true,
+        "utf8FileRoundTrip": true,
+        "unsafeAndRejectedEntryReported": true,
+        "actualIdeSaveEngineExercised": false
+      },
+      "targetPlatform": "macos",
+      "executionPlatform": "macos",
+      "nativeTargetRuntime": true,
+      "jarSha256": "6f33f1470d94461b2309e8e9e48ad1ed6a62678ed135cbbd5ddb0053bef22970"
+    },
+    "probeBoundaryTests": {
+      "count": 4,
+      "passed": 4
+    },
+    "nativeProbeCompilation": "pass"
+  },
+  "nativeProbeExpectedControls": [
+    "Actual NotebookFileEditor and selected product JAR digest",
+    "Native UndoManager restoration of cell and parent JSON source",
+    "Independent external JSON metadata merged with pending cell source before and after first save",
+    "Actual Save JButton and persisted UTF-8 source/large numeric metadata/unknown MIME/counts",
+    "EDT heartbeat remains live during save",
+    "File close/reopen loads saved source with clean modified state",
+    "Bounded timeout report, thread dump and launcher ownership cleanup"
+  ],
+  "notObserved": [
+    "Native gate execution on fixed product",
+    "Normal-modal callbacks and disposal while save pending",
+    "Windows actual native edit/undo/save/reopen",
+    "Shift+Enter execution; existing native shortcut failure retained separately"
+  ],
+  "noReferenceOrRootCheckoutFilesModified": true
+}

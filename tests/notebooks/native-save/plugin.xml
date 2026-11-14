@@ -1,0 +1,12 @@
+<idea-plugin>
+  <id>dev.openpycharm.notebooks.save.probe</id>
+  <name>OpenPyCharm Notebook Native Save Probe</name>
+  <version>1</version>
+  <vendor>OpenPyCharm</vendor>
+  <idea-version since-build="261" until-build="261.*"/>
+  <depends>com.intellij.modules.platform</depends>
+  <depends>dev.openpycharm.notebooks</depends>
+  <extensions defaultExtensionNs="com.intellij">
+    <postStartupActivity implementation="dev.openpycharm.notebooks.saveprobe.NotebookSaveProbe"/>
+  </extensions>
+</idea-plugin>
