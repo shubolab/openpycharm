@@ -1,0 +1,129 @@
+{
+  "schema": 1,
+  "version": "0.1.0-dev.2",
+  "sourceCommit": "d5fc10d19e295d02707598832fabee20d8d01bee",
+  "ciRun": 43522231765,
+  "system": "macOS 27.2 arm64",
+  "python": "3.14.0",
+  "installedFromDmg": true,
+  "installerSha256": "900281937ed35dc7858d58e4a90468242eb4addc8276331cc9aecf43c42064c5",
+  "productTreeSha256": "21c996890ba9bb96c095361cabdd58ffa7dcc7722bc0a2a38efad33e1cbb121e",
+  "postDesktopProductTreeSha256": "21c996890ba9bb96c095361cabdd58ffa7dcc7722bc0a2a38efad33e1cbb121e",
+  "appTreeUnchanged": true,
+  "strictAdHocSignaturePassed": true,
+  "ownedProcessesExited": true,
+  "log": {
+    "sessionSha256": "4576ada5bc68fd33a155d885ed97cccc7cf1860bf37775f40e562062c5f85513",
+    "bytes": 250949,
+    "errorCount": 0,
+    "warningCount": 20,
+    "ideStarts": 1
+  },
+  "nativeMarkdown": {
+    "restoredExistingProjectReadmeAtStartup": true,
+    "actualPreviewRendered": true,
+    "additionalColdNativePanelPassedInMacCI": true,
+    "noProxyOrMarkdownDisablement": true
+  },
+  "nativePython": {
+    "project": "fixtures/hello-python",
+    "runExitCode": 0,
+    "subtotal": "34.00",
+    "tax": "2.04",
+    "total": "36.04",
+    "unittestMethods": 9,
+    "nativeTestItems": 20,
+    "allPassed": true,
+    "testExitCode": 0
+  },
+  "nativeFramework": {
+    "project": ".state/dev2-final/FastAPI 新建",
+    "createdThroughNativeWizard": true,
+    "pathContainsChineseAndSpace": true,
+    "nativePython314VenvCreated": true,
+    "dependencyInstallExplicitlySelected": true,
+    "cleanHelloTemplate": true,
+    "debugPid": 76616,
+    "bind": "127.0.0.1:8000",
+    "breakpoint": "app.py:8",
+    "expression": "app.title",
+    "value": "FastAPI",
+    "resumedHttpStatus": 200,
+    "response": {
+      "framework": "fastapi",
+      "message": "Hello from FastAPI!"
+    },
+    "nativeStopExitCode": 0,
+    "savedConfigurationRestoredAfterProjectCloseReopen": true,
+    "persistedConfigurationType": "OpenPyCharmFastAPI"
+  },
+  "nativeHttp": {
+    "project": "plugins/http-client/examples",
+    "currentHealthStatus": 200,
+    "batchStatuses": [
+      200,
+      200,
+      200
+    ],
+    "echo": {
+      "message": "你好 OpenPyCharm 🚀",
+      "quantity": 2
+    },
+    "nativeSaveResponseDialogUsed": true,
+    "rawResponse": {
+      "bytes": 16,
+      "sha256": "be45cb2605bf36bebde684841a28f0fd43c69850a3dce5fedba69928ee3a8991",
+      "matches00Through0f": true
+    },
+    "stopAll": {
+      "before": {
+        "running": 1,
+        "cancelled": 0
+      },
+      "after": {
+        "running": 0,
+        "cancelled": 1
+      },
+      "visibleResult": "HTTP request cancelled."
+    }
+  },
+  "demo": {
+    "manifest": "docs/demo/v0.1.0-dev.2/capture.json",
+    "gif": "docs/demo/v0.1.0-dev.2/openpycharm-native.gif",
+    "gifSha256": "4e8265f7c5118a990a2a24abbd5cd9c1da2a7ad434cd179f5f3ac3b967369c6e",
+    "frames": 4,
+    "captureSize": [
+      2800,
+      2000
+    ],
+    "gifSize": [
+      1280,
+      914
+    ],
+    "captureDate": "2026-11-14"
+  },
+  "installers": [
+    {
+      "target": "macos-arm64",
+      "artifactId": 14084262350,
+      "bytes": 681276890,
+      "sha256": "900281937ed35dc7858d58e4a90468242eb4addc8276331cc9aecf43c42064c5",
+      "sourceInputsVerified": true
+    },
+    {
+      "target": "windows-x64",
+      "artifactId": 14084531145,
+      "bytes": 596918304,
+      "sha256": "8fd215445988f91ffe8c88af6e3e837071d47fd08476f9b3d23e290d457e6e18",
+      "sourceInputsVerified": true
+    }
+  ],
+  "limitations": [
+    "Full 1:1 parity is incomplete",
+    "Windows installer/native startup passed CI; Windows desktop Python/framework/HTTP workflows remain unverified",
+    "macOS ad-hoc signed and not notarized; Windows installer unsigned",
+    "Django/Flask actual desktop, deeper framework semantics, advanced HTTP environment/auth features remain open",
+    "Notebook/database/frontend M0 work is isolated and not included in dev.2",
+    "Release publication is separate from this installed desktop acceptance"
+  ]
+}

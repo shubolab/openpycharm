@@ -1,44 +1,64 @@
 {
-  "productVersion": "0.1.0-dev.1",
+  "productVersion": "0.1.0-dev.2",
   "upstreamVersion": "2026.1.4",
   "upstreamBuild": "PC-261.26222.68",
   "system": "macOS 27.2 arm64",
   "python": "3.14.0",
   "captureDate": "2026-11-14",
-  "method": "Real native OpenPyCharm app screenshots assembled into an animated sequence",
   "states": [
-    "Python Run exited 0",
-    "Native unittest tree: 20 items passed / 9 methods",
-    "Breakpoint, stack, locals and Decimal expression evaluation",
-    "Step over to next line"
+    "Python Run exited0 with expected totals",
+    "Native unittest9 methods /20items passed",
+    "FastAPI native Debug breakpoint and expression evaluation",
+    "Native HTTP batch and Unicode response"
   ],
+  "releaseStatus": "v0.1.0-dev.2 release-ready native candidate; installed desktop workflows and post-run tree/signature/log checks passed",
+  "sourceCommit": "d5fc10d19e295d02707598832fabee20d8d01bee",
+  "ciRun": 43522231765,
+  "installer": "OpenPyCharm-0.1.0-dev.2-macos-arm64.dmg",
+  "installerSha256": "900281937ed35dc7858d58e4a90468242eb4addc8276331cc9aecf43c42064c5",
+  "installedApplication": "/Users/wangshubo/Applications/OpenPyCharm.app",
   "captures": [
     {
       "file": "run.png",
-      "sha256": "3e75e044e3e9479aa7b56b44ea9227d769c27efd7fb66876e246012524e2ee86"
+      "sha256": "4252d6b35835cd4d0b30596e65f993ff0ae5ca352f606c07c5481547b74c93d4"
     },
     {
       "file": "tests.png",
-      "sha256": "c93191be3412e30325e0baaa936125bfc3da65b8ef783abbf2a40a4c2af8b0ed"
+      "sha256": "a0d2efc641f15e67c9ca9b7095d9e8d80e6013d86442a6509e8234c079e33a53"
     },
     {
       "file": "debug.png",
-      "sha256": "ef886537a55912c06a794753bb59ba995897688ac9d767b9d7da2105bb9559f7"
+      "sha256": "0e457bad4682d7c6e21ada727b3fa437b7598409980f2cf8db8b00fe2be24730"
     },
     {
       "file": "step.png",
-      "sha256": "de77505342897789e646ae098b9a68962bb2c88d9a694b0cc5746b9376e5a25c"
+      "sha256": "aa4ead0c5c684b4f106a4e1c1cdbf9eaf7f99f1a6eb9cb2d3f692b968363a5f0"
     }
   ],
-  "gifSha256": "941a5a6f1f53f72196c022e0f2bd1ef2c2f101e343ff24da845c76bbda8519bd",
-  "releaseStatus": "v0.1.0-dev.1 native prerelease",
   "captureSize": [
     2800,
     2000
   ],
-  "sourceCommit": "3b45fda2ceb2a4d81c8eaf1169f953dd8b1b8b5e",
-  "installer": "OpenPyCharm-0.1.0-dev.1-macos-arm64.dmg",
-  "installerSha256": "4b6954fb3a3116b5b05f6933d9e603840de28cce364e6fce42d0c35fda4b9c27",
-  "installedApplication": "/Users/wangshubo/Applications/OpenPyCharm.app",
-  "profile": "OpenPyCharm default isolated product profile; normal project trust accepted for owned fixture"
+  "method": "Real native OpenPyCharm app screenshots assembled into an animated sequence",
+  "gifSha256": "4e8265f7c5118a990a2a24abbd5cd9c1da2a7ad434cd179f5f3ac3b967369c6e",
+  "profile": "OpenPyCharm default isolated product profile; normal trust for owned fixtures; no automatic trust grants",
+  "frameworkProject": ".state/dev2-final/FastAPI 新建",
+  "additionalCaptures": [
+    {
+      "file": "v0.1.0-dev.2/framework-create.jpg",
+      "sha256": "eb54fbe45929880b9094bb7636e8906e7d018feb3c204679a061f129d7e45475"
+    },
+    {
+      "file": "v0.1.0-dev.2/framework-reopen.jpg",
+      "sha256": "4ed987e07baed776b334df081b12b283b90bd1895ed8deeb9cf2e75b0964b91e"
+    },
+    {
+      "file": "v0.1.0-dev.2/http-current.jpg",
+      "sha256": "3ef741f11a875ef060ccff241ac39349777dae88acfe94dba8ed438826725f5a"
+    },
+    {
+      "file": "v0.1.0-dev.2/markdown-restore.jpg",
+      "sha256": "43863bd32682fb54c3cbfa73dc5bc268b6f49ac97d0ab15e8503aa3c8ab141c8"
+    }
+  ]
 }

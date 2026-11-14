@@ -1,0 +1,64 @@
+{
+  "productVersion": "0.1.0-dev.2",
+  "upstreamVersion": "2026.1.4",
+  "upstreamBuild": "PC-261.26222.68",
+  "system": "macOS 27.2 arm64",
+  "python": "3.14.0",
+  "captureDate": "2026-11-14",
+  "states": [
+    "Python Run exited0 with expected totals",
+    "Native unittest9 methods /20items passed",
+    "FastAPI native Debug breakpoint and expression evaluation",
+    "Native HTTP batch and Unicode response"
+  ],
+  "releaseStatus": "v0.1.0-dev.2 release-ready native candidate; installed desktop workflows and post-run tree/signature/log checks passed",
+  "sourceCommit": "d5fc10d19e295d02707598832fabee20d8d01bee",
+  "ciRun": 43522231765,
+  "installer": "OpenPyCharm-0.1.0-dev.2-macos-arm64.dmg",
+  "installerSha256": "900281937ed35dc7858d58e4a90468242eb4addc8276331cc9aecf43c42064c5",
+  "installedApplication": "/Users/wangshubo/Applications/OpenPyCharm.app",
+  "captures": [
+    {
+      "file": "run.png",
+      "sha256": "4252d6b35835cd4d0b30596e65f993ff0ae5ca352f606c07c5481547b74c93d4"
+    },
+    {
+      "file": "tests.png",
+      "sha256": "a0d2efc641f15e67c9ca9b7095d9e8d80e6013d86442a6509e8234c079e33a53"
+    },
+    {
+      "file": "debug.png",
+      "sha256": "0e457bad4682d7c6e21ada727b3fa437b7598409980f2cf8db8b00fe2be24730"
+    },
+    {
+      "file": "step.png",
+      "sha256": "aa4ead0c5c684b4f106a4e1c1cdbf9eaf7f99f1a6eb9cb2d3f692b968363a5f0"
+    }
+  ],
+  "captureSize": [
+    2800,
+    2000
+  ],
+  "method": "Real native OpenPyCharm app screenshots assembled into an animated sequence",
+  "gifSha256": "4e8265f7c5118a990a2a24abbd5cd9c1da2a7ad434cd179f5f3ac3b967369c6e",
+  "profile": "OpenPyCharm default isolated product profile; normal trust for owned fixtures; no automatic trust grants",
+  "frameworkProject": ".state/dev2-final/FastAPI 新建",
+  "additionalCaptures": [
+    {
+      "file": "framework-create.jpg",
+      "sha256": "eb54fbe45929880b9094bb7636e8906e7d018feb3c204679a061f129d7e45475"
+    },
+    {
+      "file": "framework-reopen.jpg",
+      "sha256": "4ed987e07baed776b334df081b12b283b90bd1895ed8deeb9cf2e75b0964b91e"
+    },
+    {
+      "file": "http-current.jpg",
+      "sha256": "3ef741f11a875ef060ccff241ac39349777dae88acfe94dba8ed438826725f5a"
+    },
+    {
+      "file": "markdown-restore.jpg",
+      "sha256": "43863bd32682fb54c3cbfa73dc5bc268b6f49ac97d0ab15e8503aa3c8ab141c8"
+    }
+  ]
+}
