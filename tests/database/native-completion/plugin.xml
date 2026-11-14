@@ -1,0 +1,14 @@
+<idea-plugin>
+  <id>dev.openpycharm.database.completion.probe</id>
+  <name>OpenPyCharm Database Native Completion Probe</name>
+  <version>1</version>
+  <vendor>OpenPyCharm</vendor>
+  <idea-version since-build="261" until-build="261.*"/>
+  <depends>com.intellij.modules.platform</depends>
+  <depends>dev.openpycharm.database</depends>
+  <extensions defaultExtensionNs="com.intellij">
+    <postStartupActivity implementation="dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe"/>
+    <completion.contributor language="OpenPyCharmSQL" order="first" implementationClass="dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$BeforeObserver"/>
+    <completion.contributor language="OpenPyCharmSQL" order="last" implementationClass="dev.openpycharm.database.nativeprobe.DatabaseCompletionNativeProbe$AfterObserver"/>
+  </extensions>
+</idea-plugin>

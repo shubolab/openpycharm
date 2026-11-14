@@ -1,0 +1,45 @@
+{
+  "pin": "456919a9624bae72ac12efafc35d2b916cb0c5c5",
+  "primarySources": [
+    {
+      "path": "platform/analysis-api/src/com/intellij/codeInsight/completion/CompletionParameters.java",
+      "url": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/analysis-api/src/com/intellij/codeInsight/completion/CompletionParameters.java",
+      "sha256": "4036544031dfed917cdcdc2d4c50f39cf8829c1820fd9a44cc18bdda8f5ca473"
+    },
+    {
+      "path": "platform/lang-impl/src/com/intellij/codeInsight/completion/CompletionProgressIndicator.java",
+      "url": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/lang-impl/src/com/intellij/codeInsight/completion/CompletionProgressIndicator.java",
+      "sha256": "e33581fb11b0975e0f7beecc875a15d404d7edcc5ba6b6f4658ae9516f59772e"
+    },
+    {
+      "path": "platform/lang-impl/src/com/intellij/codeInsight/completion/CodeCompletionHandlerBase.java",
+      "url": "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/lang-impl/src/com/intellij/codeInsight/completion/CodeCompletionHandlerBase.java",
+      "sha256": "31ff9f17ea4eb89caecebef11a7de37c224280d0b93a12d5d2874cfef6f5c87a"
+    }
+  ],
+  "sdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+  "actualSdkClasses": [
+    {
+      "jar": "intellij.platform.analysis.jar",
+      "entry": "com/intellij/codeInsight/completion/CompletionInitializationContext.class",
+      "sha256": "9ecf2ae8b9c397cb2b26a37486f15c445b457c3dcaf7b0f08cecbb900077816b"
+    },
+    {
+      "jar": "intellij.platform.analysis.jar",
+      "entry": "com/intellij/codeInsight/completion/CompletionParameters.class",
+      "sha256": "71816f8df4f7b8196630b70018f2652c91b33ea024ad846f6bfa9bbc27b309f4"
+    },
+    {
+      "jar": "intellij.platform.analysis.impl.jar",
+      "entry": "com/intellij/codeInsight/completion/CompletionInitializationUtil.class",
+      "sha256": "e5796e1b8554238f19fbf855357f67eee2d80abcb8111baa18c2acd61bfe7e37"
+    }
+  ],
+  "observedContract": [
+    "CompletionParameters.getEditor returns the editor where completion started.",
+    "The actual SDK CompletionInitializationUtil.createCompletionParameters reads START_OFFSET from the completion copy offset map.",
+    "START_OFFSET is created with movement-to-right disabled; the production contributor rewrites it to identifier replacement start."
+  ],
+  "inference": "Reading the original editor text at parameters.getOffset mixes copy/start and original-caret coordinates. Native callback values are needed to determine whether this explains this no-Lookup failure.",
+  "nativeRootCauseConfirmed": false
+}

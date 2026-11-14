@@ -1,0 +1,40 @@
+{
+  "nativeApplicationLaunched": false,
+  "preparedWorkspace": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/database-native-probe/.tools/prepared-native-completion-3",
+  "productionSourceCommit": "83cf69aa4e52eb2740dc565f5945e28a4240c0da",
+  "productionJarSha256": "fcd845abfb64d4d60318732b5acd4da923ef45cc41378fed657af0c0a62d97cc",
+  "productManifestSha256": "d3e7f95e38fa090fca2528c98df8014b305b052f9bd534f4cb0043ada2431717",
+  "probeBuild": {
+    "identity": {
+      "sources": {
+        "DatabaseCompletionNativeProbe.java": "72e88e4f7d2a90b7e12f366206486213fec6694c31d3a97ab86b6927aca724fb",
+        "VerifyDatabaseCompletionProbe.java": "f75bce59fc9ba46ef3522dcbe60c772c2b33e40a0a715f38a6ab2dce4beaf51e",
+        "plugin.xml": "271bd9f031e1c68e24792302a95d2934e9acdec1756c9eea556635a25cb74646"
+      },
+      "productionJarSha256": "fcd845abfb64d4d60318732b5acd4da923ef45cc41378fed657af0c0a62d97cc",
+      "sdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+      "builderSha256": "e0288b9734e72a176b942bf07a9c8f73e7e5e7268660501003f84e387c71ea11"
+    },
+    "pluginSha256": "1e338594a004cb9895a7b3b27f22f44d4fbd02751dc52c06304fa1faf42d8727",
+    "compilation": {
+      "stdout": "",
+      "stderr": "\u6ce8: /Users/wangshubo/develop/openpycharm/.tools/worktrees/database-native-probe/tests/database/native-completion/DatabaseCompletionNativeProbe.java\u4f7f\u7528\u6216\u8986\u76d6\u4e86\u5df2\u8fc7\u65f6\u7684 API\u3002\n\u6ce8: \u6709\u5173\u8be6\u7ec6\u4fe1\u606f, \u8bf7\u4f7f\u7528 -Xlint:deprecation \u91cd\u65b0\u7f16\u8bd1\u3002\n"
+    },
+    "archiveVerification": {
+      "status": "pass",
+      "reader": "HashMapZipFile",
+      "entries": 7,
+      "closed": true,
+      "sha256": "1e338594a004cb9895a7b3b27f22f44d4fbd02751dc52c06304fa1faf42d8727"
+    },
+    "classes": [
+      "dev/openpycharm/database/nativeprobe/DatabaseCompletionNativeProbe$AfterObserver.class",
+      "dev/openpycharm/database/nativeprobe/DatabaseCompletionNativeProbe$BeforeObserver.class",
+      "dev/openpycharm/database/nativeprobe/DatabaseCompletionNativeProbe$Capture.class",
+      "dev/openpycharm/database/nativeprobe/DatabaseCompletionNativeProbe$Case.class",
+      "dev/openpycharm/database/nativeprobe/DatabaseCompletionNativeProbe$CheckedBoolean.class",
+      "dev/openpycharm/database/nativeprobe/DatabaseCompletionNativeProbe.class"
+    ],
+    "nativeApplicationLaunched": false
+  }
+}
