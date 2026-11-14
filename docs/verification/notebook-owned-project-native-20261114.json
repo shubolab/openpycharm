@@ -1,0 +1,129 @@
+{
+  "schema": 1,
+  "status": "pass-native-owned-new-project",
+  "observedAt": "2026-11-14",
+  "harnessCommit": "3c73a3d4b7f07cdbb5e0280d80d965b4fc779c32",
+  "candidateProductionCommit": "59fd8ee08f7bf821fe57a39389faa13ebffa1db1",
+  "productionJarSha256": "882248920fe940df597c53dab1c22156c3977bb66b7a651c0df7082d5d1cea28",
+  "helperJarSha256": "2fb7f7778d4a9f3b1484ad80850f4681180c76f9939204ddb100f4e54a178a1c",
+  "normalProjectCreation": {
+    "normalIdeNewProjectCreation": true,
+    "normalIdeProjectOpen": true,
+    "expectedInitialFixtureHash": "600ac9efa8e5d66ddcc8d15b85490e8cf9435b5fac24f42276f2fa87ff1ff79a",
+    "projectCreationMode": "normal-ide-new-owned-project",
+    "manualTrustClicked": false,
+    "projectTrustBypassed": false,
+    "globalTrustChecksDisabled": false,
+    "parentTrustedBefore": false,
+    "parentTrustedAfter": false,
+    "trustedProjectRoot": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/native-owned-project/.tools/native-owned-root-3c73-1/project",
+    "trustScope": "New owned project root and descendants; parent and siblings are not granted trust",
+    "projectTrusted": true
+  },
+  "checks": {
+    "kernelCodeExecuted": false,
+    "ownedFixtureOnly": true,
+    "projectTrustBypassed": false,
+    "nativeButtonDoClick": true,
+    "globalTrustChecksDisabled": false,
+    "parentTrustedBefore": false,
+    "manualTrustClicked": false,
+    "parentTrustedAfter": false,
+    "normalIdeNewProjectCreation": true,
+    "normalIdeProjectOpen": true,
+    "projectTrusted": true,
+    "nativeUndoRestored": true,
+    "pendingCellAndTextMerge": true,
+    "nativeSavePersisted": true,
+    "postSaveExternalDirtyMerge": true,
+    "platformSaveAllPersisted": true,
+    "successfulReloadStatusRestored": true,
+    "successfulReloadStateClean": true,
+    "postSaveAllCanEdit": true,
+    "metadataAndExistingOutputsPreserved": true,
+    "closeReopenSourcePreserved": true,
+    "lastCapturedEditorModified": false
+  },
+  "states": {
+    "stateAfterUndo": {
+      "captureEpoch": 11,
+      "reloading": false,
+      "conflicted": false,
+      "persistenceDirty": false,
+      "modified": true,
+      "cellViewer": false,
+      "status": "Kernel stopped — notebook reloaded from text",
+      "documentStamp": 0,
+      "modificationSequence": 2
+    },
+    "stateBeforePlatformSaveAll": {
+      "captureEpoch": 27,
+      "reloading": false,
+      "conflicted": false,
+      "persistenceDirty": false,
+      "modified": true,
+      "cellViewer": false,
+      "status": "Kernel stopped — notebook reloaded from text",
+      "documentStamp": 81,
+      "modificationSequence": 10
+    },
+    "stateAfterPlatformSaveAll": {
+      "captureEpoch": 30,
+      "reloading": false,
+      "conflicted": false,
+      "persistenceDirty": false,
+      "modified": false,
+      "cellViewer": false,
+      "status": "Kernel stopped — notebook reloaded from text",
+      "documentStamp": 81,
+      "modificationSequence": 10
+    },
+    "stateAfterFollowupSaveAll": {
+      "captureEpoch": 34,
+      "reloading": false,
+      "conflicted": false,
+      "persistenceDirty": false,
+      "modified": false,
+      "cellViewer": false,
+      "status": "Kernel stopped — notebook reloaded from text",
+      "documentStamp": 87,
+      "modificationSequence": 11
+    }
+  },
+  "assessment": {
+    "status": "pass",
+    "actualNativeSaveEngine": true,
+    "kernelCodeExecuted": false
+  },
+  "ownedPid": 2791,
+  "cleanup": {
+    "mode": "owned-posix-session",
+    "pid": 2791,
+    "exitCode": 143
+  },
+  "nativeLogErrorOrSevereCount": 0,
+  "evidence": {
+    ".tools/worktrees/native-owned-project/.tools/native-owned-root-3c73-1/prepared.json": {
+      "bytes": 111419,
+      "sha256": "2bead0c56a9a63e3b113123dea4f6aaa3262586d697ee972e21a3a5c751f89b2"
+    },
+    ".tools/worktrees/native-owned-project/.tools/native-owned-root-3c73-1/native-report.json": {
+      "bytes": 4539,
+      "sha256": "a4aa4525e3944772feac17d579ef9d15d055ff5c7a46a53372384010b804e664"
+    },
+    ".tools/worktrees/native-owned-project/.tools/native-owned-root-3c73-1/result.json": {
+      "bytes": 116567,
+      "sha256": "e73a4271916eb75dd221e13e9cf4775c4887041db9f118840d0ba12a98f92c8d"
+    },
+    ".tools/worktrees/native-owned-project/.tools/native-owned-root-3c73-1/profile/log/idea.log": {
+      "bytes": 81616,
+      "sha256": "02605454c60ae11517c8c81c63029a2bb79e4147c4887690e1c05a267261455c"
+    }
+  },
+  "limits": [
+    "Test-only freshly generated notebook fixture and isolated profile; no trust policy changes in production",
+    "NoPythoncodeexecuted;existingoutputisfixturedata",
+    "macOSarm64actualgate;WindowsnativeCIpending",
+    "NativeAPI/buttonactionsnotphysicalkeyboard"
+  ]
+}
