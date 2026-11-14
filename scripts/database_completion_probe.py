@@ -66,7 +66,7 @@ def build_probe(sdk: Path, production_jar: Path) -> tuple[Path, dict]:
                 raise ValueError("Actual IntelliJ probe archive verification failed")
     report = {"identity": identity, "pluginSha256": sha256(jar), "compilation": compilation, "archiveVerification": verified,
               "classes": sorted(n for n in payloads if n.endswith(".class")), "nativeApplicationLaunched": False}
-    (work / "build.json").write_text(json.dumps(report, indent=2) + "\n")
+    (work / "build.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     return jar.parent.parent, report
 
 
@@ -101,7 +101,7 @@ def prepare(sdk: Path, workspace: Path, app: Path) -> dict:
     layout = sdk_layout(sdk)
     if workspace.resolve().is_relative_to(target.sdk_root) or workspace.resolve().is_relative_to(layout.sdk_root):
         raise ValueError("Probe workspace must be outside SDK/product")
-    manifest = json.loads((target.contents / "openpycharm-build.json").read_text())
+    manifest = json.loads((target.contents / "openpycharm-build.json").read_text(encoding="utf-8"))
     verify_product_plugins(manifest, target.contents)
     entry = next((e for e in manifest.get("plugins", []) if e["id"] == "dev.openpycharm.database"), None)
     if entry is None:
@@ -113,8 +113,8 @@ def prepare(sdk: Path, workspace: Path, app: Path) -> dict:
     project.mkdir()
     idea = project / ".idea"
     idea.mkdir()
-    (idea / "modules.xml").write_text('<project version="4"><component name="ProjectModuleManager"><modules><module fileurl="file://$PROJECT_DIR$/completion-probe.iml" filepath="$PROJECT_DIR$/completion-probe.iml"/></modules></component></project>\n')
-    (project / "completion-probe.iml").write_text('<module type="PYTHON_MODULE" version="4"><component name="NewModuleRootManager"><content url="file://$MODULE_DIR$"/><orderEntry type="inheritedJdk"/><orderEntry type="sourceFolder" forTests="false"/></component></module>\n')
+    (idea / "modules.xml").write_text('<project version="4"><component name="ProjectModuleManager"><modules><module fileurl="file://$PROJECT_DIR$/completion-probe.iml" filepath="$PROJECT_DIR$/completion-probe.iml"/></modules></component></project>\n', encoding="utf-8")
+    (project / "completion-probe.iml").write_text('<module type="PYTHON_MODULE" version="4"><component name="NewModuleRootManager"><content url="file://$MODULE_DIR$"/><orderEntry type="inheritedJdk"/><orderEntry type="sourceFolder" forTests="false"/></component></module>\n', encoding="utf-8")
     database = project / "owned-completion.sqlite"
     with sqlite3.connect(database) as connection:
         connection.executescript('''CREATE TABLE products(id INTEGER, name TEXT, "列 名" TEXT); INSERT INTO products VALUES(1,'产品','中文列');
@@ -133,7 +133,7 @@ CREATE VIEW available_products AS SELECT * FROM products;
               "nativeApplicationLaunched": False, "projectTrustBypassed": False,
               "limitations": ["Compile/preparation only. Root must explicitly run the native gate in its exclusive desktop phase.",
                               "Passive observers add no candidates; direct-handler diagnostic cannot satisfy the native action gate."]}
-    (workspace / "prepared.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
+    (workspace / "prepared.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return result
 
 
@@ -148,7 +148,7 @@ def run(prepared: dict, timeout: int) -> dict:
              "openpycharm.database.completion.root": str(workspace), "openpycharm.database.completion.project": prepared["project"],
              "openpycharm.database.completion.database": prepared["database"], "openpycharm.database.completion.source": prepared["source"],
              "openpycharm.database.completion.invocation": invocation, "openpycharm.database.completion.expected.jar": prepared["productionJarSha256"]}
-    options.write_text(original.read_text() + "\n" + "\n".join(f"-D{k}={v}" for k, v in flags.items()) + "\n")
+    options.write_text(original.read_text(encoding="utf-8") + "\n" + "\n".join(f"-D{k}={v}" for k, v in flags.items()) + "\n", encoding="utf-8")
     environment = dict(os.environ, OPENPYCHARM_PROPERTIES=prepared["properties"], OPENPYCHARM_VM_OPTIONS=str(options))
     executable = app.contents / ("MacOS/pycharm" if app.platform == "macos" else "bin/pycharm64.exe")
     result = {**prepared, "invocationId": invocation, "nativeApplicationLaunched": False}
@@ -169,10 +169,10 @@ def run(prepared: dict, timeout: int) -> dict:
             while process.poll() is None and not report.is_file() and time.monotonic() < deadline:
                 time.sleep(.25)
             if not report.is_file():
-                dump = subprocess.run([str(app.jcmd), str(process.pid), "Thread.print", "-l"], capture_output=True, text=True, timeout=15)
-                (workspace / "external-timeout-threads.txt").write_text(dump.stdout + dump.stderr)
+                dump = subprocess.run([str(app.jcmd), str(process.pid), "Thread.print", "-l"], capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=15)
+                (workspace / "external-timeout-threads.txt").write_text(dump.stdout + dump.stderr, encoding="utf-8")
                 raise ValueError("No native report before timeout; retain ordinary trust state and owned-process evidence")
-            native = json.loads(report.read_text())
+            native = json.loads(report.read_text(encoding="utf-8"))
             result["native"] = native
             result["assessment"] = assess(native, invocation, prepared["productionJarSha256"])
         except Exception as error:
@@ -189,7 +189,7 @@ def run(prepared: dict, timeout: int) -> dict:
             except Exception as error:
                 result["cleanup"] = {"status": "fail", "error": str(error), "ownedPid": None if process is None else process.pid}
                 result["assessment"] = {"status": "fail", "error": "Owned process cleanup failed; retain exact PID/logs"}
-    (workspace / "result.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
+    (workspace / "result.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return result
 
 

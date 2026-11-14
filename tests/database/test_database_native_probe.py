@@ -1,9 +1,11 @@
 import contextlib
 import copy
 import io
+import json
 from pathlib import Path
 import sys
 import tempfile
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
@@ -73,6 +75,63 @@ class NativeCompletionEvidenceControls(unittest.TestCase):
             with patch.object(probe, "ROOT", root), patch.object(probe, "app_layout", side_effect=AssertionError("No app access")):
                 with self.assertRaisesRegex(ValueError, "existing profiles"):
                     probe.prepare(Path("/sdk"), workspace, Path("/app"))
+
+    def test_unicode_prepare_and_report_with_cp1252_defaults_without_an_ide(self):
+        """Exercise launcher I/O with a Windows-like default even on a UTF-8 host."""
+        read_text, write_text = Path.read_text, Path.write_text
+
+        def cp1252_read(path, encoding=None, errors=None):
+            return read_text(path, encoding=encoding or "cp1252", errors=errors)
+
+        def cp1252_write(path, data, encoding=None, errors=None, newline=None):
+            return write_text(path, data, encoding=encoding or "cp1252", errors=errors, newline=newline)
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "中文路径"
+            contents = root / "应用"
+            binary = contents / "bin"
+            binary.mkdir(parents=True)
+            (binary / "pycharm64.exe.vmoptions").write_text("# 中文配置\n-Xmx128m\n", encoding="utf-8")
+            production = contents / "plugins/database/lib/database.jar"
+            production.parent.mkdir(parents=True)
+            production.write_bytes(b"test-only artifact, never loaded")
+            manifest = {"plugins": [{"id": "dev.openpycharm.database", "jar": "plugins/database/lib/database.jar"}],
+                        "sourceCommit": "fixture-中文"}
+            (contents / "openpycharm-build.json").write_text(json.dumps(manifest, ensure_ascii=False), encoding="utf-8")
+            app = SimpleNamespace(sdk_root=contents, contents=contents, platform="windows", jcmd=binary / "jcmd.exe")
+            process = SimpleNamespace(pid=1234, poll=lambda: 0, returncode=0)
+            job = SimpleNamespace(assign_and_resume=lambda p: None)
+            workspace = root / ".tools/窗口 中文"
+            with patch.object(Path, "read_text", cp1252_read), patch.object(Path, "write_text", cp1252_write), \
+                 patch.object(probe, "ROOT", root), patch.object(probe, "app_layout", return_value=app), \
+                 patch.object(probe, "sdk_layout", return_value=SimpleNamespace(sdk_root=root / "SDK")), \
+                 patch.object(probe, "verify_product_plugins"), \
+                 patch.object(probe, "build_probe", return_value=(root / "observer", {"pluginSha256": "b" * 64})), \
+                 patch.object(probe.uuid, "uuid4", return_value=SimpleNamespace(hex="owned")), \
+                 patch.object(probe, "WindowsJob", return_value=job), \
+                 patch.object(probe.subprocess, "Popen", return_value=process) as launch, \
+                 patch.object(probe, "stop_owned", return_value={"status": "pass"}):
+                # The emulation rejects Unicode without an explicit encoding; PYTHONUTF8 cannot hide regressions.
+                with self.assertRaises(UnicodeEncodeError):
+                    (root / "default-encoding-negative.txt").write_text("中文")
+                prepared = probe.prepare(root / "SDK", workspace, contents)
+                self.assertEqual(prepared["productionSourceCommit"], "fixture-中文")
+                self.assertEqual(probe.prepare_profile(Path(prepared["profile"]), []), Path(prepared["properties"]))
+                native = self.passing()
+                native["plugin"]["jarSha256"] = prepared["productionJarSha256"]
+                (workspace / "native-report.json").write_text(json.dumps(native, ensure_ascii=False), encoding="utf-8")
+                result = probe.run(prepared, 60)
+                self.assertEqual(result["assessment"]["status"], "pass")
+                self.assertEqual(launch.call_count, 1)  # A mock only; no process or IDE starts in this control.
+                (workspace / "native-report.json").unlink()
+                with patch.object(probe.subprocess, "run", return_value=SimpleNamespace(stdout="线程 中文\n", stderr="诊断\n")) as dump:
+                    self.assertEqual(probe.run(prepared, 60)["assessment"]["status"], "fail")
+                    self.assertEqual(dump.call_args.kwargs["encoding"], "utf-8")
+                    self.assertEqual(dump.call_args.kwargs["errors"], "replace")
+            for name in ("prepared.json", "result.json", "probe.vmoptions"):
+                self.assertIn("中文", (workspace / name).read_bytes().decode("utf-8"))
+            self.assertIn("# 中文配置", (workspace / "probe.vmoptions").read_bytes().decode("utf-8"))
+            self.assertEqual((workspace / "external-timeout-threads.txt").read_bytes().decode("utf-8"), "线程 中文\n诊断\n")
 
 
 if __name__ == "__main__":
