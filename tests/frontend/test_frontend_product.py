@@ -9,10 +9,11 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
-import subprocess
 import sys
 import tempfile
+from types import SimpleNamespace
 import unittest
+from unittest.mock import patch
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -64,10 +65,11 @@ class FrontendProductSdkTests(unittest.TestCase):
 
     def helper(self, name, *args, jar=None):
         classpath = [self.helpers, jar or self.classes, *sorted(self.layout.lib.glob('*.jar'))]
-        result = subprocess.run([str(self.runtime.java), '-Djava.awt.headless=true', '--class-path',
-                                 os.pathsep.join(map(str, classpath)), 'dev.openpycharm.frontend.' + name,
-                                 *map(str, args)], capture_output=True, text=True, timeout=45)
-        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        # The complete SDK classpath exceeds Windows CreateProcess's command
+        # limit. The shared runner uses a quoted UTF-8 @argument file there.
+        result = self.builder.run_java(self.runtime, ['-Djava.awt.headless=true', '--class-path',
+                                      os.pathsep.join(map(str, classpath)), 'dev.openpycharm.frontend.' + name,
+                                      *map(str, args)], self.directory)
         report = json.loads(result.stdout)
         self.assertEqual(report['status'], 'pass')
         self.assertFalse(report.get('nodeStarted', True))
@@ -85,6 +87,34 @@ class FrontendProductSdkTests(unittest.TestCase):
         target = 'windows-x64' if sys.platform == 'win32' else 'macos-arm64'
         report = self.helper('FrontendProductBundleCheck', plugin, system, project, target, jar=plugin / 'lib/frontend.jar')
         self.assertTrue(report['fullPinned191PayloadAuthenticated'])
+
+
+class FrontendProductLaunchTests(unittest.TestCase):
+    def test_windows_helper_keeps_the_complete_long_classpath_in_an_argument_file(self):
+        sys.path.insert(0, str(ROOT / 'scripts'))
+        import build_frontend_plugin
+        import build_framework_plugin
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary).resolve()
+            case = FrontendProductSdkTests('test_actual_worker_settings_lifecycle_and_filesystem_controls')
+            case.builder = build_frontend_plugin
+            case.runtime = SimpleNamespace(java=directory / '工具 空间/java.exe')
+            case.directory = directory
+            case.helpers, case.classes = directory / 'helpers', directory / 'classes'
+            jars = [directory / 'lib' / ('long-dependency-name-' + str(index) + '-中文-library.jar') for index in range(500)]
+            case.layout = SimpleNamespace(lib=SimpleNamespace(glob=lambda _pattern: jars))
+            result = SimpleNamespace(returncode=0, stdout='{"status":"pass","nodeStarted":false}', stderr='')
+            with patch.object(build_framework_plugin, 'os', SimpleNamespace(name='nt')), \
+                    patch.object(build_framework_plugin.subprocess, 'run', return_value=result) as launched:
+                case.helper('FrontendProductCoreTest', directory / 'owned project 中文🚀')
+            command = launched.call_args.args[0]
+            self.assertEqual(command, [str(case.runtime.java), '@framework-java.args'])
+            self.assertEqual(launched.call_args.kwargs['cwd'], directory)
+            arguments = (directory / 'framework-java.args').read_text(encoding='utf-8')
+            self.assertGreater(len(arguments), 32767)
+            self.assertIn('dev.openpycharm.frontend.FrontendProductCoreTest', arguments)
+            self.assertIn('owned project 中文🚀', arguments)
+            self.assertIn(str(jars[-1]).replace('\\', '\\\\').replace('"', '\\"'), arguments)
 
 
 if __name__ == '__main__': unittest.main()
