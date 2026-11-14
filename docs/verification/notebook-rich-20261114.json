@@ -1,0 +1,349 @@
+{
+  "schema": 1,
+  "status": "headless-controls-pass-native-pending",
+  "scope": "Independent static rich MIME/Markdown rendering and platform shortcut registration; not installed/native-window acceptance",
+  "coreCommit": "7ac8c318cc222824596ab03a39a7afd1936bb217",
+  "inheritedSaveFix": {
+    "original": "28378bd5420877b5b6b524d9c899c9b0ddddd0cf",
+    "cherryPick": "34dd8e6"
+  },
+  "pluginId": "dev.openpycharm.notebooks",
+  "version": "0.1.0-dev.3",
+  "jarSha256": "fef9aa69f638bbe8ef86914c21d3c139b0aace990605338ee119c0d2cc835ca0",
+  "pluginDirectory": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebook-rich/.tools/notebook-plugin/c845b374cc2c6b1ac80b98f9e7a407cd1730c0239facef32a33923f1de504d5c/plugin",
+  "sdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+  "compiler": "javac 25.0.3",
+  "archiveVerification": {
+    "status": "pass",
+    "reader": "HashMapZipFile",
+    "verifiedEntries": 48,
+    "closed": true,
+    "sha256": "fef9aa69f638bbe8ef86914c21d3c139b0aace990605338ee119c0d2cc835ca0"
+  },
+  "modelTests": {
+    "status": "pass",
+    "metadataAndAttachmentsPreserved": true,
+    "richOutputsPreserved": true,
+    "sourceRoundTrip": true,
+    "outputsAndCount": true,
+    "addDeleteCells": true,
+    "malformedAndOversizedRejected": true,
+    "asynchronousPersistence": {
+      "status": "pass",
+      "offSubmittingThread": true,
+      "latestOnlyCoalescing": true,
+      "dirtyBeforeCompletion": true,
+      "staleCommitRejected": true,
+      "externalGenerationInvalidated": true,
+      "serializationFailureRemainsDirty": true,
+      "mergeSuspensionKeepsDirty": true,
+      "executorRejectionRecovers": true,
+      "completionQueueBounded": true
+    },
+    "externalMerge": {
+      "status": "pass",
+      "foreignMetadataChars": 2600000,
+      "independentSourceAndMetadata": true,
+      "localRetainedOnConflict": true,
+      "stableCellIdentities": true,
+      "structuralAndAtomicArrays": true,
+      "identicalChanges": true,
+      "missingKeysAndNull": true,
+      "immutableInputs": true,
+      "structuralSharing": true,
+      "exactLargeIntegersAndDecimals": true,
+      "extremeExponents": true,
+      "recursiveNumericEquality": true
+    },
+    "saveThreadContract": {
+      "status": "pass",
+      "unlockedWorker": true,
+      "blockingEdtCallbacksComplete": true,
+      "fileIoOffEdt": true,
+      "utf8FileRoundTrip": true,
+      "unsafeAndRejectedEntryReported": true,
+      "actualIdeSaveEngineExercised": false
+    },
+    "richOutput": {
+      "status": "pass",
+      "actualPngJpegDecode": true,
+      "metadataAndMultiline": true,
+      "pixelAndTrustBounds": true,
+      "offEdtGuard": true,
+      "staticHtmlTable": true,
+      "markdownStylesAndGfmTable": true,
+      "actualNativeSwingComponents": true,
+      "externalFetches": 0,
+      "nativeIdeLaunched": false
+    },
+    "previewScheduler": {
+      "status": "pass",
+      "latestInputAndDeliveryOnly": true,
+      "aggregatePixelBudget": true,
+      "staleDisposeRejected": true,
+      "imageReferencesReleased": true,
+      "workerRejectionRecovers": true
+    },
+    "targetPlatform": "macos",
+    "executionPlatform": "macos",
+    "nativeTargetRuntime": true,
+    "jarSha256": "fef9aa69f638bbe8ef86914c21d3c139b0aace990605338ee119c0d2cc835ca0"
+  },
+  "productionSources": {
+    "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "plugins/notebooks/NOTICE": "85b2cb99861388da1db401baf652c409013319579555732781e32c6a5c424a96",
+    "plugins/notebooks/README.md": "11b9864fb5f519095f40477ee6adb8d7ff6c5b52462fad2fcce86d36c96cdd7a",
+    "plugins/notebooks/build-support/VerifyNotebookArchive.java": "f0799e3467d4b03dfea8eb54aa2cc429f811ce67afd03bfc9876120295b2c555",
+    "plugins/notebooks/kernel-requirements.txt": "0206856a062580549f520ce261c636fa0b5b9bb114c847f8d10dfd2a97b713d1",
+    "plugins/notebooks/resources/META-INF/plugin.xml": "a400e740c77b1f82f27b6ece70d58d21fa143c0d42d57c0c113c642c880e3a3a",
+    "plugins/notebooks/resources/kernel_bridge.py": "361b86385deab957e209e5a743ea14e516e7a5840428165b1dcd29c9cae42e99",
+    "plugins/notebooks/runtime-dependencies.lock.json": "765b2b507abfd6383e3cef9f6c54700fa50ad8fbca81bdb0be401ee6151194d9",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookDisplayState.java": "c7f67049c9dc33533067ef20df629a105be1604f96a69c62113eecc311c84b6a",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookDocumentSave.java": "a1de1f6cd3492456a0e234b5d971a083ede29dfb63c3f4f75bd3faf8f3bab1cb",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookEditorProvider.java": "e49779c7309d07e2d560516d6ad9a6d24d6632dff7d9df53a0e57d9a4217e36c",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookFileEditor.java": "15d2198ea5e72e5af2bbfd25b47d464026dd17dd0039603855b0fff5e86e8178",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookFileType.java": "8e1fe08039f9d2f954b664e344fd2d3bc8fa7fb34c8ca721288066eca5fb41f6",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookKernelSession.java": "3f13a2037f784532eece3e26f397f336c68fb980e7ab07a8b3f457a04ff2057b",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookMerge.java": "ea03a4be2b5ef1a0861557c93eca16ac8ec3ae8a18dbda5a44603b216de50fbb",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookModel.java": "e27dced3a99dda43ec5bf867f77688fab829cf7db65a40f1a6a125481a4704cd",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookOutputPanel.java": "41a59c9e14eacb087c5935ca20f9148b97a51436c543c0a57083b0003a921492",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookPersistence.java": "38058e890883d44398851947f99abb20fc1e4173e7dbf58de2334a2ded76a106",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookPreviewScheduler.java": "452e4b98370680cda05a85ce801f3cad2512734b252546cdee4b0e3e4e2d7c6d",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookProjectCloseHandler.java": "ea2b19d0e67442df6bf123d12c486cec613f07a2774516d2f6370bfc28114efb",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookRichOutput.java": "345e2fbb05f56e73fba8e5f18716d680f24015f321df1f6b9dfd36123c6d30ca",
+    "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookStaticContent.java": "d16f575238dfa0eb3218098f827e9691aea4064a8813032a8f5ec58e757f0279",
+    "product/platform.lock.json": "2fe9e477d7e3164e362e33f3b95a2464b16a0699e1bade6cc112b166aed697bd",
+    "product/product.json": "f5d4a28101d3f3462b7877aeb020a1de48886a2ef06758c07531c11af01cfae3",
+    "scripts/bootstrap.py": "a9f405e1fd83ed5a63e0a676efcecbb11a0a1e1975f876e33622756b5b502fff",
+    "scripts/build_notebook_plugin.py": "5c95c1cc93ad4101cca3dffaca95e8e72607c81bd92182560e48fdc5a809adc0",
+    "scripts/platform_layout.py": "500447561715fc996c842c614aa817a2251e7dfbc22305054f7ab40fc31c7037"
+  },
+  "sourceInputsStillCurrent": true,
+  "actualKernelRuns": [
+    {
+      "runtime": {
+        "python": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebook-rich/.tools/rich-kernel-314/bin/python",
+        "version": "3.14.0 (main, Nov 19 2025, 23:04:28) [Clang 21.1.4 ]",
+        "packages": {
+          "jupyter_client": "8.6.3",
+          "ipykernel": "6.29.5",
+          "pandas": "2.3.3",
+          "matplotlib": "3.10.7",
+          "Pillow": "12.1.0",
+          "numpy": "2.5.4"
+        }
+      },
+      "checks": {
+        "status": "pass",
+        "actualMatplotlibPng": true,
+        "actualPillowJpeg": true,
+        "actualPandasHtmlTable": true,
+        "actualKernelMarkdown": true,
+        "displayIdPngAndTableUpdate": true,
+        "nbformatSaveReopen": true,
+        "completeCapturedTreeRoundTrip": true,
+        "unknownMimeMetadataAndTrustPreserved": true,
+        "nativeSwingImagesTablesText": true,
+        "ownedKernelStopped": true,
+        "notebookSha256": "876d514be7885c19036ba0f6859362d561cdaa87f6416ac4c11149c521ed4dc6",
+        "nativeIdeLaunched": false
+      },
+      "notebook": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebook-rich/.tools/rich-evidence/freeze-python314.ipynb",
+      "notebookSha256": "876d514be7885c19036ba0f6859362d561cdaa87f6416ac4c11149c521ed4dc6",
+      "testSources": {
+        "tests/notebooks/NotebookRichKernelTest.java": "d95afdca87ed70e105c9589d597a7a08bd754167594ed864d4ab82bd59fc8073",
+        "tests/notebooks/NotebookRichOutputTest.java": "6c9feb7ad35300895de8f4e0ea69ae5ebc52619965224d8643b39b1886d164ff",
+        "scripts/notebook_rich_probe.py": "087d7f4a19bf1919d56f206b4834e3ac5f68b77786c8d61ca3f077cc3596560c"
+      },
+      "reportSha256": "b90ac4ce254677c9bb924db74000015f356164ba5c487b8adca34db89426e3ab"
+    },
+    {
+      "runtime": {
+        "python": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebook-rich/.tools/rich-kernel-venv/bin/python",
+        "version": "3.11.15 (main, Jun 11 2026, 04:04:09) [Clang 22.1.3 ]",
+        "packages": {
+          "jupyter_client": "8.6.3",
+          "ipykernel": "6.29.5",
+          "pandas": "2.2.3",
+          "matplotlib": "3.9.4",
+          "Pillow": "11.3.0",
+          "numpy": "2.4.6"
+        }
+      },
+      "checks": {
+        "status": "pass",
+        "actualMatplotlibPng": true,
+        "actualPillowJpeg": true,
+        "actualPandasHtmlTable": true,
+        "actualKernelMarkdown": true,
+        "displayIdPngAndTableUpdate": true,
+        "nbformatSaveReopen": true,
+        "completeCapturedTreeRoundTrip": true,
+        "unknownMimeMetadataAndTrustPreserved": true,
+        "nativeSwingImagesTablesText": true,
+        "ownedKernelStopped": true,
+        "notebookSha256": "3bbb57ed87f5d1dbfddac96bec18876c5d7e113dece4fe66399aefb1723f5e1c",
+        "nativeIdeLaunched": false
+      },
+      "notebook": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebook-rich/.tools/rich-evidence/freeze-python311.ipynb",
+      "notebookSha256": "3bbb57ed87f5d1dbfddac96bec18876c5d7e113dece4fe66399aefb1723f5e1c",
+      "testSources": {
+        "tests/notebooks/NotebookRichKernelTest.java": "d95afdca87ed70e105c9589d597a7a08bd754167594ed864d4ab82bd59fc8073",
+        "tests/notebooks/NotebookRichOutputTest.java": "6c9feb7ad35300895de8f4e0ea69ae5ebc52619965224d8643b39b1886d164ff",
+        "scripts/notebook_rich_probe.py": "087d7f4a19bf1919d56f206b4834e3ac5f68b77786c8d61ca3f077cc3596560c"
+      },
+      "reportSha256": "668470d80f9fc516c51c7ab726e5597af8a0c29f2f0321707450804dee2c4ff3"
+    }
+  ],
+  "selectedPython314BaseIdentity": {
+    "selectedPython": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebook-rich/.tools/rich-kernel-314/bin/python",
+    "baseExecutable": "/Users/wangshubo/.local/share/uv/python/cpython-3.14.0-macos-aarch64-none/bin/python3.14",
+    "basePrefix": "/Users/wangshubo/.local/share/uv/python/cpython-3.14.0-macos-aarch64-none",
+    "version": "3.14.0 (main, Nov 19 2025, 23:04:28) [Clang 21.1.4 ]"
+  },
+  "legacySessionControls": {
+    "schema": 1,
+    "status": "pass",
+    "observedAt": "2026-11-14T02:35:11.820746+00:00",
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "targetPlatform": "macos",
+    "executionPlatform": "macos",
+    "nativeTargetRuntime": true,
+    "python": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebook-rich/.tools/rich-kernel-314/bin/python",
+    "java": "/Users/wangshubo/develop/openpycharm/.tools/platform/pycharm-2026.1.4-macos-arm64/PyCharm.app/Contents/jbr/Contents/Home/bin/java",
+    "checks": {
+      "status": "pass",
+      "realJavaSession": true,
+      "selectedPython": true,
+      "streamAndResult": true,
+      "interrupt": true,
+      "restartWhileBusy": true,
+      "stateReset": true,
+      "doubleClose": true,
+      "ownedKernelCleanup": true,
+      "unrelatedProcessSurvived": true,
+      "originalKernelPid": 34454,
+      "restartedKernelPid": 34457,
+      "disposal": {
+        "status": "pass",
+        "actualBlockedPipe": true,
+        "closeBeforeRequest": true,
+        "closeDuringStartup": true,
+        "doubleClose": true,
+        "boundedOwnedProcessAndDescendantCleanup": true,
+        "blockedWriterCloseMillis": 5013,
+        "startupCloseMillis": 5019,
+        "protocolExecutorRejectionCleanup": true,
+        "rejectedProtocolCloseMillis": 5041
+      }
+    },
+    "compilation": {
+      "stdout": "",
+      "stderr": ""
+    },
+    "stderr": "",
+    "failure": null,
+    "jarSha256": "fef9aa69f638bbe8ef86914c21d3c139b0aace990605338ee119c0d2cc835ca0",
+    "pluginDirectory": "/Users/wangshubo/develop/openpycharm/.tools/worktrees/notebook-rich/.tools/notebook-plugin/c845b374cc2c6b1ac80b98f9e7a407cd1730c0239facef32a33923f1de504d5c/plugin",
+    "sourceInputsStillCurrent": true,
+    "sdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
+    "sources": {
+      "tests/notebooks/NotebookKernelSessionTest.java": "19cee414b63bcec9f14a722db2181ee793f9b838bc228eb7a5f1f0a6d37a86f0",
+      "tests/notebooks/NotebookSessionDisposalTest.java": "e37ed4de1ced6e584b535627abf9b4a368263dda2f4d631e51fbaa22aee55552",
+      "scripts/notebook_session_probe.py": "155936d3509ce374865882f48e9ca8b1157b107164b0d3e3b484da184d063a40",
+      "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "plugins/notebooks/NOTICE": "85b2cb99861388da1db401baf652c409013319579555732781e32c6a5c424a96",
+      "plugins/notebooks/README.md": "11b9864fb5f519095f40477ee6adb8d7ff6c5b52462fad2fcce86d36c96cdd7a",
+      "plugins/notebooks/build-support/VerifyNotebookArchive.java": "f0799e3467d4b03dfea8eb54aa2cc429f811ce67afd03bfc9876120295b2c555",
+      "plugins/notebooks/kernel-requirements.txt": "0206856a062580549f520ce261c636fa0b5b9bb114c847f8d10dfd2a97b713d1",
+      "plugins/notebooks/resources/META-INF/plugin.xml": "a400e740c77b1f82f27b6ece70d58d21fa143c0d42d57c0c113c642c880e3a3a",
+      "plugins/notebooks/resources/kernel_bridge.py": "361b86385deab957e209e5a743ea14e516e7a5840428165b1dcd29c9cae42e99",
+      "plugins/notebooks/runtime-dependencies.lock.json": "765b2b507abfd6383e3cef9f6c54700fa50ad8fbca81bdb0be401ee6151194d9",
+      "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookDisplayState.java": "c7f67049c9dc33533067ef20df629a105be1604f96a69c62113eecc311c84b6a",
+      "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookDocumentSave.java": "a1de1f6cd3492456a0e234b5d971a083ede29dfb63c3f4f75bd3faf8f3bab1cb",
+      "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookEditorProvider.java": "e49779c7309d07e2d560516d6ad9a6d24d6632dff7d9df53a0e57d9a4217e36c",
+      "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookFileEditor.java": "15d2198ea5e72e5af2bbfd25b47d464026dd17dd0039603855b0fff5e86e8178",
+      "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookFileType.java": "8e1fe08039f9d2f954b664e344fd2d3bc8fa7fb34c8ca721288066eca5fb41f6",
+      "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookKernelSession.java": "3f13a2037f784532eece3e26f397f336c68fb980e7ab07a8b3f457a04ff2057b",
+      "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookMerge.java": "ea03a4be2b5ef1a0861557c93eca16ac8ec3ae8a18dbda5a44603b216de50fbb",
+      "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookModel.java": "e27dced3a99dda43ec5bf867f77688fab829cf7db65a40f1a6a125481a4704cd",
+      "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookOutputPanel.java": "41a59c9e14eacb087c5935ca20f9148b97a51436c543c0a57083b0003a921492",
+      "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookPersistence.java": "38058e890883d44398851947f99abb20fc1e4173e7dbf58de2334a2ded76a106",
+      "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookPreviewScheduler.java": "452e4b98370680cda05a85ce801f3cad2512734b252546cdee4b0e3e4e2d7c6d",
+      "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookProjectCloseHandler.java": "ea2b19d0e67442df6bf123d12c486cec613f07a2774516d2f6370bfc28114efb",
+      "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookRichOutput.java": "345e2fbb05f56e73fba8e5f18716d680f24015f321df1f6b9dfd36123c6d30ca",
+      "plugins/notebooks/src/dev/openpycharm/notebooks/NotebookStaticContent.java": "d16f575238dfa0eb3218098f827e9691aea4064a8813032a8f5ec58e757f0279",
+      "product/platform.lock.json": "2fe9e477d7e3164e362e33f3b95a2464b16a0699e1bade6cc112b166aed697bd",
+      "product/product.json": "f5d4a28101d3f3462b7877aeb020a1de48886a2ef06758c07531c11af01cfae3",
+      "scripts/bootstrap.py": "a9f405e1fd83ed5a63e0a676efcecbb11a0a1e1975f876e33622756b5b502fff",
+      "scripts/build_notebook_plugin.py": "5c95c1cc93ad4101cca3dffaca95e8e72607c81bd92182560e48fdc5a809adc0",
+      "scripts/platform_layout.py": "500447561715fc996c842c614aa817a2251e7dfbc22305054f7ab40fc31c7037"
+    },
+    "observed": [
+      "Authenticated native JVM loaded the actual built NotebookKernelSession and embedded bridge",
+      "Selected Python executed code and delivered stream/result/error events over actual process pipes",
+      "Interrupt and restart while busy reached the actual kernel; state reset and old PID exited",
+      "Repeated session disposal completed and restarted kernel PID exited; unrelated process survived",
+      "Actual pipe-write backpressure and close-during-startup helpers exited within bounded disposal on POSIX"
+    ],
+    "unknown": [
+      "Native NotebookFileEditor/Swing desktop behavior is not exercised by this headless class test",
+      "Windows runtime and installer acceptance require execution on Windows",
+      "Forced process-tree cleanup under OS/JVM crash is not established by normal disposal checks"
+    ]
+  },
+  "repositoryTests": {
+    "count": 94,
+    "passed": 94,
+    "skipped": 0,
+    "actualKernelPython": "3.14.0",
+    "logSha256": "9029527d789023c16968fa50665a11d43ee8584d5619ab9e6c4266a1e13b8d47"
+  },
+  "helloPythonFixture": {
+    "count": 9,
+    "passed": 9,
+    "logSha256": "acd2e24b0fc7a6cdeae8ffff317a3614672197ad8b136c0c01c90173e02aa52f"
+  },
+  "testProducerPins": {
+    "tests/notebooks/rich-requirements-314.txt": "cb2dd24a1a569562adf428a02c4deb1c003d76d0ea3ff339034ecaa24a688f82",
+    "tests/notebooks/rich-requirements-311.txt": "e9700bbc556443e23a75759ad0660fa5e56096d8f151c2ded80ec2745aa64580"
+  },
+  "runtimeDependencies": {
+    "jupyter_client": "8.6.3",
+    "ipykernel": "6.29.5",
+    "updated": false,
+    "producerPackagesBundled": false
+  },
+  "markdownLibrary": {
+    "source": "Existing authenticated open-source SDK boot library, not copied into notebook JAR",
+    "jar": "lib/intellij.libraries.markdown.jar",
+    "sha256": "74b475effd0b3b622aa9d20fbbfd168fb4e61e218124989ccffcfa51a680f5dd",
+    "license": "Apache-2.0; existing upstream notices retained"
+  },
+  "observed": [
+    "Actual selected Python 3.14.0 and 3.11.15 owned kernels produced Matplotlib PNG, Pillow JPEG, pandas HTML and IPython Markdown",
+    "Production display state replaced real PNG bytes and DataFrame42→99 before persistence",
+    "Complete captured nbformat tree retained identical compact JSON on file write/parse/reopen; transient display IDs are not stored",
+    "Reopened data populated headless native Swing image painting, JTable and styled JTextPane; no IDE/window launched",
+    "Owned HTTP trap received zero requests from static HTML/Markdown/native controls, including malicious implicit JLabel HTML input",
+    "Bounded native preview scheduler coalesced latest input/results and released stale/disposed image references; worker/delivery rejection and failed consumers were controlled",
+    "Native DumbAwareAction shortcut code and ordinary cell-error idle label compiled with authenticated SDK"
+  ],
+  "inferred": [
+    "Cell-lifetime platform action registration addresses the observed Swing InputMap dispatch gap, but actual desktop key dispatch is not proven",
+    "New labels distinguish ordinary Python cell errors from kernel lifecycle state; actual native label appearance is not proven"
+  ],
+  "unknown": [
+    "Installed native rich Notebook UI/layout/theme/scrolling and plugin startup/classloader behavior",
+    "Native edit/Undo/Save/project-close with this combined rich JAR; root-controlled save gate is separate",
+    "Actual Shift+Enter run dispatch, re-run after deleting/rebuilding cells, and UI error-state labels",
+    "Windows native renderer/runtime/owned process behavior and installer validation"
+  ],
+  "excluded": [
+    "Active HTML/CSS/scripts/automatic external resource fetch",
+    "SVG/MathJax/Markdown attachment images/widgets",
+    "Remote kernels, interactive stdin and notebook debugging"
+  ],
+  "nativeIdeLaunched": false,
+  "rootCheckoutCandidateReleaseModified": false
+}
