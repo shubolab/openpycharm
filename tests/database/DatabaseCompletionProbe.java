@@ -6,6 +6,9 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.sql.SQLException;
 import javax.swing.SwingUtilities;
+import com.intellij.codeInsight.completion.*;
+import com.intellij.codeInsight.lookup.*;
+import com.intellij.openapi.editor.*;
 import static dev.openpycharm.database.DatabaseMetadataCache.*;
 
 /** Real SQLite metadata plus pure native-completion context/candidate controls. No IDE launch. */
@@ -24,6 +27,66 @@ public final class DatabaseCompletionProbe {
     var lexer=new SqlLanguage.SqlLexer();lexer.start(text);boolean token=false;
     while(lexer.getTokenType()!=null){if(lexer.getTokenStart()==c.replaceStart()&&lexer.getTokenEnd()==c.replaceEnd()){token=true;break;}lexer.advance();}
     check(token,"replacement covers the actual native SQL lexer token: "+marked);
+  }
+  private static Object boundaryProxy(Class<?> type,java.lang.reflect.InvocationHandler handler){return java.lang.reflect.Proxy.newProxyInstance(type.getClassLoader(),new Class[]{type},handler);}
+  /** Actual SDK InsertionContext and production lookup callbacks; document/editor boundaries only, no IDE host. */
+  private static final class BoundaryInsertion extends InsertionContext {
+    final StringBuilder text;final Document document;final Editor editor;int caret,start,tail,end;boolean addCharacter=true;
+    static Editor unusedEditor(){
+      CaretModel model=(CaretModel)boundaryProxy(CaretModel.class,(p,m,a)->{if(m.getName().equals("getOffset"))return 0;throw new AssertionError("Unexpected superclass caret call: "+m.getName());});
+      return (Editor)boundaryProxy(Editor.class,(p,m,a)->{if(m.getName().equals("getCaretModel"))return model;throw new AssertionError("Unexpected superclass editor call: "+m.getName());});
+    }
+    BoundaryInsertion(String text,int caret){
+      super(new OffsetMap((Document)boundaryProxy(Document.class,(p,m,a)->{throw new AssertionError("Unexpected superclass document call: "+m.getName());})), '\n',new LookupElement[0],(com.intellij.psi.PsiFile)boundaryProxy(com.intellij.psi.PsiFile.class,(p,m,a)->{throw new AssertionError(m.getName());}),unusedEditor(),false);
+      this.text=new StringBuilder(text);this.caret=caret;
+      document=(Document)boundaryProxy(Document.class,(p,m,a)->switch(m.getName()){
+        case "getTextLength"->this.text.length();case "getText"->this.text.toString();
+        case "replaceString"->{this.text.replace((int)a[0],(int)a[1],a[2].toString());yield null;}
+        default->throw new AssertionError("Boundary document: "+m.getName());});
+      CaretModel model=(CaretModel)boundaryProxy(CaretModel.class,(p,m,a)->switch(m.getName()){
+        case "getOffset"->this.caret;case "getCaretCount"->1;case "moveToOffset"->{this.caret=(int)a[0];yield null;}
+        default->throw new AssertionError("Boundary caret: "+m.getName());});
+      editor=(Editor)boundaryProxy(Editor.class,(p,m,a)->switch(m.getName()){case "getDocument"->document;case "getCaretModel"->model;default->throw new AssertionError("Boundary editor: "+m.getName());});
+    }
+    @Override public int getStartOffset(){return start;}@Override public int getTailOffset(){return tail;}@Override public void setTailOffset(int value){tail=value;}
+    @Override public int getOffset(OffsetKey key){check(key==CompletionInitializationContext.IDENTIFIER_END_OFFSET,"native identifier-end key");return end;}
+    @Override public Editor getEditor(){return editor;}@Override public Document getDocument(){return document;}@Override public void setAddCompletionChar(boolean value){addCharacter=value;}
+  }
+  private static void insertionBoundaries(Path root)throws Exception{
+    DatabaseService service=new DatabaseService(null);DatabaseProfile profile=new DatabaseProfile();profile.file=root.resolve("accept-time-token.sqlite").toString();
+    try {
+      for(String phase:List.of("fresh","stale-before-accept","stale-after-capture","stale-after-default","stale-tab-after-default")){
+        for(String[] example:List.of(new String[]{"SELECT * FROM pro<caret>;","products","SELECT * FROM \"main\".\"products\";"},
+                                    new String[]{"SELECT p.\"列 <caret>名\" FROM products p;","列 名","SELECT p.\"列 名\" FROM products p;"},
+                                    new String[]{"SELECT p.\"quote\"\"<caret>olumn\" FROM products p;","quote\"column","SELECT p.\"quote\"\"column\" FROM products p;"})){
+          service.session.connect(profile,null);service.session.execute("CREATE TABLE IF NOT EXISTS products(id INTEGER,name TEXT,\"列 名\" TEXT,\"quote\"\"column\" TEXT)");service.session.refreshMetadata();
+          var snapshot=service.completionSnapshot();var context=context(example[0]);String original=example[0].replace("<caret>","");int caret=example[0].indexOf("<caret>");
+          var insertion=new BoundaryInsertion(original,caret);var candidate=named(snapshot,example[0],example[1]);
+          LookupElement item=SqlCompletionContributor.lookup(service,snapshot,candidate,insertion.editor);
+          check(item.isValid(),"fresh actual production lookup is valid");
+          String initialPrefix=context.rawPrefix(),additional=example[1].equals("products")?"d":example[1].equals("列 名")?"名":"c";
+          insertion.text.insert(caret,additional);insertion.caret=caret+=additional.length();original=insertion.text.toString();context=SqlCompletionContext.analyze(original,caret);
+          check(new SqlCompletionPrefixMatcher(initialPrefix).cloneWithPrefix(context.rawPrefix()).prefixMatches(item),"continued native matching after lookup creation accepts the additional typed suffix");
+          if(phase.equals("stale-before-accept")){
+            service.session.close();check(!item.isValid()&&insertion.text.toString().equals(original),"expired lookup is rejected before native default insertion without losing latest text");continue;
+          }
+          var before=item.as(LookupElementInsertStopper.class);check(before!=null&&!before.shouldStopLookupInsertion(),"actual native before-default callback captures latest text");
+          if(phase.equals("stale-after-capture"))service.session.close();
+          // The actual pinned LookupImpl replaces the raw prefix with the lookup string before handleInsert.
+          insertion.start=context.replaceStart();insertion.tail=insertion.start+item.getLookupString().length();
+          insertion.end=context.replaceEnd()+item.getLookupString().length()-context.rawPrefix().length();
+          insertion.text.replace(insertion.start,caret,item.getLookupString());insertion.caret=insertion.tail;
+          if(phase.equals("stale-after-default")||phase.equals("stale-tab-after-default"))service.session.close();
+          if(phase.equals("stale-tab-after-default")){insertion.text.delete(insertion.tail,insertion.end);insertion.end=insertion.tail;}
+          item.handleInsert(insertion);
+          check(insertion.text.toString().equals(phase.equals("fresh")?example[2]:original),"actual production handler preserves accept-time token/suffix in "+phase+": "+example[0]);
+          check(!insertion.addCharacter,"no extra Enter/Tab completion character on managed SQL insertion");
+          if(!phase.equals("fresh"))check(insertion.caret==caret,"stale selection restores the accept-time caret");
+        }
+      }
+    } finally {
+      service.dispose();for(String name:List.of("worker","control")){var field=DatabaseService.class.getDeclaredField(name);field.setAccessible(true);check(((java.util.concurrent.ExecutorService)field.get(service)).awaitTermination(5,java.util.concurrent.TimeUnit.SECONDS),"owned boundary service executor closed");}
+    }
   }
   public static void main(String[] args)throws Exception{
     Path root=Path.of(args[0]).toAbsolutePath();if(!Files.isDirectory(root)||!root.getFileName().toString().startsWith("owned-sqlite-"))throw new IllegalArgumentException("Owned disposable directory required");
@@ -154,6 +217,7 @@ public final class DatabaseCompletionProbe {
       session.refreshMetadata();Snapshot bounded=session.completionSnapshot();int columnCount=bounded.tables().stream().mapToInt(t->t.columns().size()).sum();
       check(columnCount>0&&columnCount<=4096&&bounded.truncated(),"real 5600-column schema obeys total metadata budget");
     }finally{session.dispose();}
+    insertionBoundaries(root);
     AtomicLong clock=new AtomicLong(1);DatabaseMetadataCache cache=new DatabaseMetadataCache(clock::get);
     check(cache.current()==null,"fresh cache does not connect or populate itself");cache.connected();Token old=cache.beginRefresh();cache.disconnected();cache.connected();Token newer=cache.beginRefresh();
     check(!cache.publish(old,"\"",List.of(new Table(null,null,"wrong_endpoint",List.of())),false),"old endpoint refresh cannot publish after reconnect");

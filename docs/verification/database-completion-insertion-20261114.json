@@ -75,7 +75,8 @@
     "upstreamPin": "456919a9624bae72ac12efafc35d2b916cb0c5c5",
     "primarySources": [
       "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/analysis-api/src/com/intellij/codeInsight/completion/PrefixMatcher.java",
-      "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/lang-impl/src/com/intellij/codeInsight/lookup/impl/LookupImpl.java"
+      "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/lang-impl/src/com/intellij/codeInsight/lookup/impl/LookupImpl.java",
+      "https://raw.githubusercontent.com/JetBrains/intellij-community/456919a9624bae72ac12efafc35d2b916cb0c5c5/platform/analysis-api/src/com/intellij/codeInsight/lookup/LookupElementInsertStopper.java"
     ],
     "change": [
       "Keep native START_OFFSET at the original caret; only extend IDENTIFIER_END_OFFSET to the complete identifier token.",
@@ -89,12 +90,13 @@
       "rawIdentifierUtf16": 2050,
       "candidates": 200
     },
-    "completionIO": "Already-created project memory and immutable snapshot only; no JDBC, PasswordSafe, filesystem, process or network calls added."
+    "completionIO": "Already-created project memory and immutable snapshot only; no JDBC, PasswordSafe, filesystem, process or network calls added.",
+    "supportedCarets": 1
   },
   "headlessVerification": {
     "authenticatedSdkReceiptSha256": "356111ae3aa27e7d254f597f0b9704421847fff4aba667b7f678e59957fb8624",
-    "jarSha256": "c9a362ca5e42509935303af601c497d4147faeaa35d105d28df2c9ff96a7106b",
-    "buildReceipt": ".tools/database-plugin/e56a8b19004184ab4314451ea6ed31d56369cc5125b1c512a670b601816451eb/build.json",
+    "jarSha256": "499b684993346beb70b0874f67e99796ae49583eebeb10e4ffbe2317e989f73f",
+    "buildReceipt": ".tools/database-plugin/e66cd37b6abdc875da601eb9ad8309f2d8af301e8a3eaee0d5a67667e21d062f/build.json",
     "sourceInputs": {
       "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
       "plugins/database/NOTICE": "24da0a8ee481e7d1c0b58cbc5664fa7c7065f9d3d144e2c49ec5155dc00605bc",
@@ -123,7 +125,7 @@
       "plugins/database/src/dev/openpycharm/database/RunSqlAction.java": "04cddd35d804f21d03f8c4fac6be49047e2e014a0ebae9edd825f86bdc83a617",
       "plugins/database/src/dev/openpycharm/database/SqlCompletionCandidates.java": "632d0d8843feb35a199c92dd632cbb7b6b4f305335bbf5d8d2c879155e368fc3",
       "plugins/database/src/dev/openpycharm/database/SqlCompletionContext.java": "2c77679867204fec55b12aa59318fd6b9ef3e302091f2cf1ee3d1fb4af4cc51e",
-      "plugins/database/src/dev/openpycharm/database/SqlCompletionContributor.java": "29aac08e69220874179c9f14421e7d167cd30a04b411e434097d87181d59c7d9",
+      "plugins/database/src/dev/openpycharm/database/SqlCompletionContributor.java": "e1662915b48d653480cb07563930d649f2421c8782a1015701daeb056e00331c",
       "plugins/database/src/dev/openpycharm/database/SqlCompletionPrefixMatcher.java": "e6c1d1fc92440a7f2a8e56cec88356fa2e574852738d71e3723c9738945bbe48",
       "plugins/database/src/dev/openpycharm/database/SqlLanguage.java": "474882faefb74af7db23a562bd20bbe8f39b9422ed8aee1883a50e6314ef3204",
       "plugins/database/src/dev/openpycharm/database/SqlParserDefinition.java": "7940e21b977f29fc67c84c25d29f6cbc072884292d7c03b41782228870d79c9d",
@@ -134,7 +136,7 @@
       "scripts/platform_layout.py": "500447561715fc996c842c614aa817a2251e7dfbc22305054f7ab40fc31c7037"
     },
     "files": {
-      "lib/database.jar": "c9a362ca5e42509935303af601c497d4147faeaa35d105d28df2c9ff96a7106b",
+      "lib/database.jar": "499b684993346beb70b0874f67e99796ae49583eebeb10e4ffbe2317e989f73f",
       "lib/sqlite-jdbc-3.54.1.0.jar": "f8dce420a6016278497f4f0560f65602b9db858de141b541cf91a4644ebe4639",
       "lib/postgresql-42.7.13.jar": "6e0e4cc2d8cae902084f8a2b18728b073a6fd9d1f87c9d8bff8f298c18185b93",
       "lib/mariadb-java-client-3.5.11.jar": "42604178b9e57ec08ee0035079961516f086e455d0141f0b22c6eff29fb2fff4",
@@ -147,9 +149,9 @@
     "archiveVerification": {
       "status": "pass",
       "reader": "HashMapZipFile",
-      "verifiedEntries": 60,
+      "verifiedEntries": 61,
       "closed": true,
-      "sha256": "c9a362ca5e42509935303af601c497d4147faeaa35d105d28df2c9ff96a7106b"
+      "sha256": "499b684993346beb70b0874f67e99796ae49583eebeb10e4ffbe2317e989f73f"
     },
     "integrationTests": {
       "status": "pass",
@@ -184,16 +186,16 @@
       },
       "completionTests": {
         "status": "pass",
-        "checks": 125,
+        "checks": 208,
         "realSqliteMetadata": true,
         "quotedUnicodeAliasAndSchemaContexts": true,
         "schemaNamespacesUseInMemoryControls": true,
         "disconnectAndStaleSnapshots": true,
         "nativeCompletionUiTested": false,
         "networkServersTested": false,
-        "testSourceSha256": "b6e5634399bf2bddc343827a8dc797177bcd2902fcb08441251027ff6662691b"
+        "testSourceSha256": "da4d0b25b7849bd92395fe1fa728b1ec49bd529a0dcbe60f27ae8e0a1630ddf9"
       },
-      "jarSha256": "c9a362ca5e42509935303af601c497d4147faeaa35d105d28df2c9ff96a7106b",
+      "jarSha256": "499b684993346beb70b0874f67e99796ae49583eebeb10e4ffbe2317e989f73f",
       "testSourceSha256": "ecdf0344967a7b766c0ead01d0dd66d3fcf3a7525f6c30fb186cffcc2fc9695a",
       "targetPlatform": "macos",
       "executionPlatform": "macos",
@@ -213,5 +215,40 @@
   "unknown": [
     "Fixed production plugin native Basic popup and insertion in source and console await root reassembly and the unchanged original probe.",
     "Real keyboard flow and Windows native completion have not been tested here."
-  ]
+  ],
+  "staleAcceptanceFollowup": {
+    "previousCommit": "c1b594285e7930bd4bb51e34a4ee4e5701f68240",
+    "previousJarSha256": "c9a362ca5e42509935303af601c497d4147faeaa35d105d28df2c9ff96a7106b",
+    "independentNegativeReport": ".tools/independent-insert-review/review.json",
+    "independentNegativeReportSha256": "5af64c8c6f49e7f1c78addac661fd7cfdb027f55635a939c3cb304615dac8f72",
+    "observedNegative": "Independent actual-SDK InsertionContext boundary control reproduced pro -> prod additional typing being lost after snapshot invalidation: the previous handler restored initial pro.",
+    "change": "Invalidated native lookup items are no longer valid. The actual before-default insertion callback captures bounded current document text and caret, including additional typing and remaining identifier suffix. If snapshot invalidates during acceptance, the actual handler restores only the differing span to this accept-time text, never an initial token.",
+    "raceChecks": "The handler checks snapshot identity before and after replacement; all work stays in project/editor memory. Only one caret is supported to avoid sharing a before-insertion capture across multiple carets.",
+    "headlessControl": {
+      "realOwnedSqliteMetadata": true,
+      "actualProductionLookupAndHandlerCallbacks": true,
+      "sdkBoundaryObjects": "Actual SDK PrefixMatcher, LookupElementInsertStopper, LookupElement and InsertionContext APIs with explicit document/editor test boundaries; no fake IDE host or Lookup instance.",
+      "cases": 15,
+      "phases": [
+        "fresh",
+        "stale before accept validation",
+        "invalidation after before-default capture",
+        "invalidation after native default insertion",
+        "invalidation after default insertion with Tab suffix deletion"
+      ],
+      "identifiers": [
+        "unquoted pro -> prod",
+        "quoted Chinese additional name plus remaining suffix",
+        "escaped quoted identifier additional c plus remaining suffix"
+      ],
+      "assertions": [
+        "fresh exact qualified/quoted SQL",
+        "stale latest user text retained",
+        "stale accept-time caret retained",
+        "completion character suppressed",
+        "owned service executors terminated"
+      ],
+      "nativeIdeStarted": false
+    }
+  }
 }
