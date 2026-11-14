@@ -10,48 +10,55 @@ verification.
 
 **Development is in progress. Full 1:1 parity is not yet verified.**
 
-The **0.1.0-dev.2 preview** adds native HTTP requests and independent
-Django, Flask and FastAPI project generators and Run/Debug configurations:
+The **0.1.0-dev.3 preview** adds native Notebook and Database tools:
 
-- Open `.http` files, run the current request or a batch, inspect responses in
-  Services, save the original response bytes, and cancel running requests.
-- Create a small framework project with the native interpreter/venv selector.
-  Dependency installation is optional and off by default. Run and debug with the
-  selected Python SDK, working directory and environment.
-- Fix cold-start Markdown preview initialization while retaining normal rendering,
-  proxy configuration and service authentication.
+- Edit nbformat 4 `.ipynb` files in native Python cells. Run the selected local
+  Python kernel with Run Cell, Shift+Enter and Run All; interrupt execution,
+  inspect PNG/JPEG charts, static HTML/DataFrame tables, Markdown and tracebacks,
+  then save and reopen the notebook. Opening a file does not execute code.
+- Add database profiles, connect explicitly, browse metadata, run SQL in the
+  native editor/console and inspect a read-only result grid. Transaction and
+  cancellation controls and cached schema/table/column completion are included.
+  Click **Refresh tables** for completion metadata; snapshots expire after five
+  minutes, and ordinary SELECT queries do not refresh them.
+- Retain native `.http` requests/Services responses and the independent Django,
+  Flask and FastAPI generators and Run/Debug configurations from dev.2.
+  Framework dependency installation remains optional and off by default.
 
-Framework templates and launch/debug support do not provide complete framework
-semantics: template/ORM intelligence, framework navigation and broader framework
-behavior remain pending. Notebook and database tools are **not included in dev.2**.
-See the [acceptance matrix](docs/acceptance.md) and
-[dev.2 release notes](docs/releases/v0.1.0-dev.2.md).
+Notebook execution requires a trusted project and user-installed dependencies in
+its selected local Python. Remote kernels, widgets and notebook debugging are
+not implemented. Database result editing/export and full SQL dialect semantics
+are not implemented; PostgreSQL and MySQL/MariaDB drivers are bundled, but real
+network connections remain unverified. Framework template/ORM intelligence and
+broader navigation remain incomplete. See [installation](docs/installation.md)
+and the [acceptance matrix](docs/acceptance.md).
 
-The final macOS installation passed Python Run
-and unittest, fresh FastAPI creation and Debug, HTTP requests, and restored README
-preview. Its product tree stayed unchanged and strict signature verification
-passed afterwards; the bounded session log has 0 errors and 20 retained warnings. Windows
-desktop workflows remain unverified. Track the exact source and installer hashes
-in the [dev.2 verification](docs/verification/2026-11-14-dev2-release.md).
+The final macOS installation passed Python Run/unittest/two-breakpoint Debug,
+local Notebook execution and rich outputs/save/reopen, and SQLite queries plus
+keyboard table/column completion. The installers come from source `9a243e6` and
+[dual-platform CI 43565932969](https://github.com/shubolab/openpycharm/actions/runs/43565932969).
+Windows passed native API Notebook save/undo/reopen, local-kernel and
+install/startup/uninstall checks; physical keyboard-and-mouse workflows remain
+unverified there.
 
-Preview: [v0.1.0-dev.2](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.2).
+Preview: [v0.1.0-dev.3](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.3).
 
 | System | Installer |
 | --- | --- |
-| macOS Apple silicon | [DMG](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.2/OpenPyCharm-0.1.0-dev.2-macos-arm64.dmg) |
-| Windows x64 | [EXE](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.2/OpenPyCharm-0.1.0-dev.2-windows-x64-setup.exe) |
+| macOS Apple silicon | [DMG](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/OpenPyCharm-0.1.0-dev.3-macos-arm64.dmg) |
+| Windows x64 | [EXE](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/OpenPyCharm-0.1.0-dev.3-windows-x64-setup.exe) |
 
-See [installation](docs/installation.md), [checksums](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.2/SHA256SUMS.txt)
-and [verification](docs/verification/2026-11-14-dev2-release.md).
-The Mac app is ad-hoc signed and not notarized; the Windows installer is unsigned.
-[Previous preview: dev.1](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.1).
+See [installation](docs/installation.md), [checksums](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/SHA256SUMS.txt)
+and [acceptance](docs/acceptance.md). The Mac app is ad-hoc signed and not
+notarized; the Windows installer is unsigned.
+[Previous preview: dev.2](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.2).
 
-![OpenPyCharm 0.1.0-dev.2 installed native workflows](docs/demo/v0.1.0-dev.2/openpycharm-native.gif)
+![OpenPyCharm 0.1.0-dev.3 installed native workflows](docs/demo/v0.1.0-dev.3/openpycharm-native.gif)
 
-Actual installed **0.1.0-dev.2**, **macOS 27.2 arm64**, Python **3.14.0**:
-Run, unittest results, FastAPI breakpoint evaluation and HTTP batch/Unicode
-response. This animation assembles real native app screenshots.
-[Capture manifest](docs/demo/v0.1.0-dev.2/capture.json).
+Actual installed **0.1.0-dev.3**, **macOS 27.2 arm64**, local Python **3.14**:
+Run, unittest, breakpoint debugging, Notebook chart/DataFrame output and a SQLite
+query. This animation assembles real native app screenshots.
+[Capture manifest](docs/demo/v0.1.0-dev.3/capture.json).
 Each publishable release gets fresh installed-version captures and a manifest.
 
 ## Build

@@ -8,42 +8,46 @@
 
 **当前正在开发，完整 1:1 对齐尚未完成。**
 
-**0.1.0-dev.2 预览版**增加原生 HTTP 请求工具，以及我们独立实现的
-Django、Flask、FastAPI 项目生成器和运行/调试配置：
+**0.1.0-dev.3 预览版**增加原生 Notebook 与数据库工具：
 
-- 编辑 `.http` 文件，运行当前请求或批量请求，在 Services 查看响应，保存原始响应
-  字节，并停止正在执行的请求。
-- 通过原生解释器/venv 选择器创建小型框架项目。依赖安装可选，默认关闭；运行与
-  调试沿用所选 Python SDK、工作目录和环境变量。
-- 修复 Markdown 预览冷启动初始化，保留正常渲染、代理配置及服务认证。
+- 在原生 Python 单元中编辑 nbformat 4 格式的 `.ipynb`。使用所选本机 Python
+  内核运行单元、Shift+Enter 或 Run All；可中断执行，查看 PNG/JPEG 图表、静态
+  HTML/DataFrame 表格、Markdown 和错误堆栈，再保存并重新打开。打开文件不会执行代码。
+- 添加连接配置，手动连接数据库，浏览元数据，在原生编辑器/控制台执行 SQL，并在
+  只读结果表格中查看数据。提供事务、取消和基于缓存的 schema/表/列补全。
+  补全前点击 **Refresh tables**；快照五分钟后过期，普通 SELECT 不会刷新它。
+- 保留 dev.2 的原生 `.http`/Services 请求工具，以及独立实现的 Django、Flask、
+  FastAPI 生成器与运行/调试配置。框架依赖安装仍可选，默认关闭。
 
-项目模板和运行/调试支持不代表完整框架语义支持：模板与 ORM 智能分析、框架导航
-和更广的框架行为仍待补齐。**dev.2 不包含 Notebook 和数据库工具。**
-详见[验收矩阵](docs/acceptance.md)与[dev.2 发行说明](docs/releases/v0.1.0-dev.2.md)。
+Notebook 执行要求信任项目，并在所选本机 Python 中自行安装依赖；尚不支持远程内核、
+widgets 和 Notebook 调试。数据库结果编辑/导出、完整 SQL 方言语义尚未实现；随包
+携带 PostgreSQL 与 MySQL/MariaDB 驱动，但真实网络连接尚未验收。框架模板、ORM 智能
+分析及更广的导航支持也仍不完整。详见[安装说明](docs/installation.md)与
+[验收矩阵](docs/acceptance.md)。
 
-最终 macOS 安装版已通过 Python 运行与 unittest、全新 FastAPI
-创建与调试、HTTP 请求及 README 预览恢复；工作流结束后产品树未变，严格签名检查通过，
-有界会话日志含 0 条错误、20 条保留警告。Windows 桌面工作流仍未验收。明确来源和
-安装包摘要见 [dev.2 验收记录](docs/verification/2026-11-14-dev2-release.md)。
+最终 macOS 安装版已通过 Python 运行、unittest、两处断点调试，本地 Notebook
+执行、富媒体输出及保存重开，以及 SQLite 查询和真实按键表/列补全。安装包来源为
+`9a243e6`，对应[双平台 CI 43565932969](https://github.com/shubolab/openpycharm/actions/runs/43565932969)。
+Windows 已通过原生 API Notebook 保存/撤销/重开、本地内核及安装/启动/卸载检查；
+实际键盘、鼠标交互工作流仍待验收。
 
-预览版：[v0.1.0-dev.2](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.2)。
+预览版：[v0.1.0-dev.3](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.3)。
 
 | 系统 | 安装包 |
 | --- | --- |
-| macOS Apple silicon | [DMG 下载](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.2/OpenPyCharm-0.1.0-dev.2-macos-arm64.dmg) |
-| Windows x64 | [EXE 下载](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.2/OpenPyCharm-0.1.0-dev.2-windows-x64-setup.exe) |
+| macOS Apple silicon | [DMG 下载](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/OpenPyCharm-0.1.0-dev.3-macos-arm64.dmg) |
+| Windows x64 | [EXE 下载](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/OpenPyCharm-0.1.0-dev.3-windows-x64-setup.exe) |
 
-见[安装说明](docs/installation.md)、[校验和](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.2/SHA256SUMS.txt)
-与[验收记录](docs/verification/2026-11-14-dev2-release.md)。Mac 应用使用临时签名且未公证，
-Windows 安装器未签名。[上一预览版 dev.1](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.1)保留下载。
+见[安装说明](docs/installation.md)、[校验和](https://github.com/shubolab/openpycharm/releases/download/v0.1.0-dev.3/SHA256SUMS.txt)
+与[验收矩阵](docs/acceptance.md)。Mac 应用使用临时签名且未公证，Windows 安装器未签名。
+[上一预览版 dev.2](https://github.com/shubolab/openpycharm/releases/tag/v0.1.0-dev.2)保留下载。
 
-![OpenPyCharm 0.1.0-dev.2 实际安装版原生功能演示](docs/demo/v0.1.0-dev.2/openpycharm-native.gif)
+![OpenPyCharm 0.1.0-dev.3 实际安装版原生功能演示](docs/demo/v0.1.0-dev.3/openpycharm-native.gif)
 
-实际安装版 **0.1.0-dev.2**，系统 **macOS 27.2 arm64**，Python **3.14.0**。
-展示运行、unittest 结果、FastAPI 断点求值和 HTTP 批量/Unicode 响应。这是由真实
-原生应用截屏组装的动画。
-详见[拍摄清单](docs/demo/v0.1.0-dev.2/capture.json)。每个可发版版本都更新实际
-安装版截屏和对应清单。
+实际安装版 **0.1.0-dev.3**，系统 **macOS 27.2 arm64**，本机 Python **3.14**。
+展示运行、unittest、断点调试、Notebook 图表/DataFrame 与 SQLite 查询；动画由真实
+原生应用截屏组装。[拍摄清单](docs/demo/v0.1.0-dev.3/capture.json)。每个可发版版本
+都更新实际安装版截屏和对应清单。
 
 ## 本机构建
 
