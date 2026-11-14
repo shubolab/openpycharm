@@ -194,7 +194,7 @@ def run_model_tests(sdk: Path, plugin: Path, host_sdk: Path | None = None) -> di
     with tempfile.TemporaryDirectory(prefix="model-", dir=work) as directory:
         temporary = Path(directory)
         classes = temporary / "classes"
-        compile_java(layout, [ROOT / "tests/notebooks/NotebookModelTest.java", ROOT / "tests/notebooks/NotebookPersistenceTest.java", ROOT / "tests/notebooks/NotebookMergeTest.java"], classes, temporary / "javac.args",
+        compile_java(layout, [ROOT / "tests/notebooks/NotebookModelTest.java", ROOT / "tests/notebooks/NotebookPersistenceTest.java", ROOT / "tests/notebooks/NotebookMergeTest.java", ROOT / "tests/notebooks/NotebookDocumentSaveTest.java"], classes, temporary / "javac.args",
                      [plugin / "lib/notebooks.jar"], runtime)
         cp = os.pathsep.join(map(str, [classes, plugin / "lib/notebooks.jar", *classpath(layout)]))
         report = json.loads(run_java(runtime, ["-classpath", cp, "dev.openpycharm.notebooks.NotebookModelTest"], temporary).stdout)
@@ -208,6 +208,10 @@ def run_model_tests(sdk: Path, plugin: Path, host_sdk: Path | None = None) -> di
         if merge.get("status") != "pass":
             raise ValueError("Notebook three-way merge checks did not pass")
         report["externalMerge"] = merge
+        contract = json.loads(run_java(runtime, ["-Djava.awt.headless=true", "-classpath", cp, "dev.openpycharm.notebooks.NotebookDocumentSaveTest"], temporary).stdout)
+        if contract.get("status") != "pass":
+            raise ValueError("Notebook save-thread contract checks did not pass")
+        report["saveThreadContract"] = contract
         report.update(targetPlatform=layout.platform, executionPlatform=runtime.platform,
                       nativeTargetRuntime=layout.platform == runtime.platform, jarSha256=sha256(plugin / "lib/notebooks.jar"))
         return report
