@@ -60,8 +60,9 @@
     "stderr": "usage: notebook_session_probe.py [-h] --sdk SDK [--host-sdk HOST_SDK]\n                                 [--version VERSION]\n                                 [--build-report BUILD_REPORT] --python PYTHON\n                                 --output OUTPUT\nnotebook_session_probe.py: error: Notebook session JAR does not match the installer compilation report\n"
   },
   "limitations": [
-    "This headless JVM/kernel probe does not exercise NotebookFileEditor native save or establish release readiness",
-    "Windows CI execution remains pending"
+    "These headless JVM/kernel controls do not exercise NotebookFileEditor native save or establish release readiness",
+    "The successful remote CI freeze precedes the integrated SQL completion and Notebook save fix; fresh builds and native gates are still required",
+    "No interactive Windows desktop acceptance is implied"
   ],
   "windowsCI": {
     "runId": 43543657085,
@@ -84,5 +85,33 @@
     "nativeJvmSession": "not reached",
     "localLogSha256": "afc067934f522640d0cf7f8bc77f8b2a8d322e4f2b6a9ea84076696eb03e4cfb",
     "url": "https://github.com/shubolab/openpycharm/actions/runs/43543657085/job/132289737977"
+  },
+  "windowsRetest": {
+    "runId": 43544473556,
+    "sourceCommit": "ce88f6cca5abd444758608d2fe8719f261e3605d",
+    "conclusion": "success",
+    "repositoryTests": 112,
+    "passed": 109,
+    "skipped": 3,
+    "realPythonKernelCasesPassed": 5,
+    "nativeJvmSession": "pass",
+    "nativeJvmSessionJarSha256": "b34406e715a36d77f26724f1c5b3c6ae4eac6db37842636f1a38757aa67bd84e",
+    "installerInstallUninstall": "pass",
+    "logSha256": "fa5d37c57c8eb87bda9ad66d90cd8e8d05237c62ab5f37319485d34a7ff8a2e6",
+    "url": "https://github.com/shubolab/openpycharm/actions/runs/43544473556"
+  },
+  "macosCI": {
+    "runId": 43544473556,
+    "sourceCommit": "ce88f6cca5abd444758608d2fe8719f261e3605d",
+    "conclusion": "success",
+    "repositoryTests": 112,
+    "passed": 112,
+    "skipped": 0,
+    "nativeJvmSession": "pass",
+    "nativeJvmSessionJarSha256": "4c3ff6c07e35e5f174fc25e5897e6cac37e40e9789b3d4d819035b5e5bafe8cf",
+    "coldMarkdown": "pass",
+    "dmg": "pass",
+    "logSha256": "e3fcd42df563e2d19fab4258a1039c2d5e3863501704316ba79e2ab56979550d",
+    "url": "https://github.com/shubolab/openpycharm/actions/runs/43544473556"
   }
 }

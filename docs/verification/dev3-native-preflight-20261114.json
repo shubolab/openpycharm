@@ -10,7 +10,10 @@
     "target": "macos-arm64",
     "sourceInputCount": 129,
     "manifestSha256": "224d416a3d43dad51022c50d338788cafbd92924ccaef47576731ad48ecef051",
-    "installedFromFinalDmg": false
+    "installedFromFinalDmg": false,
+    "afterDesktopTreeSha256": "9544f9a86bfc8cab7ae42c376ec040377d262f57dc4e4100ee24c4f4c09edc69",
+    "treeUnchanged": true,
+    "afterDesktopStrictSignatureVerified": true
   },
   "repositoryControls": {
     "tests": 112,
